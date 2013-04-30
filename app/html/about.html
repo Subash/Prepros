@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>About Prepros</title>
+
+    <script src="../scripts/lib/jquery.js"></script>
+    <script src="../scripts/lib/angular.js"></script>
+    <script src="../scripts/lib/underscore.js"></script>
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        function AboutCtrl($scope){
+
+            //Cross window communication hack
+            $scope.about =  global.preprosAbout;
+
+            var depKeys = Object.keys($scope.about.dependencies);
+            var langKeys = Object.keys($scope.about.languages);
+            $scope.version = $scope.about.version;
+
+            $scope.checkingUpdate = true;
+            $scope.errorCheck = false;
+            $scope.upToDate= false;
+
+            $scope.update = {
+                available: false,
+                version: $scope.version,
+                date: ""
+            };
+
+            $.ajaxSetup({
+                cache: false
+            });
+
+            $.getJSON("http://alphapixels.com/prepros/update.json")
+                    .done(function(data) {
+
+                        if($scope.version != data[0].version){
+
+                            $scope.update = {
+                                available: true,
+                                version: data[0].version,
+                                date: data[0].date
+                            };
+
+                            $scope.checkingUpdate = false;
+
+                            $scope.$apply();
+                        } else {
+                            $scope.checkingUpdate = false;
+                            $scope.upToDate = true;
+                            $scope.$apply();
+                        }
+
+                    })
+                    .fail(function( jqxhr, textStatus, error ) {
+                        $scope.checkingUpdate = false;
+                        $scope.errorCheck = true;
+                        $scope.$apply();
+                    });
+
+            var deps = [];
+
+            _.each(depKeys, function(key){
+
+                deps.push(key + " -> " +$scope.about.dependencies[key]);
+
+            });
+
+            _.each(langKeys, function(key){
+
+                deps.push(key + " -> " +$scope.about.languages[key].version);
+
+            });
+
+            $scope.dependencies = deps.sort();
+
+            $scope.save = function(){
+                window.close();
+            };
+
+            $scope.go = function(){
+                require('child_process').spawn('explorer', ['http://alphapixels.com/prepros'], {detached: true});
+            }
+
+        }
+    </script>
+</head>
+<body>
+<div ng-controller="AboutCtrl" class="preprosAbout">
+    <h4>Prepros {{version}}</h4>
+    <ul>
+        <li ng-repeat="dep in dependencies">{{dep}}</li>
+    </ul>
+    <p>
+        <a ng-click="go()" style="cursor: pointer;">http://alphapixels.com/prepros</a>
+    </p>
+
+    <div ng-show="update.available" class="alert alert-info">
+        New version {{update.version}} released on {{update.date}} is available. Visit <a ng-click="go()" style="cursor: pointer;">http://alphapixels.com/prepros</a> to download.
+    </div>
+    <div ng-show="checkingUpdate" class="alert alert-info">
+        Checking for updates.
+    </div>
+    <div ng-show="errorCheck" class="alert alert-error">
+        An error occurred while checking for updates.
+    </div>
+    <div ng-show="upToDate" class="alert alert-success">
+        You are using latest and greatest version of Prepros App.
+    </div>
+
+</div>
+</body>
+</html>

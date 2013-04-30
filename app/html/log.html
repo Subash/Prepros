@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>Prepros Log</title>
+    <script src="../scripts/lib/angular.js"></script>
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        function LogCtrl($scope){
+
+            $scope.preprosLog = global.preprosLog;
+
+            //HACK for cross window communication
+            global.logScope = $scope;
+
+        }
+    </script>
+</head>
+<body>
+<div ng-controller="LogCtrl" class="preprosLog">
+    <h1>Prepros Log</h1>
+    <ul class="unstyled">
+        <li ng-repeat="log in preprosLog" class="{{log.type}}">
+            <span class="name">
+                {{log.name}}
+            </span>
+            <div class="details">
+                <pre>{{log.details}}</pre>
+            </div>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

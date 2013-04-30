@@ -1,0 +1,282 @@
+<!doctype html>
+<html ng-app="prepros">
+<head>
+    <meta charset="utf-8">
+    <title>Prepros App</title>
+
+
+    <!--Load App styles -->
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <!--Load libraries -->
+    <script src="scripts/lib/jquery.js"></script>
+    <script src="scripts/lib/angular.js"></script>
+    <script src="scripts/lib/underscore.js"></script>
+    <script src="scripts/lib/bootstrap.js"></script>
+
+    <!--Load custom scripts -->
+    <script src="scripts/frame.js"></script>
+    <script src="scripts/singleInstance.js"></script>
+
+    <!--Load AngularJs App -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/filters.js"></script>
+    <script src="scripts/directives.js"></script>
+    <script src="scripts/services/watcher.js"></script>
+    <script src="scripts/services/compiler.js"></script>
+    <script src="scripts/services/config.js"></script>
+    <script src="scripts/AppController.js"></script>
+    <script src="scripts/services/fileTypes.js"></script>
+    <script src="scripts/services/liveRefresh.js"></script>
+    <script src="scripts/services/notification.js"></script>
+    <script src="scripts/services/projectsManager.js"></script>
+    <script src="scripts/services/storage.js"></script>
+    <script src="scripts/services/utils.js"></script>
+
+</head>
+<body>
+<div class="wrapper clearfix" ng-controller="AppCtrl" drop-target>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <ul>
+        <li ng-repeat="project in projects">
+            <a ng-href="#/files/{{project.id}}" draggable="false">{{project.name}}</a>
+        </li>
+    </ul>
+    <div class="controls" ng-class="{'show' : selectedProject.id}">
+        <div class="new-project icomoon-plus icons" tooltip="Add new project" add-project></div>
+        <div class="refresh icomoon-spinner-2 icons" tooltip="Refresh Files"
+             refresh-project-files="{{selectedProject.id}}"></div>
+        <div class="options icomoon-cog icons" ng-click="showOptions()" tooltip="Project Options"></div>
+        <div class="open icomoon-globe icons" tooltip="Open project live url"
+             open-live-url="{{selectedProject.id}}"></div>
+        <div class="remove icomoon-remove icons" tooltip="Remove project"
+             remove-project="{{selectedProject.id}}"></div>
+    </div>
+
+</div>
+<!-- Sidebar ends -->
+
+
+<div class="main">
+
+<!-- App title bar -->
+<div class="title-bar">
+    <div class="controls">
+        <a ng-href="#/home" class="icomoon-home" tooltip="Go to home" data-placement="bottom"></a>
+        <a class="love icomoon-heart-2" tooltip="Help the author" data-placement="bottom"></a>
+        <a class="about icomoon-info " tooltip="About Prepros" data-placement="bottom"></a>
+        <a class="log icomoon-copy-2" tooltip="App Log" data-placement="bottom"></a>
+        <a class="options icomoon-cog " tooltip="App Options" data-placement="bottom"></a>
+        <a class="to-tray icomoon-arrow-down-right-3" tooltip="Minimize to taskbar" data-placement="bottom"></a>
+        <a class="minimize-app icomoon-minus" tooltip="Minimize" data-placement="bottom"></a>
+        <a class="close-app icomoon-close" tooltip="Close" data-placement="left"></a>
+    </div>
+</div>
+
+<div class="project-options" ng-show="selectedProject.id">
+    <label>
+        <span class="label-desc">Project Name</span>
+        <input ng-model="selectedProject.name" type="text">
+    </label>
+
+    <label>
+        <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
+        <span class="label-desc">Live Refresh</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
+        <span class="label-desc">Use Custom server</span>
+    </label>
+
+    <div ng-show="selectedProject.config.useCustomServer">
+        <label>
+            <span class="label-desc">Server Url</span>
+            <input type="text" ng-model="selectedProject.config.customServerUrl">
+        </label>
+    </div>
+    <button ng-click="saveOptions()">Ok</button>
+</div>
+
+
+<!--File list and project view -->
+<div class="content clearfix">
+    <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
+        <div ng-switch on="routePath">
+            <div ng-switch-when="home" class="home">
+
+
+                <h1 class="icomoon-arrow-down-2"></h1>
+
+                <p>Please drag and drop a folder to start a new project.</p>
+
+            </div>
+
+
+            <div ng-switch-when="files">
+                <ul class="files">
+                    <li class="file" ng-repeat="file in files|orderBy:'name'|byProject">
+                        <a ng-href="#/files/{{pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}">
+                            <div class="thumb  {{file.type.toLowerCase()}}"
+                                 ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
+                            </div>
+                            <div class="details clearfix">
+                                <span class="name">{{file.name}}</span>
+                                <span class="input">{{file.shortInput}}</span>
+                                <span class="output" change-file-output="{{file.id}}" tooltip="Click to change file output path">
+                                    &rarr; {{file.shortOutput}}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+
+                <!-- Options -->
+                <div class="options">
+
+                    <span class="file-type">{{selectedFile.type}}</span>
+
+                    <span class="file-name">{{selectedFile.name}}</span>
+
+
+                    <label>
+                        <input type="checkbox" ng-model="selectedFile.config.autoCompile">
+                        <span class="label-desc">Auto Compile</span>
+                    </label>
+
+                    <div ng-switch on="selectedFile.type.toLowerCase()">
+
+                        <div ng-switch-when="less">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
+                                <span class="label-desc">Line numbers</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.compress">
+                                <span class="label-desc">Compress Css</span>
+                            </label>
+
+                        </div>
+
+                        <div ng-switch-when="sass">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
+                                <span class="label-desc">Line numbers</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.compass">
+                                <span class="label-desc">Use Compass</span>
+                            </label>
+
+                            <label>
+                                <span class="label-desc">Output Style</span>
+                                <select ng-model="selectedFile.config.outputStyle">
+                                    <option value="compressed">Compressed</option>
+                                    <option value="nested">Nested</option>
+                                    <option value="expanded">Expanded</option>
+                                </select>
+                            </label>
+
+
+                        </div>
+
+                        <div ng-switch-when="scss">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
+                                <span class="label-desc">Line numbers</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.compass">
+                                <span class="label-desc">Use Compass</span>
+                            </label>
+
+                            <label>
+                                <span class="label-desc">Output Style</span>
+                                <select ng-model="selectedFile.config.outputStyle">
+                                    <option value="compressed">Compressed</option>
+                                    <option value="nested">Nested</option>
+                                    <option value="expanded">Expanded</option>
+                                </select>
+                            </label>
+
+
+                        </div>
+
+                        <div ng-switch-when="stylus">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
+                                <span class="label-desc">Line numbers</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.compress">
+                                <span class="label-desc">Compress Css</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.nib">
+                                <span class="label-desc">Use Nib</span>
+                            </label>
+
+                        </div>
+
+                        <div ng-switch-when="coffee">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.uglify">
+                                <span class="label-desc">Uglify</span>
+                            </label>
+
+                        </div>
+
+                        <div ng-switch-when="jade">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.pretty">
+                                <span class="label-desc">Pretty Output</span>
+                            </label>
+
+                        </div>
+
+                        <div ng-switch-when="haml">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.doubleQuotes">
+                                <span class="label-desc">Double quotes</span>
+                            </label>
+
+                            <label>
+                                <span class="label-desc">Output Format</span>
+                                <select ng-model="selectedFile.config.format">
+                                    <option value="xhtml">Xhtml</option>
+                                    <option value="html5">Html5</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span class="label-desc">Output Style</span>
+                                <select ng-model="selectedFile.config.outputStyle">
+                                    <option value="indented">Indented</option>
+                                    <option value="ugly">Ugly</option>
+                                </select>
+                            </label>
+
+
+                        </div>
+                    </div>
+
+                    <button class="compile" ng-click="compile(selectedFile.id)"> Compile</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+</body>
+</html>
