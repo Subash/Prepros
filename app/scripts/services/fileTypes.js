@@ -445,29 +445,37 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
                 output: output,
                 shortOutput: shortOutput,
                 config: {
-                    autoCompile: true
+                    autoCompile: true,
+                    sanitize: false,
+                    gfm: true
                 }
             };
         },
 
         compile: function (file) {
 
-            var markdown = require('markdown');
+            var marked = require('marked');
+
+            // Set default
+            marked.setOptions({
+                gfm: file.config.gfm,
+                sanitize: file.config.sanitize
+            });
 
             fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
                 if (err) {
                     notification.error('Error reading file.', file.input);
                 } else {
 
-                    var html = markdown.markdown.toHTML(data.toString());
+                    try {
+                        var html = marked(data.toString());
 
-                    fs.outputFile(file.output, html, function (err) {
+                        fs.outputFile(file.output, html)
 
-                        if (err) {
-                            notification.error('Error writing file.', file.output);
-                        }
+                    } catch(e) {
+                        notification.error('Error compiling markdown file.', file.output);
+                    }
 
-                    });
                 }
             });
         }

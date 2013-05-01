@@ -266,6 +266,20 @@
 
 
                         </div>
+
+                        <div ng-switch-when="md">
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.gfm">
+                                <span class="label-desc">Github Flavoured</span>
+                            </label>
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.sanitize">
+                                <span class="label-desc">Sanitize Output</span>
+                            </label>
+
+                        </div>
                     </div>
 
                     <button class="compile" ng-click="compile(selectedFile.id)"> Compile</button>
