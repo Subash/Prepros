@@ -2,7 +2,7 @@
 /*global prepros,  _ , angular*/
 
 //Storage
-prepros.factory('liveRefresh', function (utils, $rootScope) {
+prepros.factory('liveRefresh', function ($rootScope) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ prepros.factory('liveRefresh', function (utils, $rootScope) {
     });
 
     //Stop refreshing on app close
-    utils.nw.window.on('close', function () {
+    require('nw.gui').Window.get().on('close', function () {
 
         wsServer.broadcast(angular.toJson({ urls: []}));
 

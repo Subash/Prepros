@@ -1,6 +1,6 @@
 /*jshint browser: true, node: true*/
 /*global prepros, $, _ */
-prepros.factory('utils', function (config) {
+prepros.factory('utils', function () {
 
 	'use strict';
 
@@ -11,43 +11,26 @@ prepros.factory('utils', function (config) {
 		return md5(string.toLowerCase()).substr(8,8);
 	}
 
-    //Node webkit api
-    var nw = {
-        gui: require('nw.gui'),
-        window: require('nw.gui').Window.get()
-    };
+    //Shows loading overlay
+    function showLoading(){
 
-    //Developer tools in development mode
-    if(config.debug){
-
-        window.addEventListener('keydown', function (e) {
-            if (e.keyIdentifier === 'F12') {
-                nw.window.showDevTools();
-            }
-        });
+        $('body').append('<div class="loading-overlay"><div class="container"><div class="loading-icon icomoon-spinner"></div></div></div>');
     }
 
-    //Shows loading overlay
-    function showLoading(yn){
+    //Hide loading animation
+    function hideLoading(){
 
-        if(yn){
-
-           $('body').append('<div class="loading-overlay"><div class="container"><div class="loading-icon icomoon-spinner"></div></div></div>');
-
-        } else {
-
-            _.delay(function(){
-                $('body .loading-overlay').fadeOut(200, function(){
-                    $(this).remove();
-                });
-            }, 200);
-        }
+        _.delay(function(){
+            $('body .loading-overlay').fadeOut(200, function(){
+                $(this).remove();
+            });
+        }, 200);
     }
 
 
 	return {
-        nw: nw,
 		id: id,
-        showLoading: showLoading
+        showLoading: showLoading,
+        hideLoading: hideLoading
 	};
 });

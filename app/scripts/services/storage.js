@@ -183,7 +183,6 @@ prepros.factory('storage', function (notification, config, $rootScope) {
         throttleSave(data);
     });
 
-
 	//Return projects list and files list
 	return {
 

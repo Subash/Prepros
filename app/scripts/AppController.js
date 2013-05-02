@@ -2,7 +2,7 @@
 /*global $, prepros,  _ */
 
 //App controller
-prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage, projectsManager, utils) {
+prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage, projectsManager, liveRefresh, watcher, utils, config) {
 
     'use strict';
 
@@ -91,11 +91,22 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
     });
 
     //Save data on exit
-    utils.nw.window.on('close', function () {
+    require('nw.gui').Window.get().on('close', function () {
 
         this.hide();
         storage.saveFiles($scope.files);
         storage.saveImports($scope.imports);
         storage.saveProjects($scope.projects);
     });
+
+    //Developer tools in development mode
+    if(config.debug){
+
+        window.addEventListener('keydown', function (e) {
+            if (e.keyIdentifier === 'F12') {
+                require('nw.gui').Window.get().showDevTools();
+            }
+        });
+    }
+
 });

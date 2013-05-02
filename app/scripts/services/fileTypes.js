@@ -120,7 +120,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
             while ((result = importReg.exec(data)) !== null) {
 
                 
-                var res = result[1].replace(/"|'/gi, "").split(",");
+                var res = result[1].replace(/"|'/gi, '').split(',');
 
                 for (i = 0; i < res.length; i++) {
 
@@ -139,7 +139,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
                     }
 
                     //First check for partial file
-                    var importedWithPartial = path.dirname(importedFilePath) + "\\_" + path.basename(importedFilePath);
+                    var importedWithPartial = path.dirname(importedFilePath) + '\\_' + path.basename(importedFilePath);
 
                     //Check if file exists
                     if (fs.existsSync(importedWithPartial)) {
@@ -456,7 +456,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
 
             var marked = require('marked');
 
-            // Set default
+            // Set markdown options
             marked.setOptions({
                 gfm: file.config.gfm,
                 sanitize: file.config.sanitize

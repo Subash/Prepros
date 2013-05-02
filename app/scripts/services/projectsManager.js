@@ -186,7 +186,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
         var filesToAdd = [];
 
-        utils.showLoading(true);
+        utils.showLoading();
 
         //Get all files in project folder and add file to file list
         walker(folder, function (err, file, next) {
@@ -231,7 +231,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
                     }
 
-                    utils.showLoading(false);
+                    utils.hideLoading();
                 }
             }
         );

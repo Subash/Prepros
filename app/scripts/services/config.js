@@ -11,7 +11,7 @@ prepros.factory('config', function () {
     //Base path
     var basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname.slice(1))));
 
-    //Read config file, everything is relative to base bath in app.json file
+    //Read config file, everything is relative to base path in app.json file
     var appFileUrl = path.join(basePath, '../package.json');
     var appFile = fs.readFileSync(appFileUrl).toString();
     var appData = JSON.parse(appFile).app;
@@ -67,79 +67,6 @@ prepros.factory('config', function () {
 
         fs.outputFile(configFile, angular.toJson(user, true));
     }
-
-    var optionsWindow;
-
-    $('.title-bar .controls .options').on('click', function () {
-
-        global.preprosOptions = {dependencies: dependencies, languages: languages, user: user};
-
-        if(typeof(optionsWindow) === "object"){
-            optionsWindow.show();
-            optionsWindow.focus();
-        } else {
-            optionsWindow = require('nw.gui').Window.open("file:///" + basePath + '\\html\\options.html', {
-                position: 'center',
-                width: 500,
-                height: 300,
-                frame: true,
-                toolbar: false,
-                icon: 'app/assets/img/icons/128.png',
-                resizable: false
-            });
-
-            optionsWindow.on('close', function(){
-                user = global.preprosOptions.user;
-                this.close(true);
-                optionsWindow = undefined;
-            });
-        }
-    });
-
-
-    require('nw.gui').Window.get().on('close', function () {
-
-        if(typeof(optionsWindow) === 'object') {
-            optionsWindow.close();
-        }
-
-    });
-
-    //About window
-    var aboutWindow;
-
-    $('.title-bar .controls .about').on('click', function () {
-
-        global.preprosAbout = {dependencies: dependencies, languages: languages, version: version};
-
-        if(typeof(aboutWindow) === "object"){
-            aboutWindow.show();
-            aboutWindow.focus();
-        } else {
-            aboutWindow = require('nw.gui').Window.open("file:///" + basePath + '\\html\\about.html', {
-                position: 'center',
-                width: 500,
-                height: 520,
-                frame: true,
-                toolbar: false,
-                icon: 'app/assets/img/icons/128.png',
-                resizable: false
-            });
-
-            aboutWindow.on('close', function(){
-                this.close(true);
-                aboutWindow = undefined;
-            });
-        }
-    });
-
-    require('nw.gui').Window.get().on('close', function () {
-
-        if(typeof(aboutWindow) === 'object') {
-            aboutWindow.close();
-        }
-    });
-
 
     return {
         basePath: basePath,

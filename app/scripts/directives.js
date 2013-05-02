@@ -9,7 +9,7 @@ prepros.directive('dropTarget', function (projectsManager) {
     return {
 
         restrict: 'A',
-        link: function (scope, element, attrs) {
+        link: function (scope, element) {
 
             var fs = require('fs'),
                 path = require('path');
@@ -47,12 +47,12 @@ prepros.directive('addProject', function (projectsManager) {
 
     return {
         restrict: 'A',
-        link: function (scope, element, attrs) {
+        link: function (scope, element) {
 
             var fs = require('fs'),
                 path = require('path');
 
-            element.on('click', function(){
+            element.on('click', function () {
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -85,15 +85,15 @@ prepros.directive('addProject', function (projectsManager) {
 });
 
 //Directive to change file output directory
-prepros.directive('changeFileOutput', function(projectsManager){
+prepros.directive('changeFileOutput', function (projectsManager) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element, attrs) {
 
             var fs = require('fs'),
                 path = require('path');
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -104,7 +104,7 @@ prepros.directive('changeFileOutput', function(projectsManager){
                     project = projectsManager.getProjectById(file.pid);
 
 
-                if(fs.existsSync(path.dirname(file.output))){
+                if (fs.existsSync(path.dirname(file.output))) {
                     wd = path.dirname(file.output);
                 } else {
                     wd = project.path;
@@ -114,7 +114,7 @@ prepros.directive('changeFileOutput', function(projectsManager){
 
                 elm.trigger('click');
 
-                $(elm).on('change', function(e){
+                $(elm).on('change', function (e) {
 
                     projectsManager.changeFileOutput(attrs.changeFileOutput, e.currentTarget.files[0].path)
 
@@ -125,11 +125,11 @@ prepros.directive('changeFileOutput', function(projectsManager){
 });
 
 //Directive to refresh project files
-prepros.directive('refreshProjectFiles', function(projectsManager){
+prepros.directive('refreshProjectFiles', function (projectsManager) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
-            element.on('click', function(event){
+        link: function (scope, element, attrs) {
+            element.on('click', function (event) {
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -142,12 +142,12 @@ prepros.directive('refreshProjectFiles', function(projectsManager){
 });
 
 //Directive to open live project url
-prepros.directive('openLiveUrl', function(liveRefresh, projectsManager){
+prepros.directive('openLiveUrl', function (liveRefresh, projectsManager) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element, attrs) {
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
@@ -161,12 +161,12 @@ prepros.directive('openLiveUrl', function(liveRefresh, projectsManager){
 });
 
 //Directive to open live project url
-prepros.directive('removeProject', function(projectsManager){
+prepros.directive('removeProject', function (projectsManager) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element, attrs) {
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
@@ -179,11 +179,11 @@ prepros.directive('removeProject', function(projectsManager){
 
 
 //Tooltip directive
-prepros.directive('tooltip', function(){
+prepros.directive('tooltip', function () {
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element, attrs) {
 
             element.tooltip({delay: 500, title: attrs.tooltip});
 
@@ -193,13 +193,13 @@ prepros.directive('tooltip', function(){
 });
 
 //Tooltip directive
-prepros.directive('compile', function(compiler){
+prepros.directive('compile', function (compiler) {
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element, attrs) {
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
 
                 compiler.compile(attrs.compile);
 
@@ -211,13 +211,13 @@ prepros.directive('compile', function(compiler){
 });
 
 //Show Project Options directive
-prepros.directive('showProjectOptions', function(){
+prepros.directive('showProjectOptions', function () {
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element) {
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
@@ -230,13 +230,13 @@ prepros.directive('showProjectOptions', function(){
 });
 
 //Save Project Options directive
-prepros.directive('saveProjectOptions', function(storage, liveRefresh){
+prepros.directive('saveProjectOptions', function (storage, liveRefresh) {
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
+        link: function (scope, element) {
 
-            element.on('click', function(event){
+            element.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
@@ -249,5 +249,148 @@ prepros.directive('saveProjectOptions', function(storage, liveRefresh){
             })
         }
     };
+
+});
+
+//Directive to show options window
+prepros.directive('openOptionsWindow', function (config) {
+
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+
+            var optionsWindow;
+
+            element.on('click', function (event) {
+
+                global.preprosOptions = {user: config.user};
+
+                if (typeof(optionsWindow) === "object") {
+                    optionsWindow.show();
+                    optionsWindow.focus();
+                } else {
+                    optionsWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\options.html', {
+                        position: 'center',
+                        width: 500,
+                        height: 300,
+                        frame: true,
+                        toolbar: false,
+                        icon: 'app/assets/img/icons/128.png',
+                        resizable: false
+                    });
+
+                    optionsWindow.on('close', function () {
+                        config.user = global.preprosOptions.user;
+                        this.close(true);
+                        optionsWindow = undefined;
+                    });
+                }
+            });
+
+            require('nw.gui').Window.get().on('close', function () {
+
+                if(typeof(optionsWindow) === 'object') {
+                    optionsWindow.close();
+                }
+
+            });
+        }
+    }
+
+});
+
+
+//Directive to show options window
+prepros.directive('openAboutWindow', function (config) {
+
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+
+            //About window
+            var aboutWindow;
+
+            element.on('click', function () {
+
+                global.preprosAbout = {dependencies: config.dependencies, languages: config.languages, version: config.version};
+
+                if(typeof(aboutWindow) === "object"){
+                    aboutWindow.show();
+                    aboutWindow.focus();
+                } else {
+                    aboutWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\about.html', {
+                        position: 'center',
+                        width: 500,
+                        height: 520,
+                        frame: true,
+                        toolbar: false,
+                        icon: 'app/assets/img/icons/128.png',
+                        resizable: false
+                    });
+
+                    aboutWindow.on('close', function(){
+                        this.close(true);
+                        aboutWindow = undefined;
+                    });
+                }
+            });
+
+            require('nw.gui').Window.get().on('close', function () {
+
+                if(typeof(aboutWindow) === 'object') {
+                    aboutWindow.close();
+                }
+            });
+        }
+    }
+
+});
+
+//Directive to show options window
+prepros.directive('openLogWindow', function (config) {
+
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+
+            //Log window
+            var logWindow;
+
+            //Push to global so notification can trigger click event to open log
+            global.logElement = element;
+
+            element.on('click', function () {
+
+                if(typeof(logWindow) === 'object') {
+                    logWindow.focus();
+                    logWindow.show();
+                } else {
+                    logWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\log.html', {
+                        position: 'center',
+                        width: 800,
+                        height: 500,
+                        frame: true,
+                        toolbar: false,
+                        icon: 'app/assets/img/icons/128.png',
+                        resizable: false
+                    });
+
+                    logWindow.on('close', function(){
+                        this.close(true);
+                        logWindow = undefined;
+                    });
+                }
+            });
+
+            //Save data on window close
+            require('nw.gui').Window.get().on('close', function () {
+
+                if(typeof(logWindow) === 'object') {
+                    logWindow.close();
+                }
+
+            });
+        }
+    }
 
 });

@@ -4,32 +4,12 @@
     <title>Prepros Options</title>
     
     <script src="../scripts/lib/angular.js"></script>
-    <script src="../scripts/lib/underscore.js"></script>
     <link href="../assets/css/style.css" rel="stylesheet">
     <script>
         function OptionsCtrl($scope){
 
             //Cross window communication hack
             $scope.options =  global.preprosOptions;
-
-            var depKeys = Object.keys($scope.options.dependencies);
-            var langKeys = Object.keys($scope.options.languages);
-
-            var deps = [];
-
-            _.each(depKeys, function(key){
-
-                deps.push(key + " -> " +$scope.options.dependencies[key]);
-
-            });
-
-            _.each(langKeys, function(key){
-
-                deps.push(key + " -> " +$scope.options.languages[key].version);
-
-            });
-
-            $scope.dependencies = deps.sort();
 
             $scope.save = function(){
                 window.close();
