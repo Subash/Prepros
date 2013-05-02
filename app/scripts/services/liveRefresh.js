@@ -48,7 +48,7 @@ prepros.factory('liveRefresh', function (utils, $rootScope) {
 
             var url = require('url');
             var parsed = url.parse(project.config.customServerUrl);
-            return parsed.protocol + '//'  +parsed.host;
+            return parsed.protocol + '//'  + parsed.host;
 
         } else {
 
