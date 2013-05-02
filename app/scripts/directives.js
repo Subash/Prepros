@@ -287,6 +287,7 @@ prepros.directive('openOptionsWindow', function (config) {
                 }
             });
 
+            //Close options window when main window is closed
             require('nw.gui').Window.get().on('close', function () {
 
                 if(typeof(optionsWindow) === 'object') {
@@ -300,7 +301,7 @@ prepros.directive('openOptionsWindow', function (config) {
 });
 
 
-//Directive to show options window
+//Directive to show about window
 prepros.directive('openAboutWindow', function (config) {
 
     return {
@@ -335,6 +336,7 @@ prepros.directive('openAboutWindow', function (config) {
                 }
             });
 
+            //Close about window when main window is closed
             require('nw.gui').Window.get().on('close', function () {
 
                 if(typeof(aboutWindow) === 'object') {
@@ -346,7 +348,7 @@ prepros.directive('openAboutWindow', function (config) {
 
 });
 
-//Directive to show options window
+//Directive to show log window
 prepros.directive('openLogWindow', function (config) {
 
     return {
@@ -382,7 +384,7 @@ prepros.directive('openLogWindow', function (config) {
                 }
             });
 
-            //Save data on window close
+            //Close log window when main window close
             require('nw.gui').Window.get().on('close', function () {
 
                 if(typeof(logWindow) === 'object') {

@@ -16,8 +16,6 @@ prepros.factory('config', function () {
     var appFile = fs.readFileSync(appFileUrl).toString();
     var appData = JSON.parse(appFile).app;
 
-    var debug = appData.debug;
-
     var packagePath = path.join(basePath, '..');
 
 
@@ -70,7 +68,6 @@ prepros.factory('config', function () {
 
     return {
         basePath: basePath,
-        debug: debug,
         projects: projects,
         files: files,
         imports: imports,

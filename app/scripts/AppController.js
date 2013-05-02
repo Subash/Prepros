@@ -98,15 +98,4 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
         storage.saveImports($scope.imports);
         storage.saveProjects($scope.projects);
     });
-
-    //Developer tools in development mode
-    if(config.debug){
-
-        window.addEventListener('keydown', function (e) {
-            if (e.keyIdentifier === 'F12') {
-                require('nw.gui').Window.get().showDevTools();
-            }
-        });
-    }
-
 });

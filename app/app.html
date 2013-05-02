@@ -4,6 +4,16 @@
     <meta charset="utf-8">
     <title>Prepros App</title>
 
+    <script>
+
+        //Devtools for development mode; remove this code from production app
+        window.addEventListener('keydown', function (e) {
+            if (e.keyIdentifier === 'F12') {
+                require('nw.gui').Window.get().showDevTools();
+            }
+        });
+
+    </script>
 
     <!--Load App styles -->
     <link href="assets/css/style.css" rel="stylesheet">
