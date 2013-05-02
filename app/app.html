@@ -48,7 +48,7 @@
         <div class="new-project icomoon-plus icons" tooltip="Add new project" add-project></div>
         <div class="refresh icomoon-spinner-2 icons" tooltip="Refresh Files"
              refresh-project-files="{{selectedProject.id}}"></div>
-        <div class="options icomoon-cog icons" ng-click="showOptions()" tooltip="Project Options"></div>
+        <div class="options icomoon-cog icons" tooltip="Project Options" show-project-options></div>
         <div class="open icomoon-globe icons" tooltip="Open project live url"
              open-live-url="{{selectedProject.id}}"></div>
         <div class="remove icomoon-remove icons" tooltip="Remove project"
@@ -96,7 +96,7 @@
             <input type="text" ng-model="selectedProject.config.customServerUrl">
         </label>
     </div>
-    <button ng-click="saveOptions()">Ok</button>
+    <button save-project-options>Ok</button>
 </div>
 
 
@@ -282,7 +282,7 @@
                         </div>
                     </div>
 
-                    <button class="compile" ng-click="compile(selectedFile.id)"> Compile</button>
+                    <button class="compile" compile="{{selectedFile.id}}"> Compile</button>
 
                 </div>
             </div>

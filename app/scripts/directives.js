@@ -191,3 +191,63 @@ prepros.directive('tooltip', function(){
     };
 
 });
+
+//Tooltip directive
+prepros.directive('compile', function(compiler){
+
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+
+            element.on('click', function(event){
+
+                compiler.compile(attrs.compile);
+
+            });
+
+        }
+    };
+
+});
+
+//Show Project Options directive
+prepros.directive('showProjectOptions', function(){
+
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+
+            element.on('click', function(event){
+                event.preventDefault();
+                event.stopPropagation();
+
+                $('.project-options').slideDown('fast');
+
+            })
+        }
+    };
+
+});
+
+//Save Project Options directive
+prepros.directive('saveProjectOptions', function(storage, liveRefresh){
+
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+
+            element.on('click', function(event){
+                event.preventDefault();
+                event.stopPropagation();
+
+                $('.project-options').slideUp('fast');
+
+                storage.saveProjects(scope.projects);
+
+                liveRefresh.startServing(scope.projects);
+
+            })
+        }
+    };
+
+});

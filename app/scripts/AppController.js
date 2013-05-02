@@ -2,13 +2,9 @@
 /*global $, prepros,  _ */
 
 //App controller
-prepros.controller('AppCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, watcher, compiler, liveRefresh, utils) {
+prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage, projectsManager, utils) {
 
     'use strict';
-
-    var fs = require('fs'),
-        path = require('path'),
-        md5 = require('MD5');
 
     //Files and projects
 	$scope.projects = projectsManager.projects;
@@ -17,43 +13,11 @@ prepros.controller('AppCtrl', function ($scope, $route, $routeParams, $location,
 
 	$scope.imports = projectsManager.imports;
 
-    $scope.compile = compiler.compile;
-
-    //Start watching files
-    watcher.startWatching({
-
+    $rootScope.$broadcast('initApp', {
         projects: $scope.projects,
         files: $scope.files,
         imports: $scope.imports
-
     });
-
-    //Start live refreshing
-    liveRefresh.startServing($scope.projects);
-
-    var debounceStartServices = _.debounce(function(){
-
-        //Start watching files
-        watcher.startWatching({
-
-            projects: $scope.projects,
-            files: $scope.files,
-            imports: $scope.imports
-
-        });
-
-        liveRefresh.startServing($scope.projects);
-
-    }, 1000);
-
-    //Throttle data saving
-    var throttleDataSave  = _.throttle(function(){
-
-        storage.saveFiles($scope.files);
-        storage.saveProjects($scope.projects);
-        storage.saveImports($scope.imports);
-
-    }, 1000);
 
     $scope.$on('dataChange', function (event, data) {
 
@@ -73,11 +37,6 @@ prepros.controller('AppCtrl', function ($scope, $route, $routeParams, $location,
         $scope.projects = data.projects;
         $scope.files = data.files;
         $scope.imports = data.imports;
-
-        debounceStartServices();
-
-        //Save data
-        throttleDataSave();
 
         //Check if selectedProject was removed from project list
         if ($scope.selectedProject.id && !_.findWhere($scope.projects, {id: $scope.selectedProject.id})) {
@@ -131,23 +90,6 @@ prepros.controller('AppCtrl', function ($scope, $route, $routeParams, $location,
         }
     });
 
-    //function to show project settings
-    $scope.showOptions = function(){
-
-        $('.project-options').slideDown('fast');
-
-    };
-
-    $scope.saveOptions = function(){
-
-        $('.project-options').slideUp('fast');
-
-        storage.saveProjects($scope.projects);
-
-        liveRefresh.startServing($scope.projects);
-
-    };
-
     //Save data on exit
     utils.nw.window.on('close', function () {
 
@@ -155,6 +97,5 @@ prepros.controller('AppCtrl', function ($scope, $route, $routeParams, $location,
         storage.saveFiles($scope.files);
         storage.saveImports($scope.imports);
         storage.saveProjects($scope.projects);
-
     });
 });

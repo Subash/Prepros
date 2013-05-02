@@ -2,7 +2,7 @@
 /*global prepros,  _ , angular*/
 
 //Storage
-prepros.factory('liveRefresh', function (utils) {
+prepros.factory('liveRefresh', function (utils, $rootScope) {
 
     'use strict';
 
@@ -81,6 +81,18 @@ prepros.factory('liveRefresh', function (utils) {
         wsServer.broadcast(angular.toJson({urls: urls}));
 
     }
+
+    //Start server on init event
+    $rootScope.$on('initApp', function(event, data){
+        startServing(data.projects);
+    });
+
+    var throttleUpdate = _.throttle(startServing, 2000);
+
+    //Update server on data change
+    $rootScope.$on('dataChange', function(event, data){
+        throttleUpdate(data.projects)
+    });
 
     //Return
     return {

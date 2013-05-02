@@ -1,7 +1,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $rootScope) {
 
 	"use strict";
 
@@ -104,6 +104,18 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 		});
 
 	}
+
+    //Start watcher on init event
+    $rootScope.$on('initApp', function(event, data){
+        startWatching(data);
+    });
+
+    var throttleUpdate = _.throttle(startWatching, 2000);
+
+    //Update watcher on data change
+    $rootScope.$on('dataChange', function(event, data){
+        throttleUpdate(data);
+    });
 
 	return{
 		startWatching: startWatching
