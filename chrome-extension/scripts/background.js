@@ -12,7 +12,7 @@ function getLiveUrl(url){
 
 	} else {
 
-		return parseUrl(url).protocol + '//'  +parseUrl(url).host;
+		return parseUrl(url).protocol + '//' + parseUrl(url).host;
 
 	}
 }
