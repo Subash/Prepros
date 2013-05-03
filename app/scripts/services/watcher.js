@@ -106,7 +106,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 	}
 
     //Start watcher on init event
-    $rootScope.$on('initApp', function(event, data){
+    $rootScope.$on('initServices', function(event, data){
         startWatching(data);
     });
 

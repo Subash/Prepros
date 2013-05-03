@@ -24,9 +24,8 @@
     <script src="scripts/lib/underscore.js"></script>
     <script src="scripts/lib/bootstrap.js"></script>
 
-    <!--Load custom scripts -->
+    <!--Load custom script -->
     <script src="scripts/frame.js"></script>
-    <script src="scripts/singleInstance.js"></script>
 
     <!--Load AngularJs App -->
     <script src="scripts/app.js"></script>
@@ -51,7 +50,8 @@
 <div class="sidebar">
     <ul>
         <li ng-repeat="project in projects">
-            <a ng-href="#/files/{{project.id}}" draggable="false">{{project.name}}</a>
+            <a ng-href="#/files/{{project.id}}" draggable="false"
+               ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
         </li>
     </ul>
     <div class="controls" ng-class="{'show' : selectedProject.id}">
@@ -79,7 +79,7 @@
         <a class="about icomoon-info " tooltip="About Prepros" data-placement="bottom" open-about-window></a>
         <a class="log icomoon-copy-2" tooltip="App Log" data-placement="bottom" open-log-window></a>
         <a class="options icomoon-cog " tooltip="App Options" data-placement="bottom" open-options-window></a>
-        <a class="to-tray icomoon-arrow-down-right-3" tooltip="Minimize to taskbar" data-placement="bottom"></a>
+        <a class="to-tray icomoon-arrow-down-right-3" tooltip="Minimize to Tray" data-placement="bottom"></a>
         <a class="minimize-app icomoon-minus" tooltip="Minimize" data-placement="bottom"></a>
         <a class="close-app icomoon-close" tooltip="Close" data-placement="left"></a>
     </div>
@@ -126,15 +126,17 @@
 
             <div ng-switch-when="files">
                 <ul class="files">
-                    <li class="file" ng-repeat="file in files|orderBy:'name'|byProject">
-                        <a ng-href="#/files/{{pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}">
+                    <li class="file" ng-repeat="file in files|byProject|orderBy:'name'">
+                        <a ng-href="#/files/{{pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
+                           draggable="false">
                             <div class="thumb  {{file.type.toLowerCase()}}"
                                  ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
                             </div>
                             <div class="details clearfix">
                                 <span class="name">{{file.name}}</span>
                                 <span class="input">{{file.shortInput}}</span>
-                                <span class="output" change-file-output="{{file.id}}" tooltip="Click to change file output path">
+                                <span class="output" change-file-output="{{file.id}}"
+                                      tooltip="Click to change file output path">
                                     &rarr; {{file.shortOutput}}
                                 </span>
                             </div>

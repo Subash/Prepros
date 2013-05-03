@@ -83,7 +83,7 @@ prepros.factory('liveRefresh', function ($rootScope) {
     }
 
     //Start server on init event
-    $rootScope.$on('initApp', function(event, data){
+    $rootScope.$on('initServices', function(event, data){
         startServing(data.projects);
     });
 

@@ -1,7 +1,54 @@
 /*jshint browser: true, node: true*/
 /*global $, nw, prepros*/
 
+//Redirect to saved application state url at first
+if(localStorage.stateUrl){
 
+    window.location.hash = localStorage.stateUrl;
+
+}
+
+//Single instance
+(function(){
+
+    'use strict';
+
+    var http = require('http');
+
+    // Random enough  :)
+    var port = 57368;
+
+    //Try to create server
+    var server = http.createServer(function (req, res) {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end('Prepros App');
+
+        //Show and maximize window on request
+        var nwWindow = require('nw.gui').Window.get();
+        nwWindow.show();
+        nwWindow.focus();
+        nwWindow.requestAttention(true);
+
+    }).listen(port, '127.0.0.1', function(){
+
+            //Load frame
+            document.dispatchEvent(new CustomEvent('loadFrame'));
+
+        });
+
+
+
+    //Error means another instance is running
+    //So request the server to show previous instance
+    server.on('error', function(){
+        http.get('http://127.0.0.1:' + port, function() {
+            require('nw.gui').Window.get().close(true);
+        });
+    });
+
+})();
+
+//Load frame
 $(document).on('loadFrame', function () {
 
     'use strict';
@@ -16,18 +63,7 @@ $(document).on('loadFrame', function () {
 
     //Prevent unhandled file drops
     $(window).on('dragenter dragexit dragover drop', function(e){
-
         e.preventDefault();
-
-    });
-
-    //Prevent backspace navigation
-    $(document).keydown(function (e) {
-        var allowed_elements = $(document.activeElement)
-            .is('input[type=text]:focus, input[type=number]:focus, input[type=password]:focus, textarea:focus');
-        if (e.keyCode === 8 && !allowed_elements) {
-            e.preventDefault();
-        }
     });
 
     //Title bar controls
@@ -91,5 +127,4 @@ $(document).on('loadFrame', function () {
         tray_icon = null;
         this.close(true);
     });
-
 });
