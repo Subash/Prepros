@@ -20,8 +20,7 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
         imports: $scope.imports
     });
 
-    $scope.$on('dataChange', function (event, data) {
-
+    function dataChange(data){
         $scope.projects = data.projects;
         $scope.files = data.files;
         $scope.imports = data.imports;
@@ -45,9 +44,18 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
                 }
             }
         }
+    }
 
-        //Force view update if it is not updating automatically
-        if (!$scope.$$phase)  $scope.$apply();
+    $scope.$on('dataChange', function (event, data) {
+
+        //Force view update if it is not updated automatically
+        if (!$scope.$$phase){
+            $scope.$apply(function(){
+                dataChange(data);
+            });
+        } else {
+            dataChange(data);
+        }
 
     });
 
