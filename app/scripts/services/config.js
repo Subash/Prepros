@@ -73,7 +73,8 @@ prepros.factory('config', function () {
         imports: imports,
         languages: languages,
 		user: user,
-        dependencies: dependencies
+        dependencies: dependencies,
+        version: version
     };
 
 });

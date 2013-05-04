@@ -1,7 +1,7 @@
 !include MUI2.nsh
 
 # App name and Version
-!define VERSION "1.1.1"
+!define VERSION "1.1.2"
 Name "Prepros ${VERSION}"
 outFile "Prepros ${VERSION}.exe"
 ShowInstDetails "nevershow"
