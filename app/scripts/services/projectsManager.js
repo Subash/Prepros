@@ -187,7 +187,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
         //Remove file if it doesn't exist
         _.each(getProjectFiles(pid), function(file){
-            if(!fs.existsSync(file.path)){
+            if(!fs.existsSync(file.input)){
                 removeFile(file.id);
             }
         });
