@@ -2,7 +2,7 @@
 /*global prepros,  _, $ */
 
 //Storage
-prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, $rootScope) {
+prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, $rootScope, $location) {
 
     'use strict';
 
@@ -48,6 +48,9 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
             //Broadcast data change event
             $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+
+            //Redirect to newly added project
+            $location.path('/files/' + _id(folder));
 
         }
     }
