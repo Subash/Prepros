@@ -50,8 +50,13 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
             $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
 
             //Redirect to newly added project
-            $location.path('/files/' + _id(folder));
-
+            if (!$rootScope.$$phase){
+                $rootScope.$apply(function(){
+                    $location.path('/files/' + _id(folder));
+                });
+            } else {
+                $location.path('/files/' + _id(folder));
+            }
         }
     }
 
