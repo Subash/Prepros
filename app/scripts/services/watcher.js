@@ -1,3 +1,4 @@
+
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
@@ -16,13 +17,9 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 		var imports = data.imports;
 
 		//Remove all previous listeners
-		if (!_.isEmpty(watching)) {
-
-			_.each(watching, function (watcher) {
-				watcher.close();
-			});
-
-		}
+        _.each(watching, function(filePath){
+            fs.unwatchFile(filePath);
+        });
 
         watching = [];
 
@@ -46,13 +43,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
             try {
 
-                if(fs.existsSync(file.input)){
+                fs.watchFile(file.input, { persistent: true, interval: 200}, debounceCompile);
 
-                    var watcher = fs.watch(file.input, { persistent: true }, debounceCompile);
-
-                    //Push to watching list so it can be closed later
-                    watching.push(watcher);
-                }
+                //Push to watching list so it can be closed later
+                watching.push(file.input);
 
             } catch (err) {
 
@@ -67,33 +61,24 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 			//Prevent multiple events
 			var debounceCompile = _.debounce(function () {
 
-				if(fs.existsSync(imp.path)){
+                _.each(imp.parents, function(parentId){
 
-					_.each(imp.parents, function(parent){
+                    var parentFile = projectsManager.getFileById(parentId);
 
-                        var parentFile = projectsManager.getFileById(parent);
+                    if(!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
 
-                        if(!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
-
-                            compiler.compile(parent);
-                        }
-
-					});
-
-				}
-
+                        compiler.compile(parentId);
+                    }
+                });
 
 			}, 200, true);
 
 			try {
 
-                if(fs.existsSync(imp.path)){
+                fs.watchFile(imp.path, { persistent: true, interval: 200}, debounceCompile);
 
-                    var watcher = fs.watch(imp.path, { persistent: true }, debounceCompile);
-
-                    //Push to watching list so it can be closed later
-                    watching.push(watcher);
-                }
+                //Push to watching list so it can be closed later
+                watching.push(imp.path);
 
 			} catch (err) {
 
