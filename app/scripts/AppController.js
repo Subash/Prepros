@@ -14,6 +14,10 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
 
     $scope.imports = projectsManager.imports;
 
+    $scope.selectedFile = [];
+
+    $scope.selectedProject = [];
+
     $rootScope.$broadcast('initServices', {
         projects: $scope.projects,
         files: $scope.files,
