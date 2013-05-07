@@ -1,5 +1,5 @@
-/*jshint browser: true, node: true*/
-/*global $, prepros,  _ */
+/*jshint browser: true, node: true, unused: false*/
+/*global prepros,  _ */
 
 //App controller
 prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,

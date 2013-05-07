@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global prepros,  _ */
+/*global prepros*/
 
 //Storage
 prepros.factory('fileTypes', function (storage, notification, config, utils) {
@@ -8,7 +8,6 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
 
     var fs = require('fs-extra'),
         path = require('path'),
-        walker = require('node-walker'),
         cp = require('child_process'),
         _id = utils.id;
 
@@ -470,7 +469,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
                     try {
                         var html = marked(data.toString());
 
-                        fs.outputFile(file.output, html)
+                        fs.outputFile(file.output, html);
 
                     } catch(e) {
                         notification.error('Error compiling markdown file.', file.output);

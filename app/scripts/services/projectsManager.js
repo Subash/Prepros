@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global prepros,  _, $ */
+/*global prepros,  _*/
 
 //Storage
 prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, $rootScope, $location) {

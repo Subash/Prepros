@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global prepros, $*/
+/*global prepros, angular*/
 
 prepros.factory('config', function () {
 

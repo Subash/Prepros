@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global nw, prepros, $, _, angular */
+/*global prepros, $, _, Mousetrap */
 
 'use strict';
 
@@ -39,7 +39,7 @@ prepros.directive('dropTarget', function (projectsManager) {
                 });
             });
         }
-    }
+    };
 });
 
 //Directive to add new project
@@ -52,7 +52,7 @@ prepros.directive('addProject', function (projectsManager) {
             var fs = require('fs'),
                 path = require('path');
 
-            Mousetrap.bind('ctrl+n', function(e) {
+            Mousetrap.bind('ctrl+n', function() {
                 element.trigger('click');
                 return false;
             });
@@ -84,9 +84,9 @@ prepros.directive('addProject', function (projectsManager) {
                     });
 
                 });
-            })
+            });
         }
-    }
+    };
 });
 
 //Directive to change file output directory
@@ -121,12 +121,12 @@ prepros.directive('changeFileOutput', function (projectsManager) {
 
                 $(elm).on('change', function (e) {
 
-                    projectsManager.changeFileOutput(attrs.changeFileOutput, e.currentTarget.files[0].path)
+                    projectsManager.changeFileOutput(attrs.changeFileOutput, e.currentTarget.files[0].path);
 
                 });
             });
         }
-    }
+    };
 });
 
 //Directive to refresh project files
@@ -135,7 +135,7 @@ prepros.directive('refreshProjectFiles', function (projectsManager) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            Mousetrap.bind(['ctrl+r', 'f5'], function(e) {
+            Mousetrap.bind(['ctrl+r', 'f5'], function() {
                 if(scope.selectedProject.id){
                     element.trigger('click');
                 }
@@ -149,9 +149,9 @@ prepros.directive('refreshProjectFiles', function (projectsManager) {
 
                 projectsManager.refreshProjectFiles(attrs.refreshProjectFiles);
 
-            })
+            });
         }
-    }
+    };
 });
 
 //Directive to open live project url
@@ -160,7 +160,7 @@ prepros.directive('openLiveUrl', function (liveRefresh, projectsManager) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            Mousetrap.bind('ctrl+l', function(e) {
+            Mousetrap.bind('ctrl+l', function() {
                 if(scope.selectedProject.id){
                     element.trigger('click');
                 }
@@ -177,7 +177,7 @@ prepros.directive('openLiveUrl', function (liveRefresh, projectsManager) {
 
             });
         }
-    }
+    };
 });
 
 //Directive to open live project url
@@ -186,7 +186,7 @@ prepros.directive('removeProject', function (projectsManager) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            Mousetrap.bind('ctrl+d', function(e) {
+            Mousetrap.bind('ctrl+d', function() {
                 if(scope.selectedProject.id){
                     element.trigger('click');
                 }
@@ -201,7 +201,7 @@ prepros.directive('removeProject', function (projectsManager) {
 
             });
         }
-    }
+    };
 });
 
 
@@ -226,7 +226,7 @@ prepros.directive('compile', function (compiler, projectsManager) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            Mousetrap.bind('ctrl+shift+c', function(e) {
+            Mousetrap.bind('ctrl+shift+c', function() {
                 if(scope.selectedProject.id){
 
                     var projects = projectsManager.getProjectFiles(scope.selectedProject.id);
@@ -240,7 +240,7 @@ prepros.directive('compile', function (compiler, projectsManager) {
                 return false;
             });
 
-            Mousetrap.bind('ctrl+c', function(e) {
+            Mousetrap.bind('ctrl+c', function() {
 
                 if(scope.selectedFile.id){
 
@@ -252,7 +252,7 @@ prepros.directive('compile', function (compiler, projectsManager) {
 
 
 
-            element.on('click', function (event) {
+            element.on('click', function () {
 
                 compiler.compile(attrs.compile);
 
@@ -276,7 +276,7 @@ prepros.directive('showProjectOptions', function () {
 
                 $('.project-options').slideDown('fast');
 
-            })
+            });
         }
     };
 
@@ -299,7 +299,7 @@ prepros.directive('saveProjectOptions', function (storage, liveRefresh) {
 
                 liveRefresh.startServing(scope.projects);
 
-            })
+            });
         }
     };
 
@@ -314,7 +314,7 @@ prepros.directive('openOptionsWindow', function (config) {
 
             var optionsWindow;
 
-            element.on('click', function (event) {
+            element.on('click', function () {
 
                 global.preprosOptions = {user: config.user};
 
@@ -349,7 +349,7 @@ prepros.directive('openOptionsWindow', function (config) {
 
             });
         }
-    }
+    };
 
 });
 
@@ -397,7 +397,7 @@ prepros.directive('openAboutWindow', function (config) {
                 }
             });
         }
-    }
+    };
 
 });
 
@@ -446,6 +446,6 @@ prepros.directive('openLogWindow', function (config) {
 
             });
         }
-    }
+    };
 
 });

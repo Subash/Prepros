@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global $, nw, prepros*/
+/*global $, CustomEvent*/
 
 //Redirect to saved application state url at first
 if(localStorage.stateUrl){
@@ -72,7 +72,7 @@ $(document).on('loadFrame', function () {
     });
 
     $('.title-bar .controls .love').on('click', function () {
-        require('child_process').spawn('explorer', ['http://alphapixels.com/prepros#love'], {detached: true})
+        require('child_process').spawn('explorer', ['http://alphapixels.com/prepros#love'], {detached: true});
     });
 
     $('.title-bar .controls .minimize-app').on('click', function () {

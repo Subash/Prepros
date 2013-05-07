@@ -27,7 +27,7 @@ prepros.factory('liveRefresh', function ($rootScope) {
     //Send the list of urls to refresh to extension on connect
     wsServer.on('request', function (request) {
 
-        var connection = request.accept('', request.origin);
+        request.accept('', request.origin);
 
         wsServer.broadcast(angular.toJson({urls: urls}));
 
@@ -91,7 +91,7 @@ prepros.factory('liveRefresh', function ($rootScope) {
 
     //Update server on data change
     $rootScope.$on('dataChange', function(event, data){
-        throttleUpdate(data.projects)
+        throttleUpdate(data.projects);
     });
 
     //Return

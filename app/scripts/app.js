@@ -1,5 +1,5 @@
-/*jshint browser: true, node: true*/
-/*global nw, prepros, $, _, angular */
+/*jshint browser: true, node: true, unused: false*/
+/*global angular */
 
 'use strict';
 

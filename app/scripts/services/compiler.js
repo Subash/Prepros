@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global prepros,  _*/
+/*global prepros*/
 
 prepros.factory("compiler", function (projectsManager, fileTypes) {
 
