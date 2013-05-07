@@ -52,6 +52,11 @@ prepros.directive('addProject', function (projectsManager) {
             var fs = require('fs'),
                 path = require('path');
 
+            Mousetrap.bind('ctrl+n', function(e) {
+                element.trigger('click');
+                return false;
+            });
+
             element.on('click', function () {
 
                 event.preventDefault();
@@ -129,6 +134,14 @@ prepros.directive('refreshProjectFiles', function (projectsManager) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
+
+            Mousetrap.bind(['ctrl+r', 'f5'], function(e) {
+                if(scope.selectedProject.id){
+                    element.trigger('click');
+                }
+                return false;
+            });
+
             element.on('click', function (event) {
 
                 event.preventDefault();
@@ -146,6 +159,13 @@ prepros.directive('openLiveUrl', function (liveRefresh, projectsManager) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
+
+            Mousetrap.bind('ctrl+l', function(e) {
+                if(scope.selectedProject.id){
+                    element.trigger('click');
+                }
+                return false;
+            });
 
             element.on('click', function (event) {
                 event.preventDefault();
@@ -165,6 +185,13 @@ prepros.directive('removeProject', function (projectsManager) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
+
+            Mousetrap.bind('ctrl+d', function(e) {
+                if(scope.selectedProject.id){
+                    element.trigger('click');
+                }
+                return false;
+            });
 
             element.on('click', function (event) {
                 event.preventDefault();
@@ -193,11 +220,37 @@ prepros.directive('tooltip', function () {
 });
 
 //Tooltip directive
-prepros.directive('compile', function (compiler) {
+prepros.directive('compile', function (compiler, projectsManager) {
 
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
+
+            Mousetrap.bind('ctrl+shift+c', function(e) {
+                if(scope.selectedProject.id){
+
+                    var projects = projectsManager.getProjectFiles(scope.selectedProject.id);
+
+                    _.each(projects, function(project){
+
+                        compiler.compile(project.id);
+
+                    });
+                }
+                return false;
+            });
+
+            Mousetrap.bind('ctrl+c', function(e) {
+
+                if(scope.selectedFile.id){
+
+                    compiler.compile(scope.selectedFile.id);
+                }
+
+                return false;
+            });
+
+
 
             element.on('click', function (event) {
 
