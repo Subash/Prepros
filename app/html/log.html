@@ -1,18 +1,37 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="prepros">
 <head>
     <title>Prepros Log</title>
+    <script src="../scripts/lib/jquery.js"></script>
+    <script src="../scripts/lib/jquery.timeago.js"></script>
     <script src="../scripts/lib/angular.js"></script>
+
     <link href="../assets/css/style.css" rel="stylesheet">
     <script>
-        function LogCtrl($scope){
+
+        var prepros = angular.module('prepros', []);
+
+        prepros.controller('LogCtrl', function($scope){
 
             $scope.preprosLog = global.preprosLog;
 
             //HACK for cross window communication
             global.logScope = $scope;
 
-        }
+        });
+
+        prepros.directive('timeDiff', function($timeout){
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs){
+
+                    $timeout(function(){
+                        $(element).timeago();
+                    });
+                }
+            }
+        });
+
     </script>
 </head>
 <body>
@@ -26,6 +45,7 @@
             <div class="details">
                 <pre>{{log.details}}</pre>
             </div>
+            <div class="time"><time datetime="{{log.date}}" x-time-diff></time> </div>
         </li>
     </ul>
 </div>

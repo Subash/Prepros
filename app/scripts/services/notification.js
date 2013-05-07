@@ -12,7 +12,7 @@ prepros.factory('notification', function (config) {
 
 	function error(name, details){
 
-        global.preprosLog.push({name: name, details: details, type: 'error'});
+        global.preprosLog.unshift({name: name, details: details, type: 'error', date: new Date().toISOString()});
 
         global.preprosNotification = {name: name, details: details, type: 'error'};
 
