@@ -468,6 +468,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
         removeImport: removeImport,
 
         refreshProjectFiles: refreshProjectFiles,
+        getProjectFiles: getProjectFiles,
         changeFileOutput: changeFileOutput
     };
 })
