@@ -4,3 +4,18 @@ Compile less, sass, scss, compass, coffeescript, stylus, jade, markdown and haml
 To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.com/prepros).
 
 ![Prepros App](http://alphapixels.com/prepros/img/prepros.png)
+
+##Features
+* Compile less, sass, scss, compass, coffeescript, stylus, jade, markdown and haml files
+* No dependencies to install (sass compass etc..)
+* Live Browser Refresh
+* Backwards @imports parsing support
+* Various options for languages
+* Error notification
+* Background file watch and compile
+* Built-in http server
+
+##TODO
+* Javascript concat and minification
+* Support slim
+* Live browser refresh extension for firefox
