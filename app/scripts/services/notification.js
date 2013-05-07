@@ -47,6 +47,14 @@ prepros.factory('notification', function (config) {
                     notificationWindow = undefined;
                 });
             }
+
+            //Close notification window when main window is closed
+            require('nw.gui').Window.get().on('close', function () {
+
+                if(typeof(notificationWindow) === 'object') {
+                    notificationWindow.close();
+                }
+            });
         }
 	}
 
