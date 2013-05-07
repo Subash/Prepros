@@ -6,8 +6,8 @@
   box-sizing: border-box;
 }
 
-*:focus, *:active {
-  outline: none !important;
+*:focus {
+  outline-color: #53777A !important;
 }
 
 ::-webkit-scrollbar {
