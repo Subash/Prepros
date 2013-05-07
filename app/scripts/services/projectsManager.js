@@ -196,53 +196,62 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
         utils.showLoading();
 
-        //Get all files in project folder and add file to file list
-        walker(folder, function (err, file, next) {
+        if(fs.existsSync(folder)){
+            //Get all files in project folder and add file to file list
+            walker(folder, function (err, file, next) {
 
-                //Ouch error occurred
-                if (err) {
+                    //Ouch error occurred
+                    if (err) {
 
-                    notification.notify('Error getting all files. ', 'error', folder);
-                }
+                        notification.notify('Error getting all files. ', 'error', folder);
+                    }
 
-                //Add file to project
-                if (file !== null) {
+                    //Add file to project
+                    if (file !== null) {
 
-                    var extname = path.extname(file).toLowerCase();
-                    var supportedExtensions = [
-                        '.less', //Less
-                        '.sass', '.scss', //Sass
-                        '.styl', //Stylus
-                        '.md', '.markdown', //Markdown
-                        '.coffee', //Coffeescript
-                        '.jade', //Jade
-                        '.haml'  //Haml
-                    ];
-                    if (_.contains(supportedExtensions, extname)) {
+                        var extname = path.extname(file).toLowerCase();
+                        var supportedExtensions = [
+                            '.less', //Less
+                            '.sass', '.scss', //Sass
+                            '.styl', //Stylus
+                            '.md', '.markdown', //Markdown
+                            '.coffee', //Coffeescript
+                            '.jade', //Jade
+                            '.haml'  //Haml
+                        ];
+                        if (_.contains(supportedExtensions, extname)) {
 
-                        filesToAdd.push(path.normalize(file));
+                            filesToAdd.push(path.normalize(file));
+
+                        }
 
                     }
 
-                }
+                    //Next file
+                    if (next) {
+                        next();
+                    } else {
 
-                //Next file
-                if (next) {
-                    next();
-                } else {
+                        //Add files
+                        if (!_.isEmpty(filesToAdd)) {
 
-                    //Add files
-                    if (!_.isEmpty(filesToAdd)) {
+                            addFileImports(filesToAdd, folder);
+                            addFiles(filesToAdd, folder);
 
-                        addFileImports(filesToAdd, folder);
-                        addFiles(filesToAdd, folder);
+                        }
 
+                        utils.hideLoading();
                     }
-
-                    utils.hideLoading();
                 }
-            }
-        );
+            );
+        } else {
+
+            removeProject(pid);
+
+            utils.hideLoading();
+
+        }
+
     }
 
     //function to add all imports by file to imports list
