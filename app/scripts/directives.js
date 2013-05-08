@@ -206,13 +206,17 @@ prepros.directive('removeProject', function (projectsManager) {
 
 
 //Tooltip directive
-prepros.directive('tooltip', function () {
+prepros.directive('tooltip', function ($timeout) {
 
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            element.tooltip({delay: 500, title: attrs.tooltip});
+            $timeout(function(){
+
+                element.tooltip({delay: 500, title: attrs.tooltip, container: 'body'});
+
+            });
 
         }
     };
