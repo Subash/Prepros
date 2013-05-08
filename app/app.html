@@ -134,12 +134,13 @@
                                  ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
                             </div>
                             <div class="details clearfix">
-                                <span class="name">{{file.name}}</span>
-                                <span class="input">{{file.shortInput}}</span>
-                                <span class="output" x-change-file-output="{{file.id}}"
-                                      x-tooltip="Click to change file output path">
-                                    &rarr; {{file.shortOutput}}
-                                </span>
+                                <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
+                                <div class="input"><span x-tooltip="{{file.input}}">{{file.shortInput}}</span></div>
+                                <div>
+                                    <span class="output"
+                                          x-tooltip="{{file.output}}" x-change-file-output="{{file.id}}">&rarr;
+                                        {{file.shortOutput}}</span>
+                                </div>
                             </div>
                         </a>
                     </li>

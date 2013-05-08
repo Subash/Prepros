@@ -377,8 +377,12 @@ body {
       .details {
         float: left;
         margin-left: 10px;
-        span {
-          display: block;
+        max-width: 560px;
+        -webkit-transition: max-width 0.25s;
+        div {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         .name {
           color: #666;
@@ -388,6 +392,11 @@ body {
           color: #AAA;
         }
       }
+    }
+
+    &.show-options .file a .details {
+      max-width: 340px;
+      -webkit-transition: max-width 0.25s;
     }
 
     .options {
