@@ -50,6 +50,9 @@
             "haml": {
                 "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
                 "version": "4.0.2"
+            },
+            "kramdown" : {
+                "version": "1.0.2"
             }
         }
     }

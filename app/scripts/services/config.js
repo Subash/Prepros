@@ -46,10 +46,17 @@ prepros.factory('config', function () {
 		haml: {
 			path: path.join(packagePath, appData.rubygems.haml.path),
 			version: appData.rubygems.haml.version
-		}
+		},
+        kramdown: {
+            version: appData.rubygems.kramdown.version
+        }
     };
 
     var user = [];
+
+    var saveOptions = function(){
+        fs.outputFile(configFile, angular.toJson(user, true));
+    };
 
     if(fs.existsSync(configFile)){
 
@@ -63,8 +70,9 @@ prepros.factory('config', function () {
             enableNotifications: true
         };
 
-        fs.outputFile(configFile, angular.toJson(user, true));
+        saveOptions();
     }
+
 
     return {
         basePath: basePath,
@@ -74,7 +82,8 @@ prepros.factory('config', function () {
         languages: languages,
 		user: user,
         dependencies: dependencies,
-        version: version
+        version: version,
+        saveOptions: saveOptions
     };
 
 });
