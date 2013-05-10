@@ -90,18 +90,6 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
 	}
 
-    //Start watcher on init event
-    $rootScope.$on('initServices', function(event, data){
-        startWatching(data);
-    });
-
-    var throttleUpdate = _.throttle(startWatching, 2000);
-
-    //Update watcher on data change
-    $rootScope.$on('dataChange', function(event, data){
-        throttleUpdate(data);
-    });
-
 	return{
 		startWatching: startWatching
 	};

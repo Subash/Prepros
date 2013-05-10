@@ -25,7 +25,6 @@ prepros.factory('notification', function (config) {
 
             if(typeof(notificationWindow) === 'object') {
                 notificationWindow.reload();
-                notificationWindow.focus();
                 notificationWindow.show();
 
             } else {

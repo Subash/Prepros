@@ -58,30 +58,9 @@ $(document).on('loadFrame', function () {
         window: require('nw.gui').Window.get()
     };
 
-    //Show window
-    nw.window.show();
-
     //Prevent unhandled file drops
     $(window).on('dragenter dragexit dragover drop', function(e){
         e.preventDefault();
-    });
-
-    //Title bar controls
-    $('.title-bar .controls .close-app').on('click', function () {
-        nw.window.close();
-    });
-
-    $('.title-bar .controls .love').on('click', function () {
-        require('child_process').spawn('explorer', ['http://alphapixels.com/prepros#love'], {detached: true});
-    });
-
-    $('.title-bar .controls .minimize-app').on('click', function () {
-        nw.window.minimize();
-    });
-
-    $('.title-bar .controls .to-tray').on('click', function () {
-
-        nw.window.hide();
     });
 
     //Tray icon
@@ -123,6 +102,9 @@ $(document).on('loadFrame', function () {
 
 
     nw.window.on('close', function () {
+
+        //Save application state url
+        localStorage.stateUrl = window.location.hash;
         tray_icon.remove();
         tray_icon = null;
         this.close(true);

@@ -172,17 +172,6 @@ prepros.factory('storage', function (notification, config, $rootScope) {
 		return notRemoved;
 	}
 
-    var throttleSave = _.throttle(function(data){
-        saveFiles(data.files);
-        saveProjects(data.projects);
-        saveImports(data.imports);
-    }, 2000);
-
-    //Save data
-    $rootScope.$on('dataChange', function(event, data){
-        throttleSave(data);
-    });
-
 	//Return projects list and files list
 	return {
 

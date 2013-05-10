@@ -28,14 +28,13 @@
     <!--Load custom script -->
     <script src="scripts/frame.js"></script>
 
-    <!--Load AngularJs App -->
+    <!-- AngularJs App -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/filters.js"></script>
-    <script src="scripts/directives.js"></script>
+
+    <!--Services -->
     <script src="scripts/services/watcher.js"></script>
     <script src="scripts/services/compiler.js"></script>
     <script src="scripts/services/config.js"></script>
-    <script src="scripts/AppController.js"></script>
     <script src="scripts/services/fileTypes.js"></script>
     <script src="scripts/services/liveRefresh.js"></script>
     <script src="scripts/services/notification.js"></script>
@@ -43,27 +42,40 @@
     <script src="scripts/services/storage.js"></script>
     <script src="scripts/services/utils.js"></script>
 
+    <!-- Filters -->
+    <script src="scripts/filters/project.js"></script>
+
+    <!-- Controllers -->
+    <script src="scripts/controllers/MainCtrl.js"></script>
+    <script src="scripts/controllers/TitlebarCtrl.js"></script>
+    <script src="scripts/controllers/SidebarCtrl.js"></script>
+    <script src="scripts/controllers/FilesCtrl.js"></script>
+
+    <!-- Directives -->
+    <script src="scripts/directives/tooltip.js"></script>
+    <script src="scripts/directives/keyboard-shortcuts.js"></script>
+    <script src="scripts/directives/drag-drop-project.js"></script>
+    <script src="scripts/directives/log-element.js"></script>
+
 </head>
 <body>
-<div class="wrapper clearfix" ng-controller="AppCtrl" x-drop-target>
+<div class="wrapper clearfix" ng-controller="MainCtrl" x-drag-drop-project x-bind-keyboard-shortcuts>
 
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar" ng-controller="SidebarCtrl">
     <ul>
         <li ng-repeat="project in projects">
             <a ng-href="#/files/{{project.id}}" draggable="false"
                ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
         </li>
     </ul>
+
     <div class="controls" ng-class="{'show' : selectedProject.id}">
-        <div class="new-project icomoon-plus icons" x-tooltip="Add new project" x-add-project></div>
-        <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files"
-             x-refresh-project-files="{{selectedProject.id}}"></div>
-        <div class="options icomoon-cog icons" x-tooltip="Project Options" x-show-project-options></div>
-        <div class="open icomoon-globe icons" x-tooltip="Open project live url"
-             x-open-live-url="{{selectedProject.id}}"></div>
-        <div class="remove icomoon-remove icons" x-tooltip="Remove project"
-             x-remove-project="{{selectedProject.id}}"></div>
+        <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
+        <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
+        <div class="options icomoon-cog icons" x-tooltip="Project Options" ng-click="showOptions()"></div>
+        <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
+        <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
     </div>
 
 </div>
@@ -73,16 +85,16 @@
 <div class="main">
 
 <!-- App title bar -->
-<div class="title-bar">
+<div class="title-bar" ng-controller="TitlebarCtrl">
     <div class="controls">
         <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
-        <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom"></a>
-        <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" x-open-about-window></a>
-        <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" x-open-log-window></a>
-        <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" x-open-options-window></a>
-        <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom"></a>
-        <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom"></a>
-        <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left"></a>
+        <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
+        <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" ng-click="openAboutWindow()"></a>
+        <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow($event)" x-log-element></a>
+        <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
+        <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
+        <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
+        <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
     </div>
 </div>
 
@@ -107,12 +119,12 @@
             <input type="text" ng-model="selectedProject.config.customServerUrl">
         </label>
     </div>
-    <button x-save-project-options>Ok</button>
+    <button>Done</button>
 </div>
 
 
 <!--File list and project view -->
-<div class="content clearfix">
+<div class="content clearfix" ng-controller="FilesCtrl">
     <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
         <div ng-switch on="routePath">
             <div ng-switch-when="home" class="home">
@@ -127,7 +139,7 @@
 
             <div ng-switch-when="files">
                 <ul class="files">
-                    <li class="file" ng-repeat="file in files|byProject|orderBy:'name'">
+                    <li class="file" ng-repeat="file in files|project|orderBy:'name'">
                         <a ng-href="#/files/{{pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
                            draggable="false">
                             <div class="thumb  {{file.type.toLowerCase()}}"
@@ -137,9 +149,9 @@
                                 <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
                                 <div class="input"><span x-tooltip="{{file.input}}">{{file.shortInput}}</span></div>
                                 <div>
-                                    <span class="output"
-                                          x-tooltip="{{file.output}}" x-change-file-output="{{file.id}}">&rarr;
-                                        {{file.shortOutput}}</span>
+                                    <span class="output" x-tooltip="{{file.output}}"
+                                          ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput}}
+                                    </span>
                                 </div>
                             </div>
                         </a>
@@ -296,7 +308,7 @@
                         </div>
                     </div>
 
-                    <button class="compile" x-compile="{{selectedFile.id}}"> Compile</button>
+                    <button class="compile" ng-click="compile()"> Compile</button>
 
                 </div>
             </div>

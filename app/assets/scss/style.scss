@@ -219,11 +219,11 @@ body {
     position: absolute;
     z-index: 555;
     top: 50%;
-    margin-top: -150px;
+    margin-top: -135px;
     left: 50%;
     margin-left: -125px;
     width: 250px;
-    height: 300px;
+    height: auto;
     padding: 10px;
     background: #FFF;
     text-align: left;
@@ -232,6 +232,9 @@ body {
     box-shadow: 0px 0px 0px 500px rgba(255, 255, 255, 0.2);
     * {
       max-width: 225px;
+    }
+    &.show {
+      display: block;
     }
 
     button {

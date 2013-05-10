@@ -2,8 +2,8 @@
 /*global prepros,  _ */
 
 //App controller
-prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
-                                        projectsManager, liveRefresh, watcher, utils, config) {
+prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
+                                        projectsManager, liveRefresh, watcher, utils, config, $timeout) {
 
     'use strict';
 
@@ -18,12 +18,48 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
 
     $scope.selectedProject = [];
 
-    $rootScope.$broadcast('initServices', {
-        projects: $scope.projects,
-        files: $scope.files,
-        imports: $scope.imports
-    });
+    ///File Change
+    var throttleFileChange = _.throttle(function(){
 
+        storage.saveFiles($scope.files);
+        watcher.startWatching({files: $scope.files, projects: $scope.projects, imports: $scope.imports});
+
+    }, 1500);
+
+    //Projects Change
+    var throttleProjectsChange = _.throttle(function(){
+
+        storage.saveProjects($scope.projects);
+        liveRefresh.startServing($scope.projects);
+
+    }, 1500);
+
+    //Imports Change
+    var throttleImportsChange = _.throttle(function(){
+        storage.saveImports($scope.imports);
+        watcher.startWatching({files: $scope.files, projects: $scope.projects, imports: $scope.imports});
+
+    }, 1500);
+
+    $scope.$watch('files', function(){
+
+        throttleFileChange();
+
+    }, true);
+
+    $scope.$watch('projects', function(){
+
+        throttleProjectsChange();
+
+    }, true);
+
+    $scope.$watch('imports', function(){
+        throttleImportsChange();
+    }, true);
+
+    //No need to start services because event on $watch is fired at the begining and it will start the services automatically
+
+    //Save data on change
     function dataChange(data){
         $scope.projects = data.projects;
         $scope.files = data.files;
@@ -109,13 +145,10 @@ prepros.controller('AppCtrl', function ($scope, $rootScope, $route, $routeParams
         }
     });
 
-    //Save data on exit
-    require('nw.gui').Window.get().on('close', function () {
-        this.hide();
-        //Save application state url
-        localStorage.stateUrl = window.location.hash;
-        storage.saveFiles($scope.files);
-        storage.saveImports($scope.imports);
-        storage.saveProjects($scope.projects);
-    });
+    //Wait 100ms for app to load and show window to prevent flash of unloaded content
+    $timeout(function(){
+        require('nw.gui').Window.get().show();
+    }, 100);
+
+
 });
