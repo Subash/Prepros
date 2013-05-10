@@ -2,7 +2,7 @@
 /*global prepros,  _, angular */
 
 //Storage
-prepros.factory('storage', function (notification, config, $rootScope) {
+prepros.factory('storage', function (notification, config) {
 
     'use strict';
 

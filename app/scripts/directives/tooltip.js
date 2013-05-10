@@ -4,6 +4,8 @@
 //Tooltip directive
 prepros.directive('tooltip', function ($timeout) {
 
+    'use strict';
+
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {

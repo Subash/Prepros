@@ -2,7 +2,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $rootScope) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler) {
 
 	"use strict";
 

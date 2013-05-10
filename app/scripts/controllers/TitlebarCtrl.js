@@ -4,6 +4,8 @@
 //Title Bar controls
 prepros.controller('TitlebarCtrl', function ($scope, config) {
 
+    'use strict';
+
     //Support Author Link
     $scope.supportAuthor = function () {
 
@@ -50,7 +52,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
 
     //Open Log window
     var logWindow;
-    $scope.openLogWindow = function (event) {
+    $scope.openLogWindow = function () {
 
         if (typeof(logWindow) === 'object') {
             logWindow.focus();
@@ -136,5 +138,5 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     //Close App
     $scope.close = function(){
         require('nw.gui').Window.get().close();
-    }
+    };
 });

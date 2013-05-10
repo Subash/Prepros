@@ -2,7 +2,7 @@
 /*global prepros,  _ , angular*/
 
 //Storage
-prepros.factory('liveRefresh', function ($rootScope) {
+prepros.factory('liveRefresh', function () {
 
     'use strict';
 

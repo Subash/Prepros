@@ -1,8 +1,10 @@
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _ , $*/
 
-//Title Bar controls
+//Files List controls
 prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager) {
+
+    'use strict';
 
     var fs = require('fs'),
         path = require('path');
@@ -40,6 +42,6 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager) {
     //Compile file
     $scope.compile = function(){
         compiler.compile($scope.selectedFile.id);
-    }
+    };
 
 });

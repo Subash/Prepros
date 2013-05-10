@@ -1,8 +1,10 @@
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _ */
+/*global prepros,  _, $ */
 
 //Title Bar controls
 prepros.controller('SidebarCtrl', function ($scope, projectsManager, liveRefresh) {
+
+    'use strict';
 
     var fs = require('fs'),
         path = require('path');

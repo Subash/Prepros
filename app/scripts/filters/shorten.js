@@ -8,8 +8,6 @@ prepros.filter('shorten', function () {
     return function (string) {
         if(string.length>65){
 
-            var newLength = string.length - 75;
-
             var splits = string.split('/');
 
             var first = splits[0];

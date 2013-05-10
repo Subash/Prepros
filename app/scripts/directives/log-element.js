@@ -4,6 +4,8 @@
 //Directive for log element
 prepros.directive('logElement', function(){
 
+    'use strict';
+
     return {
         restrict: 'A',
         link: function(scope, element){
@@ -12,7 +14,7 @@ prepros.directive('logElement', function(){
             global.logElement = element;
 
         }
-    }
+    };
 
 
 });

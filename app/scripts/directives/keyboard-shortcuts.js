@@ -4,6 +4,8 @@
 //Directive for keyboard shortcuts
 prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveRefresh, compiler){
 
+    'use strict';
+
     var fs = require('fs'),
         path = require('path');
 
@@ -98,6 +100,6 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveRefresh
             });
 
         }
-    }
+    };
 
 });
