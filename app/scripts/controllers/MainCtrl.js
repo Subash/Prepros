@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _ */
+/*global prepros,  _ , $*/
 
 //App controller
 prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
@@ -146,9 +146,12 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
     });
 
     //Wait 100ms for app to load and show window to prevent flash of unloaded content
-    $timeout(function(){
-        require('nw.gui').Window.get().show();
-    }, 100);
+    $(document).on('loadFrame', function(){
+        $timeout(function(){
+            require('nw.gui').Window.get().show();
+        }, 100);
+    }) ;
+
 
 
 });
