@@ -46,17 +46,11 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
             refreshProjectFiles(project.id);
 
+            //Redirect to newly added project
+            $location.path('/files/' + _id(folder));
+
             //Broadcast data change event
             $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
-
-            //Redirect to newly added project
-            if (!$rootScope.$$phase){
-                $rootScope.$apply(function(){
-                    $location.path('/files/' + _id(folder));
-                });
-            } else {
-                $location.path('/files/' + _id(folder));
-            }
         }
     }
 
@@ -203,7 +197,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
                     //Ouch error occurred
                     if (err) {
 
-                        notification.notify('Error getting all files. ', 'error', folder);
+                        notification.notify('Error getting all files. ', folder);
                     }
 
                     //Add file to project
@@ -354,9 +348,6 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
     //Function to add files
     function addFiles(list, projectPath) {
 
-        //Broadcast the dataChange event only if new files are found
-        var broadcast = false;
-
         _.each(list, function (filePath) {
 
             //Check if file already exists in files list
@@ -365,8 +356,6 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
             var inImports = _.isEmpty(_.findWhere(imports, {path: filePath})) ? false : true;
 
             if (!already && !inImports) {
-
-                broadcast = true;
 
                 var file,
                     extension = path.extname(filePath).toLowerCase();
@@ -423,11 +412,8 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
             }
         });
 
-        if (broadcast) {
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
-        }
+        //Broadcast data change event
+        $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
 
     }
 
