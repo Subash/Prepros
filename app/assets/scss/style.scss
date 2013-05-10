@@ -92,9 +92,14 @@ body {
   color: #666;
   cursor: default;
   font-family: LatoRegular;
-  overflow: auto;
+  overflow: hidden;
   margin: 0;
   padding: 0;
+}
+
+.tooltip .tooltip-inner {
+  max-width: 900px;
+  white-space: nowrap;
 }
 
 .wrapper {
@@ -118,11 +123,11 @@ body {
     list-style: none;
     li a {
       display: block;
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 15px;
+      padding-right: 15px;
       width: 210px;
-      height: 40px;
-      line-height: 40px;
+      height: 45px;
+      line-height: 45px;
       color: #a9a9a9;
       text-decoration: none;
       overflow: hidden;

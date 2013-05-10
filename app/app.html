@@ -44,6 +44,7 @@
 
     <!-- Filters -->
     <script src="scripts/filters/project.js"></script>
+    <script src="scripts/filters/shorten.js"></script>
 
     <!-- Controllers -->
     <script src="scripts/controllers/MainCtrl.js"></script>
@@ -147,10 +148,10 @@
                             </div>
                             <div class="details clearfix">
                                 <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
-                                <div class="input"><span x-tooltip="{{file.input}}">{{file.shortInput}}</span></div>
+                                <div class="input"><span x-tooltip="{{file.input}}">{{file.shortInput | shorten}}</span></div>
                                 <div>
                                     <span class="output" x-tooltip="{{file.output}}"
-                                          ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput}}
+                                          ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput | shorten}}
                                     </span>
                                 </div>
                             </div>
