@@ -1,3 +1,11 @@
+## Version 1.2.1 -May 11, 2013
+
+* Support [Sass Bourbon](http://bourbon.io) Mixins
+* Markdown Filter For Haml
+* User interface improvement
+* Some code and performance improvements
+
+
 ## Version 1.2.0 -May 07, 2013
 
 * Fixed app crash on project folder delete
