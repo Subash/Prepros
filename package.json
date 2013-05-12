@@ -47,6 +47,10 @@
                 "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
                 "version": "0.12.2"
             },
+            "bourbon": {
+                "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\bourbon-3.1.6\\app\\assets\\stylesheets",
+                "version": "3.1.6"
+            },
             "haml": {
                 "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
                 "version": "4.0.2"

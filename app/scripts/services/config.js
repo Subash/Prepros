@@ -43,6 +43,10 @@ prepros.factory('config', function () {
             path: path.join(packagePath, appData.rubygems.sass.path),
             version: appData.rubygems.sass.version
         },
+        bourbon: {
+            path: path.join(packagePath, appData.rubygems.bourbon.path),
+            version: appData.rubygems.bourbon.version
+        },
 		haml: {
 			path: path.join(packagePath, appData.rubygems.haml.path),
 			version: appData.rubygems.haml.version

@@ -210,6 +210,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
         } else if (ext === '.scss') {
             file.type = 'Scss';
             file.config.compass = false;
+            file.config.bourbon = false;
             file.config.outputStyle = 'compressed'; //compressed, nested, expanded
         }
 
@@ -317,6 +318,11 @@ prepros.factory('fileTypes', function (storage, notification, config, utils) {
             //Compass
             if (file.config.compass) {
                 args.push('--compass');
+            }
+
+            //Bourbon
+            if (file.config.bourbon) {
+                args.push('--load-path', config.languages.bourbon.path);
             }
 
             //Line numbers
