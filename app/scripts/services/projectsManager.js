@@ -2,7 +2,7 @@
 /*global prepros,  _*/
 
 //Storage
-prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, $rootScope, $location) {
+prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, importsVisitor, $rootScope, $location) {
 
     'use strict';
 
@@ -271,7 +271,7 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
             if (canImport && !isSassPartial && !inImports) {
 
                 //Get all the files @import-ed by this file
-                var importsByThisFile = fileTypes.visitImports(filePath);
+                var importsByThisFile = importsVisitor.visitImports(filePath);
 
                 _.each(importsByThisFile, function (importedFile) {
 
