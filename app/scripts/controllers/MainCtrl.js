@@ -14,9 +14,9 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
     $scope.imports = projectsManager.imports;
 
-    $scope.selectedFile = [];
+    $scope.selectedFile = {};
 
-    $scope.selectedProject = [];
+    $scope.selectedProject = {};
 
     ///File Change
     var throttleFileChange = _.throttle(function(){
@@ -68,7 +68,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
         //Check if selectedProject was removed from project list
         if ($scope.selectedProject.id && !_.findWhere($scope.projects, {id: $scope.selectedProject.id})) {
 
-            $scope.selectedProject = [];
+            $scope.selectedProject = {};
             $location.path('/home');
         }
 
@@ -76,7 +76,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
         if ($scope.selectedFile.id) {
             if (!_.findWhere($scope.files, {id: $scope.selectedFile.id})) {
 
-                $scope.selectedFile = [];
+                $scope.selectedFile = {};
 
                 //If project exists
                 if ($scope.selectedProject.id) {
@@ -141,7 +141,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
             }
         } else {
 
-            $scope.selectedProject = [];
+            $scope.selectedProject = {};
         }
     });
 
