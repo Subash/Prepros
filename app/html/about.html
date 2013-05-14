@@ -10,12 +10,11 @@
     <script>
         function AboutCtrl($scope){
 
-            //Cross window communication hack
-            $scope.about =  global.preprosAbout;
+            //Configuration
+            $scope.config =  global.config;
 
-            var depKeys = Object.keys($scope.about.dependencies);
-            var langKeys = Object.keys($scope.about.languages);
-            $scope.version = $scope.about.version;
+            var node_modules = Object.keys($scope.config.node_modules);
+            var gems = Object.keys($scope.config.ruby.gems);
 
             $scope.checkingUpdate = true;
             $scope.errorCheck = false;
@@ -23,7 +22,7 @@
 
             $scope.update = {
                 available: false,
-                version: $scope.version,
+                version: $scope.config.version,
                 date: ""
             };
 
@@ -31,10 +30,10 @@
                 cache: false
             });
 
-            $.getJSON("http://alphapixels.com/prepros/update.json")
+            $.getJSON($scope.config.updateFileUrl)
                     .done(function(data) {
 
-                        if($scope.version != data[0].version){
+                        if($scope.config.version != data[0].version){
 
                             $scope.update = {
                                 available: true,
@@ -58,45 +57,51 @@
                         $scope.$apply();
                     });
 
-            var deps = [];
 
-            _.each(depKeys, function(key){
+            $scope.node_modules = [];
 
-                deps.push(key + " -> " +$scope.about.dependencies[key]);
+            _.each(node_modules, function(module){
 
-            });
-
-            _.each(langKeys, function(key){
-
-                deps.push(key + " -> " +$scope.about.languages[key].version);
+                $scope.node_modules.push(module + " -> " +$scope.config.node_modules[module]);
 
             });
 
-            $scope.dependencies = deps.sort();
+            $scope.gems = [];
 
-            $scope.save = function(){
-                window.close();
-            };
+            _.each(gems, function(gem){
+
+                $scope.gems.push(gem + " -> " +$scope.config.ruby.gems[gem].version);
+
+            });
+
 
             $scope.go = function(){
-                require('child_process').spawn('explorer', ['http://alphapixels.com/prepros'], {detached: true});
+                require('child_process').spawn('explorer', [$scope.config.online.url], {detached: true});
             }
 
         }
     </script>
 </head>
-<body>
+<body style="overflow: auto">
 <div ng-controller="AboutCtrl" class="preprosAbout">
-    <h4>Prepros {{version}}</h4>
+    <h4>Prepros {{config.version}}</h4>
+
+    <h5>Node Modules</h5>
     <ul>
-        <li ng-repeat="dep in dependencies">{{dep}}</li>
+        <li ng-repeat="module in node_modules">{{module}}</li>
     </ul>
+
+    <h5>Ruby Gems</h5>
+    <ul>
+        <li ng-repeat="gem in gems">{{gem}}</li>
+    </ul>
+
     <p>
-        <a ng-click="go()" style="cursor: pointer;">http://alphapixels.com/prepros</a>
+        To learn more, please visit <a ng-click="go()" style="cursor: pointer;">{{config.online.url}}</a>.
     </p>
 
     <div ng-show="update.available" class="alert alert-info">
-        New version {{update.version}} released on {{update.date}} is available, visit <a ng-click="go()" style="cursor: pointer;">http://alphapixels.com/prepros</a> to download.
+        New version {{update.version}} released on {{update.date}} is available, visit <a ng-click="go()" style="cursor: pointer;">{{config.online.url}}</a> to download.
     </div>
     <div ng-show="checkingUpdate" class="alert alert-info">
         Checking for updates.
@@ -105,7 +110,7 @@
         An error occurred while checking for updates.
     </div>
     <div ng-show="upToDate" class="alert alert-success">
-        You are using the latest and greatest version of Prepros App.
+        You are using the latest and greatest version of Prepros.
     </div>
 
 </div>

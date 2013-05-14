@@ -457,5 +457,4 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
         getProjectFiles: getProjectFiles,
         changeFileOutput: changeFileOutput
     };
-})
-;
+});

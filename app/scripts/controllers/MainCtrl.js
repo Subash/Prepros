@@ -3,7 +3,7 @@
 
 //App controller
 prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
-                                        projectsManager, liveRefresh, watcher, utils, config, $timeout) {
+                                        projectsManager, liveRefresh, watcher) {
 
     'use strict';
 
@@ -144,14 +144,4 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
             $scope.selectedProject = {};
         }
     });
-
-    //Wait 100ms for app to load and show window to prevent flash of unloaded content
-    $(document).on('loadFrame', function(){
-        $timeout(function(){
-            require('nw.gui').Window.get().show();
-        }, 100);
-    }) ;
-
-
-
 });

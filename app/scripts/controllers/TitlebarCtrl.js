@@ -9,7 +9,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     //Support Author Link
     $scope.supportAuthor = function () {
 
-        require('child_process').spawn('explorer', ['http://alphapixels.com/prepros#love'], {detached: true});
+        require('child_process').spawn('explorer', [config.online.loveUrl], {detached: true});
 
     };
 
@@ -18,7 +18,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     var aboutWindow;
     $scope.openAboutWindow = function () {
 
-        global.preprosAbout = {dependencies: config.dependencies, languages: config.languages, version: config.version};
+        //Inject config object to global so about window can read it
+        global.config = config;
 
         if (typeof(aboutWindow) === "object") {
             aboutWindow.show();
@@ -27,11 +28,11 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
             aboutWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\about.html', {
                 position: 'center',
                 width: 500,
-                height: 520,
+                height: 590,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
-                resizable: false
+                resizable: true
             });
 
             aboutWindow.on('close', function () {
@@ -60,7 +61,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
         } else {
             logWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\log.html', {
                 position: 'center',
-                width: 800,
+                width: 700,
                 height: 500,
                 frame: true,
                 toolbar: false,
@@ -88,8 +89,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     var optionsWindow;
     $scope.openOptionsWindow = function () {
 
-        //Push app options to global so options window can get it
-        global.preprosOptions = {user: config.user};
+        //Inject config object to global so options window can read it
+        global.userConfig = config.user;
 
         if (typeof(optionsWindow) === "object") {
             optionsWindow.show();
@@ -97,8 +98,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
         } else {
             optionsWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\options.html', {
                 position: 'center',
-                width: 500,
-                height: 300,
+                width: 600,
+                height: 540,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
@@ -106,7 +107,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
             });
 
             optionsWindow.on('close', function () {
-                config.user = global.preprosOptions.user;
+                config.user = global.userConfig;
                 config.saveOptions();
                 this.close(true);
                 optionsWindow = undefined;

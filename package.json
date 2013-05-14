@@ -14,13 +14,13 @@
         "show": false
     },
 
-    "app": {
+    "prepros": {
 
         "__JSON_NOTE": "All paths are relative to this json file",
 
         "version" : "1.2.1",
         
-        "dependencies": {
+        "node_modules": {
             "coffeescript": "1.6.2",
             "express": "3.1.2",
             "fs-extra": "0.6.0",
@@ -35,28 +35,31 @@
             "websocket": "1.0.8"
         },
         "ruby": {
+
             "path": "ruby\\bin\\ruby.exe",
-            "version": "2.0.0"
-        },
-        "rubygems": {
-            "sass": {
-                "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.8\\bin\\sass",
-                "version": "3.2.8"
-            },
-            "compass": {
-                "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
-                "version": "0.12.2"
-            },
-            "bourbon": {
-                "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\bourbon-3.1.6\\app\\assets\\stylesheets",
-                "version": "3.1.6"
-            },
-            "haml": {
-                "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
-                "version": "4.0.2"
-            },
-            "kramdown" : {
-                "version": "1.0.2"
+            "version": "2.0.0",
+
+            "gems": {
+                "sass": {
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.8\\bin\\sass",
+                    "version": "3.2.8"
+                },
+                "compass": {
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
+                    "version": "0.12.2"
+                },
+                "bourbon": {
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\bourbon-3.1.6\\app\\assets\\stylesheets",
+                    "version": "3.1.6"
+                },
+                "haml": {
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
+                    "version": "4.0.2"
+                },
+                "kramdown" : {
+                    "version": "1.0.2",
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\kramdown-1.0.2\\bin\\kramdown"
+                }
             }
         }
     }

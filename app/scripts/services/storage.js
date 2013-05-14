@@ -6,7 +6,14 @@ prepros.factory('storage', function (notification, config) {
 
     'use strict';
 
-	var fs = require('fs-extra');
+	var fs = require('fs-extra'),
+        path = require('path');
+
+    //Paths
+
+    var filesPath = path.join(config.dataPath, 'files.json'),
+        projectsPath = path.join(config.dataPath, 'projects.json'),
+        importsPath = path.join(config.dataPath, 'imports.json');
 
 	//function to save files list
 	function saveFiles(files) {
@@ -14,7 +21,7 @@ prepros.factory('storage', function (notification, config) {
 		//Write data to file
         try {
 
-            fs.outputFileSync(config.files, angular.toJson(files, true));
+            fs.outputFileSync(filesPath, angular.toJson(files, true));
 
         } catch(e){
 
@@ -30,7 +37,7 @@ prepros.factory('storage', function (notification, config) {
         //Write data to file
         try {
 
-            fs.outputFileSync(config.projects, angular.toJson(projects, true));
+            fs.outputFileSync(projectsPath, angular.toJson(projects, true));
 
         } catch(e){
 
@@ -45,7 +52,7 @@ prepros.factory('storage', function (notification, config) {
         //Write data to file
         try {
 
-            fs.outputFileSync(config.imports, angular.toJson(imports, true));
+            fs.outputFileSync(importsPath, angular.toJson(imports, true));
 
         } catch(e){
 
@@ -60,11 +67,11 @@ prepros.factory('storage', function (notification, config) {
 		var projects = [];
 
 		//Read Projects file
-		if (fs.existsSync(config.projects)) {
+		if (fs.existsSync(projectsPath)) {
 
 			try {
 
-				projects = JSON.parse(fs.readFileSync(config.projects).toString());
+				projects = JSON.parse(fs.readFileSync(projectsPath).toString());
 
 			} catch (e) {
 
@@ -100,10 +107,10 @@ prepros.factory('storage', function (notification, config) {
 		var files = [];
 
 		//Read Files
-		if (fs.existsSync(config.files)) {
+		if (fs.existsSync(filesPath)) {
 			try {
 
-				files = JSON.parse(fs.readFileSync(config.files).toString());
+				files = JSON.parse(fs.readFileSync(filesPath).toString());
 
 			} catch (e) {
 
@@ -140,11 +147,11 @@ prepros.factory('storage', function (notification, config) {
 		var imports = [];
 
 		//Read Imports
-		if (fs.existsSync(config.imports)) {
+		if (fs.existsSync(importsPath)) {
 
 			try {
 
-				imports = JSON.parse(fs.readFileSync(config.imports).toString());
+				imports = JSON.parse(fs.readFileSync(importsPath).toString());
 
 			} catch (e) {
 

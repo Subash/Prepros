@@ -2,40 +2,232 @@
 <html ng-app>
 <head>
     <title>Prepros Options</title>
-    
+
+    <script src="../scripts/lib/jquery.js"></script>
+    <script src="../scripts/lib/bootstrap.js"></script>
     <script src="../scripts/lib/angular.js"></script>
     <link href="../assets/css/style.css" rel="stylesheet">
     <script>
-        function OptionsCtrl($scope){
+        function OptionsCtrl($scope) {
 
             //Cross window communication hack
-            $scope.options =  global.preprosOptions;
+            $scope.userConfig = global.userConfig;
 
-            $scope.save = function(){
+            //Just Close the window, The controller will catch data and save it on close event
+            $scope.done = function () {
                 window.close();
             }
 
         }
     </script>
 </head>
-<body>
+<body style="overflow: auto">
 <div ng-controller="OptionsCtrl" class="preprosOptions">
-    <h4>Prepros App Options</h4>
-    <div class="options">
-        <label>
-            <input type="checkbox" ng-model="options.user.enableNotifications">
-            <span class="label-desc">Enable Desktop Notifications</span>
-        </label>
-        <label>
-            <span class="label-desc">Css Folder <span class="muted">(will apply only to new projects)</span></span><br>
-            <input type="text" ng-model="options.user.cssPath">
-        </label>
-        <label>
-            <span class="label-desc">Javascripts Folder <span class="muted">(will apply only to new projects)</span></span><br>
-            <input type="text" ng-model="options.user.jsPath">
-        </label>
-        <button ng-click="save()">Save and Close</button>
+<h4>Prepros App Options</h4>
+
+<div class="tabbable tabs-left" style="border-bottom: 1px solid #CCC;margin-top: 25px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#general" data-toggle="tab">General</a></li>
+        <li><a href="#less" data-toggle="tab">Less</a></li>
+        <li><a href="#scss" data-toggle="tab">Scss</a></li>
+        <li><a href="#sass" data-toggle="tab">Sass</a></li>
+        <li><a href="#stylus" data-toggle="tab">Stylus</a></li>
+        <li><a href="#jade" data-toggle="tab">Jade</a></li>
+        <li><a href="#haml" data-toggle="tab">Haml</a></li>
+        <li><a href="#coffee" data-toggle="tab">Coffee</a></li>
+        <li><a href="#markdown" data-toggle="tab">Markdown</a></li>
+    </ul>
+    <div class="tab-content">
+
+        <div class="tab-pane active" id="general">
+            <label>
+                <span class="label-desc">Css Folder</span><br>
+                <input type="text" ng-model="userConfig.cssPath">
+            </label>
+            <label>
+                <span class="label-desc">Javascripts Folder</span><br>
+                <input type="text" ng-model="userConfig.jsPath">
+            </label>
+            <label>
+                <span class="label-desc">Html File Extension</span><br>
+                <input type="text" ng-model="userConfig.htmlExtension">
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableNotifications">
+                <span class="label-desc">Enable Desktop Notifications</span>
+            </label>
+        </div>
+
+        <!-- Less -->
+        <div class="tab-pane" id="less">
+            <label>
+                <input type="checkbox" ng-model="userConfig.less.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.less.lineNumbers">
+                <span class="label-desc">Line numbers</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.less.compress">
+                <span class="label-desc">Compress Css</span>
+            </label>
+        </div>
+
+
+        <!-- Scss -->
+        <div class="tab-pane" id="scss">
+            <label>
+                <input type="checkbox" ng-model="userConfig.scss.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.scss.lineNumbers">
+                <span class="label-desc">Line numbers</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.scss.compass">
+                <span class="label-desc">Use Compass</span>
+            </label>
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.scss.bourbon">
+                <span class="label-desc">Use Bourbon</span>
+            </label>
+
+            <label>
+                <span class="label-desc">Output Style</span><br>
+                <select ng-model="userConfig.scss.outputStyle">
+                    <option value="compressed">Compressed</option>
+                    <option value="nested">Nested</option>
+                    <option value="expanded">Expanded</option>
+                </select>
+            </label>
+        </div>
+
+        <!-- Sass -->
+        <div class="tab-pane" id="sass">
+            <label>
+                <input type="checkbox" ng-model="userConfig.sass.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.sass.lineNumbers">
+                <span class="label-desc">Line numbers</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.sass.compass">
+                <span class="label-desc">Use Compass</span>
+            </label>
+
+            <label>
+                <span class="label-desc">Output Style</span><br>
+                <select ng-model="userConfig.sass.outputStyle">
+                    <option value="compressed">Compressed</option>
+                    <option value="nested">Nested</option>
+                    <option value="expanded">Expanded</option>
+                </select>
+            </label>
+        </div>
+
+        <!-- Stylus -->
+        <div class="tab-pane" id="stylus">
+            <label>
+                <input type="checkbox" ng-model="userConfig.stylus.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.stylus.lineNumbers">
+                <span class="label-desc">Line numbers</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.stylus.compress">
+                <span class="label-desc">Compress Css</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.stylus.config.nib">
+                <span class="label-desc">Use Nib</span>
+            </label>
+        </div>
+
+
+        <!-- markdown -->
+        <div class="tab-pane" id="markdown">
+            <label>
+                <input type="checkbox" ng-model="userConfig.markdown.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.markdown.gfm">
+                <span class="label-desc">Github Flavoured</span>
+            </label>
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.markdown.sanitize">
+                <span class="label-desc">Sanitize Output</span>
+            </label>
+        </div>
+
+        <!-- coffee -->
+        <div class="tab-pane" id="coffee">
+            <label>
+                <input type="checkbox" ng-model="userConfig.coffee.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.coffee.uglify">
+                <span class="label-desc">Uglify</span>
+            </label>
+        </div>
+
+        <!-- jade -->
+        <div class="tab-pane" id="jade">
+            <label>
+                <input type="checkbox" ng-model="userConfig.jade.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.jade.pretty">
+                <span class="label-desc">Pretty Output</span>
+            </label>
+        </div>
+
+
+        <!-- Haml -->
+        <div class="tab-pane" id="haml">
+            <label>
+                <input type="checkbox" ng-model="userConfig.haml.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.haml.doubleQuotes">
+                <span class="label-desc">Double quotes</span>
+            </label>
+
+            <label>
+                <span class="label-desc">Output Format</span><br>
+                <select ng-model="userConfig.haml.format">
+                    <option value="xhtml">Xhtml</option>
+                    <option value="html5">Html5</option>
+                </select>
+            </label>
+            <label>
+                <span class="label-desc">Output Style</span><br>
+                <select ng-model="userConfig.haml.outputStyle">
+                    <option value="indented">Indented</option>
+                    <option value="ugly">Ugly</option>
+                </select>
+            </label>
+
+        </div>
+
+
     </div>
+</div>
+<!-- Done -->
+<button ng-click="done()" class="pull-right" style="margin: 20px;">Done</button>
+
 </div>
 </body>
 </html>

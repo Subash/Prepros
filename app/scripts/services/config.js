@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true*/
-/*global prepros, angular*/
+/*global prepros, angular, _*/
 
 prepros.factory('config', function () {
 
@@ -11,67 +11,162 @@ prepros.factory('config', function () {
     //Base path
     var basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname.slice(1))));
 
-    //Read config file, everything is relative to base path in app.json file
-    var appFileUrl = path.join(basePath, '../package.json');
-    var appFile = fs.readFileSync(appFileUrl).toString();
-    var appData = JSON.parse(appFile).app;
+    //Package.json file url
+    var packageFileUrl = path.join(basePath, '../package.json');
 
+    //Read package.json file and get data of app in prepros object
+    var packageData = JSON.parse(fs.readFileSync(packageFileUrl).toString()).prepros;
+
+    //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
 
-
-    //User data
+    //User data path
     var dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
 
-    var projects =  path.join(dataPath, 'projects.json'),
-        files =  path.join(dataPath, 'files.json'),
-        imports = path.join(dataPath, 'imports.json'),
-        configFile  = path.join(dataPath, 'config.json');
+    //User config file
+    var configFile = path.join(dataPath, 'config.json');
 
-    var dependencies = appData.dependencies;
-    var version = appData.version;
+    //Node modules required by the app
+    var node_modules = packageData.node_modules;
 
-    var languages = {
-        ruby: {
-            path: path.join(packagePath, appData.ruby.path),
-            version: appData.ruby.version
-        },
-        compass: {
-            path: path.join(packagePath, appData.rubygems.compass.path),
-            version: appData.rubygems.compass.version
-        },
-        sass: {
-            path: path.join(packagePath, appData.rubygems.sass.path),
-            version: appData.rubygems.sass.version
-        },
-        bourbon: {
-            path: path.join(packagePath, appData.rubygems.bourbon.path),
-            version: appData.rubygems.bourbon.version
-        },
-		haml: {
-			path: path.join(packagePath, appData.rubygems.haml.path),
-			version: appData.rubygems.haml.version
-		},
-        kramdown: {
-            version: appData.rubygems.kramdown.version
+    //App version
+    var version = packageData.version;
+
+    //App urls
+    var online = {
+        url: 'http://alphapixels.com/prepros',
+        helpUrl: 'http://alphapixels.com/prepros',
+        loveUrl: 'http://alphapixels.com/prepros#love',
+        updateFileUrl: 'http://alphapixels.com/prepros/update.json'
+    };
+
+    var ruby = {
+
+        path: path.join(packagePath, packageData.ruby.path),
+        version: packageData.ruby.version,
+
+        gems: {
+            compass: {
+                path: path.join(packagePath, packageData.ruby.gems.compass.path),
+                version: packageData.ruby.gems.compass.version
+            },
+            sass: {
+                path: path.join(packagePath, packageData.ruby.gems.sass.path),
+                version: packageData.ruby.gems.sass.version
+            },
+            bourbon: {
+                path: path.join(packagePath, packageData.ruby.gems.bourbon.path),
+                version: packageData.ruby.gems.bourbon.version
+            },
+            haml: {
+                path: path.join(packagePath, packageData.ruby.gems.haml.path),
+                version: packageData.ruby.gems.haml.version
+            },
+            kramdown: {
+                path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
+                version: packageData.ruby.gems.kramdown.version
+            }
         }
     };
 
-    var user = [];
+    var user = {};
 
-    var saveOptions = function(){
-        fs.outputFile(configFile, angular.toJson(user, true));
+
+    var saveOptions = function () {
+
+        try {
+            fs.outputFileSync(configFile, angular.toJson(user, true));
+        } catch(e){
+
+            //Can't use notification api here
+            window.alert('Unable to save configuration file.');
+
+        }
     };
 
-    if(fs.existsSync(configFile)){
+    //Read user config
+    if (fs.existsSync(configFile)) {
 
-        user  = JSON.parse(fs.readFileSync(configFile).toString());
+        try {
+            user = JSON.parse(fs.readFileSync(configFile).toString());
+        } catch(e){
+            //Can't use notification api here
+            window.alert('Unable to read configuration file.');
+        }
 
-    } else {
 
+    }
+
+    //Check if user config file is compatible with this version configurations
+    if(_.isEmpty(user) || !user.less) {
+
+        //Default Options For User
         user = {
             cssPath: 'css',
             jsPath: 'js',
-            enableNotifications: true
+            htmlExtension: '.html',
+            enableNotifications: true,
+
+
+            //Default Less Options
+            less : {
+                autoCompile: true,
+                compress : true,
+                lineNumbers: false
+            },
+
+            //Default Scss options
+            scss : {
+                autoCompile : true,
+                lineNumbers : false,
+                compass : false,
+                bourbon : false,
+                outputStyle : 'compressed' //compressed, nested, expanded
+            },
+
+            //Default Sass options
+            sass : {
+                autoCompile : true,
+                lineNumbers : false,
+                compass : false,
+                outputStyle : 'compressed' //compressed, nested, expanded
+            },
+
+
+            //Default Stylus Options
+            stylus : {
+                autoCompile: true,
+                lineNumbers : false,
+                nib : false,
+                compress : true
+            },
+
+            //Default Markdown Options
+            markdown : {
+                autoCompile: true,
+                sanitize: false,
+                gfm: true
+            },
+
+            //Default Coffeescript Options
+            coffee: {
+                autoCompile: true,
+                uglify: false
+            },
+
+            //Default Jade  Options
+            jade: {
+                autoCompile: true,
+                pretty: true
+            },
+
+            //Default Haml Options
+            haml: {
+                autoCompile: true,
+                format: 'html5', //xhtml, html5
+                outputStyle: 'indented', //indented, ugly
+                doubleQuotes: false
+            }
         };
 
         saveOptions();
@@ -79,13 +174,12 @@ prepros.factory('config', function () {
 
 
     return {
+        dataPath: dataPath,
         basePath: basePath,
-        projects: projects,
-        files: files,
-        imports: imports,
-        languages: languages,
-		user: user,
-        dependencies: dependencies,
+        ruby: ruby,
+        node_modules: node_modules,
+        online: online,
+        user: user,
         version: version,
         saveOptions: saveOptions
     };
