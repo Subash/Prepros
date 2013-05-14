@@ -30,7 +30,7 @@
                 cache: false
             });
 
-            $.getJSON($scope.config.updateFileUrl)
+            $.getJSON($scope.config.online.updateFileUrl)
                     .done(function(data) {
 
                         if($scope.config.version != data[0].version){
