@@ -57,8 +57,12 @@
                     "version": "4.0.2"
                 },
                 "kramdown" : {
-                    "version": "1.0.2",
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\kramdown-1.0.2\\bin\\kramdown"
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\kramdown-1.0.2\\bin\\kramdown",
+                    "version": "1.0.2"
+                },
+                "susy" : {
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\susy-1.0.8\\sass",
+                    "version": "1.0.8"
                 }
             }
         }

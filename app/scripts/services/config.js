@@ -65,6 +65,10 @@ prepros.factory('config', function () {
             kramdown: {
                 path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
                 version: packageData.ruby.gems.kramdown.version
+            },
+            susy: {
+                path: path.join(packagePath, packageData.ruby.gems.susy.path),
+                version: packageData.ruby.gems.susy.version
             }
         }
     };
@@ -120,7 +124,6 @@ prepros.factory('config', function () {
                 autoCompile : true,
                 lineNumbers : false,
                 compass : false,
-                bourbon : false,
                 outputStyle : 'compressed' //compressed, nested, expanded
             },
 

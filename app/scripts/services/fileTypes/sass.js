@@ -89,12 +89,15 @@ prepros.factory('sass', function (config, utils, notification) {
         //Compass
         if (file.config.compass) {
             args.push('--compass');
+
+            //Compass Susy Plugin
+            args.push('--load-path', config.ruby.gems.susy.path);
+
         }
 
-        //Bourbon
-        if (file.config.bourbon) {
-            args.push('--load-path', config.ruby.gems.bourbon.path);
-        }
+        //Sass bourbon
+        args.push('--load-path', config.ruby.gems.bourbon.path);
+
 
         //Line numbers
         if (file.config.lineNumbers) {
