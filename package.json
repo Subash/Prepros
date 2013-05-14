@@ -41,8 +41,8 @@
 
             "gems": {
                 "sass": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.8\\bin\\sass",
-                    "version": "3.2.8"
+                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.9\\bin\\sass",
+                    "version": "3.2.9"
                 },
                 "compass": {
                     "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
