@@ -1,3 +1,13 @@
+## Version 1.3.0 -May 16, 2013
+
+* New default options panel ( Ability to save default options for languages )
+* Compass Susy plugin
+* Automatic update checker
+* Enabled Bourbon by default
+* Cleaner codebase
+* Fixed bug where app crash was caused and file settings were not preserved.
+
+
 ## Version 1.2.1 -May 11, 2013
 
 * Support [Sass Bourbon](http://bourbon.io) Mixins
