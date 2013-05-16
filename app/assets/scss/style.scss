@@ -206,6 +206,9 @@ body {
         text-decoration: none;
         cursor: default;
         -webkit-app-region: no-drag;
+        &.highlight {
+          color: rgba(250, 86, 33, 1);
+        }
         &:hover {
           color: rgba(250, 86, 33, 0.7);
           background: rgba(250, 86, 33, 0.2);

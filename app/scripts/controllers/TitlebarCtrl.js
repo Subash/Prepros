@@ -1,5 +1,5 @@
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _ */
+/*global prepros,  _, $*/
 
 //Title Bar controls
 prepros.controller('TitlebarCtrl', function ($scope, config) {
@@ -140,4 +140,28 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     $scope.close = function(){
         require('nw.gui').Window.get().close();
     };
+
+    //Update Checker
+
+    $scope.appUpdate = false;
+
+    $scope.goWebsite = function(){
+        require('child_process').spawn('explorer', [config.online.url], {detached: true});
+    };
+
+    $.ajaxSetup({
+        cache: false
+    });
+
+    $.getJSON(config.online.updateFileUrl).done(function(data) {
+
+        if(config.version !== data[0].version){
+
+            $scope.appUpdate = true;
+
+            if(!$scope.$$phase){
+                $scope.$apply();
+            }
+        }
+    });
 });
