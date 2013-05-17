@@ -60,7 +60,15 @@ prepros.factory('markdown', function (config, utils, notification) {
                 try {
                     var html = marked(data.toString());
 
-                    fs.outputFile(file.output, html);
+                    fs.outputFile(file.output, html, function (err) {
+
+                        if (err) {
+                            notification.error('Error writing file.', file.output);
+                        } else {
+                            notification.success('Successfully compiled', file.input);
+                        }
+
+                    });
 
                 } catch(e) {
                     notification.error('Error compiling markdown file.', file.output);

@@ -67,8 +67,9 @@ prepros.factory('jade', function(config, utils, notification){
 
                         if (err) {
                             notification.error('Error writing file.', file.output);
+                        } else {
+                            notification.success('Successfully compiled', file.input);
                         }
-
                     });
 
                 } catch (e) {

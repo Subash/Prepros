@@ -75,7 +75,13 @@ prepros.factory('coffee', function(config, utils, notification){
                     fs.outputFile(file.output, javascript, function (err) {
 
                         if (err) {
+
                             notification.error('Error writing file.', file.output);
+
+                        } else {
+
+                            notification.success('Successfully compiled', file.input);
+
                         }
 
                     });

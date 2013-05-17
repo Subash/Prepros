@@ -61,7 +61,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
         } else {
             logWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\log.html', {
                 position: 'center',
-                width: 700,
+                width: 800,
                 height: 500,
                 frame: true,
                 toolbar: false,

@@ -57,8 +57,21 @@ prepros.factory('notification', function (config) {
         }
 	}
 
+    //Function to success notification
+    var success = function(name, details){
+
+        global.preprosLog.unshift({name: name, details: details, type: 'success', date: new Date().toISOString()});
+
+        //Hack to update log
+        if(global.logScope){
+            global.logScope.$apply();
+        }
+
+    };
+
     return {
-		error: error
+		error: error,
+        success: success
     };
 
 });

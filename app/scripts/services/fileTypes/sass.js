@@ -110,12 +110,26 @@ prepros.factory('sass', function (config, utils, notification) {
         //Start a child process to compile the file
         var rubyProcess = cp.spawn(config.ruby.path, args);
 
+        var compileErr = false;
+
         //If there is a compilation error
         rubyProcess.stderr.on('data', function (data) {
+
+            compileErr = true;
 
             notification.error('Error compiling file', data.toString());
 
         });
+
+        //Success if there is no error
+        rubyProcess.on('exit', function(){
+            if(!compileErr){
+
+                notification.success('Successfully compiled', file.input);
+
+            }
+        });
+
     };
 
     return {

@@ -523,12 +523,22 @@ body {
       padding: 15px;
       margin: 0 5px 10px 0;
       -webkit-user-select: text;
+
+      .name {
+        display: block;
+        margin-bottom: 15px;
+      }
+
       &.error {
         background: rgba(red, .1);
         .name {
           color: rgba(red, .5);
-          display: block;
-          margin-bottom: 15px;
+        }
+      }
+      &.success {
+        background: rgba(green, .1);
+        .name {
+          color: rgba(green, .5);
         }
       }
       &:last-child {
