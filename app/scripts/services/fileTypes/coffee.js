@@ -22,18 +22,18 @@ prepros.factory('coffee', function(config, utils, notification){
         var output = filePath.replace(/\.coffee/gi, '.js');
 
         //Find short output path
-        var shortOutput = filePath.replace(/\.coffee/gi, '.js').replace(/\\/g, '/');
+        var shortOutput = output.replace(/\\/g, '/');
 
         //Find output path; save to /js folder if file is in /coffee folder
-        if (path.basename(path.dirname(filePath)).toLowerCase() === 'coffee') {
+        if(filePath.match(/\\coffee\\/gi)) {
 
-            output = path.dirname(path.dirname(filePath)) + '\\' + config.user.jsPath + '\\' + path.basename(filePath).replace(/\.coffee/gi, '.js');
+            output = output.replace(/\\coffee\\/gi, '\\' + config.user.jsPath + '\\');
         }
 
         //Show Relative path if output file is within project folder
         if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
 
-            shortOutput = path.relative(projectPath, output).replace(/\.coffee/gi, '.js').replace(/\\/g, '/');
+            shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
         }
 
         return {

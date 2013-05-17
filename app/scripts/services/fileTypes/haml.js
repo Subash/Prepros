@@ -22,12 +22,12 @@ prepros.factory('haml', function (config, utils, notification) {
             var output = filePath.replace(/\.haml/gi, config.user.htmlExtension);
 
             //Find short output path
-            var shortOutput = filePath.replace(/\.haml/gi, config.user.htmlExtension).replace(/\\/g, '/');
+            var shortOutput = output.replace(/\\/g, '/');
 
             //Show Relative path if output file is within project folder
             if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
 
-                shortOutput = path.relative(projectPath, output).replace(/\.haml/gi, config.user.htmlExtension).replace(/\\/g, '/');
+                shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
             }
 
             return {
