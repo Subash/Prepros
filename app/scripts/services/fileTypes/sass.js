@@ -74,6 +74,9 @@ prepros.factory('sass', function (config, utils, notification) {
 
         var args = [config.ruby.gems.sass.path];
 
+        //Force utf-8 encoding
+        args.push('-E', 'utf-8');
+
         //Input and output
         args.push(file.input, file.output);
 
