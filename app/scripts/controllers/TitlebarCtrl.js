@@ -66,7 +66,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
-                resizable: false
+                resizable: true
             });
 
             logWindow.on('close', function () {
