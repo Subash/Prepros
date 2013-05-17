@@ -17,5 +17,6 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 
 ##TODO
 * Javascript concat and minification
+* JsHint and JsLint
 * Support slim
 * Live browser refresh extension for firefox
