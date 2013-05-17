@@ -107,8 +107,6 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
         //If url contains project id
         if ($routeParams.pid) {
 
-            $scope.pid = $routeParams.pid;
-
             //If project id in the url is in the projects list
             if (!_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}))) {
 

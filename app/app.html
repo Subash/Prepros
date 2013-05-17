@@ -152,8 +152,8 @@
             <div ng-switch-when="files">
                 <ul class="files">
                     <li class="file" ng-repeat="file in files|project|orderBy:'name'">
-                        <a ng-href="#/files/{{pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
-                           draggable="false">
+                        <a ng-href="#/files/{{file.pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
+                           draggable="false" id="/files/{{file.pid}}/{{file.id}}">
                             <div class="thumb  {{file.type.toLowerCase()}}"
                                  ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
                             </div>
