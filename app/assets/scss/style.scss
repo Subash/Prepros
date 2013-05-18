@@ -40,7 +40,8 @@ input[type=checkbox] {
   position: relative;
 }
 
-input[type='text'] {
+input[type='text'],
+input[type='number'] {
   border: 2px solid #AAA;
   border-radius: 0;
   padding: 3px 8px;

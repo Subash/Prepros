@@ -53,6 +53,10 @@
                 <input type="text" ng-model="userConfig.htmlExtension">
             </label>
             <label>
+                <span class="label-desc">Default Port for HTTP Server</span><br>
+                <input type="number" min="1" max="65535" ng-model="userConfig.httpServerPort">
+            </label>
+            <label>
                 <input type="checkbox" ng-model="userConfig.enableNotifications">
                 <span class="label-desc">Enable Desktop Notifications</span>
             </label>
