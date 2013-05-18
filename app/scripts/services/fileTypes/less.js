@@ -86,17 +86,27 @@ prepros.factory('less', function(config, utils, notification){
                         }
                         if (!e) {
 
-                            var css = tree.toCSS(options);
+                            try {
 
-                            fs.outputFile(file.output, css, function (err) {
+                                var css = tree.toCSS(options);
 
-                                if (err) {
-                                    notification.error('Error writing file.', file.output);
-                                } else {
-                                    notification.success('Successfully compiled', file.input);
-                                }
+                                fs.outputFile(file.output, css, function (err) {
 
-                            });
+                                    if (err) {
+                                        notification.error('Error writing file.', file.output);
+                                    } else {
+                                        notification.success('Successfully compiled', file.input);
+                                    }
+
+                                });
+
+                            } catch(e ){
+
+                                notification.error('Error compiling file', e.message + "\n"  + e.filename + ' line ' + e.line);
+
+                            }
+
+
                         }
                     });
                 } catch (e) {
