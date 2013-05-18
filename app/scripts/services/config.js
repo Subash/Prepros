@@ -109,6 +109,7 @@ prepros.factory('config', function () {
             cssPath: 'css',
             jsPath: 'js',
             htmlExtension: '.html',
+            httpServerPort: 3738,
             enableNotifications: true,
 
 

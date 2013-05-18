@@ -7,12 +7,30 @@ prepros.factory('liveRefresh', function () {
     'use strict';
 
     var express = require('express'),
+        fs = require('fs-extra'),
+        path = require('path'),
         app = express(),
         WebSocketServer = require('websocket').server,
-        urls= [];
+        urls= [],
+        httpServerPort;
+
+    //User data path
+    var dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
+
+    //User config file
+    var configFile = path.join(dataPath, 'config.json');
+
+    //Read user config and get Server Port.
+    if (fs.existsSync(configFile)) {
+        try {
+            httpServerPort = parseInt(JSON.parse(fs.readFileSync(configFile).toString()).httpServerPort);
+        } catch(e){
+            httpServerPort = 3738; //Fallback to Default port in case port set is not a valid number (config.json was changed outside Prepros!).
+        }
+    }
 
     //Start listening
-    var httpServer = app.listen(3738);
+    var httpServer = app.listen(httpServerPort);
 
 
     //Start websocket server for automatic browser refresh
@@ -52,7 +70,7 @@ prepros.factory('liveRefresh', function () {
 
         } else {
 
-            return 'http://localhost:3738/' + project.id + '/';
+            return 'http://localhost:'+ httpServerPort +'/' + project.id + '/';
         }
     }
 
