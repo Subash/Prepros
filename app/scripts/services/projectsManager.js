@@ -2,7 +2,7 @@
 /*global prepros,  _*/
 
 //Storage
-prepros.factory('projectsManager', function (storage, fileTypes, notification, utils, importsVisitor, $rootScope, $location) {
+prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, importsVisitor, $rootScope, $location) {
 
     'use strict';
 
@@ -422,6 +422,29 @@ prepros.factory('projectsManager', function (storage, fileTypes, notification, u
 
         var file = getFileById(id),
             project = getProjectById(file.pid);
+
+        var css = ['scss', 'sass', 'stylus', 'less'];
+        var js = ['coffee'];
+        var html = ['jade', 'haml', 'md'];
+
+        var type = file.type.toLowerCase();
+
+        if(path.extname(path.basename(newPath)) === ''){
+
+            if(_.contains(css, type)){
+
+                newPath = newPath + '.css';
+
+            } else if(_.contains(html, type)) {
+
+                newPath = newPath + config.user.htmlExtension;
+
+            } else if(_.contains(js, type)){
+
+                newPath = newPath + '.js';
+
+            }
+        }
 
         file.output = newPath;
 
