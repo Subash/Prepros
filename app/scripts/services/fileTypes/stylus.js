@@ -100,13 +100,12 @@ prepros.factory('stylus', function (config, utils, notification) {
 
                     } else {
 
-
-                        notification.success('Successfully compiled', file.input);
-
                         fs.outputFile(file.output, css, function (err) {
 
                             if (err) {
                                 notification.error('Error writing file.', file.output);
+                            } else {
+                                notification.success('Successfully compiled', file.input);
                             }
 
                         });
