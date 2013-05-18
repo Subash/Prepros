@@ -124,7 +124,7 @@ prepros.factory('config', function () {
                 autoCompile : true,
                 lineNumbers : false,
                 compass : false,
-                outputStyle : 'compressed' //compressed, nested, expanded
+                outputStyle : 'compressed' //compressed, nested, expanded, compact
             },
 
             //Default Sass options
@@ -132,7 +132,7 @@ prepros.factory('config', function () {
                 autoCompile : true,
                 lineNumbers : false,
                 compass : false,
-                outputStyle : 'compressed' //compressed, nested, expanded
+                outputStyle : 'compressed' //compressed, nested, expanded, compact
             },
 
 
