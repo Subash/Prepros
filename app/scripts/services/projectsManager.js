@@ -197,7 +197,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     //Ouch error occurred
                     if (err) {
 
-                        notification.notify('Error getting all files. ', folder);
+                        notification.error('Error getting all files. ', folder);
                     }
 
                     //Add file to project
