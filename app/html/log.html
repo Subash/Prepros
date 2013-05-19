@@ -3,7 +3,6 @@
 <head>
     <title>Prepros Log</title>
     <script src="../scripts/lib/jquery.js"></script>
-    <script src="../scripts/lib/jquery.timeago.js"></script>
     <script src="../scripts/lib/angular.js"></script>
 
     <link href="../assets/css/style.css" rel="stylesheet">
@@ -20,18 +19,6 @@
 
         });
 
-        prepros.directive('timeDiff', function($timeout){
-            return {
-                restrict: 'A',
-                link: function(scope, element, attrs){
-
-                    $timeout(function(){
-                        $(element).timeago();
-                    });
-                }
-            }
-        });
-
     </script>
 </head>
 <body style="overflow: auto">
@@ -40,12 +27,12 @@
     <ul class="unstyled">
         <li ng-repeat="log in preprosLog" class="{{log.type}}">
             <span class="name">
-                {{log.name}}
+                <strong>{{preprosLog.length - $index}} :</strong> {{log.name}}
             </span>
             <div class="details">
                 <pre>{{log.details}}</pre>
             </div>
-            <div class="time"><time datetime="{{log.date}}" x-time-diff></time> </div>
+            <div class="time">{{log.date| date:'HH:mm:ss'}}</div>
         </li>
     </ul>
 </div>

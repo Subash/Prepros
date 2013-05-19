@@ -33,7 +33,7 @@ prepros.factory('importsVisitor', function () {
                 if (result[1].indexOf(':') >= 0) {
                     importedFilePath = path.normalize(result[1]);
                 } else {
-                    importedFilePath = path.normalize(path.join(basedir, result[1]));
+                    importedFilePath = path.join(basedir, result[1]);
                 }
 
                 //Add extension if file doesn't have that
@@ -61,7 +61,7 @@ prepros.factory('importsVisitor', function () {
                 if (result[1].indexOf(':') >= 0) {
                     importedFilePath = path.normalize(result[1]);
                 } else {
-                    importedFilePath = path.normalize(path.join(basedir, result[1]));
+                    importedFilePath = path.join(basedir, result[1]);
                 }
 
 
@@ -91,7 +91,7 @@ prepros.factory('importsVisitor', function () {
                 if (fPath.indexOf(':') >= 0) {
                     importedFilePath = path.normalize(fPath);
                 } else {
-                    importedFilePath = path.normalize(path.join(basedir, fPath));
+                    importedFilePath = path.join(basedir, fPath);
                 }
 
                 //Add extension if file doesn't have that
@@ -126,7 +126,7 @@ prepros.factory('importsVisitor', function () {
 
                         importedFilePath = path.normalize(imp);
                     } else {
-                        importedFilePath = path.normalize(path.join(basedir, imp));
+                        importedFilePath = path.join(basedir, imp);
                     }
 
                     //Add extension if file doesn't have that
@@ -135,7 +135,7 @@ prepros.factory('importsVisitor', function () {
                     }
 
                     //First check for partial file
-                    var importedWithPartial = path.dirname(importedFilePath) + '\\_' + path.basename(importedFilePath);
+                    var importedWithPartial = path.normalize(path.dirname(importedFilePath) + path.sep + '_' + path.basename(importedFilePath));
 
                     //Check if file exists
                     if (fs.existsSync(importedWithPartial)) {

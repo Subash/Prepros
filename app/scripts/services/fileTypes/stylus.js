@@ -22,9 +22,9 @@ prepros.factory('stylus', function (config, utils, notification) {
         var output = filePath.replace(/\.styl/gi, '.css');
 
         //Find output path; save to user defined css folder if file is in styl or stylus folder
-        if(filePath.match(/\\styl\\|\\stylus\\/gi)) {
+        if(filePath.match(/\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi)) {
 
-            output = output.replace(/\\styl\\|\\stylus\\/gi, '\\' + config.user.cssPath + '\\');
+            output = path.normalize(output.replace(/\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi, path.sep + config.user.cssPath + path.sep));
 
         }
 
@@ -32,7 +32,7 @@ prepros.factory('stylus', function (config, utils, notification) {
         var shortOutput = output.replace(/\\/g, '/');
 
         //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
+        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
             shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
         }

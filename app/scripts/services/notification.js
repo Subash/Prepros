@@ -5,6 +5,8 @@ prepros.factory('notification', function (config) {
 
     'use strict';
 
+    var path = require('path');
+
     //Push log to global so it can be viewed from another window
     global.preprosLog = [];
 
@@ -29,7 +31,9 @@ prepros.factory('notification', function (config) {
 
             } else {
 
-                notificationWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\notification.html', {
+                var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
+
+                notificationWindow = require('nw.gui').Window.open(notificationPath, {
                     x: window.screen.availWidth-400,
                     y: window.screen.availHeight-70,
                     width: 400,

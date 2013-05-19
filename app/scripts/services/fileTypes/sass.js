@@ -23,9 +23,9 @@ prepros.factory('sass', function (config, utils, notification) {
         var output = filePath.replace(/\.sass|\.scss/gi, '.css');
 
         //Find output path; save to user defined css folder if file is in sass or scss folder
-        if(filePath.match(/\\sass\\|\\scss\\/gi)) {
+        if(filePath.match(/\\sass\\|\\scss\\|\/sass\/|\/scss\//gi)) {
 
-            output = output.replace(/\\sass\\|\\scss\\/gi, '\\' + config.user.cssPath + '\\');
+            output = path.normalize(output.replace(/\\sass\\|\\scss\\|\/sass\/|\/scss\//gi, path.sep + config.user.cssPath + path.sep));
 
         }
 
@@ -33,7 +33,7 @@ prepros.factory('sass', function (config, utils, notification) {
         var shortOutput = output.replace(/\\/g, '/');
 
         //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
+        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
             shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
         }
