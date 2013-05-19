@@ -1,0 +1,71 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'anglar' ]
+2 info using npm@1.2.21
+3 info using node@v0.10.7
+4 verbose read json /Users/matt/Projects/Prepros/package.json
+5 warn package.json Prepros@1.3.0 No repository field.
+6 verbose read json /Users/matt/Projects/Prepros/node_modules/MD5/package.json
+7 verbose read json /Users/matt/Projects/Prepros/node_modules/coffee-script/package.json
+8 verbose read json /Users/matt/Projects/Prepros/node_modules/express/package.json
+9 verbose read json /Users/matt/Projects/Prepros/node_modules/fs-extra/package.json
+10 verbose read json /Users/matt/Projects/Prepros/node_modules/jade/package.json
+11 verbose read json /Users/matt/Projects/Prepros/node_modules/less/package.json
+12 verbose read json /Users/matt/Projects/Prepros/node_modules/marked/package.json
+13 verbose read json /Users/matt/Projects/Prepros/node_modules/nib/package.json
+14 verbose read json /Users/matt/Projects/Prepros/node_modules/node-walker/package.json
+15 verbose read json /Users/matt/Projects/Prepros/node_modules/stylus/package.json
+16 verbose read json /Users/matt/Projects/Prepros/node_modules/uglify-js/package.json
+17 verbose read json /Users/matt/Projects/Prepros/node_modules/websocket/package.json
+18 warn package.json uglify-js@2.2.5 'repositories' (plural) Not supported.
+18 warn package.json Please pick one as the 'repository' field
+19 verbose from cache /Users/matt/Projects/Prepros/package.json
+20 verbose readDependencies using package.json deps
+21 verbose cache add [ 'anglar', null ]
+22 verbose cache add name=undefined spec="anglar" args=["anglar",null]
+23 verbose parsed url { protocol: null,
+23 verbose parsed url   slashes: null,
+23 verbose parsed url   auth: null,
+23 verbose parsed url   host: null,
+23 verbose parsed url   port: null,
+23 verbose parsed url   hostname: null,
+23 verbose parsed url   hash: null,
+23 verbose parsed url   search: null,
+23 verbose parsed url   query: null,
+23 verbose parsed url   pathname: 'anglar',
+23 verbose parsed url   path: 'anglar',
+23 verbose parsed url   href: 'anglar' }
+24 silly lockFile 76e1b731-anglar anglar
+25 verbose lock anglar /Users/matt/.npm/76e1b731-anglar.lock
+26 silly lockFile 76e1b731-anglar anglar
+27 silly lockFile 76e1b731-anglar anglar
+28 verbose addNamed [ 'anglar', '' ]
+29 verbose addNamed [ null, '' ]
+30 silly lockFile f24a5e6a-anglar anglar@
+31 verbose lock anglar@ /Users/matt/.npm/f24a5e6a-anglar.lock
+32 silly addNameRange { name: 'anglar', range: '', hasData: false }
+33 verbose url raw anglar
+34 verbose url resolving [ 'https://registry.npmjs.org/', './anglar' ]
+35 verbose url resolved https://registry.npmjs.org/anglar
+36 info trying registry request attempt 1 at 10:51:30
+37 http GET https://registry.npmjs.org/anglar
+38 http 404 https://registry.npmjs.org/anglar
+39 silly registry.get cb [ 404,
+39 silly registry.get   { server: 'CouchDB/1.3.0 (Erlang OTP/R15B03)',
+39 silly registry.get     date: 'Sun, 19 May 2013 09:51:29 GMT',
+39 silly registry.get     'content-type': 'application/json',
+39 silly registry.get     'content-length': '52',
+39 silly registry.get     'cache-control': 'must-revalidate' } ]
+40 silly lockFile f24a5e6a-anglar anglar@
+41 silly lockFile f24a5e6a-anglar anglar@
+42 error 404 'anglar' is not in the npm registry.
+42 error 404 You should bug the author to publish it
+42 error 404
+42 error 404 Note that you can also install from a
+42 error 404 tarball, folder, or http url, or git url.
+43 error System Darwin 12.3.0
+44 error command "node" "/usr/local/bin/npm" "install" "anglar"
+45 error cwd /Users/matt/Projects/Prepros/app
+46 error node -v v0.10.7
+47 error npm -v 1.2.21
+48 error code E404
+49 verbose exit [ 1, true ]

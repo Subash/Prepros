@@ -10,6 +10,9 @@ prepros.factory('config', function () {
 
     //Base path
     var basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname.slice(1))));
+    
+    if(process.platform !== 'win32')
+        basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname)));
 
     //Package.json file url
     var packageFileUrl = path.join(basePath, '../package.json');
@@ -20,8 +23,12 @@ prepros.factory('config', function () {
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
 
+    var dataPath = "";
     //User data path
-    var dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
+    if(process.platform === 'darwin')
+        dataPath = path.join(process.env.HOME, '/Library/Prepros/Data');
+    else
+        dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
 
     //User config file
     var configFile = path.join(dataPath, 'config.json');
@@ -40,38 +47,76 @@ prepros.factory('config', function () {
         updateFileUrl: 'http://alphapixels.com/prepros/update.json'
     };
 
-    var ruby = {
+    if(process.platform === 'win32')
+    {
+        var ruby = {
 
-        path: path.join(packagePath, packageData.ruby.path),
-        version: packageData.ruby.version,
+            path: path.join(packagePath, packageData.ruby.path),
+            version: packageData.ruby.version,
 
-        gems: {
-            compass: {
-                path: path.join(packagePath, packageData.ruby.gems.compass.path),
-                version: packageData.ruby.gems.compass.version
-            },
-            sass: {
-                path: path.join(packagePath, packageData.ruby.gems.sass.path),
-                version: packageData.ruby.gems.sass.version
-            },
-            bourbon: {
-                path: path.join(packagePath, packageData.ruby.gems.bourbon.path),
-                version: packageData.ruby.gems.bourbon.version
-            },
-            haml: {
-                path: path.join(packagePath, packageData.ruby.gems.haml.path),
-                version: packageData.ruby.gems.haml.version
-            },
-            kramdown: {
-                path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
-                version: packageData.ruby.gems.kramdown.version
-            },
-            susy: {
-                path: path.join(packagePath, packageData.ruby.gems.susy.path),
-                version: packageData.ruby.gems.susy.version
+            gems: {
+                compass: {
+                    path: path.join(packagePath, packageData.ruby.gems.compass.path),
+                    version: packageData.ruby.gems.compass.version
+                },
+                sass: {
+                    path: path.join(packagePath, packageData.ruby.gems.sass.path),
+                    version: packageData.ruby.gems.sass.version
+                },
+                bourbon: {
+                    path: path.join(packagePath, packageData.ruby.gems.bourbon.path),
+                    version: packageData.ruby.gems.bourbon.version
+                },
+                haml: {
+                    path: path.join(packagePath, packageData.ruby.gems.haml.path),
+                    version: packageData.ruby.gems.haml.version
+                },
+                kramdown: {
+                    path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
+                    version: packageData.ruby.gems.kramdown.version
+                },
+                susy: {
+                    path: path.join(packagePath, packageData.ruby.gems.susy.path),
+                    version: packageData.ruby.gems.susy.version
+                }
             }
-        }
-    };
+        };
+    }
+    else
+    {
+        var ruby = {
+
+            path: packageData.ruby.path,
+            version: packageData.ruby.version,
+
+            gems: {
+                compass: {
+                    path: path.join(packagePath, packageData.ruby.gems.compass.path),
+                    version: packageData.ruby.gems.compass.version
+                },
+                sass: {
+                    path: path.join(packagePath, packageData.ruby.gems.sass.path),
+                    version: packageData.ruby.gems.sass.version
+                },
+                bourbon: {
+                    path: path.join(packagePath, packageData.ruby.gems.bourbon.path),
+                    version: packageData.ruby.gems.bourbon.version
+                },
+                haml: {
+                    path: path.join(packagePath, packageData.ruby.gems.haml.path),
+                    version: packageData.ruby.gems.haml.version
+                },
+                kramdown: {
+                    path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
+                    version: packageData.ruby.gems.kramdown.version
+                },
+                susy: {
+                    path: path.join(packagePath, packageData.ruby.gems.susy.path),
+                    version: packageData.ruby.gems.susy.version
+                }
+            }
+        };
+    }
 
     var user = {};
 

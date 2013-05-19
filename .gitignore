@@ -1,7 +1,7 @@
 #Prepros App
 .idea
 node_modules/
-ruby/
+#ruby/
 ffmpegsumo.dll
 icudt.dll
 libEGL.dll

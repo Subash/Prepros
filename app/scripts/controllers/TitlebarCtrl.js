@@ -8,8 +8,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
 
     //Support Author Link
     $scope.supportAuthor = function () {
-
-        require('child_process').spawn('explorer', [config.online.loveUrl], {detached: true});
+        if(process.platform !== 'win32')
+            require('child_process').spawn('open', [config.online.loveUrl], {detached: true});
+        else
+            require('child_process').spawn('explorer', [config.online.loveUrl], {detached: true});
 
     };
 
@@ -146,7 +148,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     $scope.appUpdate = false;
 
     $scope.goWebsite = function(){
-        require('child_process').spawn('explorer', [config.online.url], {detached: true});
+        if(process.platform !== 'win32')
+            require('child_process').spawn('open', [config.online.url], {detached: true});
+        else
+            require('child_process').spawn('explorer', [config.online.url], {detached: true});
     };
 
     $.ajaxSetup({

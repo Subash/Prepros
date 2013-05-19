@@ -47,8 +47,10 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, liveRefresh
     $scope.openLiveUrl = function(){
 
         var url = liveRefresh.getLiveUrl($scope.selectedProject);
-
-        require('child_process').spawn('explorer', [ url ], {detached: true});
+        if(process.platform !== 'win32')
+            require('child_process').spawn('open', [ url ], {detached: true});
+        else
+            require('child_process').spawn('explorer', [ url ], {detached: true});
 
     };
 

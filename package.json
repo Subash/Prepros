@@ -1,5 +1,6 @@
 {
     "name": "Prepros",
+    "version" : "1.3.0",
     "main": "app/app.html",
     "single-instance": false,
     "window": {
@@ -12,6 +13,25 @@
         "width": 902,
         "height": 552,
         "show": false
+    },
+
+    "dependencies": {
+        "coffee-script": "1.6.2",
+        "express": "3.1.2",
+        "fs-extra": "0.6.0",
+        "jade": "0.30.0",
+        "less": "1.3.3",
+        "marked": "0.2.8",
+        "MD5": "1.0.3",
+        "nib": "0.9.1",
+        "node-walker": "0.1.0",
+        "stylus": "0.32.1",
+        "uglify-js": "2.2.5",
+        "websocket": "1.0.8"
+    },
+
+    "engines" : { 
+        "node": ">=0.10.7"
     },
 
     "prepros": {
@@ -36,32 +56,32 @@
         },
         "ruby": {
 
-            "path": "ruby\\bin\\ruby.exe",
-            "version": "2.0.0",
+            "path": "/usr/bin/ruby",
+            "version": "1.8.7",
 
             "gems": {
                 "sass": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.9\\bin\\sass",
+                    "path": "ruby/gems/sass/bin/sass",
                     "version": "3.2.9"
                 },
                 "compass": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
+                    "path": "ruby/gems/compass/bin/compass",
                     "version": "0.12.2"
                 },
                 "bourbon": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\bourbon-3.1.6\\app\\assets\\stylesheets",
+                    "path": "ruby/gems/bourbon/app/assets/stylesheets",
                     "version": "3.1.6"
                 },
                 "haml": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
+                    "path": "ruby/gems/haml/bin/haml",
                     "version": "4.0.2"
                 },
                 "kramdown" : {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\kramdown-1.0.2\\bin\\kramdown",
+                    "path": "ruby/gems/kramdown/bin/kramdown",
                     "version": "1.0.2"
                 },
                 "susy" : {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\susy-1.0.8\\sass",
+                    "path": "ruby/gems/susy/sass",
                     "version": "1.0.8"
                 }
             }

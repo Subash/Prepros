@@ -1,0 +1,18 @@
+[submodule "ruby/gems/bourbon"]
+	path = ruby/gems/bourbon
+	url = git://github.com/thoughtbot/bourbon.git
+[submodule "ruby/gems/haml"]
+	path = ruby/gems/haml
+	url = git://github.com/haml/haml.git
+[submodule "ruby/gems/kramdown"]
+	path = ruby/gems/kramdown
+	url = git://github.com/gettalong/kramdown.git
+[submodule "ruby/gems/susy"]
+	path = ruby/gems/susy
+	url = git://github.com/ericam/susy.git
+[submodule "ruby/gems/compass"]
+	path = ruby/gems/compass
+	url = git://github.com/chriseppstein/compass.git
+[submodule "ruby/gems/sass"]
+	path = ruby/gems/sass
+	url = git://github.com/nex3/sass.git
