@@ -24,7 +24,7 @@ prepros.factory('markdown', function (config, utils, notification) {
         var shortOutput = output.replace(/\\/g, '/');
 
         //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
+        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
             shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
         }

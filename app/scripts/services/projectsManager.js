@@ -448,10 +448,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         file.output = newPath;
 
-        file.shortOutput = newPath;
+        file.shortOutput = newPath.replace(/\\/g, '/');
 
         //Show Relative path if output file is within project folder
-        if (path.relative(project.path, newPath).indexOf('.\\') === -1) {
+        if (path.relative(project.path, newPath).indexOf('.' + path.sep) === -1) {
 
             file.shortOutput = path.relative(project.path, newPath).replace(/\\/g, '/');
         }

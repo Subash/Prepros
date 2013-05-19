@@ -36,32 +36,32 @@
         },
         "ruby": {
 
-            "path": "ruby\\bin\\ruby.exe",
+            "path": "ruby/bin/ruby.exe",
             "version": "2.0.0",
 
             "gems": {
                 "sass": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\sass-3.2.9\\bin\\sass",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/sass-3.2.9/bin/sass",
                     "version": "3.2.9"
                 },
                 "compass": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\compass-0.12.2\\bin\\compass",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/compass-0.12.2/bin/compass",
                     "version": "0.12.2"
                 },
                 "bourbon": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\bourbon-3.1.6\\app\\assets\\stylesheets",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/bourbon-3.1.6/app/assets/stylesheets",
                     "version": "3.1.6"
                 },
                 "haml": {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\haml-4.0.2\\bin\\haml",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/haml-4.0.2/bin/haml",
                     "version": "4.0.2"
                 },
                 "kramdown" : {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\kramdown-1.0.2\\bin\\kramdown",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/kramdown-1.0.2/bin/kramdown",
                     "version": "1.0.2"
                 },
                 "susy" : {
-                    "path": "ruby\\lib\\ruby\\gems\\2.0.0\\gems\\susy-1.0.8\\sass",
+                    "path": "ruby/lib/ruby/gems/2.0.0/gems/susy-1.0.8/sass",
                     "version": "1.0.8"
                 }
             }

@@ -22,9 +22,9 @@ prepros.factory('less', function(config, utils, notification){
         var output = filePath.replace(/\.less/gi, '.css');
 
         //Find output path; save to user defined css folder if file is in less folder
-        if(filePath.match(/\\less\\/gi)) {
+        if(filePath.match(/\\less\\|\/less\//gi)) {
 
-            output = output.replace(/\\less\\/gi, '\\' + config.user.cssPath + '\\');
+            output = path.normalize(output.replace(/\\less\\|\/less\//gi, path.sep + config.user.cssPath + path.sep));
 
         }
 
@@ -32,7 +32,7 @@ prepros.factory('less', function(config, utils, notification){
         var shortOutput = output.replace(/\\/g, '/');
 
         //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.\\') === -1) {
+        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
             shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
         }

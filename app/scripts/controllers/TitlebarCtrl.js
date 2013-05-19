@@ -6,6 +6,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
 
     'use strict';
 
+    var path = require('path');
+
     //Support Author Link
     $scope.supportAuthor = function () {
 
@@ -25,14 +27,17 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
             aboutWindow.show();
             aboutWindow.focus();
         } else {
-            aboutWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\about.html', {
+
+            var aboutPath = 'file:///' + path.normalize(config.basePath + '/html/about.html');
+
+            aboutWindow = require('nw.gui').Window.open(aboutPath, {
                 position: 'center',
                 width: 500,
-                height: 590,
+                height: 600,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
-                resizable: true
+                resizable: false
             });
 
             aboutWindow.on('close', function () {
@@ -59,7 +64,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
             logWindow.focus();
             logWindow.show();
         } else {
-            logWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\log.html', {
+
+            var logPath = 'file:///' + path.normalize(config.basePath + '/html/log.html');
+
+            logWindow = require('nw.gui').Window.open(logPath, {
                 position: 'center',
                 width: 800,
                 height: 500,
@@ -96,7 +104,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
             optionsWindow.show();
             optionsWindow.focus();
         } else {
-            optionsWindow = require('nw.gui').Window.open("file:///" + config.basePath + '\\html\\options.html', {
+
+            var optionsPath = 'file:///' + path.normalize(config.basePath + '/html/options.html');
+
+            optionsWindow = require('nw.gui').Window.open(optionsPath, {
                 position: 'center',
                 width: 600,
                 height: 540,
