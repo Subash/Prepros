@@ -9,6 +9,8 @@ libGLESv2.dll
 nw.pak
 Prepros.exe
 
+npm-debug.log
+
 #################
 ## Eclipse
 #################
