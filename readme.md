@@ -20,3 +20,4 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 * JsHint and JsLint
 * Support slim
 * Live browser refresh extension for firefox
+* Remove temporary sh launch script for OSX when [node-webkit bug fixed](https://github.com/rogerwang/node-webkit/issues/476)

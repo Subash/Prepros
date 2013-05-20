@@ -57,7 +57,7 @@ cat > Info.plist <<EOF
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Prepros</string>
+	<string>launch-prepros</string>
 	<key>CFBundleIconFile</key>
 	<string>app.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -114,8 +114,15 @@ cat > Info.plist <<EOF
 </plist>
 EOF
 sed -i.bak s/{commit}/$LATEST_COMMIT/g Info.plist
+rm Info.plist.bak
 cd MacOS
 mv node-webkit Prepros
+cat > launch-prepros <<EOF
+#!/bin/bash
+cd ../../
+./Contents/MacOS/Prepros --disable-gpu
+EOF
+chmod +x launch-prepros
 cd ../../../
 mv node-webkit.app Prepros.app
 cp -R Prepros.app ~/Desktop
