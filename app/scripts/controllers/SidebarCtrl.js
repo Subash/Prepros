@@ -1,8 +1,15 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _, $ */
 
 //Title Bar controls
-prepros.controller('SidebarCtrl', function ($scope, projectsManager, liveRefresh) {
+prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer) {
 
     'use strict';
 
@@ -46,9 +53,18 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, liveRefresh
     //Function to open live url
     $scope.openLiveUrl = function(){
 
-        var url = liveRefresh.getLiveUrl($scope.selectedProject);
 
-        require('child_process').spawn('explorer', [ url ], {detached: true});
+        if($scope.selectedProject.config.useCustomServer){
+
+            utils.openBrowser($scope.selectedProject.config.customServerUrl);
+
+        } else {
+
+            utils.openBrowser(liveServer.getLiveUrl($scope.selectedProject));
+
+        }
+
+
 
     };
 

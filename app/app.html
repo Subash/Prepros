@@ -1,3 +1,14 @@
+<!--
+
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
+ -->
+
 <!doctype html>
 <html ng-app="prepros">
 <head>
@@ -35,7 +46,7 @@
     <script src="scripts/services/watcher.js"></script>
     <script src="scripts/services/compiler.js"></script>
     <script src="scripts/services/config.js"></script>
-    <script src="scripts/services/liveRefresh.js"></script>
+    <script src="scripts/services/liveServer.js"></script>
     <script src="scripts/services/notification.js"></script>
     <script src="scripts/services/projectsManager.js"></script>
     <script src="scripts/services/importsVisitor.js"></script>
@@ -159,9 +170,9 @@
                             </div>
                             <div class="details clearfix">
                                 <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
-                                <div class="input"><span x-tooltip="{{file.input}}">{{file.shortInput | shorten}}</span></div>
+                                <div class="input"><span>{{file.shortInput | shorten}}</span></div>
                                 <div>
-                                    <span class="output" x-tooltip="{{file.output}}"
+                                    <span class="output" x-tooltip="Click to change file output path"
                                           ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput | shorten}}
                                     </span>
                                 </div>

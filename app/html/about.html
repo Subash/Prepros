@@ -76,7 +76,9 @@
 
 
             $scope.go = function(){
-                require('child_process').spawn('explorer', [$scope.config.online.url], {detached: true});
+
+                global.utils.openBrowser($scope.config.online.url);
+
             }
 
         }

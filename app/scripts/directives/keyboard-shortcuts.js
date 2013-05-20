@@ -1,8 +1,16 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true*/
 /*global prepros, $, _, Mousetrap */
 
 //Directive for keyboard shortcuts
-prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveRefresh, compiler){
+//TODO MAC Commands
+prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
 
     'use strict';
 
@@ -57,9 +65,10 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveRefresh
 
                 if(scope.selectedProject.id){
 
-                    var url = liveRefresh.getLiveUrl(scope.selectedProject);
+                    var url = liveServer.getLiveUrl(scope.selectedProject);
 
-                    require('child_process').spawn('explorer', [ url ], {detached: true});
+                    utils.openBrowser(url);
+
                 }
                 return false;
             });

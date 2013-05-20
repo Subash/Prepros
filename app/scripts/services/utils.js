@@ -1,3 +1,10 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true*/
 /*global prepros, $, _ */
 prepros.factory('utils', function () {
@@ -27,10 +34,22 @@ prepros.factory('utils', function () {
         }, 200);
     }
 
+    //Open Browser
+    function openBrowser(url){
 
-	return {
-		id: id,
+        require('child_process').spawn('explorer', [ url ], {detached: true});
+
+    }
+
+    var utils =  {
+        id: id,
         showLoading: showLoading,
-        hideLoading: hideLoading
-	};
+        hideLoading: hideLoading,
+        openBrowser: openBrowser
+    };
+
+    //Push utils to global so other windows can also use utility functions
+    global.utils = utils;
+
+    return utils;
 });
