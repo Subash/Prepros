@@ -77,6 +77,7 @@ mkdir ~/.prepros_build/linux
 mkdir ~/.prepros_build/linux/app
 cp -R ./ ~/.prepros_build/linux/app
 cd ~/.prepros_build/linux/app
+find . -type d -name .git -exec rm -rf {} \;
 zip -r ../${PWD##*/}.nw *
 cd ../../
 

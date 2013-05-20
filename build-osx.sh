@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Grab Latest Commit Hash for Version Number
+VERSION='1.3.0-beta'
 LATEST_COMMIT=`git log -1 --format="%h"`
 
 #Removed and re-populate Node Modules
@@ -15,6 +16,8 @@ mkdir ~/.prepros_build
 mkdir ~/.prepros_build/osx
 mkdir ~/.prepros_build/osx/app.nw
 cp -R ./ ~/.prepros_build/osx/app.nw
+cd ~/.prepros_build/osx/app.nw
+find . -type d -name .git -exec rm -rf {} \;
 cd ~/.prepros_build
 
 #Download Node-Webkit for OSX
@@ -80,7 +83,7 @@ cat > Info.plist <<EOF
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3.0</string>
+	<string>{version}</string>
 	<key>CFBundleVersion</key>
 	<string>{commit}</string>
 	<key>LSFileQuarantineEnabled</key>
@@ -128,14 +131,16 @@ EOF
 #Replace Latest Commit Hash inside Info.plist file
 sed -i.bak s/{commit}/$LATEST_COMMIT/g Info.plist
 rm Info.plist.bak
+sed -i.bak s/{version}/$VERSION/g Info.plist
+rm Info.plist.bak
 cd MacOS
 mv node-webkit Prepros
 
 #Create Temporary Script to launch with --disable-gpu argument (OSX Bug - https://github.com/rogerwang/node-webkit/issues/476)
 cat > launch-prepros <<EOF
 #!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-$DIR/Prepros --disable-gpu
+DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
+\$DIR/Prepros --disable-gpu
 EOF
 chmod +x launch-prepros
 cd ../../../
@@ -143,5 +148,6 @@ mv node-webkit.app Prepros.app
 
 #Move to Desktop and Delete Build DIR
 cp -R Prepros.app ~/Desktop
-zip ~/Desktop/Prepros.app
+cd ~/Desktop
+zip -r -X Prepros_$VERSION.zip ./Prepros.app
 rm -Rf ~/.prepros_build
