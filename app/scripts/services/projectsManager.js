@@ -219,7 +219,24 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                             '.jade', //Jade
                             '.haml'  //Haml
                         ];
-                        if (_.contains(supportedExtensions, extname)) {
+
+                        var filterPatterns = config.user.filterPatterns.split(',');
+
+                        var matchFilter = false;
+
+                        _.each(filterPatterns, function(pattern){
+
+                            pattern = pattern.trim();
+
+                            if(pattern !=="" && file.indexOf(pattern) !== -1) {
+
+                                matchFilter = true;
+
+                            }
+
+                        });
+
+                        if (_.contains(supportedExtensions, extname) && !matchFilter) {
 
                             filesToAdd.push(path.normalize(file));
 

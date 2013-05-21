@@ -116,6 +116,15 @@ prepros.factory('config', function () {
 
     }
 
+
+    //Backwards compatibility with older config files
+    if(!user.filterPatterns){
+
+        user.filterPatterns = '';
+        saveOptions();
+
+    }
+
     //Check if user config file is compatible with this version configurations
     if(_.isEmpty(user) || !user.less) {
 
@@ -125,6 +134,7 @@ prepros.factory('config', function () {
             jsPath: 'js',
             htmlExtension: '.html',
             enableNotifications: true,
+            filterPatterns: '',
 
 
             //Default Less Options
