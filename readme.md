@@ -19,4 +19,8 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 * Javascript concat and minification
 * JsHint and JsLint
 * Support slim
+* Image Compression
+* Support for .kit compiler
 * Live browser refresh extension for firefox
+* Remove temporary sh launch script for OSX when [node-webkit bug fixed](https://github.com/rogerwang/node-webkit/issues/476)
+* Create RPM Build for Linux, or Universal Install Script for OSX/Linux using [Yeoman Style Installer](https://github.com/tomlane/Yeoman-scripts/blob/master/scripts/old-installer.sh)

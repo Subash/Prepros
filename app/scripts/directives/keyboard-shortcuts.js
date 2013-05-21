@@ -63,11 +63,9 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             Mousetrap.bind(['ctrl+l', 'command+l'], function() {
 
                 if(scope.selectedProject.id){
-
                     var url = liveServer.getLiveUrl(scope.selectedProject);
 
                     utils.openBrowser(url);
-
                 }
                 return false;
             });

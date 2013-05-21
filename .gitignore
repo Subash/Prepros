@@ -1,13 +1,15 @@
 #Prepros App
 .idea
 node_modules/
-ruby/
+#ruby/
 ffmpegsumo.dll
 icudt.dll
 libEGL.dll
 libGLESv2.dll
 nw.pak
 Prepros.exe
+
+npm-debug.log
 
 #################
 ## Eclipse
