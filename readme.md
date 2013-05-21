@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sbspk/Prepros.png?branch=master)](https://travis-ci.org/sbspk/Prepros)
+
 #Prepros App
 Compile less, sass, scss, compass, coffeescript, stylus, jade, markdown and haml files with live browser refresh.
 
