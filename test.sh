@@ -1,5 +1,5 @@
 #!/bin/sh
-./node_modules/jshint/bin/hint ./lib/*
+./node_modules/jshint/bin/hint ./app/scripts/*
 hint=$?
 if [ $hint != 0 ]; then
 	echo "< script runner stopped jshint failed >";
