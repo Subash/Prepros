@@ -38,9 +38,13 @@ prepros.factory('utils', function () {
     function openBrowser(url){
 
         if(process.platform !== 'win32')
+        {
             require('child_process').spawn('open', [ url ], {detached: true});
+        }
         else
+        {
             require('child_process').spawn('explorer', [ url ], {detached: true});
+        }
 
     }
 
