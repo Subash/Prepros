@@ -129,34 +129,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             });
 
             //Remove file from imports parent list
-            var im = _.filter(imports, function (imp) {
-
-                return _.contains(imp.parents, id);
-
-            });
-
-            if (!_.isEmpty(im)) {
-
-                _.each(im, function (imp) {
-
-                    var newImports = _.reject(imports, function (imported) {
-                        return imported.path === imp.path;
-                    });
-
-                    imp.parents = _.without(im.parents, id);
-
-                    //If after removing one file as parent the parents list becomes empty remove whole import item
-                    if (!_.isEmpty(imp.parents)) {
-
-                        newImports.push(imp);
-
-                    }
-
-                    imports = newImports;
-
-                });
-
-            }
+            removeParentFromAllImports(id);
 
             //Broadcast data change event
             $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
@@ -180,6 +153,50 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     }
 
+    //Function to get file imports in imports list
+    function getFileImports(fid){
+
+        return _.filter(imports, function(im){
+            return _.contains(im.parents, fid);
+        });
+    }
+
+
+    //Function to remove file from import parent
+    function removeParentFromAllImports(fid){
+
+        _.each(imports, function (imp) {
+
+            removeImportParent(imp.id, fid);
+
+        });
+
+    }
+
+    //Remove parent from certain import
+    function removeImportParent(impid, fid){
+
+        var imported = _.findWhere(imports, {id: impid});
+
+        var newImports = _.reject(imports, function (imp) {
+
+            return imported.path === imp.path;
+
+        });
+
+        imported.parents = _.without(imported.parents, fid);
+
+        //If after removing one file as parent the parents list becomes empty remove whole import item
+        if (!_.isEmpty(imported.parents)) {
+
+            newImports.push(imported);
+
+        }
+
+        imports = newImports;
+
+    }
+
     //Function that walks and returns all files in a folder
     function refreshProjectFiles(pid) {
         
@@ -187,8 +204,11 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         //Remove file if it doesn't exist
         _.each(getProjectFiles(pid), function(file){
+
             if(!fs.existsSync(file.input)){
+
                 removeFile(file.id);
+
             }
         });
 
@@ -197,6 +217,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         utils.showLoading();
 
         if(fs.existsSync(folder)){
+
             //Get all files in project folder and add file to file list
             walker(folder, function (err, file, next) {
 
@@ -220,6 +241,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                             '.haml'  //Haml
                         ];
 
+                        //Exclude files that contain certain patterns
                         var filterPatterns = config.user.filterPatterns.split(',');
 
                         var matchFilter = false;
@@ -252,7 +274,49 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                         //Add files
                         if (!_.isEmpty(filesToAdd)) {
 
-                            addFileImports(filesToAdd, folder);
+                            _.each(filesToAdd, function(parentFile){
+
+                                var fileImports = [];
+
+                                //Get file imports
+                                fileImports = _.union(fileImports, importsVisitor.visitImports(parentFile));
+
+                                //Get imports of imports
+                                _.each(fileImports, function(importedFile){
+
+                                    fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
+
+                                });
+
+                                //Get imports of imports of imports
+                                _.each(fileImports, function(importedFile){
+
+                                    fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
+
+                                });
+
+                                //Remove repeated imports
+                                fileImports = _.uniq(fileImports);
+
+                                //Add imports to import list
+                                _.each(fileImports, function(imported){
+
+                                    addFileImport(folder, parentFile, imported);
+
+                                });
+
+                                //Remove any previously imported file that is not imported anymore
+                                var oldImports = getFileImports(_id(parentFile));
+
+                                _.each(oldImports, function(imp){
+
+                                    if(!_.contains(fileImports, imp.path)){
+
+                                        removeImportParent(imp.id, _id(parentFile));
+                                    }
+                                });
+                            });
+
                             addFiles(filesToAdd, folder);
 
                         }
@@ -271,102 +335,51 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     }
 
-    //function to add all imports by file to imports list
-    //it also removes files from files-list that are also in imports list
-    function addFileImports(list, projectPath) {
 
-        _.each(list, function (filePath) {
+    //function to add imported file to import list
+    function addFileImport(projectPath, parentPath, importedPath){
 
-            var extension = path.extname(filePath).toLowerCase();
+        //If @imported file is not in imports list create new entry otherwise add this file as parent
+        if (_.isEmpty(_.findWhere(imports, {path: importedPath}))) {
 
-            //Ignore sass partials
-            var sass = ['.sass', '.scss'];
+            imports.push({
+                id: _id(importedPath),
+                pid: _id(projectPath),
+                path: importedPath,
+                parents: [_id(parentPath)]
+            });
 
-            var partial = /^_/;
+        } else {
 
-            var canImport = _.contains(['.less', '.scss', '.sass', '.styl', '.jade'], extension);
+            var im = _.findWhere(imports, {path: importedPath});
 
-            var isSassPartial = _.contains(sass, extension) && partial.exec(path.basename(filePath));
-
-            //Check if file is in imports list
-            var inImports = _.isEmpty(_.findWhere(imports, {path: filePath})) ? false : true;
-
-            if (canImport && !isSassPartial && !inImports) {
-
-                //Get all the files @import-ed by this file
-                var importsByThisFile = importsVisitor.visitImports(filePath);
-
-                _.each(importsByThisFile, function (importedFile) {
-
-                    //If @imported file is not in imports list create new entry otherwise add this file as parent
-                    if (_.isEmpty(_.findWhere(imports, {path: importedFile}))) {
-
-                        imports.push({
-                            id: _id(importedFile),
-                            pid: _id(projectPath),
-                            path: importedFile,
-                            parents: [_id(filePath)]
-                        });
-
-                    } else {
-
-                        var im = _.findWhere(imports, {path: importedFile});
-
-                        if (!_.contains(im.parents, _id(filePath))) {
-                            im.parents.push(_id(filePath));
-                        }
-
-                        var newImports = _.reject(imports, function (imp) {
-                            return imp.path === importedFile;
-                        });
-
-                        newImports.push(im);
-
-                        imports = newImports;
-
-                    }
-
-                    //Remove any file that is in files list and is imported by this file
-                    removeFile(_id(importedFile));
-
-                });
-
-                //If any previously @imported file is not imported anymore
-                _.each(imports, function(im){
-
-                    if(_.contains(im.parents, _id(filePath))){
-
-                        var oldImports = _.filter(imports, function(){
-                            return _.contains(im.parents, _id(filePath));
-                        });
-
-                        _.each(oldImports, function(oldImport){
-
-                            if(!_.contains(importsByThisFile, oldImport.path)){
-
-                                var modifiedImports = _.reject(imports, function (imported) {
-                                    return imported.path === oldImport.path;
-                                });
-
-                                //Change the parents
-                                oldImport.parents = _.without(oldImport.parents, _id(filePath));
-
-                                //If the parents list is empty remove whole import else add
-                                if (!_.isEmpty(oldImport.parents)) {
-
-                                    modifiedImports.push(oldImport);
-                                }
-
-                                imports = modifiedImports;
-                            }
-                        });
-
-                    }
-
-                });
+            if (!_.contains(im.parents, _id(parentPath))) {
+                im.parents.push(_id(parentPath));
             }
-        });
+
+            //Remove old import file without new parent
+            var newImports = _.reject(imports, function (imp) {
+                return imp.path === importedPath;
+            });
+
+            //Push new import file with new parent
+            newImports.push(im);
+
+            //finally add to global imports list
+            imports = newImports;
+
+        }
+
+        //If any imported file is in the parents list of other imported file remove that as well
+        removeParentFromAllImports(_id(importedPath));
+
+
+        //Remove any file that is in files list and is imported by this file
+        removeFile(_id(importedPath));
+
     }
+
+
 
     //Function to add files
     function addFiles(list, projectPath) {
