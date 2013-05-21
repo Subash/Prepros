@@ -182,8 +182,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     //Function that walks and returns all files in a folder
     function refreshProjectFiles(pid) {
-
-        //Remove all previous project files
+        
         var folder = getProjectById(pid).path;
 
         //Remove file if it doesn't exist
