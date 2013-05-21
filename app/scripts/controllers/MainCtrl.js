@@ -1,9 +1,16 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _ , $*/
 
 //App controller
 prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
-                                        projectsManager, liveRefresh, watcher) {
+                                        projectsManager, liveServer, watcher) {
 
     'use strict';
 
@@ -30,7 +37,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
     var throttleProjectsChange = _.throttle(function(){
 
         storage.saveProjects($scope.projects);
-        liveRefresh.startServing($scope.projects);
+        liveServer.startServing($scope.projects);
 
     }, 1500);
 

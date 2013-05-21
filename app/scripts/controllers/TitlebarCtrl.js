@@ -1,8 +1,15 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _, $*/
 
 //Title Bar controls
-prepros.controller('TitlebarCtrl', function ($scope, config) {
+prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     'use strict';
 
@@ -10,10 +17,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
 
     //Support Author Link
     $scope.supportAuthor = function () {
-        if(process.platform !== 'win32')
-            require('child_process').spawn('open', [config.online.loveUrl], {detached: true});
-        else
-            require('child_process').spawn('explorer', [config.online.loveUrl], {detached: true});
+
+        utils.openBrowser(config.online.loveUrl);
 
     };
 
@@ -71,12 +76,12 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
 
             logWindow = require('nw.gui').Window.open(logPath, {
                 position: 'center',
-                width: 800,
+                width: 850,
                 height: 500,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
-                resizable: true
+                resizable: false
             });
 
             logWindow.on('close', function () {
@@ -159,10 +164,9 @@ prepros.controller('TitlebarCtrl', function ($scope, config) {
     $scope.appUpdate = false;
 
     $scope.goWebsite = function(){
-        if(process.platform !== 'win32')
-            require('child_process').spawn('open', [config.online.url], {detached: true});
-        else
-            require('child_process').spawn('explorer', [config.online.url], {detached: true});
+
+        utils.openBrowser(config.online.url);
+
     };
 
     $.ajaxSetup({

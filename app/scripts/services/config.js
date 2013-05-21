@@ -1,3 +1,10 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true*/
 /*global prepros, angular, _*/
 
@@ -6,10 +13,11 @@ prepros.factory('config', function () {
     'use strict';
 
     var fs = require('fs-extra'),
-        path = require('path');
+        path = require('path'),
+        os = require('os');
 
     //Base path
-    var basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname.slice(1))));
+    var basePath = path.join(path.dirname(process.execPath), 'app');
 
     if(process.platform !== 'win32')
         basePath = path.dirname(path.normalize(decodeURIComponent(window.location.pathname)));
@@ -31,6 +39,13 @@ prepros.factory('config', function () {
         dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
     else
         dataPath = path.join(process.env.HOME, '/.prepros/Data');
+
+   //For other Operating Systems
+   if(!os.type().match(/windows/gi)){
+
+       dataPath = path.join(process.env.USERPROFILE, 'Prepros/Data');
+
+   }
 
     //User config file
     var configFile = path.join(dataPath, 'config.json');

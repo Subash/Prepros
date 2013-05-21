@@ -1,3 +1,10 @@
+/**
+ * Prepros
+ * (c) Subash Pathak
+ * sbshpthk@gmail.com
+ * License: MIT
+ */
+
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
@@ -96,7 +103,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         }
     }
 
-    //Function to get project by its's id
+    //Function to get project by it's id
     function getProjectById(id) {
         return _.findWhere(projects, {id: id});
     }
