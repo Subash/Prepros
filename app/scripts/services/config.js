@@ -23,7 +23,7 @@ prepros.factory('config', function () {
     var packageFileUrl = path.join(basePath, '../package.json');
 
     //Read package.json file and get data of app in prepros object
-    var packageData = JSON.parse(fs.readFileSync(packageFileUrl).toString()).prepros;
+    var packageData = JSON.parse(fs.readFileSync(packageFileUrl).toString());
 
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
@@ -42,7 +42,7 @@ prepros.factory('config', function () {
     var configFile = path.join(dataPath, 'config.json');
 
     //Node modules required by the app
-    var node_modules = packageData.node_modules;
+    var node_modules = packageData.dependencies;
 
     //App version
     var version = packageData.version;
