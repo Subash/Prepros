@@ -9,7 +9,6 @@
 /*global prepros, $, _, Mousetrap */
 
 //Directive for keyboard shortcuts
-//TODO MAC Commands
 prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
 
     'use strict';
