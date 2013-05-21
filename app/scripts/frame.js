@@ -98,6 +98,9 @@
                 this.close(true);
             });
 
+            //Push tray icon to global window to tell garbage collector that tray icon is not garbage
+            window.tray_icon = tray_icon;
+
         });
 
 
