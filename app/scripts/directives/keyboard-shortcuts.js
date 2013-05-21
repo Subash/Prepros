@@ -22,7 +22,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
         link: function(scope){
 
             //New Project
-            Mousetrap.bind('ctrl+n', function() {
+            Mousetrap.bind(['ctrl+n', 'command+n'], function() {
 
                 var elm = $('<input type="file" nwdirectory>');
 
@@ -51,7 +51,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             });
 
             //Refresh Project Files
-            Mousetrap.bind(['ctrl+r', 'f5'], function() {
+            Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function() {
                 if(scope.selectedProject.id){
 
                     projectsManager.refreshProjectFiles(scope.selectedProject.id);
@@ -61,7 +61,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             });
 
             //Open Live Url
-            Mousetrap.bind('ctrl+l', function() {
+            Mousetrap.bind(['ctrl+l', 'command+l'], function() {
 
                 if(scope.selectedProject.id){
 
@@ -74,7 +74,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             });
 
             //Remove Project
-            Mousetrap.bind('ctrl+d', function() {
+            Mousetrap.bind(['ctrl+d', 'command+d'], function() {
                 if(scope.selectedProject.id){
 
                     projectsManager.removeProject(scope.selectedProject.id);
@@ -83,7 +83,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             });
 
             //Compile all project files
-            Mousetrap.bind('ctrl+shift+c', function() {
+            Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function() {
                 if(scope.selectedProject.id){
 
                     var projects = projectsManager.getProjectFiles(scope.selectedProject.id);
@@ -98,7 +98,7 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             });
 
             //Compile selected project file
-            Mousetrap.bind('ctrl+c', function() {
+            Mousetrap.bind(['ctrl+c', 'command+c'], function() {
 
                 if(scope.selectedFile.id){
 
