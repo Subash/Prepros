@@ -83,5 +83,5 @@
 
     "scripts": {
         "test": "./test.sh"
-    },
+    }
 }
