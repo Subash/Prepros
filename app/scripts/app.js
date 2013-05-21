@@ -5,7 +5,7 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true, unused: false*/
+/*jshint browser: true, node: true, unused: false, globalstrict:true*/
 /*global angular */
 
 'use strict';

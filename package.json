@@ -14,6 +14,11 @@
         "show": false
     },
 
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sbspk/Prepros.git"
+    },
+
     "prepros": {
 
         "__JSON_NOTE": "All paths are relative to this json file",
@@ -66,5 +71,17 @@
                 }
             }
         }
+    },
+
+    "devDependencies": {
+        "jshint": "0.5.x"
+    },
+
+    "engines": {
+        "node": ">=0.8"
+    },
+
+    "scripts": {
+        "test": "./test.sh"
     }
 }
