@@ -27,6 +27,37 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //Imports List
     var imports = storage.getImports();
 
+    //Remove any project that no longer exists
+    _.each(projects, function(project){
+
+        if(!fs.existsSync(project.path)){
+
+            removeProject(project.id);
+        }
+
+    });
+
+    //Remove any file that no longer exists
+    _.each(files, function(file){
+
+        if(!fs.existsSync(file.input)){
+
+            removeFile(file.id);
+        }
+
+    });
+
+
+    //Remove any import that no longer exists
+    _.each(imports, function(imported){
+
+        if(!fs.existsSync(imported.path)){
+
+            removeImport(imported.path);
+        }
+
+    });
+
     //Function to add new project
     function addProject(folder) {
 

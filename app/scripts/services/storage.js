@@ -92,20 +92,7 @@ prepros.factory('storage', function (notification, config) {
 			saveProjects([]);
 		}
 
-
-		//Remove non existing projects
-		var notRemoved = _.filter(projects, function (project) {
-			return fs.existsSync(project.path);
-		});
-
-		//If some projects are removed
-		if (!_.isEqual(projects, notRemoved)) {
-
-			//Save new projects list
-			saveProjects(notRemoved);
-		}
-
-		return notRemoved;
+        return projects;
 	}
 
 	//Get files list from files.json file
@@ -132,20 +119,7 @@ prepros.factory('storage', function (notification, config) {
 
 		}
 
-		var notRemoved = _.filter(files, function (file) {
-
-			return fs.existsSync(file.input);
-
-		});
-
-		//If some files are removed
-		if (!_.isEqual(files, notRemoved)) {
-
-			//Save new projects list
-			saveFiles(notRemoved);
-		}
-
-		return notRemoved;
+        return files;
 	}
 
 	//Get files from files.json file
@@ -172,18 +146,7 @@ prepros.factory('storage', function (notification, config) {
 			saveImports([]);
 		}
 
-		var notRemoved = _.filter(imports, function (importedFile) {
-			return fs.existsSync(importedFile.path);
-		});
-
-		//If some files are removed
-		if (!_.isEqual(imports, notRemoved)) {
-
-			//Save new projects list
-			saveImports(notRemoved);
-		}
-
-		return notRemoved;
+        return imports;
 	}
 
 	//Return projects list and files list
