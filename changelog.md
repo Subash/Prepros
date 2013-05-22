@@ -2,9 +2,9 @@
 
 * Support for compass config.rb file (must be inside projects root folder)
 * Support deep nested imports
-* Filter patterns that you can exclude from file and folders
+* Exclude certain patterns from file and folders
 * Sass compact output style
-* Success notice if file is successfully compile
+* Success notice when file is successfully compiled
 * Fixed bug where app was hidden after minimizing to tray
 * Default extensions for changed output files
 * Fixed crash while compiling less
