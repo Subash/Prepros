@@ -13,12 +13,9 @@
 
 
     var getLiveUrl = function(url) {        
-        if(url.match(/^http:\/\/localhost:3738\//))
-        {
+        if(url.match(/^http:\/\/localhost:3738\//)) {
             return url.substr(0,31);
-    	}
-        else
-        {
+    	} else {
     		return parseUrl(url).protocol + '//' + parseUrl(url).host;
     	}
     };
@@ -32,8 +29,7 @@
     //function to stop refreshing tabs
     var stopRefreshing = function(url) {
         _.each(tabs, function(tab) {
-    		if( url === getLiveUrl(tab.url) )
-            {
+    		if( url === getLiveUrl(tab.url) ) {
     			tab.open(tab.url);
     		}
     	});
@@ -41,10 +37,9 @@
 
     
     var startSocket = function() {
-        if (!WebSocket)
-        {
-          console.error("Prepros is disabled because the browser does not support WebSocket API");
-          return;
+        if (!WebSocket) {
+            console.error("Prepros is disabled because the browser does not support WebSocket API");
+            return;
         }
         
         var socket = new WebSocket('ws://localhost:3738');
@@ -54,8 +49,7 @@
 
     		_.each(liveUrls, function(url){
     			//If url is removed from refresh list
-    			if(!_.contains(newUrls, url))
-                {
+    			if(!_.contains(newUrls, url)) {
     				liveUrls = _.reject(liveUrls, function(ur){
     					return ur === url;
     				});
@@ -65,8 +59,7 @@
 
     		//Start refreshing each url
     		_.each(newUrls, function(url) {
-    			if(url)
-                {
+    			if(url) {
     				liveUrls.push(getLiveUrl(url));
     			}    
     		});
@@ -83,7 +76,7 @@
     
     _.each(tabs, function(tab) {
         tab.on('ready', function(tab){
-            if(!socketRunning){    
+            if(!socketRunning) {    
                 startSocket();
             }
         });
