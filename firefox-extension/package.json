@@ -1,0 +1,19 @@
+{
+	"id": "jid0-mDmMDcIxPldB2upakBTzWzpVlk4",
+	"name": "prepros",
+	"author": "kushalpandya",
+	"fullName": "Prepros",
+	"description": "Prepros auto-reload extension for Prepros 1.4.0",
+	"contributors": [
+						"Subash Pathak (https://github.com/sbspk)",
+						"Kushal Pandya (https://github.com/kushalpandya)"
+					],
+	"icon": "data/prepros_icon_48.png",
+	"icon64": "data/prepros_icon_64.png",
+	"dependencies": ["api-utils", "addon-kit"],
+	"lib": "lib",
+	"license": "MIT",
+	"url": "",
+	"version": "0.1b1.rev60",
+	"main": "main"
+}
