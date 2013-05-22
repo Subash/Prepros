@@ -77,7 +77,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
     //Compile
 
-    var compile = function (file) {
+    var compile = function (file, project) {
 
         var args = [config.ruby.gems.sass.path];
 
@@ -118,7 +118,7 @@ prepros.factory('sass', function (config, utils, notification) {
         fs.mkdirsSync(path.dirname(file.output));
 
         //Start a child process to compile the file
-        var rubyProcess = cp.spawn(config.ruby.path, args);
+        var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: project.path});
 
         var compileErr = false;
 

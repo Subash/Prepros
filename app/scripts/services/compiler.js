@@ -19,6 +19,9 @@ prepros.factory("compiler", function (projectsManager, fileTypes) {
 
 		var file = projectsManager.getFileById(fid);
 
+        //Sass requires project because It may need project path
+        var project = projectsManager.getProjectById(file.pid);
+
 		if (fs.existsSync(file.input)) {
 
 			var type = file.type.toLowerCase();
@@ -29,7 +32,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes) {
 
 			} else if (type === "sass" || type === "scss") {
 
-				fileTypes.sass.compile(file);
+				fileTypes.sass.compile(file, project);
 
 			} else if (type === "stylus") {
 
