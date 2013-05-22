@@ -28,8 +28,22 @@ prepros.factory('config', function () {
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
 
-    //User data path
-    var dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
+    var dataPath = '';
+
+    //for windows > vista
+    if(process.env.LOCALAPPDATA){
+
+        //User data path
+        dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
+
+    } else {
+
+        //for windows Xp
+        dataPath = path.join(process.env.APPDATA, 'Prepros/Data');
+
+    }
+
+
 
    //For other Operating Systems
    if(!os.type().match(/windows/gi)){
