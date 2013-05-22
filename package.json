@@ -21,7 +21,7 @@
 
     "__JSON_NOTE": "All paths are relative to this json file",
 
-    "version" : "1.3.0",
+    "version" : "1.4.0",
 
     "dependencies": {
         "coffee-script": "1.6.2",

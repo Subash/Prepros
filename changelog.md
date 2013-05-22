@@ -1,3 +1,16 @@
+## Version 1.4.0 -May 22, 2013
+
+* Support for compass config.rb file (must be inside projects root folder)
+* Support deep nested imports
+* Filter patterns that you can exclude from file and folders
+* Sass compact output style
+* Success notice if file is successfully compile
+* Fixed bug where app was hidden after minimizing to tray
+* Default extensions for changed output files
+* Fixed crash while compiling less
+* Other small fixes and improvements
+
+
 ## Version 1.3.0 -May 16, 2013
 
 * New default options panel ( Ability to save default options for languages )
