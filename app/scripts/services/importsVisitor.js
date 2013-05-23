@@ -116,7 +116,16 @@ prepros.factory('importsVisitor', function () {
 
         } else if (ext === '.sass' || ext === '.scss') {
 
-            importReg = /@import[ \("']*([^;]+)[;\)"']*/g;
+            //For .scss
+            importReg = /@import\s[\("']*([^;]+)[;\)"']*/g;
+
+            //For .sass
+            if(ext === '.sass'){
+
+                importReg = /@import\s[\("']*([^;\n]+)[;\)"']*/g;
+            }
+
+
 
             var i;
 
