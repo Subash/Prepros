@@ -1,7 +1,10 @@
-[![Build Status](https://travis-ci.org/sbspk/Prepros.png?branch=master)](https://travis-ci.org/sbspk/Prepros)
+<a href=''><img alt='Click here to lend your support to: Help Make Prepros More Awesome and make a donation at www.pledgie.com !' src='' border='0' /></a>
 
-#Prepros App
+
+#Prepros App [![Help Make Prepros More Awesome](http://www.pledgie.com/campaigns/20199.png?skin_name=chrome)](https://travis-ci.org/sbspk/Prepros)
 Compile less, sass, scss, compass, coffeescript, stylus, jade, markdown and haml files with live browser refresh.
+
+[![Build Status](https://travis-ci.org/sbspk/Prepros.png?branch=master)](http://www.pledgie.com/campaigns/20199)
 
 To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.com/prepros).
 
