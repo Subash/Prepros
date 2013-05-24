@@ -88,6 +88,7 @@ Section Uninstall
   delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   delete "$SMPROGRAMS\${PRODUCT_NAME}.lnk"
   RMDir /R "$LOCALAPPDATA\Prepros"
+  RMDir /R "$APPDATA\Prepros"
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
   
