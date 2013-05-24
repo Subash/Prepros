@@ -96,6 +96,12 @@ prepros.factory('sass', function (config, utils, notification) {
         //Output Style
         args.push('--style', file.config.outputStyle);
 
+        //Debug info
+        if(file.config.debug){
+
+            args.push('--debug');
+        }
+
         //Compass
         if (file.config.compass) {
             args.push('--compass');

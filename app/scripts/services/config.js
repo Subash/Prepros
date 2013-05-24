@@ -162,6 +162,7 @@ prepros.factory('config', function () {
             scss : {
                 autoCompile : true,
                 lineNumbers : false,
+                debug: false,
                 compass : false,
                 outputStyle : 'compressed' //compressed, nested, expanded, compact
             },
@@ -170,6 +171,7 @@ prepros.factory('config', function () {
             sass : {
                 autoCompile : true,
                 lineNumbers : false,
+                debug: false,
                 compass : false,
                 outputStyle : 'compressed' //compressed, nested, expanded, compact
             },
