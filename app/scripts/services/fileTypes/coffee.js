@@ -64,6 +64,13 @@ prepros.factory('coffee', function(config, utils, notification){
 
         var ugly = require('uglify-js');
 
+        var options = {};
+
+        if(file.config.bare){
+
+            options.bare = true;
+        }
+
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
@@ -73,7 +80,7 @@ prepros.factory('coffee', function(config, utils, notification){
 
                 try {
 
-                    var javascript = coffee.compile(data.toString());
+                    var javascript = coffee.compile(data.toString(), options);
 
                     if (file.config.uglify) {
 

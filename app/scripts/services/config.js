@@ -169,6 +169,7 @@ prepros.factory('config', function () {
         //Default Coffeescript Options
         coffee: {
             autoCompile: true,
+            bare: false,
             uglify: false
         },
 
