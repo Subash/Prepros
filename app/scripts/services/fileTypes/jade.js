@@ -25,7 +25,7 @@ prepros.factory('jade', function(config, utils, notification){
         var shortInput = path.relative(projectPath, filePath).replace(/\\/g, '/');
 
         // Output path
-        var output = filePath.replace(/\.jade/gi, config.user.htmlExtension);
+        var output = filePath.replace(/\.jade/gi, config.getUserOptions().htmlExtension);
 
         //Find short output path
         var shortOutput = output.replace(/\\/g, '/');
@@ -45,7 +45,7 @@ prepros.factory('jade', function(config, utils, notification){
             shortInput: shortInput,
             output: output,
             shortOutput: shortOutput,
-            config: config.user.jade
+            config: config.getUserOptions().jade
         };
     };
 

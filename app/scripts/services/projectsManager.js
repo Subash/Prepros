@@ -273,7 +273,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                         ];
 
                         //Exclude files that contain certain patterns
-                        var filterPatterns = config.user.filterPatterns.split(',');
+                        var filterPatterns = config.getUserOptions().filterPatterns.split(',');
 
                         var matchFilter = false;
 
@@ -504,7 +504,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             } else if(_.contains(html, type)) {
 
-                newPath = newPath + config.user.htmlExtension;
+                newPath = newPath + config.getUserOptions().htmlExtension;
 
             } else if(_.contains(js, type)){
 

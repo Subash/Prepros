@@ -105,7 +105,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     $scope.openOptionsWindow = function () {
 
         //Inject config object to global so options window can read it
-        global.userConfig = config.user;
+        global.userConfig = config.getUserOptions();
 
         if (typeof(optionsWindow) === "object") {
             optionsWindow.show();
@@ -125,8 +125,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
             });
 
             optionsWindow.on('close', function () {
-                config.user = global.userConfig;
-                config.saveOptions();
+                config.saveUserOptions(global.userConfig);
                 this.close(true);
                 optionsWindow = undefined;
             });

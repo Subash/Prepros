@@ -30,7 +30,7 @@ prepros.factory('notification', function (config) {
             global.logScope.$apply();
         }
 
-        if(config.user.enableNotifications){
+        if(config.getUserOptions().enableNotifications){
 
             if(typeof(notificationWindow) === 'object') {
                 notificationWindow.reload();

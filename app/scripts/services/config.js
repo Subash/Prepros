@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, angular, _*/
+/*global prepros, angular, _, $*/
 
 prepros.factory('config', function () {
 
@@ -105,7 +105,7 @@ prepros.factory('config', function () {
     var user = {};
 
 
-    var saveOptions = function () {
+    var _saveOptions = function () {
 
         try {
             fs.outputFileSync(configFile, angular.toJson(user, true));
@@ -135,7 +135,7 @@ prepros.factory('config', function () {
     if(!user.filterPatterns){
 
         user.filterPatterns = '';
-        saveOptions();
+        _saveOptions();
 
     }
 
@@ -213,7 +213,23 @@ prepros.factory('config', function () {
             }
         };
 
-        saveOptions();
+        _saveOptions();
+    }
+
+    //Wrap user options in a function to prevent angular data sharing between services
+    //If user config data is shared between files changing configuration of one file will affect another file
+    function getUserOptions() {
+
+        return $.parseJSON(angular.toJson(user));
+
+    }
+
+    function saveUserOptions(options) {
+
+        user = $.parseJSON(angular.toJson(options));
+
+        _saveOptions();
+
     }
 
 
@@ -225,7 +241,8 @@ prepros.factory('config', function () {
         online: online,
         user: user,
         version: version,
-        saveOptions: saveOptions
+        getUserOptions: getUserOptions,
+        saveUserOptions: saveUserOptions
     };
 
 });

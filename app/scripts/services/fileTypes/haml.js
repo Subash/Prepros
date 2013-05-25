@@ -26,7 +26,7 @@ prepros.factory('haml', function (config, utils, notification) {
             var shortInput = path.relative(projectPath, filePath).replace(/\\/g, '/');
 
             // Output path
-            var output = filePath.replace(/\.haml/gi, config.user.htmlExtension);
+            var output = filePath.replace(/\.haml/gi, config.getUserOptions().htmlExtension);
 
             //Find short output path
             var shortOutput = output.replace(/\\/g, '/');
@@ -46,7 +46,7 @@ prepros.factory('haml', function (config, utils, notification) {
                 shortInput: shortInput,
                 output: output,
                 shortOutput: shortOutput,
-                config: config.user.haml
+                config: config.getUserOptions().haml
             };
         };
 

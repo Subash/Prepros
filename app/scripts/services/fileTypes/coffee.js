@@ -34,7 +34,7 @@ prepros.factory('coffee', function(config, utils, notification){
         //Find output path; save to /js folder if file is in /coffee folder
         if(filePath.match(/\\coffee\\|\/coffee\//gi)) {
 
-            output = path.normalize(output.replace(/\\coffee\\|\/coffee\//gi, path.sep + config.user.jsPath + path.sep));
+            output = path.normalize(output.replace(/\\coffee\\|\/coffee\//gi, path.sep + config.getUserOptions().jsPath + path.sep));
 
         }
 
@@ -54,7 +54,7 @@ prepros.factory('coffee', function(config, utils, notification){
             shortInput: shortInput,
             output: output,
             shortOutput: shortOutput,
-            config: config.user.coffee
+            config: config.getUserOptions().coffee
         };
     };
 
