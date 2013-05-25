@@ -43,13 +43,6 @@ prepros.factory('config', function () {
 
     }
 
-   //For other Operating Systems
-   if(!os.type().match(/windows/gi)){
-
-       dataPath = path.join(process.env.USERPROFILE, 'Prepros/Data');
-
-   }
-
     //User config file
     var configFile = path.join(dataPath, 'config.json');
 
@@ -67,7 +60,10 @@ prepros.factory('config', function () {
         updateFileUrl: 'http://alphapixels.com/prepros/update.json'
     };
 
-    var ruby = {
+    var ruby  = {};
+
+    //For windows
+    ruby = {
         path: path.join(packagePath, packageData.ruby.path),
         version: packageData.ruby.version
     };
