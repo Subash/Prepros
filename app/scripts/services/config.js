@@ -43,8 +43,6 @@ prepros.factory('config', function () {
 
     }
 
-
-
    //For other Operating Systems
    if(!os.type().match(/windows/gi)){
 
@@ -70,42 +68,30 @@ prepros.factory('config', function () {
     };
 
     var ruby = {
-
         path: path.join(packagePath, packageData.ruby.path),
-        version: packageData.ruby.version,
-
-        gems: {
-            compass: {
-                path: path.join(packagePath, packageData.ruby.gems.compass.path),
-                version: packageData.ruby.gems.compass.version
-            },
-            sass: {
-                path: path.join(packagePath, packageData.ruby.gems.sass.path),
-                version: packageData.ruby.gems.sass.version
-            },
-            bourbon: {
-                path: path.join(packagePath, packageData.ruby.gems.bourbon.path),
-                version: packageData.ruby.gems.bourbon.version
-            },
-            haml: {
-                path: path.join(packagePath, packageData.ruby.gems.haml.path),
-                version: packageData.ruby.gems.haml.version
-            },
-            kramdown: {
-                path: path.join(packagePath, packageData.ruby.gems.kramdown.path),
-                version: packageData.ruby.gems.kramdown.version
-            },
-            susy: {
-                path: path.join(packagePath, packageData.ruby.gems.susy.path),
-                version: packageData.ruby.gems.susy.version
-            }
-        }
+        version: packageData.ruby.version
     };
 
+    //Gems
+    ruby.gems = {};
+    var gemKeys = Object.keys(packageData.ruby.gems);
+
+    _.each(gemKeys, function(key){
+
+        ruby.gems[key] = {
+
+            path: path.join(packagePath, packageData.ruby.gems[key].path),
+            version: packageData.ruby.gems[key].version
+        };
+
+    });
+
+
+    //User options
     var user = {};
 
-
-    var _saveOptions = function () {
+    //Private function to save user configurations
+    function _saveOptions() {
 
         try {
             fs.outputFileSync(configFile, angular.toJson(user, true));
@@ -115,7 +101,7 @@ prepros.factory('config', function () {
             window.alert('Unable to save configuration file.');
 
         }
-    };
+    }
 
     //Read user config
     if (fs.existsSync(configFile)) {
