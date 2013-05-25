@@ -62,7 +62,7 @@ prepros.factory('config', function () {
 
     var ruby  = {};
 
-    //For windows
+    //Ruby Executable
     ruby = {
         path: path.join(packagePath, packageData.ruby.path),
         version: packageData.ruby.version
