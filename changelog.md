@@ -1,3 +1,9 @@
+## Version 1.4.1 -May 25, 2013
+
+* Feature: Windows XP Compatibility
+* Feature: Sass debug information
+* Bugfix: Sass imports not detected
+
 ## Version 1.4.0 -May 22, 2013
 
 * Support for compass config.rb file (must be inside projects root folder)
