@@ -31,7 +31,7 @@ SetCompressor lzma
 !insertmacro MUI_UNPAGE_INSTFILES
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME} ${PRODUCT_VERSION}.exe"
+OutFile "${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 ShowInstDetails hide
 ShowUnInstDetails hide
