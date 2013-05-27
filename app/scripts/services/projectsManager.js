@@ -269,7 +269,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                             '.md', '.markdown', //Markdown
                             '.coffee', //Coffeescript
                             '.jade', //Jade
-                            '.haml'  //Haml
+                            '.haml',  //Haml
+                            '.slim'  //Slim
                         ];
 
                         //Exclude files that contain certain patterns
@@ -468,6 +469,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                     file = fileTypes.haml.format(filePath, projectPath);
 
+                } else if (extension === '.slim') {
+
+                    file = fileTypes.slim.format(filePath, projectPath);
+
                 }
 
                 //There is new file
@@ -492,7 +497,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         var css = ['scss', 'sass', 'stylus', 'less'];
         var js = ['coffee'];
-        var html = ['jade', 'haml', 'md'];
+        var html = ['jade', 'haml', 'md', 'slim'];
 
         var type = file.type.toLowerCase();
 

@@ -10,9 +10,7 @@
 
 'use strict';
 
-prepros.factory('fileTypes', function (storage, notification, config, utils,
-
-                                       less, sass, stylus, markdown, coffee, jade, haml) {
+prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jade, haml, slim) {
 
     return {
         less: less,
@@ -21,6 +19,7 @@ prepros.factory('fileTypes', function (storage, notification, config, utils,
         markdown: markdown,
         coffee: coffee,
         jade: jade,
-        haml: haml
+        haml: haml,
+        slim: slim
     };
 });

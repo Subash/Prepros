@@ -54,7 +54,11 @@ prepros.factory("compiler", function (projectsManager, fileTypes) {
 
 				fileTypes.haml.compile(file);
 
-			}
+			} else if (type === "slim") {
+
+                fileTypes.slim.compile(file);
+
+            }
 
 		}
 	}

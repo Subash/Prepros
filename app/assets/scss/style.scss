@@ -385,6 +385,12 @@ body {
           border-right: 5px solid #D3CE3D;
         }
       }
+      .slim {
+        border-right: 5px solid #00B4CC;
+        &:after {
+          border-right: 5px solid #00B4CC;
+        }
+      }
       .details {
         float: left;
         margin-left: 10px;

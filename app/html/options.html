@@ -24,7 +24,6 @@
 <body style="overflow: auto">
 <div ng-controller="OptionsCtrl" class="preprosOptions">
 <h4>Prepros App Options</h4>
-<div class="alert alert-info">Settings apply only to new files and projects</div>
 
 <div class="tabbable tabs-left" style="border-bottom: 1px solid #CCC;margin-top: 25px;">
     <ul class="nav nav-tabs">
@@ -35,6 +34,7 @@
         <li><a href="#stylus" data-toggle="tab">Stylus</a></li>
         <li><a href="#jade" data-toggle="tab">Jade</a></li>
         <li><a href="#haml" data-toggle="tab">Haml</a></li>
+        <li><a href="#slim" data-toggle="tab">Slim</a></li>
         <li><a href="#coffee" data-toggle="tab">Coffee</a></li>
         <li><a href="#markdown" data-toggle="tab">Markdown</a></li>
     </ul>
@@ -234,6 +234,18 @@
                 </select>
             </label>
 
+        </div>
+
+        <!-- Slim -->
+        <div class="tab-pane" id="slim">
+            <label>
+                <input type="checkbox" ng-model="userConfig.slim.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.slim.pretty">
+                <span class="label-desc">Pretty Output</span>
+            </label>
         </div>
 
 

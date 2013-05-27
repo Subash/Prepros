@@ -185,6 +185,12 @@ prepros.factory('config', function () {
             format: 'html5', //xhtml, html5
             outputStyle: 'indented', //indented, ugly
             doubleQuotes: false
+        },
+
+        //Default Slim  Options
+        slim: {
+            autoCompile: true,
+            pretty: true
         }
     };
 
