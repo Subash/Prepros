@@ -57,7 +57,10 @@ prepros.factory('config', function () {
         url: 'http://alphapixels.com/prepros',
         helpUrl: 'http://alphapixels.com/prepros',
         loveUrl: 'http://alphapixels.com/prepros#love',
-        updateFileUrl: 'http://alphapixels.com/prepros/update.json'
+        updateFileUrl: 'http://alphapixels.com/prepros/update.json',
+        githubUrl: 'http://github.com/sbspk/prepros',
+        authorTwitter: 'http://twitter.com/sbspk',
+        authorUrl: 'http://alphapixels.com'
     };
 
     var ruby  = {};

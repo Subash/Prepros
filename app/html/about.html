@@ -6,19 +6,20 @@
     <script src="../scripts/lib/jquery.js"></script>
     <script src="../scripts/lib/angular.js"></script>
     <script src="../scripts/lib/underscore.js"></script>
+    <script src="../scripts/lib/bootstrap.js"></script>
     <link href="../assets/css/style.css" rel="stylesheet">
     <script>
-        function AboutCtrl($scope){
+        function AboutCtrl($scope) {
 
             //Configuration
-            $scope.config =  global.config;
+            $scope.config = global.config;
 
             var node_modules = Object.keys($scope.config.node_modules);
             var gems = Object.keys($scope.config.ruby.gems);
 
             $scope.checkingUpdate = true;
             $scope.errorCheck = false;
-            $scope.upToDate= false;
+            $scope.upToDate = false;
 
             $scope.update = {
                 available: false,
@@ -31,9 +32,9 @@
             });
 
             $.getJSON($scope.config.online.updateFileUrl)
-                    .done(function(data) {
+                    .done(function (data) {
 
-                        if($scope.config.version != data[0].version){
+                        if ($scope.config.version != data[0].version) {
 
                             $scope.update = {
                                 available: true,
@@ -51,7 +52,7 @@
                         }
 
                     })
-                    .fail(function( jqxhr, textStatus, error ) {
+                    .fail(function (jqxhr, textStatus, error) {
                         $scope.checkingUpdate = false;
                         $scope.errorCheck = true;
                         $scope.$apply();
@@ -60,26 +61,26 @@
 
             $scope.node_modules = [];
 
-            _.each(node_modules, function(module){
+            _.each(node_modules, function (module) {
 
-                $scope.node_modules.push(module + " -> " +$scope.config.node_modules[module]);
+                $scope.node_modules.push(module + " -> " + $scope.config.node_modules[module]);
 
             });
 
             $scope.gems = [];
 
-            _.each(gems, function(gem){
+            _.each(gems, function (gem) {
 
-                $scope.gems.push(gem + " -> " +$scope.config.ruby.gems[gem].version);
+                $scope.gems.push(gem + " -> " + $scope.config.ruby.gems[gem].version);
 
             });
 
 
-            $scope.go = function(){
+            $scope.go = function (place) {
 
-                global.utils.openBrowser($scope.config.online.url);
+                global.utils.openBrowser($scope.config.online[place]);
 
-            }
+            };
 
         }
     </script>
@@ -88,33 +89,50 @@
 <div ng-controller="AboutCtrl" class="preprosAbout">
     <h4>Prepros {{config.version}}</h4>
 
-    <h5>Node Modules</h5>
-    <ul>
-        <li ng-repeat="module in node_modules">{{module}}</li>
-    </ul>
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#app-info" data-toggle="tab">About</a></li>
+            <li><a href="#node-modules" data-toggle="tab">Node Modules</a></li>
+            <li><a href="#ruby-gems" data-toggle="tab">Ruby Gems</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="app-info">
 
-    <h5>Ruby Gems</h5>
-    <ul>
-        <li ng-repeat="gem in gems">{{gem}}</li>
-    </ul>
+                <p>Prepros is an open source code preprocessing tool written using pure html, css and javascript.</p>
+                <p>It is designed, developed and maintained by <a ng-click="go('authorTwitter')" style="cursor: pointer;">Subash Pathak</a></p>
+                <p>You can hack on Prepros source code on <a ng-click="go('githubUrl')" style="cursor: pointer;">Github</a>. It's under MIT license.</p>
+                <p>Please <a ng-click="go('loveUrl')" style="cursor: pointer;">support developer</a> to make prepros more awesome.</p>
+                <p>
+                    To learn more, please visit <a ng-click="go('url')" style="cursor: pointer;">{{config.online.url}}</a>.
+                </p>
 
-    <p>
-        To learn more, please visit <a ng-click="go()" style="cursor: pointer;">{{config.online.url}}</a>.
-    </p>
-
-    <div ng-show="update.available" class="alert alert-info">
-        New version {{update.version}} released on {{update.date}} is available, visit <a ng-click="go()" style="cursor: pointer;">{{config.online.url}}</a> to download.
+                <div ng-show="update.available" class="alert alert-info">
+                    New version {{update.version}} released on {{update.date}} is available, visit <a ng-click="go('url')"
+                                                                                                      style="cursor: pointer;">{{config.online.url}}</a>
+                    to download.
+                </div>
+                <div ng-show="checkingUpdate" class="alert alert-info">
+                    Checking for updates.
+                </div>
+                <div ng-show="errorCheck" class="alert alert-error">
+                    An error occurred while checking for updates.
+                </div>
+                <div ng-show="upToDate" class="alert alert-success">
+                    You are using the latest and greatest version of Prepros.
+                </div>
+            </div>
+            <div class="tab-pane" id="node-modules">
+                <ul>
+                    <li ng-repeat="module in node_modules">{{module}}</li>
+                </ul>
+            </div>
+            <div class="tab-pane" id="ruby-gems">
+                <ul>
+                    <li ng-repeat="gem in gems">{{gem}}</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div ng-show="checkingUpdate" class="alert alert-info">
-        Checking for updates.
-    </div>
-    <div ng-show="errorCheck" class="alert alert-error">
-        An error occurred while checking for updates.
-    </div>
-    <div ng-show="upToDate" class="alert alert-success">
-        You are using the latest and greatest version of Prepros.
-    </div>
-
 </div>
 </body>
 </html>
