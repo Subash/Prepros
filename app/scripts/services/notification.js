@@ -19,65 +19,77 @@ prepros.factory('notification', function (config) {
 
     var notificationWindow;
 
-	function error(name, details){
+    function openNotificationWindow(){
 
-        global.preprosLog.unshift({name: name, details: details, type: 'error', date: new Date().toISOString()});
+        if(typeof(notificationWindow) === 'object') {
+            notificationWindow.reload();
+            notificationWindow.show();
 
-        global.preprosNotification = {name: name, details: details, type: 'error'};
+        } else {
+
+            var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
+
+            notificationWindow = require('nw.gui').Window.open(notificationPath, {
+                x: window.screen.availWidth-410,
+                y: window.screen.availHeight-110,
+                width: 400,
+                height: 100,
+                frame: false,
+                toolbar: false,
+                resizable: false,
+                show: false,
+                show_in_taskbar: false
+            });
+
+            notificationWindow.on('close', function(){
+                this.close(true);
+                notificationWindow = undefined;
+            });
+        }
+
+        //Close notification window when main window is closed
+        require('nw.gui').Window.get().on('close', function () {
+
+            if(typeof(notificationWindow) === 'object') {
+                notificationWindow.close();
+            }
+        });
+
+    }
+
+	function error(name, message, details){
+
+        global.preprosLog.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
+
+        global.preprosNotification = {name: name, message: message, type: 'error'};
 
         //Hack to update log
         if(global.logScope){
             global.logScope.$apply();
         }
 
-        if(config.getUserOptions().enableNotifications){
+        if(config.getUserOptions().enableErrorNotifications){
 
-            if(typeof(notificationWindow) === 'object') {
-                notificationWindow.reload();
-                notificationWindow.show();
-
-            } else {
-
-                var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
-
-                notificationWindow = require('nw.gui').Window.open(notificationPath, {
-                    x: window.screen.availWidth-400,
-                    y: window.screen.availHeight-70,
-                    width: 400,
-                    height: 70,
-                    frame: false,
-                    toolbar: false,
-                    resizable: false,
-                    show: false,
-                    show_in_taskbar: false
-                });
-
-                notificationWindow.on('close', function(){
-                    this.close(true);
-                    notificationWindow = undefined;
-                });
-            }
-
-            //Close notification window when main window is closed
-            require('nw.gui').Window.get().on('close', function () {
-
-                if(typeof(notificationWindow) === 'object') {
-                    notificationWindow.close();
-                }
-            });
+            openNotificationWindow();
         }
 	}
 
     //Function to success notification
-    var success = function(name, details){
+    var success = function(name, message, details){
 
-        global.preprosLog.unshift({name: name, details: details, type: 'success', date: new Date().toISOString()});
+        global.preprosLog.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
+
+        global.preprosNotification = {name: name, message: message, type: 'success'};
 
         //Hack to update log
         if(global.logScope){
             global.logScope.$apply();
         }
 
+        if(config.getUserOptions().enableSuccessNotifications){
+
+            openNotificationWindow();
+        }
     };
 
     return {

@@ -35,9 +35,17 @@
 </head>
 <body>
 
-<div ng-controller="NotificationCtrl" class="preprosNotification {{notification.type}}" ng-click="openLog()">
-    <span class="icomoon-close" ng-click="close($event)"></span>
-    <span class="title"><i class="icomoon-bullhorn"></i>{{notification.name}}</span>
+<div ng-controller="NotificationCtrl" class="preprosNotification" ng-click="openLog()">
+    <div class="notif-container {{notification.type}}">
+        <span class="icomoon-close notif-close" ng-click="close($event)"></span>
+        <div class="notif-icon">
+            <i ng-class="{'icomoon-smiley' : notification.type == 'success', 'icomoon-sad' : notification.type == 'error'}"></i>
+        </div>
+        <div class="notif-info">
+            <h3>{{notification.name}}</h3>
+            <p>{{notification.message}}</p>
+        </div>
+    </div>
 </div>
 </body>
 </html>

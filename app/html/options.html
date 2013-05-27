@@ -42,8 +42,12 @@
 
         <div class="tab-pane active" id="general">
             <label>
-                <input type="checkbox" ng-model="userConfig.enableNotifications">
-                <span class="label-desc">Enable Desktop Notifications</span>
+                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
+                <span class="label-desc">Enable Error Notifications</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
+                <span class="label-desc">Enable Success Notifications</span>
             </label>
             <label>
                 <span class="label-desc">Css Folder</span><br>

@@ -91,11 +91,11 @@ prepros.factory('coffee', function(config, utils, notification){
 
                         if (err) {
 
-                            notification.error('Error writing file.', file.output);
+                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
 
                         } else {
 
-                            notification.success('Successfully compiled', file.input);
+                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
 
                         }
 
@@ -104,8 +104,7 @@ prepros.factory('coffee', function(config, utils, notification){
 
                 } catch (e) {
 
-                    notification.error('Error compiling file', e.message + "\n" + file.input);
-
+                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n" + file.input);
                 }
             }
         });

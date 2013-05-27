@@ -70,15 +70,21 @@ prepros.factory('markdown', function (config, utils, notification) {
                     fs.outputFile(file.output, html, function (err) {
 
                         if (err) {
-                            notification.error('Error writing file.', file.output);
+
+                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+
                         } else {
-                            notification.success('Successfully compiled', file.input);
+
+                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+
                         }
 
                     });
 
                 } catch(e) {
-                    notification.error('Error compiling markdown file.', file.output);
+
+                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+
                 }
 
             }

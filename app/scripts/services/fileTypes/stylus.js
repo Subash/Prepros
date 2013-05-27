@@ -104,16 +104,20 @@ prepros.factory('stylus', function (config, utils, notification) {
                 compiler.render(function (err, css) {
                     if (err) {
 
-                        notification.error('Error compiling file.', err.message);
+                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
 
                     } else {
 
                         fs.outputFile(file.output, css, function (err) {
 
                             if (err) {
-                                notification.error('Error writing file.', file.output);
+
+                                notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
+
                             } else {
-                                notification.success('Successfully compiled', file.input);
+
+                                notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+
                             }
 
                         });

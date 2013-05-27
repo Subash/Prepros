@@ -121,7 +121,8 @@ prepros.factory('config', function () {
         cssPath: 'css',
         jsPath: 'js',
         htmlExtension: '.html',
-        enableNotifications: true,
+        enableSuccessNotifications: true,
+        enableErrorNotifications: true,
         filterPatterns: '',
 
 

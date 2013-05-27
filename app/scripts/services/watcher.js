@@ -57,7 +57,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
             } catch (err) {
 
-                notification.error("Error watching file.", file.input);
+                notification.error('Error watching file.', 'An error occurred while watching file', file.input);
             }
 
 		});
@@ -89,7 +89,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
 			} catch (err) {
 
-				notification.error("Error watching imported file.", imp.path);
+                notification.error('Error watching imported file', 'An error occurred while watching file', imp.path);
 
 			}
 

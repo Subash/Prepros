@@ -90,7 +90,9 @@ prepros.factory('less', function(config, utils, notification){
                 try {
                     parser.parse(data.toString(), function (e, tree) {
                         if (e) {
-                            notification.error('Error compiling file', e.message + "\n"  + e.filename + ' line ' + e.line);
+
+                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
+
                         }
                         if (!e) {
 
@@ -101,16 +103,21 @@ prepros.factory('less', function(config, utils, notification){
                                 fs.outputFile(file.output, css, function (err) {
 
                                     if (err) {
-                                        notification.error('Error writing file.', file.output);
+
+                                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+
+
                                     } else {
-                                        notification.success('Successfully compiled', file.input);
+
+                                        notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+
                                     }
 
                                 });
 
                             } catch(e ){
 
-                                notification.error('Error compiling file', e.message + "\n"  + e.filename + ' line ' + e.line);
+                                notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
 
                             }
 
@@ -118,7 +125,7 @@ prepros.factory('less', function(config, utils, notification){
                         }
                     });
                 } catch (e) {
-                    notification.error('Error compiling file', e.message + "\n"  + e.filename + ' line ' + e.line);
+                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
                 }
 
             }

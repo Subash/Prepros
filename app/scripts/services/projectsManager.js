@@ -255,7 +255,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     //Ouch error occurred
                     if (err) {
 
-                        notification.error('Error getting all files. ', folder);
+                        notification.error('Error ! ', 'An error occurred while scanning files', folder);
                     }
 
                     //Add file to project

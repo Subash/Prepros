@@ -133,7 +133,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
             compileErr = true;
 
-            notification.error('Error compiling file', data.toString());
+            notification.error('Compilation Failed', 'Failed to compile ' + file.name, data.toString());
 
         });
 
@@ -141,7 +141,7 @@ prepros.factory('sass', function (config, utils, notification) {
         rubyProcess.on('exit', function(){
             if(!compileErr){
 
-                notification.success('Successfully compiled', file.input);
+                notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
 
             }
         });
