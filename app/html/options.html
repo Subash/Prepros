@@ -42,14 +42,6 @@
 
         <div class="tab-pane active" id="general">
             <label>
-                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
-                <span class="label-desc">Enable Error Notifications</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
-                <span class="label-desc">Enable Success Notifications</span>
-            </label>
-            <label>
                 <span class="label-desc">Css Folder</span><br>
                 <input type="text" ng-model="userConfig.cssPath">
             </label>
@@ -65,6 +57,14 @@
                 <span class="label-desc">Exclude files that contain following patterns</span>
                 <span class="muted" style="display: block">Please enter comma separated list</span>
                 <input type="text" ng-model="userConfig.filterPatterns">
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
+                <span class="label-desc">Enable Error Notifications</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
+                <span class="label-desc">Enable Success Notifications</span>
             </label>
         </div>
 
