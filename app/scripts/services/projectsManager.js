@@ -403,14 +403,16 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     addFiles(filesToAdd, folder);
                 }
 
+                utils.hideLoading();
+
             });
         } else {
 
             removeProject(pid);
 
-        }
+            utils.hideLoading();
 
-        utils.hideLoading();
+        }
     }
 
 
