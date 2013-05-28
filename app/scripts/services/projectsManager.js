@@ -74,6 +74,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                 path: folder,
                 config: {
                     liveRefresh: true,
+                    filterPatterns: '',
                     useCustomServer: false,
                     customServerUrl: ''
                 }
@@ -228,143 +229,188 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     }
 
+    //Function to get all files inside project folder
+    function getProjectFolderFiles(pid, callback) {
+
+        var folder = getProjectById(pid).path;
+
+        var filesList = [];
+
+        //Get all files in project folder
+        walker(folder, function (err, file, next) {
+
+            //Ouch error occurred
+            if (err) {
+
+                notification.error('Error ! ', 'An error occurred while scanning files', folder);
+            }
+
+            //Add file to project
+            if (file !== null) {
+
+                var extname = path.extname(file).toLowerCase();
+                var supportedExtensions = [
+                    '.less', //Less
+                    '.sass', '.scss', //Sass
+                    '.styl', //Stylus
+                    '.md', '.markdown', //Markdown
+                    '.coffee', //Coffeescript
+                    '.jade', //Jade
+                    '.haml',  //Haml
+                    '.slim'  //Slim
+                ];
+
+                if (_.contains(supportedExtensions, extname)) {
+
+                    filesList.push(path.normalize(file));
+
+                }
+            }
+
+            //Next file
+            if (next) {
+
+                next();
+
+            } else {
+
+                callback(filesList);
+
+            }
+
+        });
+    }
+
+    //Function to match files against global and project specific filters
+    function matchFileFilters(pid, file) {
+
+        var folder = getProjectById(pid).path;
+
+        var projectFilterPatterns = '';
+
+        if(getProjectById(pid).config.filterPatterns) {
+
+            projectFilterPatterns = getProjectById(pid).config.filterPatterns;
+        }
+
+        var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
+
+        projectFilterPatterns = projectFilterPatterns.split(',');
+
+        var filterPatterns = _.unique(_.union(globalFilterPatterns, projectFilterPatterns));
+
+        var matchFilter = false;
+
+        _.each(filterPatterns, function(pattern){
+
+            pattern = pattern.trim();
+
+            if(pattern !=="" && file.indexOf(pattern) !== -1) {
+
+                matchFilter = true;
+
+            }
+
+        });
+
+        return matchFilter;
+
+    }
+
+
+
     //Function that walks and returns all files in a folder
     function refreshProjectFiles(pid) {
         
         var folder = getProjectById(pid).path;
 
-        //Remove file if it doesn't exist
+        //Remove file that doesn't exist or matches the filter pattern
         _.each(getProjectFiles(pid), function(file){
 
-            if(!fs.existsSync(file.input)){
+            //Remove if matches filter patterns or doesn't exist
+            if (matchFileFilters(pid, file.input) || !fs.existsSync(file.input)){
 
                 removeFile(file.id);
 
             }
-        });
 
-        var filesToAdd = [];
+        });
 
         utils.showLoading();
 
-        if(fs.existsSync(folder)){
+        if(fs.existsSync(folder)) {
 
-            //Get all files in project folder and add file to file list
-            walker(folder, function (err, file, next) {
+            getProjectFolderFiles(pid, function(files){
 
-                    //Ouch error occurred
-                    if (err) {
+                var filesToAdd = [];
 
-                        notification.error('Error ! ', 'An error occurred while scanning files', folder);
+                _.each(files, function(file) {
+
+                    if (!matchFileFilters(pid, file)) {
+
+                        filesToAdd.push(path.normalize(file));
+
                     }
 
-                    //Add file to project
-                    if (file !== null) {
+                });
 
-                        var extname = path.extname(file).toLowerCase();
-                        var supportedExtensions = [
-                            '.less', //Less
-                            '.sass', '.scss', //Sass
-                            '.styl', //Stylus
-                            '.md', '.markdown', //Markdown
-                            '.coffee', //Coffeescript
-                            '.jade', //Jade
-                            '.haml',  //Haml
-                            '.slim'  //Slim
-                        ];
+                //Add files
+                if (!_.isEmpty(filesToAdd)) {
 
-                        //Exclude files that contain certain patterns
-                        var filterPatterns = config.getUserOptions().filterPatterns.split(',');
+                    _.each(filesToAdd, function(parentFile){
 
-                        var matchFilter = false;
+                        var fileImports = [];
 
-                        _.each(filterPatterns, function(pattern){
+                        //Get file imports
+                        fileImports = _.union(fileImports, importsVisitor.visitImports(parentFile));
 
-                            pattern = pattern.trim();
+                        //Get imports of imports
+                        _.each(fileImports, function(importedFile){
 
-                            if(pattern !=="" && file.indexOf(pattern) !== -1) {
-
-                                matchFilter = true;
-
-                            }
+                            fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
 
                         });
 
-                        if (_.contains(supportedExtensions, extname) && !matchFilter) {
+                        //Get imports of imports of imports
+                        _.each(fileImports, function(importedFile){
 
-                            filesToAdd.push(path.normalize(file));
+                            fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
 
-                        }
+                        });
 
-                    }
+                        //Remove repeated imports
+                        fileImports = _.uniq(fileImports);
 
-                    //Next file
-                    if (next) {
-                        next();
-                    } else {
+                        //Add imports to import list
+                        _.each(fileImports, function(imported){
 
-                        //Add files
-                        if (!_.isEmpty(filesToAdd)) {
+                            addFileImport(folder, parentFile, imported);
 
-                            _.each(filesToAdd, function(parentFile){
+                        });
 
-                                var fileImports = [];
+                        //Remove any previously imported file that is not imported anymore
+                        var oldImports = getFileImports(_id(parentFile));
 
-                                //Get file imports
-                                fileImports = _.union(fileImports, importsVisitor.visitImports(parentFile));
+                        _.each(oldImports, function(imp){
 
-                                //Get imports of imports
-                                _.each(fileImports, function(importedFile){
+                            if(!_.contains(fileImports, imp.path)){
 
-                                    fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
+                                removeImportParent(imp.id, _id(parentFile));
+                            }
+                        });
+                    });
 
-                                });
-
-                                //Get imports of imports of imports
-                                _.each(fileImports, function(importedFile){
-
-                                    fileImports = _.union(fileImports, importsVisitor.visitImports(importedFile));
-
-                                });
-
-                                //Remove repeated imports
-                                fileImports = _.uniq(fileImports);
-
-                                //Add imports to import list
-                                _.each(fileImports, function(imported){
-
-                                    addFileImport(folder, parentFile, imported);
-
-                                });
-
-                                //Remove any previously imported file that is not imported anymore
-                                var oldImports = getFileImports(_id(parentFile));
-
-                                _.each(oldImports, function(imp){
-
-                                    if(!_.contains(fileImports, imp.path)){
-
-                                        removeImportParent(imp.id, _id(parentFile));
-                                    }
-                                });
-                            });
-
-                            addFiles(filesToAdd, folder);
-
-                        }
-
-                        utils.hideLoading();
-                    }
+                    addFiles(filesToAdd, folder);
                 }
-            );
+
+            });
         } else {
 
             removeProject(pid);
 
-            utils.hideLoading();
-
         }
 
+        utils.hideLoading();
     }
 
 
