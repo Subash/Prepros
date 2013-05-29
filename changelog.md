@@ -1,3 +1,13 @@
+## Version 1.5.0 -May 29, 2013
+
+* Critical Bugfix : Changing option of a file affected another file
+* Inhancement : Brand new style for notifications
+* Feature : Notification on successful compilation
+* Feature : [Slim](http://slim-lang.com) support
+* Feature : Custom file filters on per project basis
+* Feature : Coffeescript bare option
+* Some ui improvements
+
 ## Version 1.4.1 -May 25, 2013
 
 * Feature: Windows XP Compatibility
