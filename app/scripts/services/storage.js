@@ -32,7 +32,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('Error saving files list.');
+            notification.error('File System Error', 'An error occurred while saving files list.', filesPath);
         }
 
 
@@ -48,7 +48,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('Error saving projects list.');
+            notification.error('File System Error', 'An error occurred while saving projects list.', projectsPath);
         }
 
 	}
@@ -63,7 +63,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('Error saving imports list.');
+            notification.error('File System Error', 'An error occurred while saving imports list.', importsPath);
         }
 
 	}
@@ -82,7 +82,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-				notification.error('Error reading projects list.');
+                notification.error('File System Error', 'An error occurred while getting projects list.', projectsPath);
 
 			}
 
@@ -108,7 +108,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-				notification.error('Error reading files list.');
+                notification.error('File System Error', 'An error occurred while getting files list.', filesPath);
 
 			}
 
@@ -136,7 +136,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-				notification.error('Error reading imports list.');
+                notification.error('File System Error', 'An error occurred while getting imports list.', importsPath);
 
 			}
 
