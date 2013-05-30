@@ -32,7 +32,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('File System Error', 'An error occurred while saving files list.', filesPath);
+            notification.error('File System Error', 'An error occurred while saving files list.', e.message);
         }
 
 
@@ -48,7 +48,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('File System Error', 'An error occurred while saving projects list.', projectsPath);
+            notification.error('File System Error', 'An error occurred while saving projects list.', e.message);
         }
 
 	}
@@ -63,7 +63,7 @@ prepros.factory('storage', function (notification, config) {
 
         } catch(e){
 
-            notification.error('File System Error', 'An error occurred while saving imports list.', importsPath);
+            notification.error('File System Error', 'An error occurred while saving imports list.', e.message);
         }
 
 	}
@@ -82,7 +82,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-                notification.error('File System Error', 'An error occurred while getting projects list.', projectsPath);
+                notification.error('File System Error', 'An error occurred while getting projects list.', e.message);
 
 			}
 
@@ -108,7 +108,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-                notification.error('File System Error', 'An error occurred while getting files list.', filesPath);
+                notification.error('File System Error', 'An error occurred while getting files list.', e.message);
 
 			}
 
@@ -136,7 +136,7 @@ prepros.factory('storage', function (notification, config) {
 
 			} catch (e) {
 
-                notification.error('File System Error', 'An error occurred while getting imports list.', importsPath);
+                notification.error('File System Error', 'An error occurred while getting imports list.', e.message);
 
 			}
 
