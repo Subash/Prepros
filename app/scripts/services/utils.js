@@ -37,7 +37,7 @@ prepros.factory('utils', function () {
     //Open Browser
     function openBrowser(url){
 
-        require('child_process').spawn('explorer', [ url ], {detached: true});
+        require('nw.gui').Shell.openExternal(url);
 
     }
 
