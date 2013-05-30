@@ -16,6 +16,13 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     var fs = require('fs'),
         path = require('path');
 
+
+    $scope.openProjectFolder= function(folder) {
+
+        require('nw.gui').Shell.openItem(folder);
+
+    };
+
     $scope.addProject = function(){
 
         //Function to add new project
