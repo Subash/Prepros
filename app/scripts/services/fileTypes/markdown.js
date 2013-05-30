@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('markdown', function (config, utils, notification) {
+prepros.factory('markdown', function (config, utils) {
 
     'use strict';
 
@@ -49,7 +49,7 @@ prepros.factory('markdown', function (config, utils, notification) {
         };
     };
 
-    var compile = function (file) {
+    var compile = function (file, callback) {
 
         var marked = require('marked');
 
@@ -60,8 +60,11 @@ prepros.factory('markdown', function (config, utils, notification) {
         });
 
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+
             if (err) {
-                notification.error('Error reading file.', file.input);
+
+                callback(true, err.message);
+
             } else {
 
                 try {
@@ -71,11 +74,11 @@ prepros.factory('markdown', function (config, utils, notification) {
 
                         if (err) {
 
-                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+                            callback(true, err.message);
 
                         } else {
 
-                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                            callback(false, file.input);
 
                         }
 
@@ -83,7 +86,7 @@ prepros.factory('markdown', function (config, utils, notification) {
 
                 } catch(e) {
 
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+                    callback(true, file.input);
 
                 }
 

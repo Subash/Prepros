@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('stylus', function (config, utils, notification) {
+prepros.factory('stylus', function (config, utils) {
 
     'use strict';
 
@@ -60,7 +60,7 @@ prepros.factory('stylus', function (config, utils, notification) {
 
 
     //Compile
-    var compile = function (file) {
+    var compile = function (file, callback) {
 
         var stylus = require('stylus');
 
@@ -70,7 +70,7 @@ prepros.factory('stylus', function (config, utils, notification) {
 
             if (err) {
 
-                notification.error('Error reading file', err);
+                callback(true, err.message);
 
             } else {
 
@@ -104,7 +104,7 @@ prepros.factory('stylus', function (config, utils, notification) {
                 compiler.render(function (err, css) {
                     if (err) {
 
-                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
+                        callback(true, err.message);
 
                     } else {
 
@@ -112,11 +112,11 @@ prepros.factory('stylus', function (config, utils, notification) {
 
                             if (err) {
 
-                                notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
+                                callback(true, err.message);
 
                             } else {
 
-                                notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                                callback(false, file.input);
 
                             }
 

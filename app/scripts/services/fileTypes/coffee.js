@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('coffee', function(config, utils, notification){
+prepros.factory('coffee', function(config, utils){
 
     'use strict';
 
@@ -58,7 +58,7 @@ prepros.factory('coffee', function(config, utils, notification){
         };
     };
 
-    var compile = function (file) {
+    var compile = function (file, callback) {
 
         var coffee = require('coffee-script');
 
@@ -74,7 +74,7 @@ prepros.factory('coffee', function(config, utils, notification){
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                notification.error('Error reading file.', file.input);
+                callback(true, err.message);
 
             } else {
 
@@ -91,11 +91,11 @@ prepros.factory('coffee', function(config, utils, notification){
 
                         if (err) {
 
-                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+                            callback(true, err.message);
 
                         } else {
 
-                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                            callback(false, file.input);
 
                         }
 
@@ -104,7 +104,7 @@ prepros.factory('coffee', function(config, utils, notification){
 
                 } catch (e) {
 
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n" + file.input);
+                    callback(true, e.message + "\n" + file.input);
                 }
             }
         });

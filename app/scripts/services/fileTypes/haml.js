@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('haml', function (config, utils, notification) {
+prepros.factory('haml', function (config, utils) {
 
     'use strict';
 
@@ -51,7 +51,7 @@ prepros.factory('haml', function (config, utils, notification) {
         };
 
 
-        var compile = function (file) {
+        var compile = function (file, callback) {
 
             var args = [config.ruby.gems.haml.path];
 
@@ -84,7 +84,7 @@ prepros.factory('haml', function (config, utils, notification) {
 
                 compileErr = true;
 
-                notification.error('Compilation Failed', 'Failed to compile ' + file.name, data.toString() + "\n" + file.input);
+                callback(true, data.toString() + "\n" + file.input);
 
             });
 
@@ -92,7 +92,7 @@ prepros.factory('haml', function (config, utils, notification) {
             rubyProcess.on('exit', function(){
                 if(!compileErr){
 
-                    notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                    callback(false, file.input);
 
                 }
             });

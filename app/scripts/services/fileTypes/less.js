@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('less', function(config, utils, notification){
+prepros.factory('less', function(config, utils){
 
     'use strict';
 
@@ -61,7 +61,7 @@ prepros.factory('less', function(config, utils, notification){
 
 
     //Compile Less
-    var compile = function(file){
+    var compile = function(file, callback){
 
         var less = require('less');
 
@@ -83,7 +83,9 @@ prepros.factory('less', function(config, utils, notification){
 
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
-                notification.error('Error reading file.', file.input);
+
+                callback(true, err.message);
+
             } else {
 
                 //Must be in try catch block because less sometimes just throws errors rather than giving callbacks
@@ -91,7 +93,7 @@ prepros.factory('less', function(config, utils, notification){
                     parser.parse(data.toString(), function (e, tree) {
                         if (e) {
 
-                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
+                            callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
 
                         }
                         if (!e) {
@@ -104,12 +106,12 @@ prepros.factory('less', function(config, utils, notification){
 
                                     if (err) {
 
-                                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+                                        callback(true, err.message);
 
 
                                     } else {
 
-                                        notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                                        callback(false, file.input);
 
                                     }
 
@@ -117,7 +119,7 @@ prepros.factory('less', function(config, utils, notification){
 
                             } catch(e ){
 
-                                notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
+                                callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
 
                             }
 
@@ -125,7 +127,8 @@ prepros.factory('less', function(config, utils, notification){
                         }
                     });
                 } catch (e) {
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message + "\n"  + e.filename + ' line ' + e.line);
+
+                    callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
                 }
 
             }

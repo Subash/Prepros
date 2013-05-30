@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('jade', function(config, utils, notification){
+prepros.factory('jade', function(config, utils){
 
     'use strict';
 
@@ -49,7 +49,7 @@ prepros.factory('jade', function(config, utils, notification){
         };
     };
 
-    var compile = function (file) {
+    var compile = function (file, callback) {
 
         var jadeCompiler = require('jade');
 
@@ -61,7 +61,7 @@ prepros.factory('jade', function(config, utils, notification){
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                notification.error('Error reading file.', file.input);
+                callback(true, err.message);
 
             } else {
 
@@ -74,20 +74,19 @@ prepros.factory('jade', function(config, utils, notification){
 
                         if (err) {
 
-                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, file.input);
+                            callback(true, err.message);
 
                         } else {
 
-                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                            callback(false, file.input);
 
                         }
                     });
 
                 } catch (e) {
 
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, e.message);
+                    callback(true, e.message + '\n' + file.input);
                 }
-
             }
         });
     };

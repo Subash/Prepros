@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('sass', function (config, utils, notification) {
+prepros.factory('sass', function (config, utils) {
 
     'use strict';
 
@@ -77,7 +77,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
     //Compile
 
-    var compile = function (file, project) {
+    var compile = function (file, callback) {
 
         var args = [config.ruby.gems.sass.path];
 
@@ -124,7 +124,7 @@ prepros.factory('sass', function (config, utils, notification) {
         fs.mkdirsSync(path.dirname(file.output));
 
         //Start a child process to compile the file
-        var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: project.path});
+        var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});
 
         var compileErr = false;
 
@@ -133,7 +133,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
             compileErr = true;
 
-            notification.error('Compilation Failed', 'Failed to compile ' + file.name, data.toString());
+            callback(true, data.toString());
 
         });
 
@@ -141,7 +141,7 @@ prepros.factory('sass', function (config, utils, notification) {
         rubyProcess.on('exit', function(){
             if(!compileErr){
 
-                notification.success('Compilation Successful', 'Successfully compiled ' + file.name, file.input);
+                callback(false, file.input);
 
             }
         });

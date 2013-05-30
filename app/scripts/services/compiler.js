@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory("compiler", function (projectsManager, fileTypes) {
+prepros.factory("compiler", function (projectsManager, fileTypes, notification) {
 
 	"use strict";
 
@@ -19,48 +19,44 @@ prepros.factory("compiler", function (projectsManager, fileTypes) {
 
 		var file = projectsManager.getFileById(fid);
 
-        //Sass requires project because It may need project path
-        var project = projectsManager.getProjectById(file.pid);
+        var type =  file.type.toLowerCase();
 
-		if (fs.existsSync(file.input)) {
+        //Map file type with compiler
+        var typeMap = {
+            less: 'less',
+            sass: 'sass',
+            scss: 'sass',
+            stylus: 'stylus',
+            md : 'markdown',
+            coffee: 'coffee',
+            jade: 'jade',
+            haml: 'haml',
+            slim: 'slim'
+        };
 
-			var type = file.type.toLowerCase();
+        //Sass compiler requires project path for config.rb file
+        if(type === 'scss' || type === 'sass') {
 
-			if (type === "less") {
+            file.projectPath = projectsManager.getProjectById(file.pid).path;
 
-				fileTypes.less.compile(file);
+        }
 
-			} else if (type === "sass" || type === "scss") {
+        if (fs.existsSync(file.input)) {
 
-				fileTypes.sass.compile(file, project);
+            fileTypes[typeMap[type]].compile(file, function(err, data){
 
-			} else if (type === "stylus") {
+                if(err) {
 
-				fileTypes.stylus.compile(file);
+                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
 
-			} else if (type === "md") {
+                } else {
 
-				fileTypes.markdown.compile(file);
+                    notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
 
-			} else if (type === "coffee") {
+                }
 
-				fileTypes.coffee.compile(file);
-
-			} else if (type === "jade") {
-
-				fileTypes.jade.compile(file);
-
-			} else if (type === "haml") {
-
-				fileTypes.haml.compile(file);
-
-			} else if (type === "slim") {
-
-                fileTypes.slim.compile(file);
-
-            }
-
-		}
+            });
+        }
 	}
 
 	return{
