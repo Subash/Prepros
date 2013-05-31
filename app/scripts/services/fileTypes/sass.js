@@ -123,7 +123,7 @@ prepros.factory('sass', function (config, utils) {
         //Make output dir if it doesn't exist
         fs.mkdirsSync(path.dirname(file.output));
 
-        //Start a child process to compile the file
+        //Start a child process to compile the file; file.projectPath is provided by compiler.js file
         var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});
 
         var compileErr = false;
