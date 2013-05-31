@@ -1,7 +1,7 @@
 ## Version 1.5.0 -May 29, 2013
 
 * Critical Bugfix : Changing option of a file affected another file
-* Inhancement : Brand new style for notifications
+* Enhancement : Brand new style for notifications
 * Feature : Notification on successful compilation
 * Feature : [Slim](http://slim-lang.com) support
 * Feature : Custom file filters on per project basis
