@@ -29,9 +29,13 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager) {
 
 
         if (fs.existsSync(path.dirname(file.output))) {
+
             wd = path.dirname(file.output);
+
         } else {
+
             wd = project.path;
+
         }
 
         var elm = $('<input type="file" nwsaveas nwworkingdir="' + wd + '">');

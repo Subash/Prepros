@@ -61,13 +61,16 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
     }, true);
 
     $scope.$watch('imports', function(){
+
         throttleImportsChange();
+
     }, true);
 
     //No need to start services because event on $watch is fired at the begining and it will start the services automatically
 
     //Save data on change
     function dataChange(data){
+
         $scope.projects = data.projects;
         $scope.files = data.files;
         $scope.imports = data.imports;

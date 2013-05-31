@@ -31,8 +31,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
         global.config = config;
 
         if (typeof(aboutWindow) === "object") {
+
             aboutWindow.show();
             aboutWindow.focus();
+
         } else {
 
             var aboutPath = 'file:///' + path.normalize(config.basePath + '/html/about.html');
@@ -59,6 +61,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
             if (typeof(aboutWindow) === 'object') {
                 aboutWindow.close();
             }
+
         });
     };
 
