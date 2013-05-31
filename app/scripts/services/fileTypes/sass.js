@@ -91,7 +91,7 @@ prepros.factory('sass', function (config, utils) {
         args.push('--load-path', path.dirname(file.input));
 
         //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
-        var cacheLocation = path.join(process.env.TEMP, 'PreprosCache').replace(/\\\\/gi, '\\\\');
+        var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
 
         //Cache location
         args.push('--cache-location', cacheLocation);

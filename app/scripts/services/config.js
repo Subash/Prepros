@@ -46,6 +46,9 @@ prepros.factory('config', function () {
     //User config file
     var configFile = path.join(dataPath, 'config.json');
 
+    //CachePath
+    var cachePath = path.join(process.env.TEMP, 'PreprosCache');
+
     //Node modules required by the app
     var node_modules = packageData.dependencies;
 
@@ -225,8 +228,9 @@ prepros.factory('config', function () {
     }
 
 
-    return {
+    var config =  {
         dataPath: dataPath,
+        cachePath: cachePath,
         basePath: basePath,
         ruby: ruby,
         node_modules: node_modules,
@@ -235,5 +239,10 @@ prepros.factory('config', function () {
         getUserOptions: getUserOptions,
         saveUserOptions: saveUserOptions
     };
+
+    //Push to global so other windows can also read configurations
+    global.preprosConfig = config;
+
+    return config;
 
 });

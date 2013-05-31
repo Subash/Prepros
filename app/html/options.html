@@ -10,8 +10,41 @@
     <script>
         function OptionsCtrl($scope) {
 
+            var fs = require('fs-extra');
+
             //Cross window communication hack
             $scope.userConfig = global.userConfig;
+
+            //Clear Prepros Cache
+            $scope.clearCache = function(e) {
+
+                $(e.currentTarget).attr('disabled');
+
+                var html  = $(e.currentTarget).html();
+
+                fs.remove(global.preprosConfig.cachePath, function(err){
+
+                    if(!err) {
+
+                        $(e.currentTarget).html('Cleared');
+
+                        setTimeout(function(){
+
+                            $(e.currentTarget).removeAttr('disabled');
+
+                            $(e.currentTarget).html(html);
+
+                        }, 1000)
+
+                    } else {
+
+                        alert('Failed ! because of ' + err.message);
+
+                    }
+
+                });
+
+            };
 
             //Just Close the window, The controller will catch data and save it on close event
             $scope.done = function () {
@@ -65,6 +98,10 @@
             <label>
                 <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
                 <span class="label-desc">Enable Success Notifications</span>
+            </label>
+
+            <label>
+                <button class="btn" ng-click="clearCache($event)">Clear Prepros Cache</button>
             </label>
         </div>
 
