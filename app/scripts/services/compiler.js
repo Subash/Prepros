@@ -12,30 +12,18 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification) 
 
 	"use strict";
 
-	var fs = require("fs-extra");
+	var fs = require('fs-extra'),
+        path = require('path');
 
 	//function to compile
 	function compile(fid) {
 
 		var file = projectsManager.getFileById(fid);
 
-        var type =  file.type.toLowerCase();
-
-        //Map file type with compiler
-        var typeMap = {
-            less: 'less',
-            sass: 'sass',
-            scss: 'sass',
-            stylus: 'stylus',
-            md : 'markdown',
-            coffee: 'coffee',
-            jade: 'jade',
-            haml: 'haml',
-            slim: 'slim'
-        };
+        var ext =  path.extname(file.input).toLowerCase();
 
         //Sass compiler requires project path for config.rb file
-        if(type === 'scss' || type === 'sass') {
+        if(ext === '.scss' || ext === '.sass') {
 
             file.projectPath = projectsManager.getProjectById(file.pid).path;
 
@@ -43,7 +31,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification) 
 
         if (fs.existsSync(file.input)) {
 
-            fileTypes[typeMap[type]].compile(file, function(err, data){
+            fileTypes.compile(file, function(err, data){
 
                 if(err) {
 

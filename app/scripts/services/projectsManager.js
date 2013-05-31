@@ -248,22 +248,9 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             //Add file to project
             if (file !== null) {
 
-                var extname = path.extname(file).toLowerCase();
-                var supportedExtensions = [
-                    '.less', //Less
-                    '.sass', '.scss', //Sass
-                    '.styl', //Stylus
-                    '.md', '.markdown', //Markdown
-                    '.coffee', //Coffeescript
-                    '.jade', //Jade
-                    '.haml',  //Haml
-                    '.slim'  //Slim
-                ];
-
-                if (_.contains(supportedExtensions, extname)) {
+                if(fileTypes.isExtSupported(file)) {
 
                     filesList.push(path.normalize(file));
-
                 }
             }
 
@@ -283,8 +270,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     //Function to match files against global and project specific filters
     function matchFileFilters(pid, file) {
-
-        var folder = getProjectById(pid).path;
 
         var projectFilterPatterns = '';
 
@@ -471,64 +456,11 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             var inImports = _.isEmpty(_.findWhere(imports, {path: filePath})) ? false : true;
 
-            if (!already && !inImports) {
+            var isFileSupported = fileTypes.isFileSupported(filePath);
 
-                var file,
-                    extension = path.extname(filePath).toLowerCase();
+            if (isFileSupported && !already && !inImports) {
 
-                //File that can have @imports or includes
-                //Ignore sass partials
-                var sass = ['.sass', '.scss'];
-
-                var partial = /^_/;
-
-                var canImport = _.contains(['.less', '.scss', '.sass', '.styl', '.jade'], extension);
-
-                var isSassPartial = _.contains(sass, extension) && partial.exec(path.basename(filePath));
-
-                if (canImport && !isSassPartial) {
-
-                    if (extension === '.less') {
-
-                        file = fileTypes.less.format(filePath, projectPath);
-
-                    } else if (extension === '.sass' || extension === '.scss') {
-
-                        file = fileTypes.sass.format(filePath, projectPath);
-
-                    } else if (extension === '.styl') {
-
-                        file = fileTypes.stylus.format(filePath, projectPath);
-
-                    } else if (extension === '.jade') {
-
-                        file = fileTypes.jade.format(filePath, projectPath);
-
-                    }
-                } else if (extension === '.md' || extension === '.markdown') {
-
-                    file = fileTypes.markdown.format(filePath, projectPath);
-
-                } else if (extension === '.coffee') {
-
-                    file = fileTypes.coffee.format(filePath, projectPath);
-
-                } else if (extension === '.haml') {
-
-                    file = fileTypes.haml.format(filePath, projectPath);
-
-                } else if (extension === '.slim') {
-
-                    file = fileTypes.slim.format(filePath, projectPath);
-
-                }
-
-                //There is new file
-                if (!_.isEmpty(file)) {
-
-                    files.push(file);
-
-                }
+                files.push(fileTypes.format(filePath, projectPath));
             }
         });
 
@@ -543,27 +475,9 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         var file = getFileById(id),
             project = getProjectById(file.pid);
 
-        var css = ['scss', 'sass', 'stylus', 'less'];
-        var js = ['coffee'];
-        var html = ['jade', 'haml', 'md', 'slim'];
-
-        var type = file.type.toLowerCase();
-
         if(path.extname(path.basename(newPath)) === ''){
 
-            if(_.contains(css, type)){
-
-                newPath = newPath + '.css';
-
-            } else if(_.contains(html, type)) {
-
-                newPath = newPath + config.getUserOptions().htmlExtension;
-
-            } else if(_.contains(js, type)){
-
-                newPath = newPath + '.js';
-
-            }
+            newPath = newPath + fileTypes.getCompiledExtension(file.input);
         }
 
         file.output = newPath;
