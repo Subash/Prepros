@@ -91,7 +91,7 @@ prepros.factory('sass', function (config, utils) {
         args.push('--load-path', path.dirname(file.input));
 
         //Cache location
-        args.push('--cache-location', process.env.TEMP + '/PreprosCache');
+        args.push('--cache-location', path.join(process.env.TEMP, 'PreprosCache'));
 
         //Output Style
         args.push('--style', file.config.outputStyle);
