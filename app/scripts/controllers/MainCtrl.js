@@ -43,6 +43,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
     //Imports Change
     var throttleImportsChange = _.throttle(function(){
+
         storage.saveImports($scope.imports);
         watcher.startWatching({files: $scope.files, projects: $scope.projects, imports: $scope.imports});
 
