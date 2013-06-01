@@ -17,7 +17,7 @@ prepros.factory('importsVisitor', function () {
         path = require('path');
 
     //Function to get files list imported by another file; returns the list of imported files that exist
-    function getImports(filePath) {
+    function visitImports(filePath) {
 
         var importedFiles = [],
             ext = path.extname(filePath).toLowerCase(),
@@ -103,11 +103,11 @@ prepros.factory('importsVisitor', function () {
 
 
     //Function to visit imports with nested support
-    function visitImports(filePath) {
+    function getImports(filePath) {
 
         var fileImports = [];
 
-        fileImports[0] = getImports(filePath);
+        fileImports[0] = visitImports(filePath);
 
         //Get imports of imports up to four levels
         for(var i=1; i<4; i++) {
@@ -115,7 +115,7 @@ prepros.factory('importsVisitor', function () {
             _.each(fileImports[i-1], function(importedFile){
 
                 fileImports[i] = [];
-                fileImports[i] = _.uniq(_.union(fileImports[i], getImports(importedFile)));
+                fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile)));
 
             });
         }
@@ -127,7 +127,7 @@ prepros.factory('importsVisitor', function () {
 
 
     return {
-        visitImports: visitImports
+        getImports: getImports
     };
 
 });

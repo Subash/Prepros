@@ -9,7 +9,7 @@
 /*global prepros,  _*/
 
 //Storage
-prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, importsVisitor, $rootScope, $location) {
+prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, $rootScope, $location) {
 
     'use strict';
 
@@ -350,7 +350,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                         filesToAdd.push({
                             path: file,
-                            imports: (fileTypes.canImport(file))? importsVisitor.visitImports(file) : []
+                            imports: (fileTypes.canImport(file))? fileTypes.getImports(file) : []
                         });
                     }
                 });

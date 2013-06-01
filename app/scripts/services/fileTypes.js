@@ -10,7 +10,7 @@
 
 'use strict';
 
-prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jade, haml, slim, config) {
+prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jade, haml, slim, config, importsVisitor) {
 
     var path = require('path');
 
@@ -128,6 +128,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
         format: format,
         isExtSupported: isExtSupported,
         canImport: canImport,
+        getImports: importsVisitor.getImports,
         isFileSupported: isFileSupported,
         getCompiledExtension: getCompiledExtension
     };
