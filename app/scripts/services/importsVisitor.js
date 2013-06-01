@@ -27,12 +27,16 @@ prepros.factory('importsVisitor', function () {
             importedFilePath,
             importReg;
 
-        //Strip out comments
+        //Remove comments
         data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
 
-        if (ext === '.less') {
+        if (ext === '.less') { importReg = /@import[\s\("']*([^"'\);\n]+)[;\)"']*/g; }
+        if (ext === '.scss') { importReg = /@import\s[\("']*([^;]+)[;\)"']*/g; }
+        if (ext === '.sass') { importReg = /@import\s[\("']*([^;]+)[;\)"']*/g; }
+        if (ext === '.styl') { importReg = /@import\s["']*([^"';\n]+)[;"']*/g; }
+        if (ext === '.jade') { importReg = /include\s([^\n\s]+)*/g; }
 
-            importReg = /@import[\s\("']*([^"'\);\n]+)[;\)"']*/g;
+        if(ext !== '.sass' && ext !== '.scss'){
 
             while ((result = importReg.exec(data)) !== null) {
 
@@ -53,93 +57,20 @@ prepros.factory('importsVisitor', function () {
 
                     importedFiles.push(importedFilePath);
                 }
-
-
             }
 
-        } else if (ext === '.styl') {
+        } else {
 
-            importReg = /@import\s["']*([^"';\n]+)[;"']*/g;
-
+            //Read imports
             while ((result = importReg.exec(data)) !== null) {
-
-
-                //Check if path is full or just relative
-                if (result[1].indexOf(':') >= 0) {
-                    importedFilePath = path.normalize(result[1]);
-                } else {
-                    importedFilePath = path.join(basedir, result[1]);
-                }
-
-
-                //Add extension if file doesn't have that
-                if (path.extname(importedFilePath).toLowerCase() !== ext) {
-                    importedFilePath = importedFilePath + ext;
-                }
-
-
-                //Check if file exists
-                if (fs.existsSync(importedFilePath)) {
-
-                    importedFiles.push(importedFilePath);
-                }
-
-            }
-
-        } else if (ext === '.jade') {
-
-            importReg = /include\s([^\n\s]+)*/g;
-
-            while ((result = importReg.exec(data)) !== null) {
-
-                var fPath = result[1].trim();
-
-                //Check if path is full or just relative
-                if (fPath.indexOf(':') >= 0) {
-                    importedFilePath = path.normalize(fPath);
-                } else {
-                    importedFilePath = path.join(basedir, fPath);
-                }
-
-                //Add extension if file doesn't have that
-                if (path.extname(importedFilePath).toLowerCase() !== ext) {
-                    importedFilePath = importedFilePath + ext;
-                }
-
-                //Check if file exists
-                if (fs.existsSync(importedFilePath)) {
-                    importedFiles.push(importedFilePath);
-                }
-
-
-            }
-
-        } else if (ext === '.sass' || ext === '.scss') {
-
-            //For .scss
-            importReg = /@import\s[\("']*([^;]+)[;\)"']*/g;
-
-            //For .sass
-            if(ext === '.sass'){
-
-                importReg = /@import\s[\("']*([^;\n]+)[;\)"']*/g;
-            }
-
-
-
-            var i;
-
-            while ((result = importReg.exec(data)) !== null) {
-
 
                 var res = result[1].replace(/"|'/gi, '').split(',');
 
-                for (i = 0; i < res.length; i++) {
+                _.each(res, function(imp){
 
-                    var imp = res[i].trim();
+                    imp = imp.trim();
 
                     if (imp && imp.indexOf(":") >= 0) {
-
                         importedFilePath = path.normalize(imp);
                     } else {
                         importedFilePath = path.join(basedir, imp);
@@ -163,39 +94,34 @@ prepros.factory('importsVisitor', function () {
                         importedFiles.push(importedFilePath);
 
                     }
-                }
-
+                })
             }
-
         }
 
         return importedFiles;
     }
 
 
-    //Function to visit nested imports
+    //Function to visit imports with nested support
     function visitImports(filePath) {
 
         var fileImports = [];
 
-        //Get file imports
-        fileImports = _.union(fileImports, getImports(filePath));
+        fileImports[0] = getImports(filePath);
 
-        //Get imports of imports
-        _.each(fileImports, function(importedFile){
+        //Get imports of imports up to four levels
+        for(var i=1; i<4; i++) {
 
-            fileImports = _.union(fileImports, getImports(importedFile));
-        });
+            _.each(fileImports[i-1], function(importedFile){
 
-        //Get imports of imports of imports
-        _.each(fileImports, function(importedFile){
+                fileImports[i] = [];
+                fileImports[i] = _.uniq(_.union(fileImports[i], getImports(importedFile)));
 
-            fileImports = _.union(fileImports, getImports(importedFile));
-
-        });
+            });
+        }
 
         //Remove repeated imports
-        return _.uniq(fileImports);
+        return _.uniq(_.flatten(fileImports));
 
     }
 
