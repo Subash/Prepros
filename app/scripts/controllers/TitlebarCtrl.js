@@ -27,9 +27,6 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     var aboutWindow;
     $scope.openAboutWindow = function () {
 
-        //Inject config object to global so about window can read it
-        global.config = config;
-
         if (typeof(aboutWindow) === "object") {
 
             aboutWindow.show();
@@ -175,7 +172,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
         cache: false
     });
 
-    $.getJSON(config.online.updateFileUrl).done(function(data) {
+    $.getJSON(config.online.updateFileUrl, {version: config.version}).done(function(data) {
 
         if(config.version !== data[0].version){
 

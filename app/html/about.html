@@ -12,7 +12,7 @@
         function AboutCtrl($scope) {
 
             //Configuration
-            $scope.config = global.config;
+            $scope.config = global.preprosConfig;
 
             var node_modules = Object.keys($scope.config.node_modules);
             var gems = Object.keys($scope.config.ruby.gems);
@@ -31,7 +31,7 @@
                 cache: false
             });
 
-            $.getJSON($scope.config.online.updateFileUrl)
+            $.getJSON($scope.config.online.updateFileUrl, {version: $scope.config.version})
                     .done(function (data) {
 
                         if ($scope.config.version != data[0].version) {
