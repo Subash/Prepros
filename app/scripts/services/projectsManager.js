@@ -304,7 +304,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
 
 
-    //Function that walks and returns all files in a folder
+    //Function that refreshes files in a project folder
     function refreshProjectFiles(pid) {
         
         var folder = getProjectById(pid).path;
@@ -404,7 +404,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //function to add imported file to import list
     function addFileImport(projectPath, parentPath, importedPath){
 
-        //If @imported file is not in imports list create new entry otherwise add this file as parent
+        //If @imported file is not in imports list create new entry otherwise add the file as parent
         if (_.isEmpty(_.findWhere(imports, {path: importedPath}))) {
 
             imports.push({
@@ -435,7 +435,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         }
 
-        //If any imported file is in the parents list of other imported file remove that as well
+        //If any imported file is in the parents list of other imported file remove that
         removeParentFromAllImports(_id(importedPath));
 
 
