@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros*/
+/*global prepros, _*/
 
 //Imports Visitor
 prepros.factory('importsVisitor', function () {
@@ -17,7 +17,7 @@ prepros.factory('importsVisitor', function () {
         path = require('path');
 
     //Function to get files list imported by another file; returns the list of imported files that exist
-    function visitImports(filePath) {
+    function getImports(filePath) {
 
         var importedFiles = [],
             ext = path.extname(filePath).toLowerCase(),
@@ -170,6 +170,33 @@ prepros.factory('importsVisitor', function () {
         }
 
         return importedFiles;
+    }
+
+
+    //Function to visit nested imports
+    function visitImports(filePath) {
+
+        var fileImports = [];
+
+        //Get file imports
+        fileImports = _.union(fileImports, getImports(filePath));
+
+        //Get imports of imports
+        _.each(fileImports, function(importedFile){
+
+            fileImports = _.union(fileImports, getImports(importedFile));
+        });
+
+        //Get imports of imports of imports
+        _.each(fileImports, function(importedFile){
+
+            fileImports = _.union(fileImports, getImports(importedFile));
+
+        });
+
+        //Remove repeated imports
+        return _.uniq(fileImports);
+
     }
 
 
