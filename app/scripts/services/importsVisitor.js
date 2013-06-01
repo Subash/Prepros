@@ -112,9 +112,10 @@ prepros.factory('importsVisitor', function () {
         //Get imports of imports up to four levels
         for(var i=1; i<4; i++) {
 
+            fileImports[i] = [];
+
             _.each(fileImports[i-1], function(importedFile){
 
-                fileImports[i] = [];
                 fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile)));
 
             });
