@@ -358,11 +358,15 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                 //Check if file is in the imports list of another file
                 //If it is ignore the file
                 var importsOfAllFiles = _.uniq(_.flatten(_.pluck(filesToAdd, 'imports')));
+
                 _.each(filesToAdd, function(file) {
+
                     //Check
                     if(!_.contains(importsOfAllFiles, file.path)){
+
                         //Add file
                         addFile(file.path, folder);
+
                          //Add imports
                         _.each(file.imports, function(imp) {
 
@@ -372,8 +376,11 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                     //Remove any previously imported file that is not imported anymore
                     var oldImports = getFileImports(_id(file.path));
+
                     _.each(oldImports, function(imp){
+
                         if(!_.contains(file.imports, imp.path)){
+
                             removeImportParent(imp.id, _id(file.path));
                         }
                     });
@@ -389,7 +396,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             removeProject(pid);
 
             utils.hideLoading();
-
         }
     }
 
