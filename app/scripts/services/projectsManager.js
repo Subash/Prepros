@@ -350,7 +350,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                         filesToAdd.push({
                             path: file,
-                            imports: importsVisitor.visitImports(file)
+                            imports: (fileTypes.canImport(file))? importsVisitor.visitImports(file) : []
                         });
                     }
                 });

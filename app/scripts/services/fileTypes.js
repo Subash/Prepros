@@ -111,11 +111,23 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
 
     }
 
+    //Function to find if file can import another file
+    function canImport(filePath) {
+
+        var ext = path.extname(filePath).slice(1);
+
+        var can = ['less', 'sass', 'scss', 'jade', 'styl'];
+
+        return _.contains(can, ext);
+
+    }
+
 
     return {
         compile : compile,
         format: format,
         isExtSupported: isExtSupported,
+        canImport: canImport,
         isFileSupported: isFileSupported,
         getCompiledExtension: getCompiledExtension
     };
