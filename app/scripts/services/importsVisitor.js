@@ -5,7 +5,7 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, loopfunc: true*/
 /*global prepros, _*/
 
 //Imports Visitor
@@ -94,7 +94,7 @@ prepros.factory('importsVisitor', function () {
                         importedFiles.push(importedFilePath);
 
                     }
-                })
+                });
             }
         }
 
