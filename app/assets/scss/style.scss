@@ -273,13 +273,14 @@ body {
       width: 450px;
       -webkit-transition: width 0.25s;
     }
-    .home {
+    .home, .no-files {
       h1 {
         text-align: center;
         font-size: 100px;
         margin-top: 130px;
       }
       p {
+        margin-top: 25px;
         text-align: center;
         font-size: 16px;
       }

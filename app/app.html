@@ -165,7 +165,9 @@
 
 
             <div ng-switch-when="files">
-                <ul class="files">
+
+                <!-- Files list -->
+                <ul class="files" ng-show="(files|project).length > 0">
                     <li class="file" ng-repeat="file in files|project|orderBy:'name'">
                         <a ng-href="#/files/{{file.pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
                            draggable="false" id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)">
@@ -184,6 +186,15 @@
                         </a>
                     </li>
                 </ul>
+
+                <!-- There are no files -->
+                <div class="no-files"  ng-show="(files|project).length == 0">
+
+                    <h1 class="icomoon-sad"></h1>
+
+                    <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
+
+                </div>
 
 
                 <!-- Options -->
