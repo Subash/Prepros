@@ -1,0 +1,24 @@
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
+    <span class="label-desc">Line numbers</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.debug">
+    <span class="label-desc">Debug Info</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.compass">
+    <span class="label-desc">Use Compass</span>
+</label>
+
+<label>
+    <span class="label-desc">Output Style</span>
+    <select ng-model="selectedFile.config.outputStyle">
+        <option value="compressed">Compressed</option>
+        <option value="compact">Compact</option>
+        <option value="nested">Nested</option>
+        <option value="expanded">Expanded</option>
+    </select>
+</label>
