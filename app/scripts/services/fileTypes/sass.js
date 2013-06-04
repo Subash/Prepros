@@ -79,7 +79,7 @@ prepros.factory('sass', function (config, utils) {
 
     var compile = function (file, callback) {
 
-        var args =[], cwd;
+        var args =[];
 
         if(file.config.fullCompass && file.config.compass) {
 
