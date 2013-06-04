@@ -79,7 +79,7 @@
     <script src="scripts/directives/keyboard-shortcuts.js"></script>
     <script src="scripts/directives/drag-drop-project.js"></script>
     <script src="scripts/directives/log-element.js"></script>
-    <script src="scripts/directives/ng-include-if.js"></script>
+    <script src="scripts/directives/ng-include-when.js"></script>
 
 </head>
 <body>
@@ -212,7 +212,7 @@
                     </label>
 
                     <!-- Load options template -->
-                    <div ng-include-if="selectedFile.type" src="'templates/' + selectedFile.type + '.html'"></div>
+                    <div ng-include-when="selectedFile.type" src="'templates/' + selectedFile.type + '.html'"></div>
 
                     <button class="compile" ng-click="compile()">Compile</button>
 

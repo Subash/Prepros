@@ -11,7 +11,7 @@
 'use strict';
 
 //Conditional includes
-prepros.directive('ngIncludeIf', function ($timeout, $compile, $http, $templateCache) {
+prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http, $templateCache) {
 
     return {
 
@@ -20,9 +20,9 @@ prepros.directive('ngIncludeIf', function ($timeout, $compile, $http, $templateC
 
             $timeout(function(){
 
-                scope.$watch(attrs.ngIncludeIf, function(){
+                scope.$watch(attrs.ngIncludeWhen, function(){
 
-                    if(scope.$eval(attrs.ngIncludeIf)) {
+                    if(scope.$eval(attrs.ngIncludeWhen)) {
 
                         $http({method: 'GET', url: scope.$eval(attrs.src)}).
                             success(function(data) {
