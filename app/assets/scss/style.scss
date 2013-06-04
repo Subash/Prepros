@@ -10,20 +10,6 @@
   outline-color: #53777A !important;
 }
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,.3);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0,0,0,.4);
-}
-
 html {
   margin: 0;
   padding: 0;
@@ -106,6 +92,20 @@ body {
   width: 902px;
   height: 552px;
   border: 1px solid #3e3e3e;
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.3);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,.4);
+  }
 }
 
 .sidebar {
@@ -524,7 +524,7 @@ body {
     padding-bottom: 0;
     margin-bottom: 0;
     height: 435px;
-    overflow: scroll;
+    overflow: auto;
     li {
       padding: 15px;
       margin: 0 5px 10px 0;
