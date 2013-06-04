@@ -79,52 +79,81 @@ prepros.factory('sass', function (config, utils) {
 
     var compile = function (file, callback) {
 
-        var args = [config.ruby.gems.sass.path];
+        var args =[], cwd;
 
-        //Force utf-8 encoding
-        args.push('-E', 'utf-8');
+        if(file.config.fullCompass && file.config.compass) {
 
-        //Input and output
-        args.push(file.input, file.output);
+            args = [config.ruby.gems.compass.path];
 
-        //Load path for @imports
-        args.push('--load-path', path.dirname(file.input));
+            args.push('compile', path.relative(file.projectPath, file.input));
 
-        //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
-        var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
+            args.push("--environment", 'development');
 
-        //Cache location
-        args.push('--cache-location', cacheLocation);
+            //Output Style
+            args.push('--output-style', file.config.outputStyle);
 
-        //Output Style
-        args.push('--style', file.config.outputStyle);
+            //Line numbers
+            if (!file.config.lineNumbers) {
+                args.push('--no-line-comments');
+            }
 
-        //Debug info
-        if(file.config.debug){
+            //Debug info
+            if(file.config.debug){
 
-            args.push('--debug');
+                args.push('--debug-info');
+            }
+
+            args.push('--force');
+
+        } else {
+
+            args = [config.ruby.gems.sass.path];
+
+            //Force utf-8 encoding
+            args.push('-E', 'utf-8');
+
+            //Input and output
+            args.push(file.input, file.output);
+
+            //Load path for @imports
+            args.push('--load-path', path.dirname(file.input));
+
+            //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
+            var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
+
+            //Cache location
+            args.push('--cache-location', cacheLocation);
+
+            //Output Style
+            args.push('--style', file.config.outputStyle);
+
+            //Debug info
+            if(file.config.debug){
+
+                args.push('--debug');
+            }
+
+            //Compass
+            if (file.config.compass) {
+                args.push('--compass');
+
+                //Compass Susy Plugin
+                args.push('--load-path', config.ruby.gems.susy.path);
+
+            }
+
+            //Sass bourbon
+            args.push('--load-path', config.ruby.gems.bourbon.path);
+
+            //Line numbers
+            if (file.config.lineNumbers) {
+                args.push('--line-numbers');
+            }
+
+            //Make output dir if it doesn't exist
+            fs.mkdirsSync(path.dirname(file.output));
+
         }
-
-        //Compass
-        if (file.config.compass) {
-            args.push('--compass');
-
-            //Compass Susy Plugin
-            args.push('--load-path', config.ruby.gems.susy.path);
-
-        }
-
-        //Sass bourbon
-        args.push('--load-path', config.ruby.gems.bourbon.path);
-
-
-        //Line numbers
-        if (file.config.lineNumbers) {
-            args.push('--line-numbers');
-        }
-
-        //Make output dir if it doesn't exist
-        fs.mkdirsSync(path.dirname(file.output));
 
         //Start a child process to compile the file; file.projectPath is provided by compiler.js file
         var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});

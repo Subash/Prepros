@@ -9,7 +9,8 @@
                 <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
                 <div class="input"><span>{{file.shortInput | shorten}}</span></div>
                 <div>
-                    <span class="output" x-tooltip="Click to change file output path"
+                    <span ng-hide="file.config.compass && file.config.fullCompass"
+                          class="output" x-tooltip="Click to change file output path"
                           ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput | shorten}}
                     </span>
                 </div>

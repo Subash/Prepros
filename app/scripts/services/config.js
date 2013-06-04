@@ -145,6 +145,7 @@ prepros.factory('config', function () {
             lineNumbers : false,
             debug: false,
             compass : false,
+            fullCompass: false,
             outputStyle : 'compressed' //compressed, nested, expanded, compact
         },
 
@@ -154,6 +155,7 @@ prepros.factory('config', function () {
             lineNumbers : false,
             debug: false,
             compass : false,
+            fullCompass: false,
             outputStyle : 'compressed' //compressed, nested, expanded, compact
         },
 

@@ -2,13 +2,20 @@
     <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
     <span class="label-desc">Line numbers</span>
 </label>
+
 <label>
     <input type="checkbox" ng-model="selectedFile.config.debug">
     <span class="label-desc">Debug Info</span>
 </label>
+
 <label>
     <input type="checkbox" ng-model="selectedFile.config.compass">
     <span class="label-desc">Use Compass</span>
+</label>
+
+<label ng-show="selectedFile.config.compass">
+    <input type="checkbox" ng-model="selectedFile.config.fullCompass">
+    <span class="label-desc">Full Compass Support</span>
 </label>
 
 <label>
