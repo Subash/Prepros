@@ -140,16 +140,6 @@ prepros.factory('config', function () {
             lineNumbers: false
         },
 
-        //Default Scss options
-        scss : {
-            autoCompile : true,
-            lineNumbers : false,
-            debug: false,
-            compass : false,
-            fullCompass: false,
-            outputStyle : 'compressed' //compressed, nested, expanded, compact
-        },
-
         //Default Sass options
         sass : {
             autoCompile : true,

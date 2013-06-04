@@ -62,7 +62,6 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#general" data-toggle="tab">General</a></li>
         <li><a href="#less" data-toggle="tab">Less</a></li>
-        <li><a href="#scss" data-toggle="tab">SCSS</a></li>
         <li><a href="#sass" data-toggle="tab">Sass</a></li>
         <li><a href="#stylus" data-toggle="tab">Stylus</a></li>
         <li><a href="#jade" data-toggle="tab">Jade</a></li>
@@ -122,40 +121,6 @@
             <label>
                 <input type="checkbox" ng-model="userConfig.less.compress">
                 <span class="label-desc">Compress CSS</span>
-            </label>
-        </div>
-
-
-        <!-- Scss -->
-        <div class="tab-pane" id="scss">
-            <label>
-                <input type="checkbox" ng-model="userConfig.scss.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.scss.lineNumbers">
-                <span class="label-desc">Line numbers</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.scss.debug">
-                <span class="label-desc">Debug Info</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.scss.compass">
-                <span class="label-desc">Use Compass</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.scss.fullCompass">
-                <span class="label-desc">Full Compass Support</span>
-            </label>
-            <label>
-                <span class="label-desc">Output Style</span><br>
-                <select ng-model="userConfig.scss.outputStyle">
-                    <option value="compressed">Compressed</option>
-                    <option value="compact">Compact</option>
-                    <option value="nested">Nested</option>
-                    <option value="expanded">Expanded</option>
-                </select>
             </label>
         </div>
 

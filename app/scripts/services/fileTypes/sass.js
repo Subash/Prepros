@@ -53,7 +53,8 @@ prepros.factory('sass', function (config, utils) {
             input: filePath,
             shortInput: shortInput,
             output: output,
-            shortOutput: shortOutput
+            shortOutput: shortOutput,
+            config : config.getUserOptions().sass
         };
 
         var ext = path.extname(filePath);
@@ -61,13 +62,10 @@ prepros.factory('sass', function (config, utils) {
         if (ext === '.scss') {
 
             file.type = 'Scss';
-            file.config = config.getUserOptions().scss;
 
         } else if (ext === '.sass') {
 
             file.type = 'Sass';
-            file.config = config.getUserOptions().scss;
-
         }
 
         return file;
