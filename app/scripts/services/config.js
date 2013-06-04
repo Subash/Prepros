@@ -126,6 +126,7 @@ prepros.factory('config', function () {
     var defaultConfig = {
         cssPath: 'css',
         jsPath: 'js',
+        htmlPath: 'html',
         htmlExtension: '.html',
         enableSuccessNotifications: true,
         enableErrorNotifications: true,

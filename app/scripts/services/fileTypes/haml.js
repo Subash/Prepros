@@ -28,6 +28,13 @@ prepros.factory('haml', function (config, utils) {
             // Output path
             var output = filePath.replace(/\.haml/gi, config.getUserOptions().htmlExtension);
 
+            //Find output path; save to /html folder if file is in /haml folder
+            if(filePath.match(/\\haml\\|\/haml\//gi)) {
+
+                output = path.normalize(output.replace(/\\haml\\|\/haml\//gi, path.sep + config.getUserOptions().htmlPath + path.sep));
+
+            }
+
             //Find short output path
             var shortOutput = output.replace(/\\/g, '/');
 
