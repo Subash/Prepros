@@ -84,6 +84,11 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
             $scope.selectedProject = {};
             $scope.selectedProjectFiles = [];
             $location.path('/home');
+
+        } else {
+
+            $scope.selectedProjectFiles = _.where($scope.files, {pid: $routeParams.pid});
+
         }
 
         //Check if selectedFile was removed from files list
