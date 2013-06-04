@@ -110,7 +110,7 @@ prepros.factory('importsVisitor', function () {
         fileImports[0] = visitImports(filePath);
 
         //Get imports of imports up to four levels
-        for(var i=1; i<4; i++) {
+        for(var i=1; i<5; i++) {
 
             fileImports[i] = [];
 
