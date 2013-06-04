@@ -265,7 +265,7 @@ body {
       margin: 0;
       padding: 0;
       width: 670px;
-      height: 490px;
+      max-height: 490px;
       -webkit-transition: width 0.25s;
     }
 

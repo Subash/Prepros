@@ -65,7 +65,6 @@
     <script src="scripts/services/fileTypes/slim.js"></script>
 
     <!-- Filters -->
-    <script src="scripts/filters/project.js"></script>
     <script src="scripts/filters/shorten.js"></script>
 
     <!-- Controllers -->
@@ -154,7 +153,9 @@
 <!--File list and project view -->
 <div class="content clearfix" ng-controller="FilesCtrl">
     <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
+
         <div ng-switch on="routePath">
+
             <div ng-switch-when="home" class="home">
 
 
@@ -168,35 +169,16 @@
             <div ng-switch-when="files">
 
                 <!-- Files list -->
-                <ul class="files" ng-show="(files|project).length > 0">
-                    <li class="file" ng-repeat="file in files|project|orderBy:'name'">
-                        <a ng-href="#/files/{{file.pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
-                           draggable="false" id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)">
-                            <div class="thumb  {{file.type.toLowerCase()}}"
-                                 ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
-                            </div>
-                            <div class="details clearfix">
-                                <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
-                                <div class="input"><span>{{file.shortInput | shorten}}</span></div>
-                                <div>
-                                    <span class="output" x-tooltip="Click to change file output path"
-                                          ng-click="changeFileOutput($event, file.id)">&rarr; {{file.shortOutput | shorten}}
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                <div ng-include src="'templates/files-list.html'"></div>
 
                 <!-- There are no files -->
-                <div class="no-files"  ng-show="(files|project).length == 0">
+                <div class="no-files"  ng-show="selectedProjectFiles.length == 0">
 
                     <h1 class="icomoon-sad"></h1>
 
                     <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
 
                 </div>
-
 
                 <!-- Options -->
                 <div class="options">

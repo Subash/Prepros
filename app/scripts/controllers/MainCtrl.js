@@ -25,6 +25,8 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
     $scope.selectedProject = {};
 
+    $scope.selectedProjectFiles = [];
+
     ///File Change
     var throttleFileChange = _.throttle(function(){
 
@@ -80,6 +82,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
         if ($scope.selectedProject.id && !_.findWhere($scope.projects, {id: $scope.selectedProject.id})) {
 
             $scope.selectedProject = {};
+            $scope.selectedProjectFiles = [];
             $location.path('/home');
         }
 
@@ -123,6 +126,8 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
                 $scope.selectedProject = _.findWhere($scope.projects, {id: $routeParams.pid});
 
+                $scope.selectedProjectFiles = _.where($scope.files, {pid: $routeParams.pid});
+
                 //If url contains file id
                 if ($routeParams.fid) {
 
@@ -151,6 +156,8 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
         } else {
 
             $scope.selectedProject = {};
+
+            $scope.selectedProjectFiles = [];
         }
     });
 });
