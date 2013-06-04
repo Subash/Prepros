@@ -81,130 +81,129 @@
     <script src="scripts/directives/ng-include-when.js"></script>
 
 </head>
-<body>
-<div class="wrapper clearfix" ng-controller="MainCtrl" x-drag-drop-project x-bind-keyboard-shortcuts>
+<body class="wrapper clearfix" ng-controller="MainCtrl" x-drag-drop-project x-bind-keyboard-shortcuts>
 
-<!-- Sidebar -->
-<div class="sidebar" ng-controller="SidebarCtrl">
-    <ul>
-        <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)">
-            <a ng-href="#/files/{{project.id}}" draggable="false"
-               ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
-        </li>
-    </ul>
+    <!-- Sidebar -->
+    <div class="sidebar" ng-controller="SidebarCtrl">
+        <ul>
+            <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)">
+                <a ng-href="#/files/{{project.id}}" draggable="false"
+                   ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
+            </li>
+        </ul>
 
-    <div class="controls" ng-class="{'show' : selectedProject.id}">
-        <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
-        <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
-        <div class="options icomoon-cog icons" x-tooltip="Project Options" ng-click="showOptions()"></div>
-        <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
-        <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
+        <div class="controls" ng-class="{'show' : selectedProject.id}">
+            <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
+            <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
+            <div class="options icomoon-cog icons" x-tooltip="Project Options" ng-click="showOptions()"></div>
+            <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
+            <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
+        </div>
+
     </div>
-
-</div>
-<!-- Sidebar ends -->
+    <!-- Sidebar ends -->
 
 
-<div class="main">
+    <div class="main">
 
-<!-- App title bar -->
-<div class="title-bar" ng-controller="TitlebarCtrl">
-    <div class="controls">
-        <a ng-click="goWebsite()" class="icomoon-gift highlight" x-tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
-        <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
-        <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
-        <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" ng-click="openAboutWindow()"></a>
-        <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow()" x-log-element></a>
-        <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
-        <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
-        <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
-        <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
-    </div>
-</div>
+        <!-- App title bar -->
+        <div class="title-bar" ng-controller="TitlebarCtrl">
+            <div class="controls">
+                <a ng-click="goWebsite()" class="icomoon-gift highlight" x-tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
+                <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
+                <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
+                <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" ng-click="openAboutWindow()"></a>
+                <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow()" x-log-element></a>
+                <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
+                <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
+                <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
+                <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
+            </div>
+        </div>
 
-<div class="project-options" ng-show="selectedProject.id">
-    <label>
-        <span class="label-desc">Project Name</span>
-        <input ng-model="selectedProject.name" type="text">
-    </label>
-    <label>
-        <span class="label-desc">Filter Patterns</span>
-        <input type="text" ng-model="selectedProject.config.filterPatterns">
-    </label>
-    <label>
-        <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
-        <span class="label-desc">Live Refresh</span>
-    </label>
-    <label>
-        <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
-        <span class="label-desc">Use Custom server</span>
-    </label>
+        <div class="project-options" ng-show="selectedProject.id">
+            <label>
+                <span class="label-desc">Project Name</span>
+                <input ng-model="selectedProject.name" type="text">
+            </label>
 
-    <div ng-show="selectedProject.config.useCustomServer">
-        <label>
-            <span class="label-desc">Server URL</span>
-            <input type="text" ng-model="selectedProject.config.customServerUrl">
-        </label>
-    </div>
-    <button>Done</button>
-</div>
+            <label>
+                <span class="label-desc">Filter Patterns</span>
+                <input type="text" ng-model="selectedProject.config.filterPatterns">
+            </label>
 
+            <label>
+                <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
+                <span class="label-desc">Live Refresh</span>
+            </label>
 
-<!--File list and project view -->
-<div class="content clearfix" ng-controller="FilesCtrl">
-    <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
+            <label>
+                <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
+                <span class="label-desc">Use Custom server</span>
+            </label>
 
-        <div ng-switch on="routePath">
-
-            <div ng-switch-when="home" class="home">
-
-
-                <h1 class="icomoon-arrow-down-2"></h1>
-
-                <p>Please drag and drop a folder to start a new project.</p>
-
+            <div ng-show="selectedProject.config.useCustomServer">
+                <label>
+                    <span class="label-desc">Server URL</span>
+                    <input type="text" ng-model="selectedProject.config.customServerUrl">
+                </label>
             </div>
 
-
-            <div ng-switch-when="files">
-
-                <!-- Files list -->
-                <div ng-include src="'templates/files-list.html'"></div>
-
-                <!-- There are no files -->
-                <div class="no-files"  ng-show="selectedProjectFiles.length == 0">
-
-                    <h1 class="icomoon-sad"></h1>
-
-                    <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
-
-                </div>
-
-                <!-- Options -->
-                <div class="options">
-
-                    <span class="file-type">{{selectedFile.type}}</span>
-
-                    <span class="file-name">{{selectedFile.name}}</span>
+            <button>Done</button>
+        </div>
 
 
-                    <label>
-                        <input type="checkbox" ng-model="selectedFile.config.autoCompile">
-                        <span class="label-desc">Auto Compile</span>
-                    </label>
+        <!--File list and project view -->
+        <div class="content clearfix" ng-controller="FilesCtrl">
 
-                    <!-- Load options template -->
-                    <div ng-include-when="selectedFile.type" src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
+            <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
 
-                    <button class="compile" ng-click="compile()">Compile</button>
+                <div ng-switch on="routePath">
 
+                    <div ng-switch-when="home" class="home">
+
+                        <h1 class="icomoon-arrow-down-2"></h1>
+
+                        <p>Please drag and drop a folder to start a new project.</p>
+
+                    </div>
+
+                    <div ng-switch-when="files">
+
+                        <!-- Files list -->
+                        <div ng-include src="'templates/files-list.html'"></div>
+
+                        <!-- There are no files -->
+                        <div class="no-files"  ng-show="selectedProjectFiles.length == 0">
+
+                            <h1 class="icomoon-sad"></h1>
+
+                            <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
+
+                        </div>
+
+                        <!-- Options -->
+                        <div class="options">
+
+                            <span class="file-type">{{selectedFile.type}}</span>
+
+                            <span class="file-name">{{selectedFile.name}}</span>
+
+                            <label>
+                                <input type="checkbox" ng-model="selectedFile.config.autoCompile">
+                                <span class="label-desc">Auto Compile</span>
+                            </label>
+
+                            <!-- Load options template -->
+                            <div ng-include-when="selectedFile.type" src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
+
+                            <button class="compile" ng-click="compile()">Compile</button>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
-
 </body>
 </html>
