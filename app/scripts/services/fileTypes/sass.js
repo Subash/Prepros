@@ -83,7 +83,7 @@ prepros.factory('sass', function (config, utils) {
 
             args = [config.ruby.gems.compass.path];
 
-            args.push('compile', path.relative(file.projectPath, file.input));
+            args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
             args.push("--environment", 'development');
 
