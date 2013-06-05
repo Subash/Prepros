@@ -70,6 +70,7 @@
         <li><a href="#slim" data-toggle="tab">Slim</a></li>
         <li><a href="#coffee" data-toggle="tab">Coffee</a></li>
         <li><a href="#markdown" data-toggle="tab">Markdown</a></li>
+        <li><a href="#advanced" data-toggle="tab">Advanced</a></li>
     </ul>
     <div class="tab-content">
 
@@ -87,8 +88,8 @@
                 <span class="label-desc">Enable Success Notifications</span>
             </label>
             <label>
-                <span class="label-desc">Exclude files that contain following patterns</span>
-                <span class="muted" style="display: block">Please enter comma separated list</span>
+                <span class="label-desc">Exclude files that contain following patterns</span><br>
+                <span class="muted">Please enter comma separated list</span><br>
                 <input type="text" ng-model="userConfig.filterPatterns">
             </label>
             <label>
@@ -269,6 +270,33 @@
             </label>
         </div>
 
+        <!-- Advanced Settings -->
+        <div class="tab-pane" id="advanced">
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.useCustomSassCompass">
+                <span class="label-desc">Custom Sass Compass Executable</span>
+            </label>
+
+            <label ng-show="userConfig.useCustomSassCompass">
+                <span class="label-desc">Ruby executable path</span><br>
+                <span class="muted">Path to ruby.exe.</span><br>
+                <input type="text" ng-model="userConfig.customRubyPath">
+            </label>
+
+            <label ng-show="userConfig.useCustomSassCompass">
+                <span class="label-desc">Sass executable path</span><br>
+                <span class="muted">Path to sass file without any extension not the sass.bat file</span><br>
+                <input type="text" ng-model="userConfig.customSassPath">
+            </label>
+
+            <label ng-show="userConfig.useCustomSassCompass">
+                <span class="label-desc">Compass executable path</span><br>
+                <span class="muted">Path to compass file without any extension not the compass.bat file</span><br>
+                <input type="text" ng-model="userConfig.customCompassPath">
+            </label>
+
+        </div>
 
     </div>
 

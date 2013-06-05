@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('sass', function (config, utils) {
+prepros.factory('sass', function (config, utils, notification) {
 
     'use strict';
 
@@ -81,7 +81,14 @@ prepros.factory('sass', function (config, utils) {
 
         if(file.config.fullCompass && file.config.compass) {
 
-            args = [config.ruby.gems.compass.path];
+            if(config.getUserOptions().useCustomSassCompass) {
+
+                args = [config.getUserOptions().customCompassPath];
+
+            } else {
+
+                args = [config.ruby.gems.compass.path];
+            }
 
             args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
@@ -105,7 +112,14 @@ prepros.factory('sass', function (config, utils) {
 
         } else {
 
-            args = [config.ruby.gems.sass.path];
+            if(config.getUserOptions().useCustomSassCompass) {
+
+                args = [config.getUserOptions().customSassPath];
+
+            } else {
+
+                args = [config.ruby.gems.sass.path];
+            }
 
             //Force utf-8 encoding
             args.push('-E', 'utf-8');
@@ -153,8 +167,26 @@ prepros.factory('sass', function (config, utils) {
 
         }
 
-        //Start a child process to compile the file; file.projectPath is provided by compiler.js file
-        var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});
+        var rubyProcess;
+
+        if(config.getUserOptions().useCustomSassCompass) {
+
+            try {
+
+                //Start a child process to compile the file; file.projectPath is provided by compiler.js file
+                rubyProcess = cp.spawn(config.getUserOptions().customRubyPath, args, {cwd: file.projectPath});
+
+            } catch(e) {
+
+                notification.error('Invalid Custom Path', 'Prepros was unable to run custom executable.', e.message);
+            }
+
+        } else {
+
+            //Start a child process to compile the file; file.projectPath is provided by compiler.js file
+            rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});
+
+        }
 
         var compileErr = false;
 
