@@ -1,0 +1,66 @@
+<div class="project-options" ng-show="selectedProject.id">
+    <div class="tabbable">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#general" data-toggle="tab">General</a></li>
+            <li><a href="#folders" data-toggle="tab">Folders</a></li>
+            <li><a href="#more" data-toggle="tab">More</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="general">
+
+                <label>
+                    <span class="label-desc">Project Name</span><br>
+                    <input ng-model="selectedProject.name" type="text">
+                </label>
+
+                <label>
+                    <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
+                    <span class="label-desc">Live Refresh</span>
+                </label>
+
+                <label>
+                    <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
+                    <span class="label-desc">Use Custom server</span>
+                </label>
+
+                <label ng-show="selectedProject.config.useCustomServer">
+                    <span class="label-desc">Server URL</span><br>
+                    <input type="text" ng-model="selectedProject.config.customServerUrl">
+                </label>
+            </div>
+
+            <div class="tab-pane" id="folders">
+
+                <label>
+                    <span class="label-desc">CSS Folder</span><br>
+                    <input type="text" ng-model="selectedProject.config.cssPath">
+                </label>
+
+                <label>
+                    <span class="label-desc">Javascripts Folder</span><br>
+                    <input type="text" ng-model="selectedProject.config.jsPath">
+                </label>
+
+                <label>
+                    <span class="label-desc">HTML Folder</span><br>
+                    <input type="text" ng-model="selectedProject.config.htmlPath">
+                </label>
+            </div>
+
+            <div class="tab-pane" id="more">
+
+                <label>
+                    <span class="label-desc">Filter Patterns</span><br>
+                    <span class="muted">Please enter comma separated list</span><br>
+                    <input type="text" ng-model="selectedProject.config.filterPatterns">
+                </label>
+
+            </div>
+        </div>
+    </div>
+
+    <button>Done</button>
+
+</div>

@@ -33,7 +33,7 @@ prepros.factory('sass', function (config, utils) {
         //Find output path; save to user defined css folder if file is in sass or scss folder
         if(filePath.match(/\\sass\\|\\scss\\|\/sass\/|\/scss\//gi)) {
 
-            output = path.normalize(output.replace(/\\sass\\|\\scss\\|\/sass\/|\/scss\//gi, path.sep + config.getUserOptions().cssPath + path.sep));
+            output = path.normalize(output.replace(/\\sass\\|\\scss\\|\/sass\/|\/scss\//gi, path.sep + '{{cssPath}}' + path.sep));
 
         }
 

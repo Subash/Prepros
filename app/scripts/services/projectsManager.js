@@ -76,7 +76,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     liveRefresh: true,
                     filterPatterns: '',
                     useCustomServer: false,
-                    customServerUrl: ''
+                    customServerUrl: '',
+                    cssPath : config.getUserOptions().cssPath,
+                    jsPath : config.getUserOptions().jsPath,
+                    htmlPath : config.getUserOptions().htmlPath
                 }
             };
 
@@ -113,6 +116,11 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //function to get all project files
     function getProjectFiles(pid){
         return _.where(files, {pid : pid});
+    }
+
+    //Function to get current Project config
+    function getProjectConfig(pid) {
+        return getProjectById(pid).config;
     }
 
     //Function to remove project files
@@ -481,6 +489,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         refreshProjectFiles: refreshProjectFiles,
         getProjectFiles: getProjectFiles,
+        getProjectConfig: getProjectConfig,
         changeFileOutput: changeFileOutput
     };
 });

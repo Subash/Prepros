@@ -32,7 +32,7 @@ prepros.factory('less', function(config, utils){
         //Find output path; save to user defined css folder if file is in less folder
         if(filePath.match(/\\less\\|\/less\//gi)) {
 
-            output = path.normalize(output.replace(/\\less\\|\/less\//gi, path.sep + config.getUserOptions().cssPath + path.sep));
+            output = path.normalize(output.replace(/\\less\\|\/less\//gi, path.sep + '{{cssPath}}' + path.sep));
 
         }
 

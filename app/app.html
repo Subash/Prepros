@@ -66,6 +66,7 @@
 
     <!-- Filters -->
     <script src="scripts/filters/shorten.js"></script>
+    <script src="scripts/filters/interpolatePath.js"></script>
 
     <!-- Controllers -->
     <script src="scripts/controllers/MainCtrl.js"></script>
@@ -121,37 +122,8 @@
             </div>
         </div>
 
-        <div class="project-options" ng-show="selectedProject.id">
-            <label>
-                <span class="label-desc">Project Name</span>
-                <input ng-model="selectedProject.name" type="text">
-            </label>
-
-            <label>
-                <span class="label-desc">Filter Patterns</span>
-                <input type="text" ng-model="selectedProject.config.filterPatterns">
-            </label>
-
-            <label>
-                <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
-                <span class="label-desc">Live Refresh</span>
-            </label>
-
-            <label>
-                <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
-                <span class="label-desc">Use Custom server</span>
-            </label>
-
-            <div ng-show="selectedProject.config.useCustomServer">
-                <label>
-                    <span class="label-desc">Server URL</span>
-                    <input type="text" ng-model="selectedProject.config.customServerUrl">
-                </label>
-            </div>
-
-            <button>Done</button>
-        </div>
-
+        <!-- Project Options -->
+        <div ng-include src="'templates/project-options.html'"></div>
 
         <!--File list and project view -->
         <div class="content clearfix" ng-controller="FilesCtrl">

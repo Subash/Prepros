@@ -9,7 +9,7 @@
 /*global prepros,  _ , $*/
 
 //Files List controls
-prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager) {
+prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter) {
 
     'use strict';
 
@@ -27,10 +27,15 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager) {
         var file = projectsManager.getFileById(id),
             project = projectsManager.getProjectById(file.pid);
 
+        //Replace file.output placeholders with real paths
+        var cfg = projectsManager.getProjectConfig(file.pid);
 
-        if (fs.existsSync(path.dirname(file.output))) {
+        var out = $filter('interpolatePath')(file.output, cfg);
 
-            wd = path.dirname(file.output);
+
+        if (fs.existsSync(path.dirname(out))) {
+
+            wd = path.dirname(out);
 
         } else {
 

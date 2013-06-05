@@ -34,7 +34,7 @@ prepros.factory('coffee', function(config, utils){
         //Find output path; save to /js folder if file is in /coffee folder
         if(filePath.match(/\\coffee\\|\/coffee\//gi)) {
 
-            output = path.normalize(output.replace(/\\coffee\\|\/coffee\//gi, path.sep + config.getUserOptions().jsPath + path.sep));
+            output = path.normalize(output.replace(/\\coffee\\|\/coffee\//gi, path.sep + '{{jsPath}}' + path.sep));
 
         }
 

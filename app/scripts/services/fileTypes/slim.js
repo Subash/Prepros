@@ -31,7 +31,7 @@ prepros.factory('slim', function (config, utils) {
             //Find output path; save to /html folder if file is in /slim folder
             if(filePath.match(/\\slim\\|\/slim\//gi)) {
 
-                output = path.normalize(output.replace(/\\slim\\|\/slim\//gi, path.sep + config.getUserOptions().htmlPath + path.sep));
+                output = path.normalize(output.replace(/\\slim\\|\/slim\//gi, path.sep + '{{htmlPath}}' + path.sep));
 
             }
 

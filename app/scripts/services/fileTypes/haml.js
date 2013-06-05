@@ -31,7 +31,7 @@ prepros.factory('haml', function (config, utils) {
             //Find output path; save to /html folder if file is in /haml folder
             if(filePath.match(/\\haml\\|\/haml\//gi)) {
 
-                output = path.normalize(output.replace(/\\haml\\|\/haml\//gi, path.sep + config.getUserOptions().htmlPath + path.sep));
+                output = path.normalize(output.replace(/\\haml\\|\/haml\//gi, path.sep + '{{htmlPath}}' + path.sep));
 
             }
 

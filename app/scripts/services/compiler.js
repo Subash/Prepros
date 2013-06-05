@@ -6,9 +6,9 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros*/
+/*global prepros, $, angular*/
 
-prepros.factory("compiler", function (projectsManager, fileTypes, notification) {
+prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter) {
 
 	"use strict";
 
@@ -22,16 +22,23 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification) 
 
         var ext =  path.extname(file.input).toLowerCase();
 
+        //Replace file.output placeholders with real paths
+        var cfg = projectsManager.getProjectConfig(file.pid);
+
+        //Remove angular hash maps so that the change in file here won't affect files in project
+        var f = $.parseJSON(angular.toJson(file));
+
         //Sass compiler requires project path for config.rb file
         if(ext === '.scss' || ext === '.sass') {
 
-            file.projectPath = projectsManager.getProjectById(file.pid).path;
-
+            f.projectPath = projectsManager.getProjectById(file.pid).path;
         }
 
-        if (fs.existsSync(file.input)) {
+        f.output = $filter('interpolatePath')(file.output, cfg);
 
-            fileTypes.compile(file, function(err, data){
+        if (fs.existsSync(f.input)) {
+
+            fileTypes.compile(f, function(err, data){
 
                 if(err) {
 

@@ -227,10 +227,10 @@ body {
     position: absolute;
     z-index: 555;
     top: 50%;
-    margin-top: -165px;
     left: 50%;
-    margin-left: -125px;
-    width: 250px;
+    margin-top: -180px;
+    margin-left: -150px;
+    width: 255px;
     height: auto;
     padding: 10px;
     background: #FFF;
@@ -238,9 +238,6 @@ body {
     border: 2px solid #AAA;
     display: none;
     box-shadow: 0px 0px 0px 500px rgba(255, 255, 255, 0.2);
-    * {
-      max-width: 225px;
-    }
     &.show {
       display: block;
     }
