@@ -81,14 +81,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
         if(file.config.fullCompass && file.config.compass) {
 
-            if(config.getUserOptions().useCustomSassCompass) {
-
-                args = [config.getUserOptions().customCompassPath];
-
-            } else {
-
-                args = [config.ruby.gems.compass.path];
-            }
+            args = [config.ruby.gems.compass.path];
 
             args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
@@ -112,14 +105,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
         } else {
 
-            if(config.getUserOptions().useCustomSassCompass) {
-
-                args = [config.getUserOptions().customSassPath];
-
-            } else {
-
-                args = [config.ruby.gems.sass.path];
-            }
+            args = [config.ruby.gems.sass.path];
 
             //Force utf-8 encoding
             args.push('-E', 'utf-8');
@@ -166,7 +152,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
         var rubyProcess;
 
-        if(config.getUserOptions().useCustomSassCompass) {
+        if(config.getUserOptions().useCustomRuby) {
 
             try {
 

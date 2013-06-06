@@ -131,10 +131,8 @@ prepros.factory('config', function () {
         enableSuccessNotifications: true,
         enableErrorNotifications: true,
         filterPatterns: '',
-        useCustomSassCompass: false,
-        customCompassPath: '',
+        useCustomRuby: false,
         customRubyPath: '',
-        customSassPath: '',
 
 
         //Default Less Options

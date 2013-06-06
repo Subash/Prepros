@@ -273,30 +273,19 @@
         <!-- Advanced Settings -->
         <div class="tab-pane" id="advanced">
 
-            <div class="alert alert-danger" style="margin-bottom: 0; width: 350px;"><i class="icomoon-info"></i> These settings might hurt, Use with caution !</div><br>
-
             <label>
-                <input type="checkbox" ng-model="userConfig.useCustomSassCompass">
-                <span class="label-desc">Custom Sass Compass Executable</span>
+                <input type="checkbox" ng-model="userConfig.useCustomRuby">
+                <span class="label-desc">Use Custom Ruby for Sass and Compass</span>
             </label>
 
-            <label ng-show="userConfig.useCustomSassCompass">
-                <span class="label-desc">Ruby executable path</span><br>
-                <span class="muted">Path to ruby.exe.</span><br>
+            <label ng-show="userConfig.useCustomRuby">
+                <span class="label-desc">Path to ruby.exe file</span><br>
                 <input type="text" ng-model="userConfig.customRubyPath">
             </label>
 
-            <label ng-show="userConfig.useCustomSassCompass">
-                <span class="label-desc">Sass executable path</span><br>
-                <span class="muted">Path to sass file without any extension not the sass.bat file</span><br>
-                <input type="text" ng-model="userConfig.customSassPath">
-            </label>
-
-            <label ng-show="userConfig.useCustomSassCompass">
-                <span class="label-desc">Compass executable path</span><br>
-                <span class="muted">Path to compass file without any extension not the compass.bat file</span><br>
-                <input type="text" ng-model="userConfig.customCompassPath">
-            </label>
+            <div class="alert alert-danger" style="width: 350px;">
+                <i class="icomoon-info"></i> These settings might hurt, Use with caution !
+            </div>
 
         </div>
 
