@@ -147,11 +147,8 @@ prepros.factory('sass', function (config, utils, notification) {
 
             //Compass
             if (file.config.compass) {
+
                 args.push('--compass');
-
-                //Compass Susy Plugin
-                args.push('--load-path', config.ruby.gems.susy.path);
-
             }
 
             //Sass bourbon

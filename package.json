@@ -69,10 +69,6 @@
             "bourbon": {
                 "path": "ruby/sass-lib/bourbon",
                 "version": "3.1.6"
-            },
-            "susy" : {
-                "path": "ruby/sass-lib/susy",
-                "version": "1.0.8"
             }
         }
     },
