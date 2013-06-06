@@ -1,3 +1,17 @@
+## Version 1.6.0 -June 06, 2013
+
+* Feature : Option to point to an external ruby compiler
+* Feature : Per project html, css and js folders
+* Feature : Full compass support
+* Bugfix : Notification popup caused other windows to lose focus
+* Enhancement : Nested imports upto 5 levels
+* Updated CoffeeScript to 1.6.3
+* Updated Jade to 0.31.1
+* Updated Less to 1.4.0
+* Updated Marked to 0.2.9
+* Updated uglify-js to 2.3.6
+* Some performance and UI improvements
+
 ## Version 1.5.0 -May 29, 2013
 
 * Critical Bugfix : Changing option of a file affected another file
