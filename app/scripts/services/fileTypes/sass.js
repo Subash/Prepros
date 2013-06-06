@@ -170,8 +170,17 @@ prepros.factory('sass', function (config, utils, notification) {
 
             try {
 
-                //Start a child process to compile the file; file.projectPath is provided by compiler.js file
-                rubyProcess = cp.spawn(config.getUserOptions().customRubyPath, args, {cwd: file.projectPath});
+                if(fs.existsSync(config.getUserOptions().customRubyPath)) {
+
+                    //Start a child process to compile the file; file.projectPath is provided by compiler.js file
+                    rubyProcess = cp.spawn(config.getUserOptions().customRubyPath, args, {cwd: file.projectPath});
+
+                } else {
+
+
+                    notification.error('Invalid Ruby Path', 'Prepros was unable to run Ruby', config.getUserOptions().customRubyPath + ' not found');
+
+                }
 
             } catch(e) {
 
