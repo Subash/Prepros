@@ -17,17 +17,31 @@
             //HACK for cross window communication
             global.logScope = $scope;
 
+            $scope.clear = function(){
+
+                $scope.preprosLog = [];
+
+                global.preprosLog = [];
+
+                $scope.preprosLog = global.preprosLog;
+
+            }
+
         });
 
     </script>
 </head>
 <body style="overflow: auto">
 <div ng-controller="LogCtrl" class="preprosLog">
-    <h1>Prepros Log</h1>
+
+    <div class="heading clearfix">
+        <h4 class="pull-left">Prepros Log</h4><button class="btn pull-right" ng-click="clear()">Clear Log</button>
+    </div>
+
     <ul class="unstyled">
         <li ng-repeat="log in preprosLog" class="{{log.type}}">
             <span class="name">
-                <strong>{{preprosLog.length - $index}} :</strong> {{log.name}}
+                {{log.name}}
             </span>
             <div class="details">
                 <pre>{{log.details}}</pre>

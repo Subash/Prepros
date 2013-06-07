@@ -61,6 +61,12 @@ prepros.factory('notification', function (config) {
 
         global.preprosLog.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
+        if(global.preprosLog.length>5) {
+
+            global.preprosLog = global.preprosLog.slice(0, 5);
+
+        }
+
         global.preprosNotification = {name: name, message: message, type: 'error'};
 
         //Hack to update log
@@ -78,6 +84,12 @@ prepros.factory('notification', function (config) {
     var success = function(name, message, details){
 
         global.preprosLog.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
+
+        if(global.preprosLog.length>5) {
+
+            global.preprosLog = global.preprosLog.slice(0, 5);
+
+        }
 
         global.preprosNotification = {name: name, message: message, type: 'success'};
 
