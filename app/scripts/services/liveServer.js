@@ -5,7 +5,7 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true, es5: true*/
+/*jshint browser: true, node: true*/
 /*global prepros,  _ , angular*/
 
 //Storage

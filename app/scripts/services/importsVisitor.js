@@ -42,13 +42,13 @@ prepros.factory('importsVisitor', function () {
 
             while ((result = importReg.exec(data)) !== null) {
 
-                res = result[1].replace(/"|'/gi, '');
+                result[1] = result[1].replace(/"|'/gi, '');
 
                 //Check if path is full or just relative
-                if (res.indexOf(':') >= 0) {
-                    importedFilePath = path.normalize(res);
+                if (result[1].indexOf(':') >= 0) {
+                    importedFilePath = path.normalize(result[1]);
                 } else {
-                    importedFilePath = path.join(basedir, res);
+                    importedFilePath = path.join(basedir, result[1]);
                 }
 
                 //Add extension if file doesn't have that
