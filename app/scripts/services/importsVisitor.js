@@ -35,10 +35,14 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.sass') { importReg = /@import\s[\("']*([^;]+)[;\)"']*/g; }
         if (ext === '.styl') { importReg = /@import\s["']*([^"';\n]+)[;"']*/g; }
         if (ext === '.jade') { importReg = /include\s([^\n\s]+)*/g; }
+        if (ext === '.slim') { importReg = /==\sSlim::Template.new\((?:"|')([^\n\s]+)(?:"|')\).render/g; }
+
 
         if(ext !== '.sass' && ext !== '.scss'){
 
             while ((result = importReg.exec(data)) !== null) {
+
+                result[1] = result[1].replace(/"|'/gi, '');
 
                 //Check if path is full or just relative
                 if (result[1].indexOf(':') >= 0) {
