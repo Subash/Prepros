@@ -74,7 +74,7 @@ prepros.factory('slim', function (config, utils) {
             fs.mkdirsSync(path.dirname(file.output));
 
             //Start a child process to compile the file
-            var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: path.dirname(file.input)});
+            var rubyProcess = cp.spawn(config.ruby.path, args);
 
             var compileErr = false;
 
