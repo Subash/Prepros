@@ -5,7 +5,7 @@ Compile less, sass, scss, compass, coffeescript, stylus, jade, slim, markdown an
 
 To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.com/prepros).
 
-![Prepros App](http://alphapixels.com/prepros/img/prepros.png)
+![Prepros App](http://alphapixels.com/prepros/img/prepros.jpg)
 
 ##Features
 * Compile less, sass, scss, compass, coffeescript, stylus, jade, markdown and haml files
