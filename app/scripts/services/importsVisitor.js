@@ -27,22 +27,21 @@ prepros.factory('importsVisitor', function () {
             importedFilePath,
             importReg;
 
-        //Remove comments
+        //Strip Comments
         data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
+        data = data.replace(/\/\/(.*)/g, '');
 
-        if (ext === '.less') { importReg = /@import[\s\("']*([^"'\);\n]+)[;\)"']*/g; }
-        if (ext === '.scss') { importReg = /@import\s[\("']*([^;]+)[;\)"']*/g; }
-        if (ext === '.sass') { importReg = /@import\s[\("']*([^;\n]+)[;\)"']*/g; }
-        if (ext === '.styl') { importReg = /@import\s["']*([^"';\n]+)[;"']*/g; }
-        if (ext === '.jade') { importReg = /include\s([^\n\s]+)*/g; }
-        if (ext === '.slim') { importReg = /\==\sSlim::Template.new\((?:"|')([^\n]+)(?:"|')\).render/g; }
+        if (ext === '.less') { importReg = /@import\s['"]*([^\n;"']+)[;"']/g; }
+        if (ext === '.scss') { importReg = /@import\s['"]*([^;]+)[;"']/g; }
+        if (ext === '.sass') { importReg = /@import\s['"]*([^;\n]+)["']/g; }
+        if (ext === '.styl') { importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g; }
+        if (ext === '.jade') { importReg = /include\s+(.*)/g; }
+        if (ext === '.slim') { importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g; }
 
 
         if(ext !== '.sass' && ext !== '.scss'){
 
             while ((result = importReg.exec(data)) !== null) {
-
-                result[1] = result[1].replace(/"|'/gi, '');
 
                 //Check if path is full or just relative
                 if (result[1].indexOf(':') >= 0) {
