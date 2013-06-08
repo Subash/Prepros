@@ -70,7 +70,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
     //Function to check if file is supported
     function isFileSupported(filePath) {
 
-        var extname = path.extname(filePath).toLowerCase();
+        var extname = path.extname(filePath).toLowerCase().slice(1);
 
         //Sass partials are not supported
         var sass = ['sass', 'scss'];
