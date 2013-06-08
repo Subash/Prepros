@@ -1,3 +1,9 @@
+## Version 1.6.1 -June 08, 2013
+
+* Bugfix: Prepros didn't ignore sass partials
+* Feature: Slim import watching
+
+
 ## Version 1.6.0 -June 06, 2013
 
 * Feature : Option to point to an external ruby compiler
