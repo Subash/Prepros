@@ -35,7 +35,7 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.sass') { importReg = /@import\s[\("']*([^;\n]+)[;\)"']*/g; }
         if (ext === '.styl') { importReg = /@import\s["']*([^"';\n]+)[;"']*/g; }
         if (ext === '.jade') { importReg = /include\s([^\n\s]+)*/g; }
-        if (ext === '.slim') { importReg = /\==\sSlim::Template.new\((?:"|')([^\n\s]+)(?:"|')\).render/g; }
+        if (ext === '.slim') { importReg = /\==\sSlim::Template.new\((?:"|')([^\n]+)(?:"|')\).render/g; }
 
 
         if(ext !== '.sass' && ext !== '.scss'){
