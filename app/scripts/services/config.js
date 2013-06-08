@@ -47,7 +47,7 @@ prepros.factory('config', function () {
     var configFile = path.join(dataPath, 'config.json');
 
     //CachePath
-    var cachePath = path.join(process.env.TEMP, 'PreprosCache');
+    var cachePath = path.join(os.tmpdir(), 'PreprosCache');
 
     //Node modules required by the app
     var node_modules = packageData.dependencies;
