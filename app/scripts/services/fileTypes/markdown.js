@@ -27,10 +27,12 @@ prepros.factory('markdown', function (config, utils) {
         // Output path
         var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
 
-        //Find output path; save to user defined html folder if file is in md or markdown folder
-        if(filePath.match(/\\md\\|\\markdown\\|\/md\/|\/markdown\//gi)) {
+        var pathRegx = /\\md\\|\\markdown\\|\/md\/|\/markdown\//gi;
 
-            output = path.normalize(output.replace(/\\md\\|\\markdown\\|\/md\/|\/markdown\//gi, path.sep + '{{htmlPath}}' + path.sep));
+        //Find output path; save to user defined html folder if file is in md or markdown folder
+        if(filePath.match(pathRegx)) {
+
+            output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
         }
 

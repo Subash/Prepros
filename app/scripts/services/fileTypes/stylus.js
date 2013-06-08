@@ -29,10 +29,12 @@ prepros.factory('stylus', function (config, utils) {
         // Output path
         var output = filePath.replace(/\.styl/gi, '.css');
 
-        //Find output path; save to user defined css folder if file is in styl or stylus folder
-        if(filePath.match(/\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi)) {
+        var pathRegx = /\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi;
 
-            output = path.normalize(output.replace(/\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi, path.sep + '{{cssPath}}' + path.sep));
+        //Find output path; save to user defined css folder if file is in styl or stylus folder
+        if(filePath.match(pathRegx)) {
+
+            output = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
 
         }
 

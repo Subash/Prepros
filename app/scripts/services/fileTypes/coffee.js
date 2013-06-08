@@ -31,10 +31,12 @@ prepros.factory('coffee', function(config, utils){
         //Find short output path
         var shortOutput = output.replace(/\\/g, '/');
 
-        //Find output path; save to /js folder if file is in /coffee folder
-        if(filePath.match(/\\coffee\\|\/coffee\//gi)) {
+        var pathRegx = /\\coffee\\|\/coffee\//gi;
 
-            output = path.normalize(output.replace(/\\coffee\\|\/coffee\//gi, path.sep + '{{jsPath}}' + path.sep));
+        //Find output path; save to /js folder if file is in /coffee folder
+        if(filePath.match(pathRegx)) {
+
+            output = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
 
         }
 

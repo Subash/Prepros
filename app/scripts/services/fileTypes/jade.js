@@ -27,10 +27,12 @@ prepros.factory('jade', function(config, utils){
         // Output path
         var output = filePath.replace(/\.jade/gi, config.getUserOptions().htmlExtension);
 
-        //Find output path; save to /html folder if file is in /jade folder
-        if(filePath.match(/\\jade\\|\/jade\//gi)) {
+        var pathRegx = /\\jade\\|\/jade\//gi;
 
-            output = path.normalize(output.replace(/\\jade\\|\/jade\//gi, path.sep + '{{htmlPath}}' + path.sep));
+        //Find output path; save to /html folder if file is in /jade folder
+        if(filePath.match(pathRegx)) {
+
+            output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
         }
 

@@ -28,10 +28,12 @@ prepros.factory('slim', function (config, utils) {
             // Output path
             var output = filePath.replace(/\.slim/gi, config.getUserOptions().htmlExtension);
 
-            //Find output path; save to /html folder if file is in /slim folder
-            if(filePath.match(/\\slim\\|\/slim\//gi)) {
+            var pathRegx = /\\slim\\|\/slim\//gi;
 
-                output = path.normalize(output.replace(/\\slim\\|\/slim\//gi, path.sep + '{{htmlPath}}' + path.sep));
+            //Find output path; save to /html folder if file is in /slim folder
+            if(filePath.match(pathRegx)) {
+
+                output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
             }
 
