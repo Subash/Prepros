@@ -29,7 +29,7 @@ prepros.factory('importsVisitor', function () {
 
         //Strip Comments
         data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
-        data = data.replace(/\/\/(.*)/g, '');
+        data = data.replace(/\/\/.*/g, '');
 
         if (ext === '.less') { importReg = /@import\s['"]*([^\n;"']+)[;"']/g; }
         if (ext === '.scss') { importReg = /@import\s['"]*([^;]+)[;"']/g; }
