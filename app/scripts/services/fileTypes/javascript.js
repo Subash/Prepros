@@ -5,7 +5,7 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, loopfunc: true*/
 /*global prepros, _*/
 
 prepros.factory('javascript', function (config, utils, importsVisitor) {
@@ -66,40 +66,112 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
 
                 var javascript = data.toString();
 
+                var result, importedFile, error = false, fileImports = [];
+
                 var importReg = /\/\/(?:\s|)@prepros-append\s+(.*)/gi;
 
-                _.each(importsVisitor.getImports(file.input), function (impFile) {
+                var read = function(filePathToRead) {
 
-                    var contents = fs.readFileSync(impFile, { encoding: 'utf8' });
+                    var impFiles = [];
 
-                    javascript = javascript + '\n' + contents.toString();
-                });
+                    while ((result = importReg.exec(fs.readFileSync(filePathToRead))) !== null) {
 
-                //Remove @prepros-import statements
-                javascript = javascript.replace(importReg, '');
+                        result[1] = result[1].replace(/'|"/gi, '').trim();
 
-                try {
+                        //Check if path is full or just relative
+                        if (result[1].indexOf(':') >= 0) {
 
-                    if (file.config.uglify) {
-
-                        javascript = ugly.minify(javascript, {fromString: true}).code;
-                    }
-
-                    fs.outputFile(file.output, javascript, function (err) {
-
-                        if (err) {
-
-                            callback(true, err.message);
+                            importedFile = path.normalize(result[1]);
 
                         } else {
 
-                            callback(false, file.input);
+                            importedFile = path.join(path.dirname(filePathToRead), result[1]);
                         }
+
+                        //Add extension
+                        if (path.extname(importedFile).toLowerCase() !== '.js') {
+
+                            importedFile = importedFile + '.js';
+                        }
+
+                        //Check if file exists
+                        if (fs.existsSync(importedFile)) {
+
+                            impFiles.push(importedFile);
+
+                        } else {
+
+                            error = true;
+
+                            callback(true, 'Imported file "'+ importedFile +'" not found \n' + file.input);
+                        }
+                    }
+
+                    return impFiles;
+                };
+
+                fileImports[0] = read(file.input);
+
+                //Get imports of imports up to four levels
+                for(var i=1; i<5; i++) {
+
+                    fileImports[i] = [];
+
+                    _.each(fileImports[i-1], function(importedFile){
+
+                        fileImports[i] = _.uniq(_.union(fileImports[i], read(importedFile)));
+
+                    });
+                }
+
+                try {
+
+                    //Remove repeated imports
+                    _.each(_.uniq(_.flatten(fileImports)), function(imp) {
+
+                        javascript = javascript + fs.readFileSync(imp).toString();
+
                     });
 
                 } catch(e) {
 
-                    callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message);
+                    error = true;
+
+                    callback(true, e.message);
+
+                }
+
+
+                if(!error) {
+
+                    //Remove @prepros-append statements
+                    javascript = javascript.replace(importReg, '');
+
+                    try {
+
+
+
+                        if (file.config.uglify) {
+
+                            javascript = ugly.minify(javascript, {fromString: true}).code;
+                        }
+
+                        fs.outputFile(file.output, javascript, function (err) {
+
+                            if (err) {
+
+                                callback(true, err.message);
+
+                            } else {
+
+                                callback(false, file.input);
+                            }
+                        });
+
+                    } catch(e) {
+
+                        callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message);
+                    }
                 }
             }
         });
