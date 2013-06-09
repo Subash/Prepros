@@ -40,7 +40,7 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.styl') { importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g; }
         if (ext === '.jade') { importReg = /include\s+(.*)/g; }
         if (ext === '.slim') { importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g; }
-        if (ext === '.js'  ) { importReg = /\/\/\s@prepros-import\s+(.*)/gi; }
+        if (ext === '.js'  ) { importReg = /\/\/\s@prepros-append\s+(.*)/gi; }
 
 
         if(ext !== '.sass' && ext !== '.scss'){

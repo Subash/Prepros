@@ -76,7 +76,7 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
                 });
 
                 //Remove @prepros-import statements
-                javascript = javascript.replace(/\/\/\s@prepros-import\s+(.*)\n/gi, '');
+                javascript = javascript.replace(/\/\/\s@prepros-append\s+(.*)\n/gi, '');
 
                 if (file.config.uglify) {
 
