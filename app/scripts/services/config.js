@@ -138,7 +138,7 @@ prepros.factory('config', function () {
         //Default Less Options
         less : {
             autoCompile: true,
-            compress : true,
+            compress : false,
             lineNumbers: false
         },
 
@@ -149,7 +149,7 @@ prepros.factory('config', function () {
             debug: false,
             compass : false,
             fullCompass: false,
-            outputStyle : 'compressed' //compressed, nested, expanded, compact
+            outputStyle : 'expanded' //compressed, nested, expanded, compact
         },
 
 
@@ -158,7 +158,7 @@ prepros.factory('config', function () {
             autoCompile: true,
             lineNumbers : false,
             nib : false,
-            compress : true
+            compress : false
         },
 
         //Default Markdown Options
