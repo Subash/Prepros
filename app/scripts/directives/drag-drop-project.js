@@ -42,6 +42,12 @@ prepros.directive('dragDropProject', function (projectsManager) {
 
                         //Add to projects
                         projectsManager.addProject(file.path);
+
+                    } else if(stats.isFile() && path.dirname(path.dirname(file.path)) !== path.dirname(file.path)) {
+
+                        //Add to projects
+                        projectsManager.addProject(path.dirname(file.path));
+
                     }
                 });
             });
