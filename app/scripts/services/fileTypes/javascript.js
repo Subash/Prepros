@@ -68,9 +68,9 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
 
                 var importReg = /\/\/(?:\s|)@prepros-append\s+(.*)/gi;
 
-                _.each(importsVisitor.getImports(file.input), function (impfile) {
+                _.each(importsVisitor.getImports(file.input), function (impFile) {
 
-                    var contents = fs.readFileSync(impfile, { encoding: 'utf8' });
+                    var contents = fs.readFileSync(impFile, { encoding: 'utf8' });
 
                     javascript = javascript + '\n' + contents.toString();
                 });
