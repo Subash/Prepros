@@ -192,7 +192,9 @@ prepros.factory('config', function () {
         //Default Slim  Options
         slim: {
             autoCompile: true,
-            pretty: true
+            pretty: true,
+            fourSpaceIndent: true,
+            format: ':html5' //:xhtml, :html4, :html5, :html
         }
     };
 

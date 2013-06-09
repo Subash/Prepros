@@ -64,6 +64,14 @@ prepros.factory('slim', function (config, utils) {
 
             var args = [config.ruby.gems.slim.path];
 
+            args.push('-oformat=' + file.config.format);
+
+            if(file.config.fourSpaceIndent) {
+
+                args.push('-oindent="    "');
+
+            }
+
             //Input and output
             args.push(file.input, file.output);
 

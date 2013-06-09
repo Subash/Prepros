@@ -2,3 +2,16 @@
     <input type="checkbox" ng-model="selectedFile.config.pretty">
     <span class="label-desc">Pretty Output</span>
 </label>
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.fourSpaceIndent">
+    <span class="label-desc">Indent By Four Spaces</span>
+</label>
+<label>
+    <span class="label-desc">Output Format</span>
+    <select ng-model="selectedFile.config.format">
+        <option value=":xhtml">XHTML</option>
+        <option value=":html5">HTML5</option>
+        <option value=":html">HTML</option>
+        <option value=":html4">HTML4</option>
+    </select>
+</label>
