@@ -28,8 +28,11 @@ prepros.factory('importsVisitor', function () {
             importReg;
 
         //Strip Comments
-        data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
-        data = data.replace(/\/\/.*/g, '');
+        if(ext !== '.js') {
+            data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
+            data = data.replace(/\/\/.*/g, '');
+        }
+
 
         if (ext === '.less') { importReg = /@import\s['"]*([^\n;"']+)[;"']/g; }
         if (ext === '.scss') { importReg = /@import\s['"]*([^;]+)[;"']/g; }
@@ -37,6 +40,7 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.styl') { importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g; }
         if (ext === '.jade') { importReg = /include\s+(.*)/g; }
         if (ext === '.slim') { importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g; }
+        if (ext === '.js'  ) { importReg = /\/\/\s@prepros-import\s+(.*)/g; }
 
 
         if(ext !== '.sass' && ext !== '.scss'){

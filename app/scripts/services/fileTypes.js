@@ -10,7 +10,7 @@
 
 'use strict';
 
-prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jade, haml, slim, config, importsVisitor) {
+prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, config, importsVisitor) {
 
     var path = require('path');
 
@@ -23,6 +23,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
         md : markdown,
         markdown : markdown,
         coffee: coffee,
+        js: javascript,
         jade: jade,
         haml: haml,
         slim: slim
@@ -58,6 +59,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
             '.styl', //Stylus
             '.md', '.markdown', //Markdown
             '.coffee', //Coffeescript
+            '.js', //Javascript
             '.jade', //Jade
             '.haml',  //Haml
             '.slim'  //Slim
@@ -79,7 +81,14 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
 
         var isSassPartial = _.contains(sass, extname) && partial.exec(path.basename(filePath));
 
-        return isExtSupported(filePath) && !isSassPartial;
+        //Minified js files are also not supported
+        var js = ['js'];
+
+        var minified = /min.js$/;
+
+        var isMinified = _.contains(js, extname) && minified.exec(path.basename(filePath));
+
+        return isExtSupported(filePath) && !isSassPartial && !isMinified;
 
     }
 
@@ -89,7 +98,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
         var ext = path.extname(filePath).slice(1);
 
         var css = ['scss', 'sass', 'stylus', 'less'];
-        var js = ['coffee'];
+        var js = ['coffee', 'js'];
         var html = ['jade', 'haml', 'md', 'markdown', 'slim'];
 
         if(_.contains(css, ext)){
@@ -116,7 +125,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jad
 
         var ext = path.extname(filePath).slice(1);
 
-        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim'];
+        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js'];
 
         return (_.contains(can, ext))? importsVisitor.getImports(filePath) : [];
 

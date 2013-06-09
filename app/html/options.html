@@ -71,6 +71,7 @@
         <li><a href="#haml" data-toggle="tab">Haml</a></li>
         <li><a href="#slim" data-toggle="tab">Slim</a></li>
         <li><a href="#coffee" data-toggle="tab">Coffee</a></li>
+        <li><a href="#javascript" data-toggle="tab">Javascript</a></li>
         <li><a href="#markdown" data-toggle="tab">Markdown</a></li>
         <li><a href="#advanced" data-toggle="tab">Advanced</a></li>
     </ul>
@@ -214,6 +215,18 @@
             </label>
             <label>
                 <input type="checkbox" ng-model="userConfig.coffee.uglify">
+                <span class="label-desc">Uglify</span>
+            </label>
+        </div>
+
+        <!-- Javascript -->
+        <div class="tab-pane" id="javascript">
+            <label>
+                <input type="checkbox" ng-model="userConfig.javascript.autoCompile">
+                <span class="label-desc">Auto Compile</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.javascript.uglify">
                 <span class="label-desc">Uglify</span>
             </label>
         </div>

@@ -175,6 +175,12 @@ prepros.factory('config', function () {
             uglify: false
         },
 
+        //Default javascript options
+        javascript: {
+            autoCompile: true,
+            uglify: true
+        },
+
         //Default Jade  Options
         jade: {
             autoCompile: true,
