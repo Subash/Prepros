@@ -40,12 +40,17 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.styl') { importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g; }
         if (ext === '.jade') { importReg = /include\s+(.*)/g; }
         if (ext === '.slim') { importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g; }
-        if (ext === '.js'  ) { importReg = /\/\/\s@prepros-append\s+(.*)/gi; }
+        if (ext === '.js'  ) { importReg = /\/\/(?:\s|)@prepros-append\s+(.*)/gi; }
+
+        //Automatically add extension
+        var autoExt = ['.less', '.styl', '.js'];
 
 
         if(ext !== '.sass' && ext !== '.scss'){
 
             while ((result = importReg.exec(data)) !== null) {
+
+                result[1] = result[1].replace(/'|"/gi, '').trim();
 
                 //Check if path is full or just relative
                 if (result[1].indexOf(':') >= 0) {
@@ -54,9 +59,12 @@ prepros.factory('importsVisitor', function () {
                     importedFilePath = path.join(basedir, result[1]);
                 }
 
-                //Add extension if file doesn't have that
-                if (path.extname(importedFilePath).toLowerCase() !== ext) {
-                    importedFilePath = importedFilePath + ext;
+                if(_.contains(autoExt, ext)) {
+
+                    //Add extension if file doesn't have that
+                    if (path.extname(importedFilePath).toLowerCase() !== ext) {
+                        importedFilePath = importedFilePath + ext;
+                    }
                 }
 
                 //Check if file exists

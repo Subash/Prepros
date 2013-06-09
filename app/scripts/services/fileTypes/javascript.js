@@ -64,9 +64,9 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
 
             } else {
 
-                var error = false;
-
                 var javascript = data.toString();
+
+                var importReg = /\/\/(?:\s|)@prepros-append\s+(.*)/gi;
 
                 _.each(importsVisitor.getImports(file.input), function (impfile) {
 
@@ -76,24 +76,31 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
                 });
 
                 //Remove @prepros-import statements
-                javascript = javascript.replace(/\/\/\s@prepros-append\s+(.*)\n/gi, '');
+                javascript = javascript.replace(importReg, '');
 
-                if (file.config.uglify) {
+                try {
 
-                    javascript = ugly.minify(javascript, {fromString: true}).code;
-                }
+                    if (file.config.uglify) {
 
-                fs.outputFile(file.output, javascript, function (err) {
-
-                    if (err) {
-
-                        callback(true, err.message);
-
-                    } else {
-
-                        callback(false, file.input);
+                        javascript = ugly.minify(javascript, {fromString: true}).code;
                     }
-                });
+
+                    fs.outputFile(file.output, javascript, function (err) {
+
+                        if (err) {
+
+                            callback(true, err.message);
+
+                        } else {
+
+                            callback(false, file.input);
+                        }
+                    });
+
+                } catch(e) {
+
+                    callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message);
+                }
             }
         });
     };
