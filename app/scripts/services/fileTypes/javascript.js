@@ -26,7 +26,7 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
         var shortInput = path.relative(projectPath, filePath).replace(/\\/g, '/');
 
         // Output path
-        var output = filePath.replace(/\.js/gi, '-min.js');
+        var output = path.join(path.dirname(filePath), 'min', path.basename(filePath).replace(/\.js/gi, '-min.js'));
 
         //Find short output path
         var shortOutput = output.replace(/\\/g, '/');
@@ -74,6 +74,9 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
 
                     javascript = javascript + '\n' + contents.toString();
                 });
+
+                //Remove @prepros-import statements
+                javascript = javascript.replace(/\/\/\s@prepros-import\s+(.*)\n/gi, '');
 
                 if (file.config.uglify) {
 
