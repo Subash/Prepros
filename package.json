@@ -58,7 +58,7 @@
             },
             "slim": {
                 "path": "ruby/bin/slimrb",
-                "version": "1.3.9"
+                "version": "2.0.0"
             },
             "kramdown" : {
                 "path": "ruby/bin/kramdown",
