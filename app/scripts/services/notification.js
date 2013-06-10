@@ -61,9 +61,9 @@ prepros.factory('notification', function (config) {
 
         global.preprosLog.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
-        if(global.preprosLog.length>5) {
+        if(global.preprosLog.length>30) {
 
-            global.preprosLog = global.preprosLog.slice(0, 5);
+            global.preprosLog = global.preprosLog.slice(0, 30);
 
         }
 
@@ -85,9 +85,9 @@ prepros.factory('notification', function (config) {
 
         global.preprosLog.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
 
-        if(global.preprosLog.length>5) {
+        if(global.preprosLog.length>30) {
 
-            global.preprosLog = global.preprosLog.slice(0, 5);
+            global.preprosLog = global.preprosLog.slice(0, 30);
 
         }
 
