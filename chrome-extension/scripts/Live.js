@@ -105,32 +105,25 @@
 
     // check all tracking resources for changes
     checkForChanges: function () {
+      
       for (var url in resources) {
+
         if (pendingRequests[url])
           continue;
 
         Live.getHead(url, function (url, newInfo) {
+
           var oldInfo = resources[url],
-              hasChanged = false;
+            hasChanged = false;
           resources[url] = newInfo;
-          for (var header in oldInfo) {
-            // do verification based on the header type
-            var oldValue = oldInfo[header],
-                newValue = newInfo[header],
-                contentType = newInfo["Content-Type"];
-            switch (header.toLowerCase()) {
-              case "etag":
-                if (!newValue) break;
-                // fall through to default
-              default:
-                hasChanged = oldValue != newValue;
-                break;
-            }
-            // if changed, act
-            if (hasChanged) {
-              Live.refreshResource(url, contentType);
-              break;
-            }
+          if(oldInfo['Etag']) {
+            hasChanged = oldInfo['Etag'] != newInfo['Etag'];
+          } else if(oldInfo['Last-Modified']){
+            hasChanged = oldInfo['Last-Modified'] != newInfo['Last-Modified'];
+          }
+          // if changed, act
+          if (hasChanged) {
+            Live.refreshResource(url, newInfo['Content-Type']);
           }
         });
       }
