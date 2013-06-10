@@ -1,0 +1,52 @@
+!!! 5
+html
+	include jade/head.jade
+
+	body
+		include jade/nav.jade
+
+		.container.docs
+
+			.row
+				.sidebar.span3
+
+					ul.topics
+						li
+							a(href='index.html') Getting Started
+						li
+							a(href='installing.html') Installing
+						li
+							a(href='live-refresh.html') Live Refresh
+						li
+							a(href='config.html') Configuring Prepros
+						li
+							a(href='project-files-config.html') Project and file settings
+						li
+							a(href='sass-compass.html') Using Sass &amp; Compass
+						li
+							a(href='js-concat-minify.html') Js Conatenation and Minification
+						li
+							a(href='less.html') Using Less
+						li
+							a(href='stylus.html') Using Stylus
+						li
+							a(href='jade.html') Using jade
+						li
+							a(href='coffee-script.html') Using Coffee-Script
+						li
+							a(href='haml.html') Using Haml
+						li
+							a(href='markdown.html') Using Markdown
+						li
+							a(href='slim.html') Using Slim
+						li
+							<div div id="bsap_1286936" class="bsarocks bsap_70757695faf54d2f2053aaf9e63c7162"></div>
+
+				.docs-content.span9
+
+					h1=page.title
+						
+					div
+						!= page.html
+
+	include jade/foot.jade
