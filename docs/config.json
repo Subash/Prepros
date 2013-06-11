@@ -1,4 +1,5 @@
 {
+  "baseUrl": "http://alphapixels.com/prepros/docs",
   "locals": {
     "title": "Documentation"
   }
