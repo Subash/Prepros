@@ -1,5 +1,5 @@
 ---
-title: Managing Prepros projects
+title: Managing projects
 template: index.jade
 ---
 
@@ -20,7 +20,7 @@ You can add new project to Prepros by clicking the plus icon located near the bo
 
 ![Using plus icon to add new project](img/projects/plus-icon.jpg)
 
-<div class="alert alert-info">You can also hit CTRL+N to add new project</div>
+<div class="alert alert-info">You can also hit `CTRL+N` to add new project</div>
 
 ###Project Toolbar
 
@@ -55,3 +55,6 @@ You can also change default options from [options window](config.html) before ad
 __3. Filters__
 You can exclude certain files from project by adding filter patterns in comma seperated list. You can also add global filters from [options window](config.html).
 <div class="alert alert-info">Don't forget to refresh project after editing filters.</div>
+
+
+<div class="alert alert-info">You can double click project name to open project folder in explorer.</div>
