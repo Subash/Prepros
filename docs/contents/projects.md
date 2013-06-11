@@ -5,8 +5,6 @@ template: index.jade
 
 Project is the collection of all your preprocessing files. It can be just your scss, less folder or the project you are working on. Your projects are listed on the left part of the Prepros window
 
-___
-
 ### Adding Project
 Adding a new project to Prepros is as easy as pie. There are three ways to add project in Prepros.
 
