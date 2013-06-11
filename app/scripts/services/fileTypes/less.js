@@ -77,6 +77,9 @@ prepros.factory('less', function(config, utils){
 
         }
 
+        options.strictMath = file.config.strictMath;
+        options.strictUnits = file.config.strictUnits;
+
         var parser = new (less.Parser)({
             paths: [importPath],
             filename: file.input,
