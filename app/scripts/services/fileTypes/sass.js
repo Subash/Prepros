@@ -112,6 +112,11 @@ prepros.factory('sass', function (config, utils, notification) {
             //Force utf-8 encoding
             args.push('-E', 'utf-8');
 
+            if(file.config.unixNewlines) {
+
+                args.push('--unix-newlines');
+            }
+
             //Input and output
             args.push(file.input, file.output);
 

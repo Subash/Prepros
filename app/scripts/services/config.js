@@ -148,6 +148,7 @@ prepros.factory('config', function () {
         sass : {
             autoCompile : true,
             lineNumbers : false,
+            unixNewlines: false,
             debug: false,
             compass : false,
             fullCompass: false,
