@@ -22,6 +22,12 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     };
 
+    //Help Link
+    $scope.help = function () {
+
+        utils.openBrowser(config.online.helpUrl);
+
+    };
 
     //Open about window on click
     var aboutWindow;

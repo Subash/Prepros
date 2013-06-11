@@ -58,7 +58,7 @@ prepros.factory('config', function () {
     //App urls
     var online = {
         url: 'http://alphapixels.com/prepros',
-        helpUrl: 'http://alphapixels.com/prepros',
+        helpUrl: 'http://alphapixels.com/prepros/docs/',
         loveUrl: 'http://alphapixels.com/prepros#love',
         updateFileUrl: 'http://alphapixels.com/prepros/update.json',
         githubUrl: 'http://github.com/sbspk/prepros',
