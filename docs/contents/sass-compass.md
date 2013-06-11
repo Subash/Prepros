@@ -41,11 +41,9 @@ To point to the custom ruby go to [options panel](config.html) > advanced tab an
 [Bourbon](http://bourbon.io) comes prebundled with Prepros. Just require it on your sass file and you are good to go.
 
 ```css
-
 @import 'bourbon';
 
 ~~ Your Css ~~
-
 ```
 
 Boom, it works.

@@ -13,7 +13,7 @@ Minified js file that end with `min.js` are ignored by Prepros.
 
 `//@prepros-append` statements can be used to append a file at the end of another file.
 
-```js
+```css
 //@prepros-append first.js
 //@prepros-append second.js
 //@prepros-append third file.js
