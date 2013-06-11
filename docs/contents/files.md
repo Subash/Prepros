@@ -19,7 +19,7 @@ You can click on file to show file options pannel on the right side of the app w
 
 ![Options](img/files/options.jpg)
 
-The above figure shows the file options panel for a sass files. You can see options for other languages by clicking the file.
+The above image shows the file options panel for a sass files. You can see options for other languages by clicking the file.
 
 You can also default file options from [options window](config.html) before adding project.
 

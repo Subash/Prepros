@@ -3,7 +3,7 @@ title: Geting Started With Prepros
 template: index.jade
 ---
 
-Prepros is a compiler for preprocessing languages like less, sass, compass, stylus, jade, slim and haml. Prepros can live refresh your browser whenever you change your code on your favourite editor.
+Prepros is a GUI compiler for preprocessing languages such as less, sass, compass, stylus, jade, slim, markdown and haml. Prepros can also live refresh your browser whenever you change your code on your favourite editor.
 
 ### Some cool features of Prepros
 * Compile almost every preprocessing language
