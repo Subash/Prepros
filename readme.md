@@ -20,6 +20,6 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 * Built-in http server
 
 ##TODO
-* Javascript concat and minification
+* Frameworks
 * JsHint and JsLint
 * Live browser refresh extension for firefox
