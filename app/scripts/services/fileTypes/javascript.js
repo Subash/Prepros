@@ -66,6 +66,20 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
 
                 var javascript = data.toString();
 
+                if (file.config.uglify) {
+
+                    try {
+
+                        javascript = ugly.minify(javascript, {fromString: true}).code;
+
+                    } catch(e) {
+
+                        error = true;
+
+                        callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ file.input);
+                    }
+                }
+
                 var result, importedFile, error = false, fileImports = [];
 
                 var importReg = /\/\/(?:\s|)@prepros-append\s+(.*)/gi;
@@ -129,8 +143,23 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
                     //Remove repeated imports
                     _.each(_.uniq(_.flatten(fileImports)), function(imp) {
 
-                        javascript = javascript + fs.readFileSync(imp).toString();
+                        var js = fs.readFileSync(imp).toString();
 
+                        if (file.config.uglify && !/min.js$/.exec(path.basename(imp))) {
+
+                            try {
+
+                                js = ugly.minify(js, {fromString: true}).code;
+
+                            } catch(e) {
+
+                                error = true;
+
+                                callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ imp);
+                            }
+                        }
+
+                        javascript = javascript + '\n'  + js;
                     });
 
                 } catch(e) {
@@ -147,31 +176,17 @@ prepros.factory('javascript', function (config, utils, importsVisitor) {
                     //Remove @prepros-append statements
                     javascript = javascript.replace(importReg, '');
 
-                    try {
+                    fs.outputFile(file.output, javascript, function (err) {
 
+                        if (err) {
 
+                            callback(true, err.message);
 
-                        if (file.config.uglify) {
+                        } else {
 
-                            javascript = ugly.minify(javascript, {fromString: true}).code;
+                            callback(false, file.input);
                         }
-
-                        fs.outputFile(file.output, javascript, function (err) {
-
-                            if (err) {
-
-                                callback(true, err.message);
-
-                            } else {
-
-                                callback(false, file.input);
-                            }
-                        });
-
-                    } catch(e) {
-
-                        callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message);
-                    }
+                    });
                 }
             }
         });
