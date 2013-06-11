@@ -1,3 +1,14 @@
+## Version 1.7.0 -June 11, 2013
+
+* Feature: Javascript concatenation and minification [Docs](http://alphapixels.com/prepros/docs/js-concat-minify.html)
+* Feature: Options for less strict math and unit
+* Bugfix: Chrome extension constant refresh
+* Complete rewrite of @import detection scripts
+* Jade updated to 0.31.2
+* Ability to add project by dropping a file
+* Updated Slim to 2.0.0
+* Some performance and UI improvements
+
 ## Version 1.6.1 -June 08, 2013
 
 * Bugfix: Prepros didn't ignore sass partials
