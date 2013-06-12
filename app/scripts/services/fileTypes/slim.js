@@ -66,9 +66,13 @@ prepros.factory('slim', function (config, utils) {
 
             args.push('-oformat=' + file.config.format);
 
-            if(file.config.fourSpaceIndent) {
+            if(file.config.indent === 'four'){
 
                 args.push('-oindent="    "');
+
+            } else if(file.config.indent === 'tab'){
+
+                args.push('-oindent="\t"');
 
             }
 

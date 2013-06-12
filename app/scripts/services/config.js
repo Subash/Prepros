@@ -202,6 +202,7 @@ prepros.factory('config', function () {
         slim: {
             autoCompile: true,
             pretty: true,
+            indent: 'default', //default, four, tab
             fourSpaceIndent: true,
             format: ':html5' //:xhtml, :html4, :html5, :html
         }

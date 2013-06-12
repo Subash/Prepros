@@ -296,8 +296,12 @@
                 <span class="label-desc">Pretty Output</span>
             </label>
             <label>
-                <input type="checkbox" ng-model="userConfig.slim.fourSpaceIndent">
-                <span class="label-desc">Indent By Four Spaces</span>
+                <span class="label-desc">Indent</span>
+                <select ng-model="userConfig.slim.indent">
+                    <option value="default">Default</option>
+                    <option value="four">Four Spaces</option>
+                    <option value="tab">Tab</option>
+                </select>
             </label>
             <label>
                 <span class="label-desc">Output Format</span><br>
