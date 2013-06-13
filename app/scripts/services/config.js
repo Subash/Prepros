@@ -209,14 +209,18 @@ prepros.factory('config', function () {
     };
 
     //Fill in the undefined values from default configurations
+    var cNames = Object.keys(userConfig);
+    _.each(cNames, function(c){
+
+        if(typeof userConfig[c] === 'object') {
+
+            userConfig[c] = _.defaults(userConfig[c], defaultConfig[c]);
+        }
+
+    });
+
     userConfig = _.defaults(userConfig, defaultConfig);
 
-    //Create configuration file if it doesn't exist
-    if(!fs.existsSync(configFile)) {
-
-        _saveOptions();
-
-    }
 
     //Wrap user options in a function to prevent angular data sharing between services
     //If user config data is shared between files changing configuration of one file will affect another file
