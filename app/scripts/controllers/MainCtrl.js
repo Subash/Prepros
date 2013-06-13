@@ -141,7 +141,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
                         $scope.selectedFile = _.findWhere($scope.files, {id: $routeParams.fid});
 
-                        //If file is ot in the file list redirect to project files list
+                        //If file is not in the file list redirect to project files list
                     } else {
 
                         $location.path('/files/' + $scope.selectedProject.id);
