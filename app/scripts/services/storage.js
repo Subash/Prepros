@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros,  _, angular */
+/*global prepros,  _, angular, $ */
 
 //Storage
 prepros.factory('storage', function (notification, config) {
@@ -16,137 +16,41 @@ prepros.factory('storage', function (notification, config) {
 	var fs = require('fs-extra'),
         path = require('path');
 
-    //Paths
-
-    var filesPath = path.join(config.dataPath, 'files.json'),
-        projectsPath = path.join(config.dataPath, 'projects.json'),
-        importsPath = path.join(config.dataPath, 'imports.json');
-
 	//function to save files list
 	function saveFiles(files) {
 
-		//Write data to file
-        try {
-
-            fs.outputFileSync(filesPath, angular.toJson(files, true));
-
-        } catch(e){
-
-            notification.error('File System Error', 'An error occurred while saving files list.', e.message);
-        }
-
-
+        localStorage.PreprosFiles = angular.toJson(files, false);
 	}
 
 	//Function to save project list to json
 	function saveProjects(projects) {
 
-        //Write data to file
-        try {
-
-            fs.outputFileSync(projectsPath, angular.toJson(projects, true));
-
-        } catch(e){
-
-            notification.error('File System Error', 'An error occurred while saving projects list.', e.message);
-        }
+        localStorage.PreprosProjects = angular.toJson(projects, false);
 
 	}
 
 	//Function to save imports list to json
 	function saveImports(imports) {
 
-        //Write data to file
-        try {
-
-            fs.outputFileSync(importsPath, angular.toJson(imports, true));
-
-        } catch(e){
-
-            notification.error('File System Error', 'An error occurred while saving imports list.', e.message);
-        }
-
+        localStorage.PreprosImports = angular.toJson(imports, false);
 	}
 
 	//Get projects list from projects.json file
 	function getProjects() {
 
-		var projects = [];
-
-		//Read Projects file
-		if (fs.existsSync(projectsPath)) {
-
-			try {
-
-				projects = JSON.parse(fs.readFileSync(projectsPath).toString());
-
-			} catch (e) {
-
-                notification.error('File System Error', 'An error occurred while getting projects list.', e.message);
-
-			}
-
-		} else {
-
-			//Create new empty projects file
-			saveProjects([]);
-		}
-
-        return projects;
+        return $.parseJSON(localStorage.PreprosProjects || '[]');
 	}
 
 	//Get files list from files.json file
 	function getFiles() {
 
-		var files = [];
-
-		//Read Files
-		if (fs.existsSync(filesPath)) {
-			try {
-
-				files = JSON.parse(fs.readFileSync(filesPath).toString());
-
-			} catch (e) {
-
-                notification.error('File System Error', 'An error occurred while getting files list.', e.message);
-
-			}
-
-		} else {
-
-			//Create new empty files list
-			saveFiles([]);
-
-		}
-
-        return files;
+        return $.parseJSON(localStorage.PreprosFiles || '[]');
 	}
 
 	//Get files from files.json file
 	function getImports() {
 
-		var imports = [];
-
-		//Read Imports
-		if (fs.existsSync(importsPath)) {
-
-			try {
-
-				imports = JSON.parse(fs.readFileSync(importsPath).toString());
-
-			} catch (e) {
-
-                notification.error('File System Error', 'An error occurred while getting imports list.', e.message);
-
-			}
-
-		} else {
-
-			//Create new empty imports list
-			saveImports([]);
-		}
-
-        return imports;
+        return $.parseJSON(localStorage.PreprosImports || '[]');
 	}
 
 	//Return projects list and files list

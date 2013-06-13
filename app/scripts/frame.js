@@ -14,9 +14,9 @@
     'use strict';
 
     //Redirect to saved application state url at first
-    if (localStorage.stateUrl) {
+    if (localStorage.PreprosStateUrl) {
 
-        window.location.hash = localStorage.stateUrl;
+        window.location.hash = localStorage.PreprosStateUrl;
 
     }
 
@@ -94,7 +94,7 @@
 
             nw.window.on('close', function () {
                 //Save application state url
-                localStorage.stateUrl = window.location.hash;
+                localStorage.PreprosStateUrl = window.location.hash;
                 this.close(true);
             });
 

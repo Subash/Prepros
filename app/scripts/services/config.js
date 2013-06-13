@@ -23,28 +23,10 @@ prepros.factory('config', function () {
     var packageFileUrl = path.join(basePath, '../package.json');
 
     //Read package.json file and get data of app in prepros object
-    var packageData = JSON.parse(fs.readFileSync(packageFileUrl).toString());
+    var packageData = $.parseJSON(fs.readFileSync(packageFileUrl).toString());
 
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
-
-    var dataPath = '';
-
-    //for windows > vista
-    if(process.env.LOCALAPPDATA){
-
-        //User data path
-        dataPath = path.join(process.env.LOCALAPPDATA, 'Prepros/Data');
-
-    } else {
-
-        //for windows Xp
-        dataPath = path.join(process.env.APPDATA, 'Prepros/Data');
-
-    }
-
-    //User config file
-    var configFile = path.join(dataPath, 'config.json');
 
     //CachePath
     var cachePath = path.join(os.tmpdir(), 'PreprosCache');
@@ -66,10 +48,8 @@ prepros.factory('config', function () {
         authorUrl: 'http://alphapixels.com'
     };
 
-    var ruby  = {};
-
     //Ruby Executable
-    ruby = {
+    var ruby = {
         path: path.join(packagePath, packageData.ruby.path),
         version: packageData.ruby.version
     };
@@ -88,40 +68,8 @@ prepros.factory('config', function () {
 
     });
 
-
-    //User options
-    var userConfig = {};
-
-    //Private function to save user configurations
-    function _saveOptions() {
-
-        try {
-
-            fs.outputFileSync(configFile, angular.toJson(userConfig, true));
-
-        } catch(e){
-
-            //Can't use notification api here
-            window.alert('Unable to save configuration file.');
-
-        }
-    }
-
     //Read user config
-    if (fs.existsSync(configFile)) {
-
-        try {
-
-            userConfig = JSON.parse(fs.readFileSync(configFile).toString());
-
-        } catch(e){
-
-            //Can't use notification api here
-            window.alert('Unable to read configuration file.');
-        }
-
-
-    }
+    var userConfig = $.parseJSON(localStorage.PreprosConfig || '{}');
 
     var defaultConfig = {
         cssPath: 'css',
@@ -226,21 +174,18 @@ prepros.factory('config', function () {
     //If user config data is shared between files changing configuration of one file will affect another file
     function getUserOptions() {
 
-        return $.parseJSON(angular.toJson(userConfig));
+        return $.parseJSON(angular.toJson(userConfig, false));
 
     }
 
     function saveUserOptions(options) {
 
-        userConfig = $.parseJSON(angular.toJson(options));
-
-        _saveOptions();
+        localStorage.PreprosConfig = userConfig = angular.toJson(options);
 
     }
 
 
     var config =  {
-        dataPath: dataPath,
         cachePath: cachePath,
         basePath: basePath,
         ruby: ruby,
