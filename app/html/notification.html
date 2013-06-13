@@ -24,7 +24,7 @@
 
             $scope.close= function(e){
                 e.stopPropagation();
-                window.close();
+                require('nw.gui').Window.get().close();
             };
         }
     </script>

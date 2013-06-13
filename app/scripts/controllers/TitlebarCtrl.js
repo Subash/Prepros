@@ -33,7 +33,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     var aboutWindow;
     $scope.openAboutWindow = function () {
 
-        if (typeof(aboutWindow) === "object") {
+        if (aboutWindow) {
 
             aboutWindow.show();
             aboutWindow.focus();
@@ -53,15 +53,15 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
             });
 
             aboutWindow.on('close', function () {
-                this.close(true);
-                aboutWindow = undefined;
+                aboutWindow.close(true);
+                aboutWindow = null;
             });
         }
 
         //Close about window when main window is closed
         require('nw.gui').Window.get().on('close', function () {
 
-            if (typeof(aboutWindow) === 'object') {
+            if (aboutWindow) {
                 aboutWindow.close();
             }
 
@@ -73,7 +73,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     var logWindow;
     $scope.openLogWindow = function () {
 
-        if (typeof(logWindow) === 'object') {
+        if (logWindow) {
             logWindow.focus();
             logWindow.show();
         } else {
@@ -91,15 +91,15 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
             });
 
             logWindow.on('close', function () {
-                this.close(true);
-                logWindow = undefined;
+                logWindow.close(true);
+                logWindow = null;
             });
         }
 
         //Close log window when main window close
         require('nw.gui').Window.get().on('close', function () {
 
-            if (typeof(logWindow) === 'object') {
+            if (logWindow) {
                 logWindow.close();
             }
 
@@ -113,7 +113,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
         //Inject config object to global so options window can read it
         global.userConfig = config.getUserOptions();
 
-        if (typeof(optionsWindow) === "object") {
+        if (optionsWindow) {
             optionsWindow.show();
             optionsWindow.focus();
         } else {
@@ -132,18 +132,17 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
             optionsWindow.on('close', function () {
                 config.saveUserOptions(global.userConfig);
-                this.close(true);
-                optionsWindow = undefined;
+                optionsWindow.close(true);
+                optionsWindow = null;
             });
         }
 
         //Close options window when main window is closed
         require('nw.gui').Window.get().on('close', function () {
 
-            if (typeof(optionsWindow) === 'object') {
+            if (optionsWindow) {
                 optionsWindow.close();
             }
-
         });
 
     };

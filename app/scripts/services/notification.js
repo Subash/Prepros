@@ -21,7 +21,7 @@ prepros.factory('notification', function (config) {
 
     function openNotificationWindow(){
 
-        if(typeof(notificationWindow) === 'object') {
+        if(notificationWindow) {
 
             notificationWindow.close();
         }
@@ -44,13 +44,13 @@ prepros.factory('notification', function (config) {
 
         notificationWindow.on('close', function(){
             this.close(true);
-            notificationWindow = undefined;
+            notificationWindow = null;
         });
 
         //Close notification window when main window is closed
         require('nw.gui').Window.get().on('close', function () {
 
-            if(typeof(notificationWindow) === 'object') {
+            if(notificationWindow) {
                 notificationWindow.close();
             }
         });

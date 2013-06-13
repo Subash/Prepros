@@ -48,7 +48,7 @@
 
             //Just Close the window, The controller will catch data and save it on close event
             $scope.done = function () {
-                window.close();
+                require('nw.gui').Window.get().close();
             }
 
         }
