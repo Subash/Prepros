@@ -74,8 +74,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     $scope.openLogWindow = function () {
 
         if (logWindow) {
+
             logWindow.focus();
             logWindow.show();
+
         } else {
 
             var logPath = 'file:///' + path.normalize(config.basePath + '/html/log.html');
@@ -114,8 +116,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
         global.userConfig = config.getUserOptions();
 
         if (optionsWindow) {
+
             optionsWindow.show();
             optionsWindow.focus();
+
         } else {
 
             var optionsPath = 'file:///' + path.normalize(config.basePath + '/html/options.html');
