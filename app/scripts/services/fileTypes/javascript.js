@@ -82,8 +82,8 @@ prepros.factory('javascript', function (config, utils) {
                 }
 
                 var importReg = {
-                    append: /\/\/(?:\s|)@prepros-append\s+(.*)/gi,
-                    prepend: /\/\/(?:\s|)@prepros-prepend\s+(.*)/gi
+                    append: /\/\/(?:\s|)@(?:prepros|codekit)-append\s+(.*)/gi,
+                    prepend: /\/\/(?:\s|)@(?:prepros|codekit)-prepend\s+(.*)/gi
                 };
 
                 var read = function(filePathToRead) {

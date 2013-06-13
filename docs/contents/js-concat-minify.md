@@ -36,3 +36,5 @@ Files that are appended/prepended are not shown in the files list but they are w
 If you have minification settings turned on the `first.js`, `second.js` and `third file.js` will be minified before appending/prepending but fourth file will be appended/prepended as it is because the file contains `.min` suffix. This prevents Prepros from re-minifying an already minified file which is a disaster.
 
 Please note if you are using nested append/prepend, the nested statements are treated as the statements on parent file not the nested file that means if the child has append/prepend statements the files in that statement are directly concatenated to compiling parent file not with the file which has statements.
+
+Prepros also supports codekit style `// @codekit-append` and `// @codekit-prepend` statements.
