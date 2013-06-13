@@ -21,8 +21,18 @@ Minified js file that end with `min.js` are ignored by Prepros.
 
 ```
 
+`//@prepros-prepend` statements can be used to prepend a file at the begining of another file.
+
+```css
+//@prepros-prepend first.js
+//@prepros-prepend second.js
+//@prepros-prepend third file.js
+//@prepros-prepend fourth.min.js
+```
+
 The above file will output the concatenated form of `first.js`, `second.js`, `third file.js` and `fourth.min.js`.
-Files that are appened are not shown in the files list but they are watched and parent file is compiled whenever a change is made to the appended file.
+Files that are appended/prepended are not shown in the files list but they are watched and parent file is compiled whenever a change is made to the appended file.
 
-If you have minification settings turned on the `first.js`, `second.js` and `third file.js` will be minified before appending but fourth file will be appended as it is because the file contains `.min` suffix. This prevents Prepros from re-minifying an already minified file which is a disaster.
+If you have minification settings turned on the `first.js`, `second.js` and `third file.js` will be minified before appending/prepending but fourth file will be appended/prepended as it is because the file contains `.min` suffix. This prevents Prepros from re-minifying an already minified file which is a disaster.
 
+Please note if you are using nested append/prepend, the nested statements are treated as the statements on parent file not the nested file that means if the child has append/prepend statements the files in that statement are directly concatenated to compiling parent file not with the file which has statements.
