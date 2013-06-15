@@ -180,11 +180,11 @@ prepros.factory('javascript', function (config, utils) {
 
                             if(append) {
 
-                                javascript = javascript + '\n'  + js;
+                                javascript = javascript + js;
 
                             } else {
 
-                                javascript = js + '\n' + javascript;
+                                javascript = js + javascript;
                             }
 
                         });
