@@ -43,7 +43,7 @@ prepros.factory('importsVisitor', function () {
         if (ext === '.js'  ) { importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi; }
 
         //Automatically add extension
-        var autoExt = ['.less', '.styl', '.js'];
+        var autoExt = ['.less', '.styl', '.js', '.jade'];
 
 
         if(ext !== '.sass' && ext !== '.scss'){
