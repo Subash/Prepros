@@ -99,10 +99,6 @@ prepros.factory('slim', function (config, utils) {
 
                 callback(true, data.toString() + "\n" + file.input);
 
-                rubyProcess.kill();
-
-                rubyProcess = null;
-
             });
 
             //Success if there is no error

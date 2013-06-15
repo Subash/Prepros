@@ -196,10 +196,6 @@ prepros.factory('sass', function (config, utils, notification) {
 
             callback(true, data.toString());
 
-            rubyProcess.kill();
-
-            rubyProcess = null;
-
         });
 
         //Success if there is no error
