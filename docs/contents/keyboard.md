@@ -5,7 +5,7 @@ template: index.jade
 
 If you are a keyboard master you can navigate around Prepros like a web browser.
 
-These are some handy keuboard shortcuts.
+These are some handy keyboard shortcuts.
 
 * `CTRL+N`  : New Project
 * `CTRL+R` or `F5`  : Refresh Project Files
