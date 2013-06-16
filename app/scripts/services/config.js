@@ -180,7 +180,7 @@ prepros.factory('config', function () {
 
     function saveUserOptions(options) {
 
-        localStorage.preprosConfig = angular.toJson(options);
+        localStorage.PreprosConfig = angular.toJson(options);
 
         userConfig = angular.fromJson(localStorage.preprosConfig);
 
