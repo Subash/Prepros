@@ -168,9 +168,6 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     };
 
     //Update Checker
-
-    $scope.appUpdate = false;
-
     $scope.goWebsite = function(){
 
         utils.openBrowser(config.online.url);
@@ -180,6 +177,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     $.ajaxSetup({
         cache: false
     });
+
+    $scope.appUpdate = false;
 
     $.getJSON(config.online.updateFileUrl, {version: config.version}).done(function(data) {
 
