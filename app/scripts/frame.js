@@ -43,16 +43,18 @@
                 window: require('nw.gui').Window.get()
             };
 
-            //Wait 100ms for app to load and show window to prevent flash of unloaded content; works on most computers
+            //Wait 100ms for app to load and show window to prevent flash of unloaded content
             window.setTimeout(function(){
                 nw.window.show();
             }, 100);
 
-
-            //Prevent unhandled file drops
-            $(window).on('dragenter dragexit dragover drop', function (e) {
+            window.addEventListener("dragover",function(e){
                 e.preventDefault();
-            });
+            },false);
+
+            window.addEventListener("drop",function(e){
+                e.preventDefault();
+            },false);
 
             //Tray icon
             var tray_icon = new nw.gui.Tray({
@@ -91,16 +93,16 @@
                 nw.window.focus();
             });
 
-
-            nw.window.on('close', function () {
-                //Save application state url
-                localStorage.PreprosStateUrl = window.location.hash;
-                this.close(true);
-            });
-
             //Push tray icon to global window to tell garbage collector that tray icon is not garbage
             window.tray_icon = tray_icon;
 
+            nw.window.on('close', function () {
+
+                //Save application state url on exit
+                localStorage.PreprosStateUrl = window.location.hash;
+                this.close(true);
+
+            });
         });
 
 

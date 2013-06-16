@@ -10,7 +10,7 @@
  -->
 
 <!doctype html>
-<html ng-app="prepros">
+<html>
 <head>
     <meta charset="utf-8">
     <title>Prepros App</title>
@@ -29,58 +29,13 @@
     <!--Load App styles -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <!--Load libraries -->
-    <script src="scripts/lib/jquery.js"></script>
-    <script src="scripts/lib/angular.js"></script>
-    <script src="scripts/lib/underscore.js"></script>
-    <script src="scripts/lib/bootstrap.js"></script>
-    <script src="scripts/lib/mousetrap.js"></script>
+    <!-- Angular loader and script loader -->
+    <script src="scripts/libraries/angular-loader.min.js"></script>
+    <script src="scripts/libraries/script.min.js"></script>
 
     <!--Load custom script -->
+    <script src="scripts/load.js"></script>
     <script src="scripts/frame.js"></script>
-
-    <!-- AngularJs App -->
-    <script src="scripts/app.js"></script>
-
-    <!--Services -->
-    <script src="scripts/services/watcher.js"></script>
-    <script src="scripts/services/compiler.js"></script>
-    <script src="scripts/services/config.js"></script>
-    <script src="scripts/services/liveServer.js"></script>
-    <script src="scripts/services/notification.js"></script>
-    <script src="scripts/services/projectsManager.js"></script>
-    <script src="scripts/services/importsVisitor.js"></script>
-    <script src="scripts/services/storage.js"></script>
-    <script src="scripts/services/utils.js"></script>
-
-    <!-- File Types -->
-    <script src="scripts/services/fileTypes.js"></script>
-    <script src="scripts/services/fileTypes/less.js"></script>
-    <script src="scripts/services/fileTypes/sass.js"></script>
-    <script src="scripts/services/fileTypes/stylus.js"></script>
-    <script src="scripts/services/fileTypes/markdown.js"></script>
-    <script src="scripts/services/fileTypes/coffee.js"></script>
-    <script src="scripts/services/fileTypes/javascript.js"></script>
-    <script src="scripts/services/fileTypes/jade.js"></script>
-    <script src="scripts/services/fileTypes/haml.js"></script>
-    <script src="scripts/services/fileTypes/slim.js"></script>
-
-    <!-- Filters -->
-    <script src="scripts/filters/shorten.js"></script>
-    <script src="scripts/filters/interpolatePath.js"></script>
-
-    <!-- Controllers -->
-    <script src="scripts/controllers/MainCtrl.js"></script>
-    <script src="scripts/controllers/TitlebarCtrl.js"></script>
-    <script src="scripts/controllers/SidebarCtrl.js"></script>
-    <script src="scripts/controllers/FilesCtrl.js"></script>
-
-    <!-- Directives -->
-    <script src="scripts/directives/tooltip.js"></script>
-    <script src="scripts/directives/keyboard-shortcuts.js"></script>
-    <script src="scripts/directives/drag-drop-project.js"></script>
-    <script src="scripts/directives/log-element.js"></script>
-    <script src="scripts/directives/ng-include-when.js"></script>
 
 </head>
 <body class="wrapper clearfix" ng-controller="MainCtrl" x-drag-drop-project x-bind-keyboard-shortcuts>
