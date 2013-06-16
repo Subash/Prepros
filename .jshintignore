@@ -1,3 +1,3 @@
 node_modules
 
-app/scripts/lib/*.js
+app/scripts/libraries/*.js
