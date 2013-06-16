@@ -11,7 +11,7 @@
 'use strict';
 
 //Conditional includes
-prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http, $templateCache) {
+prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http) {
 
     return {
 
@@ -20,7 +20,7 @@ prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http, $templat
 
             $timeout(function(){
 
-                scope.$watch(attrs.ngIncludeWhen, function(){
+                scope.$on('$routeChangeSuccess', function(){
 
                     if(scope.$eval(attrs.ngIncludeWhen)) {
 
@@ -36,11 +36,8 @@ prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http, $templat
                         element.html('');
 
                     }
-
-                }, true);
-
+                });
             });
-
         }
     };
 });
