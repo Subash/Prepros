@@ -69,7 +69,17 @@ prepros.factory('config', function () {
     });
 
     //Read user config
-    var userConfig = angular.fromJson(localStorage.PreprosConfig || '{}');
+    var userConfig = {};
+    try {
+
+        angular.fromJson(localStorage.PreprosConfig);
+
+    } catch (e) {
+
+        alert('Error Reading Configurations ! Reverting to defaults.');
+
+        saveUserOptions(userConfig);
+    }
 
     var defaultConfig = {
         cssPath: 'css',

@@ -38,19 +38,61 @@ prepros.factory('storage', function () {
 	//Get projects list from projects.json file
 	function getProjects() {
 
-        return angular.fromJson(localStorage.PreprosProjects || '[]');
+        var projects = [];
+
+        try {
+
+            projects = angular.fromJson(localStorage.PreprosProjects);
+
+        } catch(e) {
+
+            alert('Error Reading Projects ! Reverting to defaults.');
+
+            saveProjects([]);
+
+        }
+
+        return projects;
 	}
 
 	//Get files list from files.json file
 	function getFiles() {
 
-        return angular.fromJson(localStorage.PreprosFiles || '[]');
+        var files = [];
+
+        try {
+
+            files = angular.fromJson(localStorage.PreprosFiles);
+
+        } catch(e) {
+
+            alert('Error Reading Files ! Reverting to defaults.');
+
+            saveFiles([]);
+
+        }
+
+        return files;
 	}
 
 	//Get files from files.json file
 	function getImports() {
 
-        return angular.fromJson(localStorage.PreprosImports || '[]');
+        var imports = [];
+
+        try {
+
+            imports = angular.fromJson(localStorage.PreprosImports);
+
+        } catch(e) {
+
+            alert('Error Reading Imports ! Reverting to defaults.');
+
+            saveImports([]);
+
+        }
+
+        return imports;
 	}
 
 	//Return projects list and files list
