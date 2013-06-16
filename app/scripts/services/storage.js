@@ -6,10 +6,10 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros,  _, angular, $ */
+/*global prepros, angular*/
 
 //Storage
-prepros.factory('storage', function (notification, config) {
+prepros.factory('storage', function () {
 
     'use strict';
 
@@ -38,19 +38,19 @@ prepros.factory('storage', function (notification, config) {
 	//Get projects list from projects.json file
 	function getProjects() {
 
-        return $.parseJSON(localStorage.PreprosProjects || '[]');
+        return angular.fromJson(localStorage.PreprosProjects || '[]');
 	}
 
 	//Get files list from files.json file
 	function getFiles() {
 
-        return $.parseJSON(localStorage.PreprosFiles || '[]');
+        return angular.fromJson(localStorage.PreprosFiles || '[]');
 	}
 
 	//Get files from files.json file
 	function getImports() {
 
-        return $.parseJSON(localStorage.PreprosImports || '[]');
+        return angular.fromJson(localStorage.PreprosImports || '[]');
 	}
 
 	//Return projects list and files list
