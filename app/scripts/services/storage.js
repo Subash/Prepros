@@ -46,7 +46,7 @@ prepros.factory('storage', function () {
 
         } catch(e) {
 
-            alert('Error Reading Projects ! Reverting to defaults.');
+            window.alert('Error Reading Projects ! Reverting to defaults.');
 
             saveProjects([]);
 
@@ -66,7 +66,7 @@ prepros.factory('storage', function () {
 
         } catch(e) {
 
-            alert('Error Reading Files ! Reverting to defaults.');
+            window.alert('Error Reading Files ! Reverting to defaults.');
 
             saveFiles([]);
 
@@ -86,7 +86,7 @@ prepros.factory('storage', function () {
 
         } catch(e) {
 
-            alert('Error Reading Imports ! Reverting to defaults.');
+            window.alert('Error Reading Imports ! Reverting to defaults.');
 
             saveImports([]);
 

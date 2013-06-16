@@ -76,7 +76,7 @@ prepros.factory('config', function () {
 
     } catch (e) {
 
-        alert('Error Reading Configurations ! Reverting to defaults.');
+        window.alert('Error Reading Configurations ! Reverting to defaults.');
 
         saveUserOptions(userConfig);
     }
