@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, angular, _, $*/
+/*global prepros, angular, _*/
 
 prepros.factory('config', function () {
 
@@ -23,7 +23,7 @@ prepros.factory('config', function () {
     var packageFileUrl = path.join(basePath, '../package.json');
 
     //Read package.json file and get data of app in prepros object
-    var packageData = $.parseJSON(fs.readFileSync(packageFileUrl).toString());
+    var packageData = angular.fromJson(fs.readFileSync(packageFileUrl).toString());
 
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
@@ -69,7 +69,7 @@ prepros.factory('config', function () {
     });
 
     //Read user config
-    var userConfig = $.parseJSON(localStorage.PreprosConfig || '{}');
+    var userConfig = angular.fromJson(localStorage.PreprosConfig || '{}');
 
     var defaultConfig = {
         cssPath: 'css',
@@ -174,13 +174,15 @@ prepros.factory('config', function () {
     //If user config data is shared between files changing configuration of one file will affect another file
     function getUserOptions() {
 
-        return $.parseJSON(angular.toJson(userConfig, false));
+        return angular.fromJson(angular.toJson(userConfig, false));
 
     }
 
     function saveUserOptions(options) {
 
-        localStorage.PreprosConfig = userConfig = angular.toJson(options);
+        localStorage.preprosConfig = angular.toJson(options);
+
+        userConfig = angular.fromJson(localStorage.preprosConfig);
 
     }
 
