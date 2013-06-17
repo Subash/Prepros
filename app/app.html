@@ -51,7 +51,7 @@
         <div class="controls" ng-class="{'show' : selectedProject.id}">
             <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
             <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
-            <div class="options icomoon-cog icons" x-tooltip="Project Options" ng-click="showOptions()"></div>
+            <div class="options icomoon-cog icons" x-tooltip="Project Options" x-show-modal-on-click="#optionsModal"></div>
             <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
             <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
         </div>
@@ -77,9 +77,6 @@
                 <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
             </div>
         </div>
-
-        <!-- Project Options -->
-        <div ng-include src="'templates/project-options.html'"></div>
 
         <!--File list and project view -->
         <div class="content clearfix" ng-controller="FilesCtrl">
@@ -135,6 +132,7 @@
     </div>
 
 <!-- Include Modal Windows -->
+<div ng-include src="'templates/project-options.html'"></div>
 <div ng-include src="'templates/about.html'"></div>
 
 

@@ -46,17 +46,6 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
 
     };
 
-    //Function to show project options
-    $scope.showOptions = function(){
-
-        $('.project-options').slideDown('fast');
-
-        $('.project-options button').click(function(){
-            $('.project-options').slideUp('fast');
-        });
-
-    };
-
     //Function to open live url
     $scope.openLiveUrl = function(){
 
