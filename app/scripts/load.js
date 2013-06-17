@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global $script, angular*/
+/*global $LAB, angular*/
 
 (function () {
 
@@ -77,11 +77,6 @@
     //Angularjs App
     jScripts.push('scripts/app.js');
 
-    //Controllers
-    controllers.forEach(function(controller) {
-        jScripts.push('scripts/controllers/' + controller + '.js');
-    });
-
     //Services
     services.forEach(function (service) {
         jScripts.push('scripts/services/' + service + '.js');
@@ -90,6 +85,11 @@
     //File types
     fileTypes.forEach(function (type) {
         jScripts.push('scripts/services/fileTypes/' + type + '.js');
+    });
+
+    //Controllers
+    controllers.forEach(function(controller) {
+        jScripts.push('scripts/controllers/' + controller + '.js');
     });
 
     //Filters
@@ -103,9 +103,10 @@
     });
 
     //Load scripts and bootstrap
-    $script(jScripts, function () {
+    $LAB.setOptions({AlwaysPreserveOrder:true});
 
-        angular.bootstrap(document, ['prepros']);
-
-    });
+    $LAB.script(jScripts)
+        .wait(function(){
+            angular.bootstrap(document, ['prepros']);
+        });
 })();
