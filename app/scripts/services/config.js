@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, angular, _*/
+/*global prepros, angular, _, $*/
 
 prepros.factory('config', function () {
 
@@ -56,23 +56,22 @@ prepros.factory('config', function () {
 
     //Gems
     ruby.gems = {};
-    var gemKeys = Object.keys(packageData.ruby.gems);
+    for ( var gemKey in ruby.gems ) {
 
-    _.each(gemKeys, function(key){
+        if(ruby.gems.hasOwnProperty(gemKey)) {
+            ruby.gems[gemKey] = {
 
-        ruby.gems[key] = {
-
-            path: path.join(packagePath, packageData.ruby.gems[key].path),
-            version: packageData.ruby.gems[key].version
-        };
-
-    });
+                path: path.join(packagePath, packageData.ruby.gems[gemKey].path),
+                version: packageData.ruby.gems[gemKey].version
+            };
+        }
+    }
 
     //Read user config
     var userConfig = {};
     try {
 
-        angular.fromJson(localStorage.PreprosConfig);
+        $.parseJSON(localStorage.PreprosConfig);
 
     } catch (e) {
 
@@ -167,33 +166,30 @@ prepros.factory('config', function () {
     };
 
     //Fill in the undefined values from default configurations
-    var cNames = Object.keys(userConfig);
-    _.each(cNames, function(c){
-
-        if(typeof userConfig[c] === 'object') {
-
-            userConfig[c] = _.defaults(userConfig[c], defaultConfig[c]);
-        }
-
-    });
-
     userConfig = _.defaults(userConfig, defaultConfig);
+
+    for ( var configKey in userConfig ) {
+
+        if(userConfig.hasOwnProperty(configKey) && typeof userConfig[configKey] === 'object') {
+
+            userConfig[configKey] = _.defaults(userConfig[configKey], defaultConfig[configKey]);
+        }
+    }
 
 
     //Wrap user options in a function to prevent angular data sharing between services
     //If user config data is shared between files changing configuration of one file will affect another file
     function getUserOptions() {
 
-        return angular.fromJson(angular.toJson(userConfig, false));
+        return $.parseJSON(angular.toJson(userConfig, false));
 
     }
 
     function saveUserOptions(options) {
 
-        localStorage.PreprosConfig = angular.toJson(options);
+        localStorage.setItem('PreprosConfig', angular.toJson(options));
 
-        userConfig = angular.fromJson(localStorage.preprosConfig);
-
+        userConfig = $.parseJSON(angular.toJson(options));
     }
 
 
