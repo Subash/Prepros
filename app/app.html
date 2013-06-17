@@ -39,97 +39,105 @@
 </head>
 <body class="wrapper clearfix" ng-controller="MainCtrl" x-drag-drop-project x-bind-keyboard-shortcuts>
 
-    <!-- Sidebar -->
-    <div class="sidebar" ng-controller="SidebarCtrl">
-        <ul>
-            <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)">
-                <a ng-href="#/files/{{project.id}}" draggable="false"
-                   ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
-            </li>
-        </ul>
+<!-- Sidebar -->
+<div class="sidebar" ng-controller="SidebarCtrl">
+    <ul>
+        <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)">
+            <a ng-href="#/files/{{project.id}}" draggable="false"
+               ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
+        </li>
+    </ul>
 
-        <div class="controls" ng-class="{'show' : selectedProject.id}">
-            <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
-            <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
-            <div class="options icomoon-cog icons" x-tooltip="Project Options" x-show-modal-on-click="#optionsModal"></div>
-            <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
-            <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
-        </div>
-
+    <div class="controls" ng-class="{'show' : selectedProject.id}">
+        <div class="new-project icomoon-plus icons" x-tooltip="Add new project" ng-click="addProject()"></div>
+        <div class="refresh icomoon-spinner-2 icons" x-tooltip="Refresh Files" ng-click="refreshFiles()"></div>
+        <div class="options icomoon-cog icons" x-tooltip="Project Options" x-show-modal-on-click="#optionsModal"></div>
+        <div class="open icomoon-globe icons" x-tooltip="Open project live url" ng-click="openLiveUrl()"></div>
+        <div class="remove icomoon-remove icons" x-tooltip="Remove project" ng-click="removeProject()"></div>
     </div>
-    <!-- Sidebar ends -->
+
+</div>
+<!-- Sidebar ends -->
 
 
-    <div class="main">
+<div class="main">
 
-        <!-- App title bar -->
-        <div class="title-bar" ng-controller="TitlebarCtrl">
-            <div class="controls">
-                <a ng-click="goWebsite()" class="icomoon-gift highlight" x-tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
-                <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
-                <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
-                <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" x-show-modal-on-click="#aboutModal"></a>
-                <a class="about icomoon-question " x-tooltip="Help" data-placement="bottom" ng-click="help()"></a>
-                <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow()" x-log-element></a>
-                <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
-                <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
-                <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
-                <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
-            </div>
+    <!-- App title bar -->
+    <div class="title-bar" ng-controller="TitlebarCtrl">
+        <div class="controls">
+            <a ng-click="goWebsite()" class="icomoon-gift highlight" x-tooltip="A New Version Of Prepros is Available"
+               data-placement="bottom" ng-show="appUpdate"></a>
+            <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
+            <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom"
+               ng-click="supportAuthor()"></a>
+            <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom"
+               x-show-modal-on-click="#aboutModal"></a>
+            <a class="about icomoon-question " x-tooltip="Help" data-placement="bottom" ng-click="help()"></a>
+            <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow()"
+               x-log-element></a>
+            <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom"
+               ng-click="openOptionsWindow()"></a>
+            <a class="to-tray icomoon-arrow-down-right-3" x-tooltip="Minimize to Tray" data-placement="bottom"
+               ng-click="toTray()"></a>
+            <a class="minimize-app icomoon-minus" x-tooltip="Minimize" data-placement="bottom"
+               ng-click="minimize()"></a>
+            <a class="close-app icomoon-close" x-tooltip="Close" data-placement="left" ng-click="close()"></a>
         </div>
+    </div>
 
-        <!--File list and project view -->
-        <div class="content clearfix" ng-controller="FilesCtrl">
+    <!--File list and project view -->
+    <div class="content clearfix" ng-controller="FilesCtrl">
 
-            <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
+        <div class="content-wrap clearfix" ng-class="{'show-options' : selectedFile.id}">
 
-                <div ng-switch on="routePath">
+            <div ng-switch on="routePath">
 
-                    <div ng-switch-when="home" class="home">
+                <div ng-switch-when="home" class="home">
 
-                        <h1 class="icomoon-arrow-down-2"></h1>
+                    <h1 class="icomoon-arrow-down-2"></h1>
 
-                        <p>Please drag and drop a folder to start a new project.</p>
+                    <p>Please drag and drop a folder to start a new project.</p>
+
+                </div>
+
+                <div ng-switch-when="files">
+
+                    <!-- Files list -->
+                    <div ng-include src="'templates/files-list.html'"></div>
+
+                    <!-- There are no files -->
+                    <div class="no-files" ng-show="selectedProjectFiles.length == 0">
+
+                        <h1 class="icomoon-sad"></h1>
+
+                        <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
 
                     </div>
 
-                    <div ng-switch-when="files">
+                    <!-- Options -->
+                    <div class="options">
 
-                        <!-- Files list -->
-                        <div ng-include src="'templates/files-list.html'"></div>
+                        <span class="file-type">{{selectedFile.type}}</span>
 
-                        <!-- There are no files -->
-                        <div class="no-files"  ng-show="selectedProjectFiles.length == 0">
+                        <span class="file-name">{{selectedFile.name}}</span>
 
-                            <h1 class="icomoon-sad"></h1>
+                        <label>
+                            <input type="checkbox" ng-model="selectedFile.config.autoCompile">
+                            <span class="label-desc">Auto Compile</span>
+                        </label>
 
-                            <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
+                        <!-- Load options template -->
+                        <div prepros-include="selectedFile.type"
+                             src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
 
-                        </div>
+                        <button class="compile" ng-click="compile()">Compile</button>
 
-                        <!-- Options -->
-                        <div class="options">
-
-                            <span class="file-type">{{selectedFile.type}}</span>
-
-                            <span class="file-name">{{selectedFile.name}}</span>
-
-                            <label>
-                                <input type="checkbox" ng-model="selectedFile.config.autoCompile">
-                                <span class="label-desc">Auto Compile</span>
-                            </label>
-
-                            <!-- Load options template -->
-                            <div prepros-include="selectedFile.type" src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
-
-                            <button class="compile" ng-click="compile()">Compile</button>
-
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <!-- Include Modal Windows -->
 <div ng-include src="'templates/project-options.html'"></div>
