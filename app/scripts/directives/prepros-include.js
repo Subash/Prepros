@@ -20,7 +20,7 @@ prepros.directive('preprosInclude', function ($timeout, $compile, $http) {
 
             $timeout(function(){
 
-                scope.$on('$routeChangeSuccess', function(){
+                var update = function(){
 
                     if(scope.$eval(attrs.preprosInclude)) {
 
@@ -36,6 +36,12 @@ prepros.directive('preprosInclude', function ($timeout, $compile, $http) {
                         element.html('');
 
                     }
+                };
+
+                update();
+
+                scope.$on('$routeChangeSuccess', function(){
+                    update();
                 });
             });
         }
