@@ -60,7 +60,7 @@ prepros.factory('slim', function (config, utils) {
         };
 
 
-        var compile = function (file, callback) {
+        var compile = function (file, successCall, errorCall) {
 
             var args = [config.ruby.gems.slim.path];
 
@@ -97,7 +97,7 @@ prepros.factory('slim', function (config, utils) {
 
                 compileErr = true;
 
-                callback(true, data.toString() + "\n" + file.input);
+                errorCall(data.toString() + "\n" + file.input);
 
             });
 
@@ -105,7 +105,7 @@ prepros.factory('slim', function (config, utils) {
             rubyProcess.on('exit', function(){
                 if(!compileErr){
 
-                    callback(false, file.input);
+                    successCall(file.input);
 
                 }
 

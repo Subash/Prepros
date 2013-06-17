@@ -63,7 +63,7 @@ prepros.factory('less', function(config, utils){
 
 
     //Compile Less
-    var compile = function(file, callback){
+    var compile = function(file, successCall, errorCall){
 
         var less = require('less');
 
@@ -89,7 +89,7 @@ prepros.factory('less', function(config, utils){
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -98,7 +98,7 @@ prepros.factory('less', function(config, utils){
                     parser.parse(data.toString(), function (e, tree) {
                         if (e) {
 
-                            callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
+                            errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
 
                         }
                         if (!e) {
@@ -111,12 +111,12 @@ prepros.factory('less', function(config, utils){
 
                                     if (err) {
 
-                                        callback(true, err.message);
+                                        errorCall(err.message);
 
 
                                     } else {
 
-                                        callback(false, file.input);
+                                        successCall(file.input);
 
                                     }
 
@@ -124,7 +124,7 @@ prepros.factory('less', function(config, utils){
 
                             } catch(e ){
 
-                                callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
+                                errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
 
                             }
 
@@ -133,7 +133,7 @@ prepros.factory('less', function(config, utils){
                     });
                 } catch (e) {
 
-                    callback(true, e.message + "\n"  + e.filename + ' line ' + e.line);
+                    errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
                 }
 
             }

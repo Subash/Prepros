@@ -60,7 +60,7 @@ prepros.factory('coffee', function(config, utils){
         };
     };
 
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var coffee = require('coffee-script');
 
@@ -76,7 +76,7 @@ prepros.factory('coffee', function(config, utils){
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -93,11 +93,11 @@ prepros.factory('coffee', function(config, utils){
 
                         if (err) {
 
-                            callback(true, err.message);
+                            errorCall(err.message);
 
                         } else {
 
-                            callback(false, file.input);
+                            successCall(file.input);
 
                         }
 
@@ -106,7 +106,7 @@ prepros.factory('coffee', function(config, utils){
 
                 } catch (e) {
 
-                    callback(true, e.message + "\n" + file.input);
+                    errorCall(e.message + "\n" + file.input);
                 }
             }
         });

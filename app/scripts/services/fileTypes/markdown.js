@@ -58,7 +58,7 @@ prepros.factory('markdown', function (config, utils) {
         };
     };
 
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var marked = require('marked');
 
@@ -72,7 +72,7 @@ prepros.factory('markdown', function (config, utils) {
 
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -83,11 +83,11 @@ prepros.factory('markdown', function (config, utils) {
 
                         if (err) {
 
-                            callback(true, err.message);
+                            errorCall(err.message);
 
                         } else {
 
-                            callback(false, file.input);
+                            successCall(file.input);
 
                         }
 
@@ -95,7 +95,7 @@ prepros.factory('markdown', function (config, utils) {
 
                 } catch(e) {
 
-                    callback(true, file.input);
+                    errorCall(file.input);
 
                 }
 

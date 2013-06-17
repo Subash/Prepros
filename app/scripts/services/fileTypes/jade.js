@@ -58,7 +58,7 @@ prepros.factory('jade', function(config, utils){
         };
     };
 
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var jadeCompiler = require('jade');
 
@@ -70,7 +70,7 @@ prepros.factory('jade', function(config, utils){
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -83,18 +83,18 @@ prepros.factory('jade', function(config, utils){
 
                         if (err) {
 
-                            callback(true, err.message);
+                            errorCall(err.message);
 
                         } else {
 
-                            callback(false, file.input);
+                            successCall(file.input);
 
                         }
                     });
 
                 } catch (e) {
 
-                    callback(true, e.message + '\n' + file.input);
+                    errorCall(e.message + '\n' + file.input);
                 }
             }
         });

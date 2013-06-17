@@ -62,7 +62,7 @@ prepros.factory('stylus', function (config, utils) {
 
 
     //Compile
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var stylus = require('stylus');
 
@@ -72,7 +72,7 @@ prepros.factory('stylus', function (config, utils) {
 
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -106,7 +106,7 @@ prepros.factory('stylus', function (config, utils) {
                 compiler.render(function (err, css) {
                     if (err) {
 
-                        callback(true, err.message);
+                        errorCall(err.message);
 
                     } else {
 
@@ -114,11 +114,11 @@ prepros.factory('stylus', function (config, utils) {
 
                             if (err) {
 
-                                callback(true, err.message);
+                                errorCall(err.message);
 
                             } else {
 
-                                callback(false, file.input);
+                                successCall(file.input);
 
                             }
 

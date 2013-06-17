@@ -51,7 +51,7 @@ prepros.factory('javascript', function (config, utils) {
         };
     };
 
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var ugly = require('uglify-js');
 
@@ -60,7 +60,7 @@ prepros.factory('javascript', function (config, utils) {
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
-                callback(true, err.message);
+                errorCall(err.message);
 
             } else {
 
@@ -77,7 +77,7 @@ prepros.factory('javascript', function (config, utils) {
 
                         error = true;
 
-                        callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ file.input);
+                        errorCall('Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ file.input);
                     }
                 }
 
@@ -124,7 +124,7 @@ prepros.factory('javascript', function (config, utils) {
 
                                 error = true;
 
-                                callback(true, 'Imported file "'+ importedFile +'" not found \n' + file.input);
+                                errorCall('Imported file "'+ importedFile +'" not found \n' + file.input);
                             }
                         }
                     });
@@ -174,7 +174,7 @@ prepros.factory('javascript', function (config, utils) {
 
                                     error = true;
 
-                                    callback(true, 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ imp);
+                                    errorCall('Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ imp);
                                 }
                             }
 
@@ -193,7 +193,7 @@ prepros.factory('javascript', function (config, utils) {
 
                         error = true;
 
-                        callback(true, e.message);
+                        errorCall(e.message);
                     }
                 };
 
@@ -215,11 +215,11 @@ prepros.factory('javascript', function (config, utils) {
 
                         if (err) {
 
-                            callback(true, err.message);
+                            errorCall(err.message);
 
                         } else {
 
-                            callback(false, file.input);
+                            successCall(file.input);
                         }
                     });
                 }

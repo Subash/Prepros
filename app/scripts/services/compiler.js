@@ -38,17 +38,13 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
         if (fs.existsSync(f.input)) {
 
-            fileTypes.compile(f, function(err, data){
+            fileTypes.compile(f, function(data){
 
-                if(err) {
+                notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
 
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
+            }, function(data){
 
-                } else {
-
-                    notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
-
-                }
+                notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
 
             });
         }

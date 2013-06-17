@@ -77,7 +77,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
     //Compile
 
-    var compile = function (file, callback) {
+    var compile = function (file, successCall, errorCall) {
 
         var args =[];
 
@@ -194,7 +194,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
             compileErr = true;
 
-            callback(true, data.toString());
+            errorCall(data.toString());
 
         });
 
@@ -202,7 +202,7 @@ prepros.factory('sass', function (config, utils, notification) {
         rubyProcess.on('exit', function(){
             if(!compileErr){
 
-                callback(false, file.input);
+                successCall(file.input);
 
             }
 
