@@ -218,7 +218,10 @@ prepros.factory('config', function ($http) {
         });
 
         checker.error(function(data){
-            fail();
+
+            if(fail){
+                fail();
+            }
         });
     }
 
