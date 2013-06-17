@@ -66,7 +66,7 @@
         'keyboard-shortcuts',
         'drag-drop-project',
         'log-element',
-        'ng-include-when',
+        'prepros-include',
         'show-modal-on-click'
 
     ];

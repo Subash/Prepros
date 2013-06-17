@@ -120,7 +120,7 @@
                             </label>
 
                             <!-- Load options template -->
-                            <div ng-include-when="selectedFile.type" src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
+                            <div prepros-include="selectedFile.type" src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
 
                             <button class="compile" ng-click="compile()">Compile</button>
 

@@ -11,7 +11,7 @@
 'use strict';
 
 //Conditional includes
-prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http) {
+prepros.directive('preprosInclude', function ($timeout, $compile, $http) {
 
     return {
 
@@ -22,7 +22,7 @@ prepros.directive('ngIncludeWhen', function ($timeout, $compile, $http) {
 
                 scope.$on('$routeChangeSuccess', function(){
 
-                    if(scope.$eval(attrs.ngIncludeWhen)) {
+                    if(scope.$eval(attrs.preprosInclude)) {
 
                         $http({method: 'GET', url: scope.$eval(attrs.src)}).
                             success(function(data) {
