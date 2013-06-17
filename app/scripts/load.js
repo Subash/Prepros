@@ -26,7 +26,8 @@
         'MainCtrl',
         'TitleBarCtrl',
         'SidebarCtrl',
-        'FilesCtrl'
+        'FilesCtrl',
+        'AboutCtrl'
     ];
 
     var services = [
@@ -65,7 +66,8 @@
         'keyboard-shortcuts',
         'drag-drop-project',
         'log-element',
-        'ng-include-when'
+        'ng-include-when',
+        'show-modal-on-click'
 
     ];
 

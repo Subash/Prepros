@@ -29,46 +29,6 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     };
 
-    //Open about window on click
-    var aboutWindow;
-    $scope.openAboutWindow = function () {
-
-        if (aboutWindow) {
-
-            aboutWindow.show();
-            aboutWindow.focus();
-
-        } else {
-
-            var aboutPath = 'file:///' + path.normalize(config.basePath + '/html/about.html');
-
-            aboutWindow = require('nw.gui').Window.open(aboutPath, {
-                position: 'center',
-                width: 500,
-                height: 400,
-                frame: true,
-                toolbar: false,
-                icon: 'app/assets/img/icons/128.png',
-                resizable: false
-            });
-
-            aboutWindow.on('close', function () {
-                aboutWindow.close(true);
-                aboutWindow = null;
-            });
-        }
-
-        //Close about window when main window is closed
-        require('nw.gui').Window.get().on('close', function () {
-
-            if (aboutWindow) {
-                aboutWindow.close();
-            }
-
-        });
-    };
-
-
     //Open Log window
     var logWindow;
     $scope.openLogWindow = function () {
@@ -174,21 +134,11 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     };
 
-    $.ajaxSetup({
-        cache: false
-    });
+    config.checkUpdate(function(data){
 
-    $scope.appUpdate = false;
-
-    $.getJSON(config.online.updateFileUrl, {version: config.version}).done(function(data) {
-
-        if(config.version !== data[0].version){
-
+        if(data.available){
             $scope.appUpdate = true;
-
-            if(!$scope.$$phase){
-                $scope.$apply();
-            }
         }
+
     });
 });

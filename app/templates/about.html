@@ -1,0 +1,60 @@
+<div class="modal hide fade" id="aboutModal" ng-controller="AboutCtrl">
+
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>Prepros {{config.version}}</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#app-info" data-toggle="tab">About</a></li>
+                <li><a href="#node-modules" data-toggle="tab">Node Modules</a></li>
+                <li><a href="#ruby-gems" data-toggle="tab">Ruby Gems</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="app-info">
+
+                    <p>Prepros is an open source code preprocessing tool developed using the power of html, css and
+                        javascript and node-webkit.</p>
+
+                    <p>It's designed, developed and maintained by <a ng-click="go('authorTwitter')">Subash Pathak</a> on
+                        <a ng-click="go('githubUrl')">Github</a> under MIT license</p>
+
+                    <p>
+                        To learn more about Prepros, please visit <a ng-click="go('url')">{{config.online.url}}</a>.
+                    </p>
+
+                    <div ng-show="update.available" class="alert alert-info">
+                        New version {{update.version}} released on {{update.date}} is available, visit <a
+                            ng-click="go('url')">{{config.online.url}}</a>
+                        to download.
+                    </div>
+                    <div ng-show="errorChecking" class="alert alert-error">
+                        An error occurred while checking for updates.
+                    </div>
+                    <div ng-show="upToDate" class="alert alert-success">
+                        You are using the latest and greatest version of Prepros.
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="node-modules">
+                    <ul>
+                        <li ng-repeat="module in node_modules">{{module}}</li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane" id="ruby-gems">
+                    <ul>
+                        <li ng-repeat="gem in gems">{{gem}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+    </div>
+</div>

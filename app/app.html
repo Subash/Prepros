@@ -29,7 +29,7 @@
     <!--Load App styles -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- Angular loader and script loader -->
+    <!-- Scripts loader -->
     <script src="scripts/libraries/LAB.min.js"></script>
 
     <!--Load custom script -->
@@ -68,7 +68,7 @@
                 <a ng-click="goWebsite()" class="icomoon-gift highlight" x-tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
                 <a ng-href="#/home" class="icomoon-home" x-tooltip="Go to home" data-placement="bottom" tabindex="-1"></a>
                 <a class="love icomoon-heart-2" x-tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
-                <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" ng-click="openAboutWindow()"></a>
+                <a class="about icomoon-info " x-tooltip="About Prepros" data-placement="bottom" x-show-modal-on-click="#aboutModal"></a>
                 <a class="about icomoon-question " x-tooltip="Help" data-placement="bottom" ng-click="help()"></a>
                 <a class="log icomoon-copy-2" x-tooltip="App Log" data-placement="bottom" ng-click="openLogWindow()" x-log-element></a>
                 <a class="options icomoon-cog " x-tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
@@ -133,5 +133,10 @@
             </div>
         </div>
     </div>
+
+<!-- Include Modal Windows -->
+<div ng-include src="'templates/about.html'"></div>
+
+
 </body>
 </html>

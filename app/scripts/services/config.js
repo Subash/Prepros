@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros, angular, _, $*/
 
-prepros.factory('config', function () {
+prepros.factory('config', function ($http) {
 
     'use strict';
 
@@ -56,9 +56,9 @@ prepros.factory('config', function () {
 
     //Gems
     ruby.gems = {};
-    for ( var gemKey in ruby.gems ) {
+    for ( var gemKey in packageData.ruby.gems ) {
 
-        if(ruby.gems.hasOwnProperty(gemKey)) {
+        if(packageData.ruby.gems.hasOwnProperty(gemKey)) {
             ruby.gems[gemKey] = {
 
                 path: path.join(packagePath, packageData.ruby.gems[gemKey].path),
@@ -176,7 +176,6 @@ prepros.factory('config', function () {
         }
     }
 
-
     //Wrap user options in a function to prevent angular data sharing between services
     //If user config data is shared between files changing configuration of one file will affect another file
     function getUserOptions() {
@@ -192,6 +191,37 @@ prepros.factory('config', function () {
         userConfig = $.parseJSON(angular.toJson(options));
     }
 
+    function checkUpdate(success, fail){
+
+        var opt = {method: 'get', url: online.updateFileUrl, cache: false};
+
+        var checker = $http(opt);
+
+        checker.success(function(data){
+
+            data = data[0];
+
+            if(config.version !== data.version) {
+
+                success({
+                    available: true,
+                    version: data.version,
+                    date: data.date
+                });
+            } else {
+                success({
+                    available: false,
+                    version: version,
+                    date: data.date
+                });
+            }
+        });
+
+        checker.error(function(data){
+            fail();
+        });
+    }
+
 
     var config =  {
         cachePath: cachePath,
@@ -201,7 +231,8 @@ prepros.factory('config', function () {
         online: online,
         version: version,
         getUserOptions: getUserOptions,
-        saveUserOptions: saveUserOptions
+        saveUserOptions: saveUserOptions,
+        checkUpdate: checkUpdate
     };
 
     //Push to global so other windows can also read configurations
