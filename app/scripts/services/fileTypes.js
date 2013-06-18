@@ -40,11 +40,11 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
     }
 
     //Function to compile file based on it's type
-    function compile(file, callback) {
+    function compile(file, successCall, errorCall) {
 
         var extname = path.extname(file.input).toLowerCase().slice(1);
 
-        typeMap[extname].compile(file, callback);
+        typeMap[extname].compile(file, successCall, errorCall);
 
     }
 
