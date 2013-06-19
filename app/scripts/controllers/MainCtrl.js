@@ -71,8 +71,7 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
 
     //No need to start services because event on $watch is fired at the begining and it will start the services automatically
 
-    //Save data on change
-    function dataChange(data){
+    $scope.$on('dataChange', function (event, data) {
 
         $scope.projects = data.projects;
         $scope.files = data.files;
@@ -102,18 +101,6 @@ prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParam
                     $location.path('/files/' + $scope.selectedProject.id);
                 }
             }
-        }
-    }
-
-    $scope.$on('dataChange', function (event, data) {
-
-        //Force view update if it is not updated automatically
-        if (!$scope.$$phase){
-            $scope.$apply(function(){
-                dataChange(data);
-            });
-        } else {
-            dataChange(data);
         }
 
     });

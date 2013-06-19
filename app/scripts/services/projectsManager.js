@@ -394,7 +394,9 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     });
                 });
 
-                $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+                $rootScope.$apply(function(){
+                    $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+                });
 
                 utils.hideLoading();
 
