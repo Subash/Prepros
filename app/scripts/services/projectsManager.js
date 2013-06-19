@@ -58,6 +58,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     });
 
+    var _broadCast = function(){
+        $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+    };
+
     //Function to add new project
     function addProject(folder) {
 
@@ -90,9 +94,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             //Redirect to newly added project
             $location.path('/files/' + _id(folder));
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
         }
     }
 
@@ -107,9 +108,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             });
 
             removeProjectFiles(pid);
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
         }
     }
 
@@ -137,10 +135,9 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             imports = _.reject(imports, function (imp) {
                 return imp.pid === pid;
             });
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
         }
+
+        _broadCast();
     }
 
     //Function to get project by it's id
@@ -170,9 +167,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             //Remove file from imports parent list
             removeParentFromAllImports(id);
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
         }
 
     }
@@ -186,11 +180,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             imports = _.reject(imports, function (imp) {
                 return imp.id === id;
             });
-
-            //Broadcast data change event
-            $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
         }
 
+
+        _broadCast();
     }
 
     //Function to get file imports in imports list
@@ -235,6 +228,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         imports = newImports;
 
+        _broadCast();
     }
 
     //Function to get all files inside project folder
@@ -392,13 +386,15 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                         if(!_.contains(file.imports, imp.path)){
 
-                            removeImportParent(imp.id, _id(file.path));
+                            $rootScope.$apply(function(){
+                                removeImportParent(imp.id, _id(file.path));
+                            });
                         }
                     });
                 });
 
                 $rootScope.$apply(function(){
-                    $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+                    _broadCast();
                 });
 
                 utils.hideLoading();

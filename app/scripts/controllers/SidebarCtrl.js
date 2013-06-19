@@ -52,7 +52,6 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     //Function to open live url
     $scope.openLiveUrl = function(){
 
-
         if($scope.selectedProject.config.useCustomServer){
 
             utils.openBrowser($scope.selectedProject.config.customServerUrl);
@@ -63,13 +62,10 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
 
         }
 
-
-
     };
 
     //Function to remove project
     $scope.removeProject = function(){
-
         projectsManager.removeProject($scope.selectedProject.id);
     };
 
