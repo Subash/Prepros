@@ -19,7 +19,7 @@
         'underscore.min',
         'bootstrap.min',
         'mousetrap.min',
-        'angular.min'
+        'angular'
     ];
 
     var controllers = [
