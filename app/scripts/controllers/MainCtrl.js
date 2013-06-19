@@ -9,7 +9,7 @@
 /*global prepros,  _ , $*/
 
 //App controller
-prepros.controller('MainCtrl', function ($scope, $rootScope, $route, $routeParams, $location, storage,
+prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage,
                                         projectsManager, liveServer, watcher) {
 
     'use strict';

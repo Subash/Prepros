@@ -373,12 +373,15 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     if(!_.contains(importsOfAllFiles, file.path)){
 
                         //Add file
-                        addFile(file.path, folder);
+                        $rootScope.$apply(function(){
+                            addFile(file.path, folder);
+                        });
 
                          //Add imports
                         _.each(file.imports, function(imp) {
-
-                            addFileImport(folder, file.path, imp);
+                            $rootScope.$apply(function(){
+                                addFileImport(folder, file.path, imp);
+                            });
                         });
                     }
 
@@ -469,8 +472,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             file.shortOutput = path.relative(project.path, newPath).replace(/\\/g, '/');
         }
-
-        $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
     }
 
     //Return

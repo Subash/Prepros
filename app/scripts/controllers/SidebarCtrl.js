@@ -9,7 +9,7 @@
 /*global prepros,  _, $ */
 
 //Title Bar controls
-prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer) {
+prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, $rootScope) {
 
     'use strict';
 
@@ -35,7 +35,10 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
             var file = e.currentTarget.files[0].path;
 
             //Must notify scope after async operation
-            projectsManager.addProject(file);
+            $scope.$apply(function(){
+                projectsManager.addProject(file);
+            });
+
         });
     };
 
@@ -68,7 +71,6 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     $scope.removeProject = function(){
 
         projectsManager.removeProject($scope.selectedProject.id);
-
     };
 
 });

@@ -9,7 +9,7 @@
 /*global prepros,  _ , $*/
 
 //Files List controls
-prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter, $rootScope) {
+prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter) {
 
     'use strict';
 
@@ -49,7 +49,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
 
         $(elm).on('change', function (e) {
 
-            $rootScope.$apply(function(){
+            $scope.$apply(function(){
                 projectsManager.changeFileOutput(id, e.currentTarget.files[0].path);
             });
         });
