@@ -88,7 +88,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                 }
             };
 
-            var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9-_]/g, '');
+            var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
 
             var isNotUsed = _.isEmpty(_.where(projects, function(p){
                 p.config.serverUrl = serverUrl;
