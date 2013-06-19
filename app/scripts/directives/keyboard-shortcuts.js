@@ -39,8 +39,13 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
                         //Check if it is a directory and not a drive
                         if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
 
-                            //Add to projects
-                            projectsManager.addProject(file.path);
+                            scope.$apply(function(){
+
+                                //Add to projects
+                                projectsManager.addProject(file.path);
+
+                            });
+
                         }
                     });
 
@@ -53,7 +58,11 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function() {
                 if(scope.selectedProject.id){
 
-                    projectsManager.refreshProjectFiles(scope.selectedProject.id);
+                    scope.$apply(function(){
+
+                        projectsManager.refreshProjectFiles(scope.selectedProject.id);
+
+                    });
 
                 }
                 return false;
@@ -76,7 +85,11 @@ prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer,
             Mousetrap.bind(['ctrl+d', 'command+d'], function() {
                 if(scope.selectedProject.id){
 
-                    projectsManager.removeProject(scope.selectedProject.id);
+                    scope.$apply(function(){
+
+                        projectsManager.removeProject(scope.selectedProject.id);
+
+                    });
                 }
                 return false;
             });

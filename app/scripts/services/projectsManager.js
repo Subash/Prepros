@@ -94,6 +94,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             //Redirect to newly added project
             $location.path('/files/' + _id(folder));
+
+            _broadCast();
         }
     }
 
@@ -109,6 +111,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             removeProjectFiles(pid);
         }
+
+        _broadCast();
     }
 
     //function to get all project files
@@ -167,6 +171,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             //Remove file from imports parent list
             removeParentFromAllImports(id);
+
+            _broadCast();
         }
 
     }
