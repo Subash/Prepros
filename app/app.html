@@ -127,7 +127,7 @@
                         </label>
 
                         <!-- Load options template -->
-                        <div prepros-include="selectedFile.type"
+                        <div ng-if="selectedFile.type" ng-include
                              src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
 
                         <button class="compile" ng-click="compile()">Compile</button>

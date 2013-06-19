@@ -66,7 +66,6 @@
         'keyboard-shortcuts',
         'drag-drop-project',
         'log-element',
-        'prepros-include',
         'show-modal-on-click'
 
     ];
