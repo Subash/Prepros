@@ -59,7 +59,7 @@ prepros.factory('liveServer', function () {
 
         } else {
 
-            return 'http://localhost:3738/' + project.id + '/';
+            return 'http://localhost:3738/' + project.config.serverUrl + '/';
         }
     }
 
@@ -72,9 +72,9 @@ prepros.factory('liveServer', function () {
 
             if (!project.config.useCustomServer) {
 
-                app.use('/' + project.id + '/', express.static(project.path));
+                app.use('/' + project.config.serverUrl + '/', express.static(project.path));
 
-                app.use('/' + project.id + '/', express.directory(project.path, {icons: true}));
+                app.use('/' + project.config.serverUrl + '/', express.directory(project.path, {icons: true}));
             }
 
             if (project.config.liveRefresh) {

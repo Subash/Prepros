@@ -78,6 +78,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                 path: folder,
                 config: {
                     liveRefresh: true,
+                    serverUrl: _id(folder),
                     filterPatterns: '',
                     useCustomServer: false,
                     customServerUrl: '',
@@ -86,6 +87,17 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     htmlPath : config.getUserOptions().htmlPath
                 }
             };
+
+            var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9-_]/g, '');
+
+            var isNotUsed = _.isEmpty(_.where(projects, function(p){
+                p.config.serverUrl = serverUrl;
+            }));
+
+            if(isNotUsed && serverUrl !== '') {
+
+                project.config.serverUrl = serverUrl;
+            }
 
             //Push project to projects list
             projects.push(project);
