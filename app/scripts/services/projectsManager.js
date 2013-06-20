@@ -27,6 +27,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //Imports List
     var imports = storage.getImports();
 
+    var _broadCast = function(){
+        $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
+    };
+
     //Remove any project that no longer exists
     _.each(projects, function(project){
 
@@ -57,10 +61,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         }
 
     });
-
-    var _broadCast = function(){
-        $rootScope.$broadcast('dataChange', {projects: projects, files: files, imports: imports});
-    };
 
     //Function to add new project
     function addProject(folder) {
