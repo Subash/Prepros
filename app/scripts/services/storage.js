@@ -42,7 +42,7 @@ prepros.factory('storage', function () {
 
         try {
 
-            projects = angular.fromJson(localStorage.PreprosProjects);
+            projects = angular.fromJson(localStorage.PreprosProjects || '[]');
 
         } catch(e) {
 
@@ -62,7 +62,7 @@ prepros.factory('storage', function () {
 
         try {
 
-            files = angular.fromJson(localStorage.PreprosFiles);
+            files = angular.fromJson(localStorage.PreprosFiles || '[]');
 
         } catch(e) {
 
@@ -82,7 +82,7 @@ prepros.factory('storage', function () {
 
         try {
 
-            imports = angular.fromJson(localStorage.PreprosImports);
+            imports = angular.fromJson(localStorage.PreprosImports || '[]');
 
         } catch(e) {
 

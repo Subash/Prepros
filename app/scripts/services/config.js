@@ -71,7 +71,7 @@ prepros.factory('config', function ($http) {
     var userConfig = {};
     try {
 
-        $.parseJSON(localStorage.PreprosConfig);
+        $.parseJSON(localStorage.PreprosConfig || '{}');
 
     } catch (e) {
 
