@@ -1,0 +1,37 @@
+.logs {
+  margin-right: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 490px;
+  .log {
+    padding: 15px;
+    margin-bottom: 10px;
+    -webkit-user-select: text;
+
+    .name {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    &.error {
+      background: rgba(red, .1);
+      .name {
+        color: rgba(red, .5);
+      }
+    }
+    &.success {
+      background: rgba(green, .1);
+      .name {
+        color: rgba(green, .5);
+      }
+    }
+    &:last-child {
+      margin: 0 5px 0 0;
+      padding: 15px 15px ;
+    }
+  }
+
+  .clear-log {
+    margin: 10px 10px 0 0;
+  }
+}

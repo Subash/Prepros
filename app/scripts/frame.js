@@ -48,6 +48,10 @@
                 nw.window.show();
             }, 100);
 
+            window.addEventListener("dragenter",function(e){
+                e.preventDefault();
+            },false);
+
             window.addEventListener("dragover",function(e){
                 e.preventDefault();
             },false);

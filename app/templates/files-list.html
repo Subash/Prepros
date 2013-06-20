@@ -1,20 +1,33 @@
 <ul class="files">
+
     <li class="file" ng-repeat="file in selectedProjectFiles|orderBy:'name'">
-        <a ng-href="#/files/{{file.pid}}/{{file.id}}" ng-class="{'active' : selectedFile.id == file.id}"
-           draggable="false" id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)">
+
+        <a ng-href="#/files/{{file.pid}}/{{file.id}}"
+           ng-class="{'active' : selectedFile.id == file.id}"
+           id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)" >
+
             <div class="thumb  {{file.type.toLowerCase()}}"
                  ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}
             </div>
+
             <div class="details clearfix">
-                <div class="name"><span x-tooltip="{{file.input}}">{{file.name}}</span></div>
-                <div class="input"><span>{{file.shortInput | shorten}}</span></div>
+
+                <div class="name">
+                    <span tooltip="{{file.input}}">{{file.name}}</span>
+                </div>
+
+                <div class="input">
+                    <span>{{file.shortInput | shorten}}</span>
+                </div>
+
                 <div>
                     <span ng-hide="file.config.compass && file.config.fullCompass"
-                          class="output" x-tooltip="Click to change file output path"
+                          class="output" tooltip="Click to change file output path"
                           ng-click="changeFileOutput($event, file.id)">&rarr;
                         {{file.shortOutput | interpolatePath : selectedProject.config | shorten}}
                     </span>
                 </div>
+
             </div>
         </a>
     </li>

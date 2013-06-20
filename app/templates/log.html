@@ -1,0 +1,25 @@
+<div class="no-logs" ng-if="log.length == 0">
+
+    <h1 class="icomoon-file"></h1>
+
+    <p>Here is nothing yet. You will see log entries after you compile files.</p>
+
+</div>
+
+<div class="logs" ng-if="log.length != 0">
+
+    <button class="btn pull-right clear-log" ng-click="clearLog()">Clear Log</button>
+
+    <div ng-repeat="l in log" class="{{l.type}} log">
+                            <span class="name">
+                                {{l.name}}
+                            </span>
+
+        <div class="details">
+            <pre>{{l.details}}</pre>
+        </div>
+
+        <div class="time">{{l.date| date:'HH:mm:ss'}}</div>
+    </div>
+
+</div>

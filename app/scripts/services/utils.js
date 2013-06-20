@@ -41,15 +41,10 @@ prepros.factory('utils', function () {
 
     }
 
-    var utils =  {
+    return {
         id: id,
         showLoading: showLoading,
         hideLoading: hideLoading,
         openBrowser: openBrowser
     };
-
-    //Push utils to global so other windows can also use utility functions
-    global.utils = utils;
-
-    return utils;
 });

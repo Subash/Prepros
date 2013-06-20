@@ -64,8 +64,8 @@
     var directives = [
         'tooltip',
         'keyboard-shortcuts',
-        'drag-drop-project',
-        'log-element',
+        'drop-project',
+        'tabs',
         'show-modal-on-click'
 
     ];

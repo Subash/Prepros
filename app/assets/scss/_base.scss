@@ -1,0 +1,19 @@
+* {
+  @include box-sizing(border-box);
+}
+
+*:focus {
+  outline-color: #53777A !important;
+}
+
+body {
+  -webkit-user-select: none;
+  background: #efefef;
+  color: #666;
+  font-family: SourceSansPro;
+  cursor: default;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
+}

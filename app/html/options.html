@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="prepros">
 <head>
     <title>Prepros Options</title>
 
@@ -8,7 +9,10 @@
     <script src="../scripts/libraries/bootstrap.min.js"></script>
     <link href="../assets/css/style.css" rel="stylesheet">
     <script>
-        function OptionsCtrl($scope) {
+
+        var prepros = angular.module('prepros', []);
+
+        prepros.controller('OptionsCtrl', function ($scope) {
 
             var fs = require('fs-extra');
 
@@ -16,19 +20,19 @@
             $scope.userConfig = global.userConfig;
 
             //Clear Prepros Cache
-            $scope.clearCache = function(e) {
+            $scope.clearCache = function (e) {
 
                 $(e.currentTarget).attr('disabled');
 
-                var html  = $(e.currentTarget).html();
+                var html = $(e.currentTarget).html();
 
-                fs.remove(global.preprosConfig.cachePath, function(err){
+                fs.remove(global.preprosConfig.cachePath, function (err) {
 
-                    if(!err) {
+                    if (!err) {
 
                         $(e.currentTarget).html('Cleared');
 
-                        setTimeout(function(){
+                        setTimeout(function () {
 
                             $(e.currentTarget).removeAttr('disabled');
 
@@ -50,296 +54,274 @@
             $scope.done = function () {
                 require('nw.gui').Window.get().close();
             }
-
-        }
+        })
     </script>
+
+    <!--Bootstrap Tabs -->
+    <script src="../scripts/directives/tabs.js"></script>
+
 </head>
-<body style="overflow: auto">
-<div ng-controller="OptionsCtrl" class="preprosOptions">
-<div class="heading">
-    <h4>Prepros App Options</h4>
+<body ng-controller="OptionsCtrl" style="padding-top: 20px;">
+
+<div class="tabs-left clearfix" bs-tabs>
+<div data-title="General">
+    <label>
+        <span class="label-desc label-block">HTML File Extension</span>
+        <input type="text" ng-model="userConfig.htmlExtension">
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
+        <span class="label-desc">Enable Error Notifications</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
+        <span class="label-desc">Enable Success Notifications</span>
+    </label>
+    <label>
+        <span class="label-desc label-block">Exclude files that contain following patterns</span><br>
+        <span class="muted label-block">Please enter comma separated list</span><br>
+        <input type="text" ng-model="userConfig.filterPatterns">
+    </label>
+    <label label-block>
+        <button class="btn" ng-click="clearCache($event)">Clear Prepros Cache</button>
+    </label>
 </div>
 
-<div class="tabbable tabs-left" style="border-bottom: 1px solid #CCC;margin-top: 25px;">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#general" data-toggle="tab">General</a></li>
-        <li><a href="#folders" data-toggle="tab">Folders</a></li>
-        <li><a href="#less" data-toggle="tab">Less</a></li>
-        <li><a href="#sass" data-toggle="tab">Sass</a></li>
-        <li><a href="#stylus" data-toggle="tab">Stylus</a></li>
-        <li><a href="#jade" data-toggle="tab">Jade</a></li>
-        <li><a href="#haml" data-toggle="tab">Haml</a></li>
-        <li><a href="#slim" data-toggle="tab">Slim</a></li>
-        <li><a href="#coffee" data-toggle="tab">Coffee</a></li>
-        <li><a href="#javascript" data-toggle="tab">Javascript</a></li>
-        <li><a href="#markdown" data-toggle="tab">Markdown</a></li>
-        <li><a href="#advanced" data-toggle="tab">Advanced</a></li>
-    </ul>
-    <div class="tab-content">
+<div data-title="Folders">
 
-        <div class="tab-pane active" id="general">
-            <label>
-                <span class="label-desc">HTML File Extension</span><br>
-                <input type="text" ng-model="userConfig.htmlExtension">
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
-                <span class="label-desc">Enable Error Notifications</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
-                <span class="label-desc">Enable Success Notifications</span>
-            </label>
-            <label>
-                <span class="label-desc">Exclude files that contain following patterns</span><br>
-                <span class="muted">Please enter comma separated list</span><br>
-                <input type="text" ng-model="userConfig.filterPatterns">
-            </label>
-            <label>
-                <button class="btn" ng-click="clearCache($event)">Clear Prepros Cache</button>
-            </label>
-        </div>
+    <label>
+        <span class="label-desc label-block">CSS Folder</span><br>
+        <input type="text" ng-model="userConfig.cssPath">
+    </label>
+    <label>
+        <span class="label-desc label-block">JavaScripts Folder</span><br>
+        <input type="text" ng-model="userConfig.jsPath">
+    </label>
+    <label>
+        <span class="label-desc label-block">Html Folder</span><br>
+        <input type="text" ng-model="userConfig.htmlPath">
+    </label>
 
-        <div class="tab-pane" id="folders">
-            <label>
-                <span class="label-desc">CSS Folder</span><br>
-                <input type="text" ng-model="userConfig.cssPath">
-            </label>
-            <label>
-                <span class="label-desc">JavaScripts Folder</span><br>
-                <input type="text" ng-model="userConfig.jsPath">
-            </label>
-            <label>
-                <span class="label-desc">Html Folder</span><br>
-                <input type="text" ng-model="userConfig.htmlPath">
-            </label>
-        </div>
+</div>
 
+<div data-title="Less">
 
-        <!-- Less -->
-        <div class="tab-pane" id="less">
-            <label>
-                <input type="checkbox" ng-model="userConfig.less.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.less.lineNumbers">
-                <span class="label-desc">Line numbers</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.less.strictMath">
-                <span class="label-desc">Strict Maths</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.less.strictUnits">
-                <span class="label-desc">Strict Units</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.less.compress">
-                <span class="label-desc">Compress CSS</span>
-            </label>
-        </div>
+    <label>
+        <input type="checkbox" ng-model="userConfig.less.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.less.lineNumbers">
+        <span class="label-desc">Line numbers</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.less.strictMath">
+        <span class="label-desc">Strict Maths</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.less.strictUnits">
+        <span class="label-desc">Strict Units</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.less.compress">
+        <span class="label-desc">Compress CSS</span>
+    </label>
 
-        <!-- Sass -->
-        <div class="tab-pane" id="sass">
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.lineNumbers">
-                <span class="label-desc">Line numbers</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.unixNewlines">
-                <span class="label-desc">Unix Newlines</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.debug">
-                <span class="label-desc">Debug Info</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.compass">
-                <span class="label-desc">Use Compass</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.sass.fullCompass">
-                <span class="label-desc">Full Compass Support</span>
-            </label>
-            <label>
-                <span class="label-desc">Output Style</span><br>
-                <select ng-model="userConfig.sass.outputStyle">
-                    <option value="compressed">Compressed</option>
-                    <option value="compact">Compact</option>
-                    <option value="nested">Nested</option>
-                    <option value="expanded">Expanded</option>
-                </select>
-            </label>
-        </div>
+</div>
 
-        <!-- Stylus -->
-        <div class="tab-pane" id="stylus">
-            <label>
-                <input type="checkbox" ng-model="userConfig.stylus.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.stylus.lineNumbers">
-                <span class="label-desc">Line numbers</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.stylus.compress">
-                <span class="label-desc">Compress CSS</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.stylus.config.nib">
-                <span class="label-desc">Use Nib</span>
-            </label>
-        </div>
+<div data-title="Sass">
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.lineNumbers">
+        <span class="label-desc">Line numbers</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.unixNewlines">
+        <span class="label-desc">Unix Newlines</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.debug">
+        <span class="label-desc">Debug Info</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.compass">
+        <span class="label-desc">Use Compass</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.fullCompass">
+        <span class="label-desc">Full Compass Support</span>
+    </label>
+    <label>
+        <span class="label-desc label-block">Output Style</span>
+        <select ng-model="userConfig.sass.outputStyle">
+            <option value="compressed">Compressed</option>
+            <option value="compact">Compact</option>
+            <option value="nested">Nested</option>
+            <option value="expanded">Expanded</option>
+        </select>
+    </label>
+</div>
 
+<div data-title="Stylus">
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.lineNumbers">
+        <span class="label-desc">Line numbers</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.compress">
+        <span class="label-desc">Compress CSS</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.config.nib">
+        <span class="label-desc">Use Nib</span>
+    </label>
+</div>
 
-        <!-- markdown -->
-        <div class="tab-pane" id="markdown">
-            <label>
-                <input type="checkbox" ng-model="userConfig.markdown.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.markdown.gfm">
-                <span class="label-desc">Github Flavoured</span>
-            </label>
+<div data-title="Jade">
 
-            <label>
-                <input type="checkbox" ng-model="userConfig.markdown.sanitize">
-                <span class="label-desc">Sanitize Output</span>
-            </label>
-        </div>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.lineNumbers">
+        <span class="label-desc">Line numbers</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.compress">
+        <span class="label-desc">Compress CSS</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.stylus.config.nib">
+        <span class="label-desc">Use Nib</span>
+    </label>
 
-        <!-- coffee -->
-        <div class="tab-pane" id="coffee">
-            <label>
-                <input type="checkbox" ng-model="userConfig.coffee.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.coffee.bare">
-                <span class="label-desc">Bare</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.coffee.uglify">
-                <span class="label-desc">Uglify</span>
-            </label>
-        </div>
+</div>
 
-        <!-- Javascript -->
-        <div class="tab-pane" id="javascript">
-            <label>
-                <input type="checkbox" ng-model="userConfig.javascript.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.javascript.uglify">
-                <span class="label-desc">Uglify</span>
-            </label>
-        </div>
+<div data-title="Haml">
 
-        <!-- jade -->
-        <div class="tab-pane" id="jade">
-            <label>
-                <input type="checkbox" ng-model="userConfig.jade.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.jade.pretty">
-                <span class="label-desc">Pretty Output</span>
-            </label>
-        </div>
+    <label>
+        <input type="checkbox" ng-model="userConfig.haml.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
 
+    <label>
+        <input type="checkbox" ng-model="userConfig.haml.doubleQuotes">
+        <span class="label-desc">Double quotes</span>
+    </label>
 
-        <!-- Haml -->
-        <div class="tab-pane" id="haml">
-            <label>
-                <input type="checkbox" ng-model="userConfig.haml.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
+    <label>
+        <span class="label-desc label-block">Output Format</span>
+        <select ng-model="userConfig.haml.format">
+            <option value="xhtml">XHTML</option>
+            <option value="html5">HTML5</option>
+        </select>
+    </label>
+    <label>
+        <span class="label-desc label-block">Output Style</span>
+        <select ng-model="userConfig.haml.outputStyle">
+            <option value="indented">Indented</option>
+            <option value="ugly">Ugly</option>
+        </select>
+    </label>
+</div>
 
-            <label>
-                <input type="checkbox" ng-model="userConfig.haml.doubleQuotes">
-                <span class="label-desc">Double quotes</span>
-            </label>
+<div data-title="Slim">
+    <label>
+        <input type="checkbox" ng-model="userConfig.slim.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.slim.pretty">
+        <span class="label-desc">Pretty Output</span>
+    </label>
+    <label>
+        <span class="label-desc label-block">Indent</span>
+        <select ng-model="userConfig.slim.indent">
+            <option value="default">Default ( 2 spaces )</option>
+            <option value="four">Four Spaces</option>
+            <option value="tab">Tab</option>
+        </select>
+    </label>
+    <label>
+        <span class="label-desc label-block">Output Format</span>
+        <select ng-model="userConfig.slim.format">
+            <option value=":xhtml">XHTML</option>
+            <option value=":html5">HTML5</option>
+            <option value=":html">HTML</option>
+            <option value=":html4">HTML4</option>
+        </select>
+    </label>
+</div>
 
-            <label>
-                <span class="label-desc">Output Format</span><br>
-                <select ng-model="userConfig.haml.format">
-                    <option value="xhtml">XHTML</option>
-                    <option value="html5">HTML5</option>
-                </select>
-            </label>
-            <label>
-                <span class="label-desc">Output Style</span><br>
-                <select ng-model="userConfig.haml.outputStyle">
-                    <option value="indented">Indented</option>
-                    <option value="ugly">Ugly</option>
-                </select>
-            </label>
+<div data-title="Coffee">
+    <label>
+        <input type="checkbox" ng-model="userConfig.coffee.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.coffee.bare">
+        <span class="label-desc">Bare</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.coffee.uglify">
+        <span class="label-desc">Uglify</span>
+    </label>
+</div>
 
-        </div>
+<div data-title="Javascript">
+    <label>
+        <input type="checkbox" ng-model="userConfig.javascript.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.javascript.uglify">
+        <span class="label-desc">Uglify</span>
+    </label>
+</div>
 
-        <!-- Slim -->
-        <div class="tab-pane" id="slim">
-            <label>
-                <input type="checkbox" ng-model="userConfig.slim.autoCompile">
-                <span class="label-desc">Auto Compile</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.slim.pretty">
-                <span class="label-desc">Pretty Output</span>
-            </label>
-            <label>
-                <span class="label-desc">Indent</span><br>
-                <select ng-model="userConfig.slim.indent">
-                    <option value="default">Default ( 2 spaces )</option>
-                    <option value="four">Four Spaces</option>
-                    <option value="tab">Tab</option>
-                </select>
-            </label>
-            <label>
-                <span class="label-desc">Output Format</span><br>
-                <select ng-model="userConfig.slim.format">
-                    <option value=":xhtml">XHTML</option>
-                    <option value=":html5">HTML5</option>
-                    <option value=":html">HTML</option>
-                    <option value=":html4">HTML4</option>
-                </select>
-            </label>
-        </div>
+<div data-title="Markdown">
+    <label>
+        <input type="checkbox" ng-model="userConfig.markdown.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.markdown.gfm">
+        <span class="label-desc">Github Flavoured</span>
+    </label>
 
-        <!-- Advanced Settings -->
-        <div class="tab-pane" id="advanced">
+    <label>
+        <input type="checkbox" ng-model="userConfig.markdown.sanitize">
+        <span class="label-desc">Sanitize Output</span>
+    </label>
+</div>
 
-            <label>
-                <input type="checkbox" ng-model="userConfig.useCustomRuby">
-                <span class="label-desc">Use Custom Ruby for Sass and Compass</span>
-            </label>
+<div data-title="Advanced">
+    <label>
+        <input type="checkbox" ng-model="userConfig.useCustomRuby">
+        <span class="label-desc">Use Custom Ruby for Sass and Compass</span>
+    </label>
 
-            <label ng-show="userConfig.useCustomRuby">
-                <span class="label-desc">Path to ruby.exe file</span><br>
-                <input type="text" ng-model="userConfig.customRubyPath">
-            </label>
+    <label ng-show="userConfig.useCustomRuby">
+        <span class="label-desc label-block">Path to ruby.exe file</span>
+        <input type="text" ng-model="userConfig.customRubyPath">
+    </label>
 
-            <div class="alert alert-danger" style="width: 350px;">
-                <i class="icomoon-info"></i> These settings might hurt, Use with caution !
-            </div>
-
-        </div>
-
+    <div class="alert alert-danger" style="width: 350px;">
+        <i class="icomoon-info"></i> These settings might hurt, Use with caution !
     </div>
-
+</div>
 </div>
 
 <!-- Done -->
-<button ng-click="done()" class="pull-right" style="margin: 20px;">Done</button>
+<button ng-click="done()" class="pull-right prepros-button" style="margin: 10px;">Done</button>
 
-</div>
 </body>
 </html>

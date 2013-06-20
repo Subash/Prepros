@@ -1,0 +1,143 @@
+@mixin prefix_val($prop, $value, $prefixes...) {
+    @each $prefix in $prefixes {
+        @if($prefix != spec) {
+            #{$prop}: -#{$prefix}-$value;
+        }
+        @if($prefix == spec) {
+            #{$prop}: $value;
+        }
+    }
+}
+
+@mixin prefix($prop, $value, $prefixes...) {
+    @each $prefix in $prefixes {
+        @if($prefix != spec) {
+            -#{$prefix}-#{$prop}: $value;
+        }
+        @if($prefix == spec) {
+            #{$prop}: $value;
+        }
+    }
+}
+
+@mixin linear-gradient($angle, $stops...) {
+    $ang: "#{$angle}";
+    @if ( type-of( $angle ) !="number" )        {
+
+        @if      ($ang == "to top"          )   { @include prefix_val(background-image, linear-gradient(bottom,       $stops), webkit, moz, o);   }
+        @else if ($ang == "to bottom"       )   { @include prefix_val(background-image, linear-gradient(top,          $stops), webkit, moz, o);   }
+        @else if ($ang == "to left"         )   { @include prefix_val(background-image, linear-gradient(right,        $stops), webkit, moz, o);   }
+        @else if ($ang == "to right"        )   { @include prefix_val(background-image, linear-gradient(left,         $stops), webkit, moz, o);   }
+        @else if ($ang == "to top right"    )   { @include prefix_val(background-image, linear-gradient(bottom left,  $stops), webkit, moz, o);   }
+        @else if ($ang == "to right top"    )   { @include prefix_val(background-image, linear-gradient(bottom left,  $stops), webkit, moz, o);   }
+        @else if ($ang == "to top left"     )   { @include prefix_val(background-image, linear-gradient(bottom right, $stops), webkit, moz, o);   }
+        @else if ($ang == "to left top"     )   { @include prefix_val(background-image, linear-gradient(bottom right, $stops), webkit, moz, o);   }
+        @else if ($ang == "to bottom right" )   { @include prefix_val(background-image, linear-gradient(top left,     $stops), webkit, moz, o);   }
+        @else if ($ang == "to right bottom" )   { @include prefix_val(background-image, linear-gradient(top left,     $stops), webkit, moz, o);   }
+        @else if ($ang == "to bottom left"  )   { @include prefix_val(background-image, linear-gradient(top right,    $stops), webkit, moz, o);   }
+        @else if ($ang == "to left bottom"  )   { @include prefix_val(background-image, linear-gradient(top right,    $stops), webkit, moz, o);   }
+
+        background-image: linear-gradient($angle, $stops);
+    }
+
+    @else if( type-of( $angle ) =="number" ) {
+
+        $old-angle: abs(450deg - $angle)%360;
+        @include prefix_val(background-image, linear-gradient($old-angle, $stops), webkit, moz, o);
+        background-image: linear-gradient($angle, $stops);
+    }
+}
+
+@mixin transition($args...) {
+    @include prefix(transition, ($args), webkit, moz, o, spec);
+}
+
+@mixin box-shadow($shadows...) {
+    @include prefix(box-shadow, ($shadows), webkit, moz, spec);
+}
+
+@mixin border-image ($args...) {
+    @include prefix(border-image, ($args), webkit, moz, o, spec);
+}
+
+@mixin transform2d($args...) {
+    @include prefix(transform, ($args), webkit, moz, ms, o, spec);
+}
+
+@mixin transform3d($args...) {
+    @include prefix(transform, ($args), webkit, moz, spec);
+}
+
+@mixin perspective($perspective) {
+    @include prefix(perspective, ($perspective), webkit, moz, spec);
+    @include prefix(transform-style, preserve-3d, webkit, moz, spec);
+}
+
+@mixin animation($args...) {
+    @include prefix(animation, ($args), webkit, moz, o, spec);
+}
+
+@mixin box-sizing($args...) {
+    @include prefix(box-sizing, ($args), webkit, moz, spec);
+}
+
+@mixin background-clip($args...) {
+    @include prefix(background-clip, ($args), webkit, moz, spec);
+}
+
+@mixin background-size($args...) {
+    @include prefix(background-clip, ($args), webkit, moz, spec);
+}
+
+@mixin opacity($alpha) {
+    $ie-opacity: round($alpha*100);
+    opacity: $alpha;
+    filter: unquote("alpha(opacity=#{$ie-opacity})");
+}
+
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+@mixin size-square($size) {
+    @include size($size, $size);
+}
+
+@mixin multiple-columns($count, $gap) {
+    @include prefix(column-count, ($count), webkit, moz, ms, o, spec);
+    @include prefix(column-gap, ($gap), webkit, moz, ms, o, spec);
+}
+
+@mixin appearance($args...) {
+    @include prefix(appearance, ($args), webkit, moz, ms, o, spec);
+}
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} { @content; }
+    @-moz-keyframes #{$animation-name}    { @content; }
+    @-o-keyframes #{$animation-name}      { @content; }
+    @keyframes #{$animation-name}         { @content; }
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
+}
+
+@mixin font-face($family, $url, $weight: normal, $style: normal) {
+    @font-face {
+        font-family: $family;
+        src: url('#{$url}.eot');
+        src: url('#{$url}.eot#iefix') format('embedded-opentype'), 
+             url('#{$url}.woff') format('woff'), 
+             url('#{$url}.ttf') format('truetype'), 
+             url('#{$url}.svg##{$family}') format('svg');
+        font-weight: $weight;
+        font-style: $style;
+    }
+}

@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap */
 
 //Directive for keyboard shortcuts
-prepros.directive('bindKeyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
+prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
 
     'use strict';
 

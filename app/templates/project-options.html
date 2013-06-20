@@ -7,65 +7,57 @@
 
     <div class="modal-body">
 
-        <div class="tabbable">
+        <div bs-tabs>
 
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab">General</a></li>
-                <li><a href="#folders" data-toggle="tab">Directories</a></li>
-                <li><a href="#more" data-toggle="tab">More</a></li>
-            </ul>
+            <div data-title="General">
 
-            <div class="tab-content">
-                <div class="tab-pane active" id="general">
+                <label>
+                    <span class="label-desc label-block">Project Name</span>
+                    <input ng-model="selectedProject.name" type="text" class="span4">
+                </label>
 
-                    <label>
-                        <span class="label-desc">Project Name</span><br>
-                        <input ng-model="selectedProject.name" type="text">
-                    </label>
+                <label>
+                    <input type="checkbox" ng-model="selectedProject.config.liveRefresh" class="span4">
+                    <span class="label-desc">Live Refresh</span>
+                </label>
 
-                    <label>
-                        <input type="checkbox" ng-model="selectedProject.config.liveRefresh">
-                        <span class="label-desc">Live Refresh</span>
-                    </label>
+                <label>
+                    <input type="checkbox" ng-model="selectedProject.config.useCustomServer" class="span4">
+                    <span class="label-desc">Use Custom server</span>
+                </label>
 
-                    <label>
-                        <input type="checkbox" ng-model="selectedProject.config.useCustomServer">
-                        <span class="label-desc">Use Custom server</span>
-                    </label>
+                <label ng-show="selectedProject.config.useCustomServer">
+                    <span class="label-desc label-block">Server URL</span>
+                    <input type="text" ng-model="selectedProject.config.customServerUrl" class="span4">
+                </label>
+            </div>
 
-                    <label ng-show="selectedProject.config.useCustomServer">
-                        <span class="label-desc">Server URL</span><br>
-                        <input type="text" ng-model="selectedProject.config.customServerUrl">
-                    </label>
-                </div>
+            <div data-title="Directories">
 
-                <div class="tab-pane" id="folders">
+                <label>
+                    <span class="label-desc label-block">CSS Folder</span>
+                    <input type="text" ng-model="selectedProject.config.cssPath" class="span4">
+                </label>
 
-                    <label>
-                        <span class="label-desc">CSS Folder</span><br>
-                        <input type="text" ng-model="selectedProject.config.cssPath">
-                    </label>
+                <label>
+                    <span class="label-desc label-block">Javascripts Folder</span>
+                    <input type="text" ng-model="selectedProject.config.jsPath" class="span4">
+                </label>
 
-                    <label>
-                        <span class="label-desc">Javascripts Folder</span><br>
-                        <input type="text" ng-model="selectedProject.config.jsPath">
-                    </label>
+                <label>
+                    <span class="label-desc label-block">HTML Folder</span>
+                    <input type="text" ng-model="selectedProject.config.htmlPath" class="span4">
+                </label>
+            </div>
 
-                    <label>
-                        <span class="label-desc">HTML Folder</span><br>
-                        <input type="text" ng-model="selectedProject.config.htmlPath">
-                    </label>
-                </div>
+            <div data-title="More">
 
-                <div class="tab-pane" id="more">
+                <label>
+                    <span class="label-desc label-block">Filter Patterns</span>
+                    <span class="muted label-block">Please enter comma separated list</span>
+                    <input type="text" ng-model="selectedProject.config.filterPatterns" class="span4">
+                </label>
 
-                    <label>
-                        <span class="label-desc">Filter Patterns</span><br>
-                        <span class="muted">Please enter comma separated list</span><br>
-                        <input type="text" ng-model="selectedProject.config.filterPatterns">
-                    </label>
-
-                </div>
             </div>
         </div>
     </div>

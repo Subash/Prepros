@@ -10,7 +10,7 @@
 
 //App controller
 prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage,
-                                        projectsManager, liveServer, watcher) {
+                                        projectsManager, liveServer, watcher, notification) {
 
     'use strict';
 
@@ -27,11 +27,18 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     $scope.selectedProjectFiles = [];
 
+    $scope.log = notification.getLog();
+
     ///File Change
     var throttleFileChange = _.throttle(function(){
 
         storage.saveFiles($scope.files);
-        watcher.startWatching({files: $scope.files, projects: $scope.projects, imports: $scope.imports});
+
+        watcher.startWatching({
+            files: $scope.files,
+            projects: $scope.projects,
+            imports: $scope.imports
+        });
 
     }, 1500);
 
@@ -47,7 +54,12 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     var throttleImportsChange = _.throttle(function(){
 
         storage.saveImports($scope.imports);
-        watcher.startWatching({files: $scope.files, projects: $scope.projects, imports: $scope.imports});
+
+        watcher.startWatching({
+            files: $scope.files,
+            projects: $scope.projects,
+            imports: $scope.imports
+        });
 
     }, 1500);
 
@@ -71,50 +83,54 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     //No need to start services because event on $watch is fired at the begining and it will start the services automatically
 
+    $scope.selectedProjectFiles = _.where($scope.files, {pid: $routeParams.pid});
+
     $scope.$on('dataChange', function (event, data) {
 
         $scope.projects = data.projects;
         $scope.files = data.files;
         $scope.imports = data.imports;
 
-        //Check if selectedProject was removed from project list
-        if ($scope.selectedProject.id && !_.findWhere($scope.projects, {id: $scope.selectedProject.id})) {
+        if($scope.selectedProject.id){
 
-            $scope.selectedProject = {};
-            $scope.selectedProjectFiles = [];
-            $location.path('/home');
+            var projectExists = _.findWhere($scope.projects, {id: $scope.selectedProject.id});
 
-        } else {
+            if(!projectExists) {
 
-            $scope.selectedProjectFiles = _.where($scope.files, {pid: $routeParams.pid});
+                $scope.selectedProject = {};
+                $scope.selectedProjectFiles = [];
+                $location.path('/home');
 
-        }
+            } else {
 
-        //Check if selectedFile was removed from files list
-        if ($scope.selectedFile.id) {
-            if (!_.findWhere($scope.files, {id: $scope.selectedFile.id})) {
+                $scope.selectedProjectFiles = _.where($scope.files, {pid: $routeParams.pid});
 
-                $scope.selectedFile = {};
-
-                //If project exists
-                if ($scope.selectedProject.id) {
-                    $location.path('/files/' + $scope.selectedProject.id);
-                }
             }
         }
 
+        if($scope.selectedFile.id){
+
+            var fileExists = _.findWhere($scope.files, {id: $scope.selectedFile.id});
+
+            if (!fileExists) {
+
+                $location.path('/files/' + $scope.selectedFile.pid);
+
+                $scope.selectedFile = {};
+            }
+        }
     });
 
-    $scope.$on('$routeChangeSuccess', function () {
+    $scope.$on('$routeChangeSuccess', function (){
 
-        //Get path from route
-        $scope.routePath = $route.current.routePath;
+        $scope.path = $route.current.path;
 
-        //If url contains project id
-        if ($routeParams.pid) {
+        if($scope.path === 'files') {
+
+            var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
 
             //If project id in the url is in the projects list
-            if (!_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}))) {
+            if (projectExists) {
 
                 $scope.selectedProject = _.findWhere($scope.projects, {id: $routeParams.pid});
 
@@ -123,14 +139,17 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
                 //If url contains file id
                 if ($routeParams.fid) {
 
+                    var fileExists = !_.isEmpty(_.findWhere($scope.files, {id: $routeParams.fid}));
+
                     //If file id is in the file list
-                    if (!_.isEmpty(_.findWhere($scope.files, {id: $routeParams.fid}))) {
+                    if (fileExists) {
 
                         $scope.selectedFile = _.findWhere($scope.files, {id: $routeParams.fid});
 
-                        //If file is not in the file list redirect to project files list
+
                     } else {
 
+                        //If file is not in the file list redirect to project files list
                         $location.path('/files/' + $scope.selectedProject.id);
 
                     }
@@ -139,9 +158,9 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
                     $scope.selectedFile = {};
                 }
 
-                //If project id is not in the list redirect to home
             } else {
 
+                //If project id is not in the list redirect to home
                 $location.path('/home');
 
             }
@@ -151,5 +170,15 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
             $scope.selectedProjectFiles = [];
         }
+
     });
+
+
+    //Function to clear log
+    $scope.clearLog = function(){
+
+        notification.clearLog();
+
+        $scope.log = notification.getLog();
+    };
 });

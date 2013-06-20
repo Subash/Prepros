@@ -8,16 +8,24 @@
 /*jshint browser: true, node: true*/
 /*global prepros */
 
-prepros.factory('notification', function (config) {
+prepros.factory('notification', function (config, $location, $rootScope) {
 
     'use strict';
 
     var path = require('path');
 
-    //Push log to global so it can be viewed from another window
-    global.preprosLog = [];
+    var notificationWindow, log = [];
 
-    var notificationWindow;
+    //Inject function in global so that notification can show log
+    global.showLog = function(){
+
+        $rootScope.$apply(function(){
+            $location.path('/log');
+        });
+
+        require('nw.gui').Window.get().show();
+    };
+
 
     function openNotificationWindow(){
 
@@ -59,20 +67,11 @@ prepros.factory('notification', function (config) {
 
 	function error(name, message, details){
 
-        global.preprosLog.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
+        log.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
-        if(global.preprosLog.length>30) {
-
-            global.preprosLog = global.preprosLog.slice(0, 30);
-
-        }
+        log = (log.length>30)? log.slice(0, 30): log;
 
         global.preprosNotification = {name: name, message: message, type: 'error'};
-
-        //Hack to update log
-        if(global.logScope){
-            global.logScope.$apply();
-        }
 
         if(config.getUserOptions().enableErrorNotifications){
 
@@ -83,20 +82,11 @@ prepros.factory('notification', function (config) {
     //Function to success notification
     var success = function(name, message, details){
 
-        global.preprosLog.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
+        log.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
 
-        if(global.preprosLog.length>30) {
-
-            global.preprosLog = global.preprosLog.slice(0, 30);
-
-        }
+        log = (log.length>30)? log.slice(0, 30): log;
 
         global.preprosNotification = {name: name, message: message, type: 'success'};
-
-        //Hack to update log
-        if(global.logScope){
-            global.logScope.$apply();
-        }
 
         if(config.getUserOptions().enableSuccessNotifications){
 
@@ -104,9 +94,20 @@ prepros.factory('notification', function (config) {
         }
     };
 
+    //Clear Log
+    var clearLog = function(){
+        log = [];
+    };
+
+    var getLog = function(){
+        return log;
+    };
+
     return {
 		error: error,
-        success: success
+        success: success,
+        clearLog: clearLog,
+        getLog: getLog
     };
 
 });

@@ -1,0 +1,85 @@
+.sidebar {
+  float: left;
+  width: 210px;
+  height: 550px;
+  background: #3e3e3e;
+  ul {
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    margin-top: 40px;
+    padding: 0;
+    height: 450px;
+    list-style: none;
+    li a {
+      display: block;
+      padding-left: 15px;
+      padding-right: 15px;
+      width: 210px;
+      height: 45px;
+      line-height: 45px;
+      color: #a9a9a9;
+      text-decoration: none;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      &:hover {
+        color: #fff;
+      }
+      &:hover {
+        color: #fff;
+      }
+      &.active {
+        background: #302f2f;
+        color: #fff;
+      }
+    }
+  }
+
+  .controls {
+    margin: auto;
+    border-top: 1px solid darken(#a9a9a9, 50%);
+    width: 180px;
+    padding-top: 12px;
+    position: relative;
+    div {
+      height: 30px;
+      width: 30px;
+      line-height: 30px;
+      color: #a9a9a9;
+      display: inline-block;
+      text-align: center;
+      -webkit-transform: scale(0, 0);
+      -webkit-transition: -webkit-transform .3s;
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    .new-project {
+      -webkit-transform: scale(1, 1);
+    }
+
+    &.show div {
+      -webkit-transform: scale(1, 1);
+      -webkit-transition: -webkit-transform .2s;
+    }
+  }
+
+  .animate-enter,
+   .animate-leave
+   {
+    @include transition(all 400ms);
+     position: relative;
+   }
+
+  .animate-enter.animate-enter-active,
+  .animate-leave {
+    left: 0;
+  }
+
+  .animate-leave.animate-leave-active,
+  .animate-enter {
+    left: -250px;
+  }
+}

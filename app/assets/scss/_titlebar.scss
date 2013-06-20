@@ -1,0 +1,35 @@
+.title-bar {
+  -webkit-app-region: drag;
+  width: 690px;
+  height: 40px;
+  background: #fff;
+  box-shadow: 1px 1px 2px #d3d3d3;
+  .controls {
+    float: right;
+    a {
+      display: block;
+      float: left;
+      margin-top: 5px;
+      margin-right: 5px;
+      height: 30px;
+      width: 30px;
+      color: #777;
+      line-height: 30px;
+      text-align: center;
+      text-decoration: none;
+      cursor: default;
+      -webkit-app-region: no-drag;
+      &.highlight {
+        color: rgba(250, 86, 33, 1);
+      }
+      &:hover {
+        color: rgba(250, 86, 33, 0.7);
+        background: rgba(250, 86, 33, 0.2);
+      }
+      &:active {
+        color: rgba(250, 86, 33, 1);
+        background: rgba(250, 86, 33, 0.4);
+      }
+    }
+  }
+}

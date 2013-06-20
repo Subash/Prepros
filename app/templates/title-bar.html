@@ -1,0 +1,14 @@
+<div class="title-bar" ng-controller="TitlebarCtrl">
+    <div class="controls">
+        <a ng-click="goWebsite()" class="icomoon-gift highlight" tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
+        <a ng-href="#/home" class="icomoon-home" tooltip="Go to home" data-placement="bottom"></a>
+        <a class="love icomoon-heart-2" tooltip="Help the author" data-placement="bottom" ng-click="supportAuthor()"></a>
+        <a class="about icomoon-info " tooltip="About Prepros" data-placement="bottom" show-modal-on-click="#aboutModal"></a>
+        <a class="about icomoon-question " tooltip="Help" data-placement="bottom" ng-click="help()"></a>
+        <a ng-href="#/log" class="log icomoon-copy-2" tooltip="App Log" data-placement="bottom"></a>
+        <a class="options icomoon-cog " tooltip="App Options" data-placement="bottom" ng-click="openOptionsWindow()"></a>
+        <a class="to-tray icomoon-arrow-down-right-3" tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
+        <a class="minimize-app icomoon-minus" tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
+        <a class="close-app icomoon-close" tooltip="Close" data-placement="left" ng-click="close()"></a>
+    </div>
+</div>
