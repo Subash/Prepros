@@ -6,7 +6,7 @@ function getLiveUrl(url){
 
 	'use strict';
 
-	if(url.match(/^http:\/\/localhost:3738\//)){
+	if(url.match(/^http:\/\/localhost:3738\/i/)){
 
 		return url.substr(0,31);
 
