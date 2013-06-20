@@ -13,16 +13,20 @@
       margin-bottom: 15px;
     }
 
+    pre {
+      color: #888;
+    }
+
     &.error {
-      background: rgba(red, .1);
+      background: rgba(red, .06);
       .name {
-        color: rgba(red, .5);
+        color: rgba(red, .4);
       }
     }
     &.success {
-      background: rgba(green, .1);
+      background: rgba(green, .06);
       .name {
-        color: rgba(green, .5);
+        color: rgba(green, .4);
       }
     }
     &:last-child {
