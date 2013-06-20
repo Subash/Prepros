@@ -42,7 +42,7 @@ prepros.factory('config', function ($http) {
         url: 'http://alphapixels.com/prepros',
         helpUrl: 'http://alphapixels.com/prepros/docs/',
         loveUrl: 'http://alphapixels.com/prepros#love',
-        updateFileUrl: 'http://alphapixels.com/prepros/update.json',
+        updateFileUrl: 'https://raw.github.com/sbspk/Prepros/master/package.json',
         githubUrl: 'http://github.com/sbspk/prepros',
         authorTwitter: 'http://twitter.com/sbspk',
         authorUrl: 'http://alphapixels.com'
@@ -199,20 +199,18 @@ prepros.factory('config', function ($http) {
 
         checker.success(function(data){
 
-            data = data[0];
-
             if(config.version !== data.version) {
 
                 success({
                     available: true,
                     version: data.version,
-                    date: data.date
+                    date: data.releaseDate
                 });
             } else {
                 success({
                     available: false,
                     version: version,
-                    date: data.date
+                    date: data.releaseDate
                 });
             }
         });
