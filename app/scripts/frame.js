@@ -43,10 +43,10 @@
                 window: require('nw.gui').Window.get()
             };
 
-            //Wait 100ms for app to load and show window to prevent flash of unloaded content
+            //Wait 200ms for app to load and show window to prevent flash of unloaded content
             window.setTimeout(function(){
                 nw.window.show();
-            }, 100);
+            }, 200);
 
             window.addEventListener("dragenter",function(e){
                 e.preventDefault();
