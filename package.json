@@ -33,7 +33,6 @@
         "marked": "0.2.9",
         "MD5": "1.0.3",
         "nib": "0.9.1",
-        "node-walker": "0.1.0",
         "stylus": "0.32.1",
         "uglify-js": "2.3.6",
         "websocket": "1.0.8"

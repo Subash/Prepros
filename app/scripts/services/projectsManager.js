@@ -15,7 +15,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     var fs = require('fs'),
         path = require('path'),
-        walker = require('node-walker'),
         _id = utils.id;
 
     //Projects List
@@ -250,42 +249,44 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     }
 
     //Function to get all files inside project folder
-    function getProjectFolderFiles(pid, callback) {
+    function getProjectFolderFiles(pid) {
 
         var folder = getProjectById(pid).path;
 
-        var filesList = [];
+        var f = [];
 
-        //Get all files in project folder
-        walker(folder, function (err, file, next) {
+        function get(dir) {
 
-            //Ouch error occurred
-            if (err) {
+            var files = fs.readdirSync(dir);
 
-                notification.error('Error ! ', 'An error occurred while scanning files', err.message);
-            }
+            files.forEach(function(file){
 
-            //Add file to project
-            if (file !== null) {
+                var fp = dir + path.sep + file;
 
-                if(fileTypes.isExtSupported(file)) {
+                if(fs.statSync(fp).isDirectory()) {
 
-                    filesList.push(path.normalize(file));
+                    get(fp);
+
+                } else {
+
+                    if(fileTypes.isFileSupported(fp)){
+                        f.push(fp);
+                    }
                 }
-            }
+            });
+        }
 
-            //Next file
-            if (next) {
+        try {
 
-                next();
+            get(folder);
 
-            } else {
+        } catch(e) {
 
-                callback(filesList);
+            notification.error('Error ! ', 'An error occurred while scanning files', e.message);
 
-            }
+        }
 
-        });
+        return f;
     }
 
     //Function to match files against global and project specific filters
@@ -360,64 +361,55 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         if(fs.existsSync(folder)) {
 
-            getProjectFolderFiles(pid, function(projectFiles){
+            var projectFiles = getProjectFolderFiles(pid);
 
-                var filesToAdd = [];
+            var filesToAdd = [];
 
-                _.each(projectFiles, function(file) {
+            _.each(projectFiles, function(file) {
 
-                    if (!matchFileFilters(pid, file)) {
+                if (!matchFileFilters(pid, file)) {
 
-                        filesToAdd.push({
-                            path: file,
-                            imports: fileTypes.getImports(file)
-                        });
-                    }
-                });
-
-                //Check if file is in the imports list of another file
-                //If it is ignore the file
-                var importsOfAllFiles = _.uniq(_.flatten(_.pluck(filesToAdd, 'imports')));
-
-                _.each(filesToAdd, function(file) {
-
-                    //Check
-                    if(!_.contains(importsOfAllFiles, file.path)){
-
-                        //Add file
-                        $rootScope.$apply(function(){
-                            addFile(file.path, folder);
-                        });
-
-                         //Add imports
-                        _.each(file.imports, function(imp) {
-                            $rootScope.$apply(function(){
-                                addFileImport(folder, file.path, imp);
-                            });
-                        });
-                    }
-
-                    //Remove any previously imported file that is not imported anymore
-                    var oldImports = getFileImports(_id(file.path));
-
-                    _.each(oldImports, function(imp){
-
-                        if(!_.contains(file.imports, imp.path)){
-
-                            $rootScope.$apply(function(){
-                                removeImportParent(imp.id, _id(file.path));
-                            });
-                        }
+                    filesToAdd.push({
+                        path: file,
+                        imports: fileTypes.getImports(file)
                     });
-                });
-
-                $rootScope.$apply(function(){
-                    _broadCast();
-                });
-
-                utils.hideLoading();
-
+                }
             });
+
+            //Check if file is in the imports list of another file
+            //If it is ignore the file
+            var importsOfAllFiles = _.uniq(_.flatten(_.pluck(filesToAdd, 'imports')));
+
+            _.each(filesToAdd, function(file) {
+
+                //Check
+                if(!_.contains(importsOfAllFiles, file.path)){
+
+                    //Add file
+                    addFile(file.path, folder);
+
+                    //Add imports
+                    _.each(file.imports, function(imp) {
+                        addFileImport(folder, file.path, imp);
+                    });
+                }
+
+                //Remove any previously imported file that is not imported anymore
+                var oldImports = getFileImports(_id(file.path));
+
+                _.each(oldImports, function(imp){
+
+                    if(!_.contains(file.imports, imp.path)){
+
+                        removeImportParent(imp.id, _id(file.path));
+                    }
+                });
+            });
+
+            _broadCast();
+
+            utils.hideLoading();
+
         } else {
 
             removeProject(pid);
