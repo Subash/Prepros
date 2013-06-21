@@ -1,5 +1,15 @@
 
-/*global chrome, _*/
+/*global chrome*/
+
+Array.prototype.contains = function(item) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === item) {
+            return true;
+        }
+    }
+    return false;
+};
 
 function parseUrl(string){
 
@@ -25,21 +35,23 @@ function startSocket(){
 
         liveUrls = [];
 
-		_.each(JSON.parse(evt.data).urls, function(url){
+        JSON.parse(evt.data).urls.forEach(function(url) {
 
-			liveUrls.push(url);
+            liveUrls.push(url);
 
-			chrome.tabs.getAllInWindow(null, function(tabs){
+            chrome.tabs.getAllInWindow(null, function(tabs){
 
-				_.each(tabs, function(tab){
+                tabs.forEach(function(tab){
 
-					if(_.contains(liveUrls, parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)){
+                    if(liveUrls.contains(parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
 
-						chrome.tabs.reload(tab.id, { bypassCache: true });
-					}
-				});
-			});
-		});
+                        chrome.tabs.reload(tab.id, { bypassCache: true });
+
+                    }
+                });
+            });
+
+        });
 	});
 
 	socket.addEventListener('open', function(){
@@ -70,7 +82,7 @@ function startRefreshing(tab){
 
 		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
 
-	} else if(_.contains(liveUrls, parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
+	} else if(liveUrls.contains(parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
 
 		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
 

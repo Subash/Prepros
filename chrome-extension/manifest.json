@@ -7,7 +7,7 @@
 	"offline_enabled": true,
 	"minimum_chrome_version": "18",
 	"background": {
-		"scripts": [ "scripts/underscore.js", "scripts/background.js"]
+		"scripts": ["scripts/background.js"]
 	},
 	"icons": {
 		"16": "img/icon.png",
