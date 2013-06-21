@@ -17,14 +17,14 @@
                 </div>
 
                 <div class="input">
-                    <span>{{file.shortInput | shorten}}</span>
+                    <span>{{file.shortInput | prettyPath | shorten}}</span>
                 </div>
 
                 <div>
                     <span ng-hide="file.config.compass && file.config.fullCompass"
                           class="output" tooltip="Click to change file output path"
                           ng-click="changeFileOutput($event, file.id)">&rarr;
-                        {{file.shortOutput | interpolatePath : selectedProject.config | shorten}}
+                        {{file.shortOutput | interpolatePath : selectedProject.config | prettyPath | shorten}}
                     </span>
                 </div>
 

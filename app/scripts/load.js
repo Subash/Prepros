@@ -58,7 +58,8 @@
 
     var filters = [
         'shorten',
-        'interpolatePath'
+        'interpolatePath',
+        'prettyPath'
     ];
 
     var directives = [

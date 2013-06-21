@@ -22,7 +22,7 @@ prepros.factory('markdown', function (config, utils) {
         var name = path.basename(filePath);
 
         //Relative input path
-        var shortInput = path.relative(projectPath, filePath).replace(/\\/g, '/');
+        var shortInput = path.relative(projectPath, filePath);
 
         // Output path
         var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
@@ -37,12 +37,12 @@ prepros.factory('markdown', function (config, utils) {
         }
 
         //Find short output path
-        var shortOutput = output.replace(/\\/g, '/');
+        var shortOutput = output;
 
         //Show Relative path if output file is within project folder
         if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
-            shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
+            shortOutput = path.relative(projectPath, output);
         }
 
         return {

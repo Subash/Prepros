@@ -83,7 +83,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     customServerUrl: '',
                     cssPath : config.getUserOptions().cssPath,
                     jsPath : config.getUserOptions().jsPath,
-                    htmlPath : config.getUserOptions().htmlPath
+                    htmlPath : config.getUserOptions().htmlPath,
+                    jsMinPath: config.getUserOptions().jsMinPath
                 }
             };
 

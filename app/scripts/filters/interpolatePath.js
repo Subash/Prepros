@@ -11,9 +11,9 @@
 'use strict';
 
 prepros.filter('interpolatePath', function ($interpolate) {
-    return function (string, cssPath, jsPath, htmlPath) {
+    return function (string, cssPath, jsPath, htmlPath, jsMinPath) {
 
-        return $interpolate(string)(cssPath, jsPath, htmlPath);
+        return require('path').normalize($interpolate(string)(cssPath, jsPath, htmlPath, jsMinPath));
 
     };
 });

@@ -84,6 +84,7 @@ prepros.factory('config', function ($http) {
         cssPath: 'css',
         jsPath: 'js',
         htmlPath: 'html',
+        jsMinPath: 'min',
         htmlExtension: '.html',
         enableSuccessNotifications: true,
         enableErrorNotifications: true,

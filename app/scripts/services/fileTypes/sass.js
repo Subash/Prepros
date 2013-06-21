@@ -25,7 +25,7 @@ prepros.factory('sass', function (config, utils, notification) {
         var name = path.basename(filePath);
 
         //Relative input path
-        var shortInput = path.relative(projectPath, filePath).replace(/\\/g, '/');
+        var shortInput = path.relative(projectPath, filePath);
 
         // Output path
         var output = filePath.replace(/\.sass|\.scss/gi, '.css');
@@ -40,12 +40,12 @@ prepros.factory('sass', function (config, utils, notification) {
         }
 
         //Find short output path
-        var shortOutput = output.replace(/\\/g, '/');
+        var shortOutput = output;
 
         //Show Relative path if output file is within project folder
         if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
 
-            shortOutput = path.relative(projectPath, output).replace(/\\/g, '/');
+            shortOutput = path.relative(projectPath, output);
         }
 
         var file = {
