@@ -99,7 +99,7 @@ function startRefreshing(url){
 
 			if( url === getLiveUrl(tab.url) ){
 
-				chrome.tabs.executeScript(tab.id, {file: 'scripts/live.js'});
+				chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
 			}
 		});
 	});

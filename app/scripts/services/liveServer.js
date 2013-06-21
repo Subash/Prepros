@@ -9,7 +9,7 @@
 /*global prepros,  _ , angular*/
 
 //Storage
-prepros.factory('liveServer', function () {
+prepros.factory('liveServer', function (config) {
 
     'use strict';
 
@@ -20,7 +20,6 @@ prepros.factory('liveServer', function () {
 
     //Start listening
     var httpServer = app.listen(3738);
-
 
     //Start websocket server for automatic browser refresh
     var wsServer = new WebSocketServer({
@@ -80,8 +79,8 @@ prepros.factory('liveServer', function () {
             if (project.config.liveRefresh) {
 
                 urls.push(getLiveUrl(project));
+                urls.push(project.path);
             }
-
         });
 
         //Send data to browser extensions
@@ -89,9 +88,42 @@ prepros.factory('liveServer', function () {
 
     }
 
+    var refreshServer =  new WebSocketServer({
+
+        httpServer: app.listen(25690),
+
+        autoAcceptConnections: false
+
+    });
+
+    app.use('/lr/', express.static(config.basePath + '/scripts/libraries/'));
+    app.use('/lr/', express.directory(config.basePath + '/scripts/libraries/'));
+
+    refreshServer.on('request', function (request) {
+
+        request.accept('', request.origin);
+
+        refreshServer.broadcast(("!!ver:1.6"));
+
+    });
+
+    function refresh(file) {
+
+        var data = JSON.stringify([
+            'refresh', {
+                path: file,
+                apply_js_live: false,
+                apply_css_live: true
+            }
+        ]);
+
+        refreshServer.broadcast(data);
+    }
+
     //Return
     return {
         startServing: startServing,
-        getLiveUrl: getLiveUrl
+        getLiveUrl: getLiveUrl,
+        refresh: refresh
     };
 });

@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros, $, angular*/
 
-prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope) {
+prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer) {
 
 	"use strict";
 
@@ -43,6 +43,8 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                 $rootScope.$apply(function(){
                     notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
                 });
+
+                liveServer.refresh(f.output);
 
             }, function(data){
 
