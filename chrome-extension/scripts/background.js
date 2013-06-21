@@ -29,7 +29,7 @@ function startSocket(){
 
 	'use strict';
 
-	var socket = new WebSocket('ws://localhost:3738');
+	var socket = new WebSocket('ws://localhost:5656');
 
 	socket.addEventListener('message', function(evt){
 
@@ -78,7 +78,7 @@ function startRefreshing(tab){
 		startSocket();
 	}
 
-	if(tab.url.match(/^http:\/\/localhost:3738\//gi) || tab.url.match(/^file:\/\/\//gi)) {
+	if(tab.url.match(/^http:\/\/localhost:5656\//gi) || tab.url.match(/^file:\/\/\//gi)) {
 
 		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
 

@@ -19,7 +19,7 @@ prepros.factory('liveServer', function (config) {
         urls= [];
 
     //Start listening
-    var httpServer = app.listen(3738);
+    var httpServer = app.listen(5656);
 
     //Start websocket server for automatic browser refresh
     var wsServer = new WebSocketServer({
@@ -58,7 +58,7 @@ prepros.factory('liveServer', function (config) {
 
         } else {
 
-            return 'http://localhost:3738/' + project.config.serverUrl + '/';
+            return 'http://localhost:5656/' + project.config.serverUrl + '/';
         }
     }
 
@@ -89,6 +89,7 @@ prepros.factory('liveServer', function (config) {
 
     var refreshServer =  new WebSocketServer({
 
+        //Live reload connection port
         httpServer: app.listen(25690),
 
         autoAcceptConnections: false
