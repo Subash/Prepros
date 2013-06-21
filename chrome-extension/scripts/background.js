@@ -66,8 +66,6 @@ function startRefreshing(tab){
 		startSocket();
 	}
 
-	console.log(tab);
-
 	if(tab.url.match(/^http:\/\/localhost:3738\//gi) || tab.url.match(/^file:\/\/\//gi)) {
 
 		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
