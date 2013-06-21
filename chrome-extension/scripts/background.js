@@ -1,22 +1,6 @@
 
 /*global chrome, _*/
 
-
-function getLiveUrl(url){
-
-	'use strict';
-
-	if(url.match(/^http:\/\/localhost:3738\/i/)){
-
-		return url.substr(0,31);
-
-	} else {
-
-		return parseUrl(url).protocol + '//' + parseUrl(url).host;
-
-	}
-}
-
 function parseUrl(string){
 
 	'use strict';
@@ -28,9 +12,8 @@ function parseUrl(string){
 	return parser;
 }
 
-var socketRunning = false;
-
-var liveUrls = [];
+var socketRunning = false,
+	liveUrls = [];
 
 function startSocket(){
 
@@ -38,36 +21,24 @@ function startSocket(){
 
 	var socket = new WebSocket('ws://localhost:3738');
 
-
 	socket.addEventListener('message', function(evt){
 
-		var newUrls = JSON.parse(evt.data).urls;
+        liveUrls = [];
 
-		_.each(liveUrls, function(url){
+		_.each(JSON.parse(evt.data).urls, function(url){
 
+			liveUrls.push(url);
 
-			//If url is removed from refresh list
-			if(!_.contains(newUrls, url)) {
+			chrome.tabs.getAllInWindow(null, function(tabs){
 
-				liveUrls = _.reject(liveUrls, function(ur){
+				_.each(tabs, function(tab){
 
-					return ur === url;
+					if(_.contains(liveUrls, parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)){
+
+						chrome.tabs.reload(tab.id, { bypassCache: true });
+					}
 				});
-
-				stopRefreshing(url);
-			}
-		});
-
-		//Start refreshing each url
-		_.each(newUrls, function(url){
-
-			if(url){
-				startRefreshing(getLiveUrl(url));
-
-				liveUrls.push(getLiveUrl(url));
-			}
-			
-
+			});
 		});
 	});
 
@@ -84,64 +55,37 @@ function startSocket(){
 	});
 }
 
-//Try to run at startup
-startSocket();
-
 
 //function to start refreshing tabs
-function startRefreshing(url){
+function startRefreshing(tab){
 
 	'use strict';
 
-	chrome.tabs.getAllInWindow(null, function(tabs){
+	if(!socketRunning) {
 
-		_.each(tabs, function(tab){
+		startSocket();
+	}
 
-			if( url === getLiveUrl(tab.url) ){
+	console.log(tab);
 
-				chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
-			}
-		});
-	});
+	if(tab.url.match(/^http:\/\/localhost:3738\//gi) || tab.url.match(/^file:\/\/\//gi)) {
+
+		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
+
+	} else if(_.contains(liveUrls, parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
+
+		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
+
+	}
 }
-
-
-//function to stop refreshing tabs
-function stopRefreshing(url){
-
-	'use strict';
-
-	chrome.tabs.getAllInWindow(null, function(tabs){
-
-		_.each(tabs, function(tab){
-
-			if( url === getLiveUrl(tab.url) ){
-
-				chrome.tabs.reload(tab.id, { bypassCache: true });
-
-			}
-		});
-	});
-}
-
 
 //Try to run refreshing on tab update
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 	'use strict';
 
-	if (changeInfo.status === 'loading') return;
-
-	if(!socketRunning){
-
-		startSocket();
-
-	} else {
-
-		if(_.contains(liveUrls, getLiveUrl(tab.url))){
-
-			startRefreshing(getLiveUrl(tab.url));
-		}
-	}
+    if(tab.status == 'complete') {
+        startRefreshing(tab);
+    }
 
 });

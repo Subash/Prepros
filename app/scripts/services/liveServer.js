@@ -76,10 +76,9 @@ prepros.factory('liveServer', function (config) {
                 app.use('/' + project.config.serverUrl + '/', express.directory(project.path, {icons: true}));
             }
 
-            if (project.config.liveRefresh) {
+            if (project.config.useCustomServer) {
 
                 urls.push(getLiveUrl(project));
-                urls.push(project.path);
             }
         });
 

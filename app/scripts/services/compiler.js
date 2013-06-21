@@ -44,7 +44,11 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                     notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
                 });
 
-                liveServer.refresh(f.output);
+
+                if(projectsManager.getProjectById(file.pid).config.liveRefresh) {
+                    liveServer.refresh(f.output);
+                }
+
 
             }, function(data){
 
