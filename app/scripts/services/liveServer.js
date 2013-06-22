@@ -64,7 +64,7 @@ prepros.factory('liveServer', function (config) {
 
 
     //Live reload middleware inspired by https://github.com/intesso/connect-livereload
-    function liveReload(opt) {
+    function liveReload() {
 
         var snippet = '<script>' +
             '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
