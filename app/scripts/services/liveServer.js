@@ -66,7 +66,10 @@ prepros.factory('liveServer', function (config) {
     //Live reload middleware inspired by https://github.com/intesso/connect-livereload
     function liveReload(opt) {
 
-        var snippet = '<script src="http://localhost:5656/lr/livereload.js?snipver=1&host=localhost&port=25690"></script>';
+        var snippet = '<script>' +
+            '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
+            'a.src="http://" + window.location.host + "/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=25690"})();' +
+            '</script>';
 
         return function liveReload(req, res, next) {
             var writeHead = res.writeHead;
