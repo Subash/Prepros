@@ -7,7 +7,7 @@ Prepros can live refresh your browser whenever a change is made to your file.
 
 You have to first [install](installing.html) browser extension for the live refresh to work.
 
-If you open file directly in the browser from file system the live refresh won't work. You have to click on the `globe` icon on the project toolbar to open live url. You can also hit `CTRL+L` to open the live url of the selected project.
+If you open file directly in the browser from file system ~~~ the live refresh won't work ~~~ (It works from version 2.0). You have to click on the `globe` icon on the project toolbar to open live url with built in http server. You can also hit `CTRL+L` to open the live url of the selected project.
 
 ![Click to open Live url](img/live-refresh/open-live-url.jpg)
 
@@ -20,4 +20,4 @@ Open projects options panel by clicking the cog icon in the project toolbar and 
 
 ![Custom Server](img/live-refresh/custom-server.jpg)
 
-<div class="alert alert-info">Extension pools server by using head ajax requests if you are working with ajax testing you can temporarily disable live refresh by un-checking the live refresh checkbox.</div>
+<div class="alert alert-info">Please enable `allow access to file url` option for Prepros chrome extension from chrome extensions page.</div>
