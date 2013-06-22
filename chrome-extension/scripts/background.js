@@ -78,14 +78,11 @@ function startRefreshing(tab){
 		startSocket();
 	}
 
-	if(tab.url.match(/^http:\/\/localhost:5656\//gi) || tab.url.match(/^file:\/\/\//gi)) {
+	var parsedUrl = parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host;
+
+	if(tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
 
 		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
-
-	} else if(liveUrls.contains(parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
-
-		chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
-
 	}
 }
 
