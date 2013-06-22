@@ -16,3 +16,5 @@ Overwriting without uninstalling previous version will retain your configuration
 ### Installing Browser Extension for Live Refresh
 
 Currently only Chrome extension is available for Prepros. Click the `Install Chrome Extension` button [on the front page of Prepros website](http://alphapixels.com/prepros/) to install it.
+
+Live refresh works in Firefox, Chrome, Opera and even IE10 if you are using built in http server but to use custom server you have to install browser extension.

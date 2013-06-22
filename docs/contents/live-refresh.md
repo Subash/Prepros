@@ -20,4 +20,6 @@ Open projects options panel by clicking the cog icon in the project toolbar and 
 
 ![Custom Server](img/live-refresh/custom-server.jpg)
 
+Live refresh works in Firefox, Chrome, Opera and even IE10 if you are using built in http server but to use custom server you have to install browser extension.
+
 <div class="alert alert-info">Please enable `allow access to file url` option for Prepros chrome extension from chrome extensions page.</div>
