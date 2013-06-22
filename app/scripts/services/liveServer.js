@@ -62,7 +62,68 @@ prepros.factory('liveServer', function (config) {
         }
     }
 
-    // function to add project to server
+
+    //Live reload middleware inspired by https://github.com/intesso/connect-livereload
+    function liveReload(opt) {
+
+        var snippet = '<script src="http://localhost:5656/lr/livereload.js?snipver=1&host=localhost&port=25690"></script>';
+
+        return function liveReload(req, res, next) {
+            var writeHead = res.writeHead;
+            var write = res.write;
+            var end = res.end;
+            var path = require('path');
+            var url = require('url');
+
+            var filepath = url.parse(req.url).pathname;
+
+            filepath = filepath.slice(-1) === '/' ? filepath + 'index.html' : filepath;
+
+            if (path.extname( filepath ) !== '.html') {
+
+                return next();
+            }
+
+            res.push = function(chunk) {
+                res.data = (res.data || '') + chunk;
+            };
+
+            res.inject = res.write = function(string, encoding) {
+
+                if (string !== undefined) {
+
+                    var body = string instanceof Buffer ? string.toString(encoding) : string;
+
+                    res.push(body.replace(/<\/body>/, function (w) {
+                        return snippet + w;
+                    }));
+                }
+
+                return true;
+            };
+
+            res.end = function(string, encoding) {
+                res.writeHead = writeHead;
+                res.end = end;
+                var result = res.inject(string, encoding);
+                if (!result) {
+                    return res.end(string, encoding);
+                }
+
+                if (res.data !== undefined && !res._header) {
+                    res.setHeader('content-length', Buffer.byteLength(res.data, encoding));
+                }
+
+                res.end(res.data, encoding);
+            };
+
+            next();
+        };
+    }
+
+    app.use(liveReload());
+
+    //function to add project to server
     function startServing(projects) {
 
         urls = [];
