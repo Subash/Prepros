@@ -65,67 +65,64 @@ prepros.factory('liveServer', function (config) {
 
 
     //Live reload middleware inspired by https://github.com/intesso/connect-livereload
-    function liveReload() {
+    app.use(function(req, res, next) {
 
-        var snippet = '<script>' +
-            '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
-            'a.src="http://" + window.location.host + "/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=25690"})();' +
-            '</script>';
+        var writeHead = res.writeHead;
+        var write = res.write;
+        var end = res.end;
+        var path = require('path');
+        var url = require('url');
 
-        return function liveReload(req, res, next) {
-            var writeHead = res.writeHead;
-            var write = res.write;
-            var end = res.end;
-            var path = require('path');
-            var url = require('url');
+        var filepath = url.parse(req.url).pathname;
 
-            var filepath = url.parse(req.url).pathname;
+        filepath = filepath.slice(-1) === '/' ? filepath + 'index.html' : filepath;
 
-            filepath = filepath.slice(-1) === '/' ? filepath + 'index.html' : filepath;
+        if (path.extname( filepath ) !== '.html') {
 
-            if (path.extname( filepath ) !== '.html') {
+            return next();
+        }
 
-                return next();
+        res.push = function(chunk) {
+            res.data = (res.data || '') + chunk;
+        };
+
+        res.inject = res.write = function(string, encoding) {
+
+            if (string !== undefined) {
+
+                var body = string instanceof Buffer ? string.toString(encoding) : string;
+
+                var snippet = '<script>' +
+                    '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
+                    'a.src="http://" + window.location.host + "/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=25690"})();' +
+                    '</script>';
+
+                res.push(body.replace(/<\/body>/, function (w) {
+                    return snippet + w;
+                }));
             }
 
-            res.push = function(chunk) {
-                res.data = (res.data || '') + chunk;
-            };
-
-            res.inject = res.write = function(string, encoding) {
-
-                if (string !== undefined) {
-
-                    var body = string instanceof Buffer ? string.toString(encoding) : string;
-
-                    res.push(body.replace(/<\/body>/, function (w) {
-                        return snippet + w;
-                    }));
-                }
-
-                return true;
-            };
-
-            res.end = function(string, encoding) {
-                res.writeHead = writeHead;
-                res.end = end;
-                var result = res.inject(string, encoding);
-                if (!result) {
-                    return res.end(string, encoding);
-                }
-
-                if (res.data !== undefined && !res._header) {
-                    res.setHeader('content-length', Buffer.byteLength(res.data, encoding));
-                }
-
-                res.end(res.data, encoding);
-            };
-
-            next();
+            return true;
         };
-    }
 
-    app.use(liveReload());
+        res.end = function(string, encoding) {
+            res.writeHead = writeHead;
+            res.end = end;
+            var result = res.inject(string, encoding);
+
+            if (!result) {
+                return res.end(string, encoding);
+            }
+
+            if (res.data !== undefined && !res._header) {
+                res.setHeader('content-length', Buffer.byteLength(res.data, encoding));
+            }
+
+            res.end(res.data, encoding);
+        };
+
+        next();
+    });
 
     //function to add project to server
     function startServing(projects) {
