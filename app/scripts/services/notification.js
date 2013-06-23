@@ -69,7 +69,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
-        log = (log.length>=30)? log.slice(0, 29): log;
+        log = (log.length>=20)? log.slice(0, 19): log;
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
@@ -86,7 +86,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
 
-        log = (log.length>=30)? log.slice(0, 29): log;
+        log = (log.length>=20)? log.slice(0, 19): log;
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
