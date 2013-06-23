@@ -37,8 +37,14 @@ html
             -moz-transition: padding .4s;
             transition: padding .4s;
         }
+
+        p {
+            text-align: center;
+        }
     body
         h1 Prepros Projects
         - each project in projects
             div.project
                 a(href=project.url) #{project.name}
+        - if (projects.length == 0)
+            p No projects found. Hit refresh after adding projects.
