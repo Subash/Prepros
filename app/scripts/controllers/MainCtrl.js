@@ -182,6 +182,6 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     //Update log on log change event
     $scope.$on('logUpdate', function(e, data) {
         $scope.log = data.log;
-    })
+    });
 
 });
