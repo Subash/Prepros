@@ -69,7 +69,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
-        log = (log.length>30)? log.slice(0, 30): log;
+        log = (log.length>=30)? log.slice(0, 29): log;
+
+        $rootScope.$broadcast('logUpdate', {log: log});
 
         global.preprosNotification = {name: name, message: message, type: 'error'};
 
@@ -84,7 +86,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
 
-        log = (log.length>30)? log.slice(0, 30): log;
+        log = (log.length>=30)? log.slice(0, 29): log;
+
+        $rootScope.$broadcast('logUpdate', {log: log});
 
         global.preprosNotification = {name: name, message: message, type: 'success'};
 
@@ -97,17 +101,14 @@ prepros.factory('notification', function (config, $location, $rootScope) {
     //Clear Log
     var clearLog = function(){
         log = [];
-    };
-
-    var getLog = function(){
-        return log;
+        $rootScope.$broadcast('logUpdate', {log: log});
     };
 
     return {
 		error: error,
         success: success,
         clearLog: clearLog,
-        getLog: getLog
+        log : log
     };
 
 });

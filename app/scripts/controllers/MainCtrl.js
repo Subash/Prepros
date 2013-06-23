@@ -27,7 +27,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     $scope.selectedProjectFiles = [];
 
-    $scope.log = notification.getLog();
+    $scope.log = notification.log;
 
     ///File Change
     var throttleFileChange = _.throttle(function(){
@@ -176,9 +176,12 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     //Function to clear log
     $scope.clearLog = function(){
-
         notification.clearLog();
-
-        $scope.log = notification.getLog();
     };
+
+    //Update log on log change event
+    $scope.$on('logUpdate', function(e, data) {
+        $scope.log = data.log;
+    })
+
 });
