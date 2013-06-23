@@ -18,6 +18,7 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
     $scope.node_modules = [];
     $scope.errorChecking = false;
     $scope.upToDate = false;
+    $scope.checking = true;
 
     $scope.update = {
         available: false,
@@ -38,9 +39,13 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
             $scope.upToDate = true;
         }
 
+        $scope.checking = false;
+
     }, function(){
 
         $scope.errorChecking = true;
+
+        $scope.checking = false;
 
     });
 

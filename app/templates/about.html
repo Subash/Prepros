@@ -27,11 +27,15 @@
                     to download.
                 </div>
 
-                <div ng-show="errorChecking" class="alert alert-error">
+                <div ng-if="errorChecking" class="alert alert-error">
                     An error occurred while checking for updates.
                 </div>
 
-                <div ng-show="upToDate" class="alert alert-success">
+                <div ng-if="checking" class="alert alert-info">
+                    Checking for updates &hellip;
+                </div>
+
+                <div ng-if="upToDate" class="alert alert-success">
                     You are using the latest and greatest version of Prepros.
                 </div>
             </div>
