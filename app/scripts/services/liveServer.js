@@ -16,7 +16,8 @@ prepros.factory('liveServer', function (config) {
     var express = require('express'),
         app = express(),
         WebSocketServer = require('websocket').server,
-        urls= [];
+        urls= [],
+        serverProjects = [];
 
     //Start listening
     var httpServer = app.listen(5656);
@@ -130,14 +131,19 @@ prepros.factory('liveServer', function (config) {
     function startServing(projects) {
 
         urls = [];
+        serverProjects = [];
 
         _.each(projects, function(project){
 
             if (!project.config.useCustomServer) {
 
-                app.use('/' + project.config.serverUrl + '/', express.static(project.path));
+                var projectUrl = '/' + project.config.serverUrl + '/';
 
-                app.use('/' + project.config.serverUrl + '/', express.directory(project.path, {icons: true}));
+                app.use(projectUrl, express.static(project.path));
+
+                app.use(projectUrl, express.directory(project.path, {icons: true}));
+
+                serverProjects.push({ name: project.name, url : projectUrl});
             }
 
             if (project.config.useCustomServer) {
@@ -157,6 +163,19 @@ prepros.factory('liveServer', function (config) {
         httpServer: app.listen(25690),
 
         autoAcceptConnections: false
+
+    });
+
+    //Index page for projects
+    app.set('views', config.basePath + '/templates/live-server');
+
+    app.set('view engine', 'jade');
+
+    app.get('/', function (req, res) {
+
+        res.render('index', {
+            projects: serverProjects
+        });
 
     });
 

@@ -1,0 +1,44 @@
+html
+    head
+        title Prepros Projects
+    style
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
+
+        body {
+            max-width: 600px;
+            margin: auto;
+            background: #EFEFEF;
+            font: 14px/1.5;
+            font-family: 'Open Sans', sans-serif;
+            color: #666;
+        }
+        h1 {
+            margin: 20px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .project a {
+            display: block;
+            text-decoration: none;
+            color: #FA6900;
+            margin: 10px;
+            padding: 10px;
+            background: #E0E4CC;
+            text-transform: capitalize;
+            -webkit-transition: padding .4s;
+            -moz-transition: padding .4s;
+            transition: padding .4s;
+        }
+
+        .project a:hover {
+            padding-left: 30px;
+            -webkit-transition: padding .4s;
+            -moz-transition: padding .4s;
+            transition: padding .4s;
+        }
+    body
+        h1 Prepros Projects
+        - each project in projects
+            div.project
+                a(href=project.url) #{project.name}
