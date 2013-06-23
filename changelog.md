@@ -1,4 +1,4 @@
-## Version 1.7.0 -June 11, 2013
+### Version 1.7.0 -June 11, 2013
 
 * Feature: Javascript concatenation and minification [Docs](http://alphapixels.com/prepros/docs/js-concat-minify.html)
 * Feature: Options for less strict math and unit
@@ -9,13 +9,13 @@
 * Updated Slim to 2.0.0
 * Some performance and UI improvements
 
-## Version 1.6.1 -June 08, 2013
+### Version 1.6.1 -June 08, 2013
 
 * Bugfix: Prepros didn't ignore sass partials
 * Feature: Slim import watching
 
 
-## Version 1.6.0 -June 06, 2013
+### Version 1.6.0 -June 06, 2013
 
 * Feature : Option to point to an external ruby compiler
 * Feature : Per project html, css and js folders
@@ -29,7 +29,7 @@
 * Updated uglify-js to 2.3.6
 * Some performance and UI improvements
 
-## Version 1.5.0 -May 29, 2013
+### Version 1.5.0 -May 29, 2013
 
 * Critical Bugfix : Changing option of a file affected another file
 * Enhancement : Brand new style for notifications
@@ -39,13 +39,13 @@
 * Feature : Coffeescript bare option
 * Some ui improvements
 
-## Version 1.4.1 -May 25, 2013
+### Version 1.4.1 -May 25, 2013
 
 * Feature: Windows XP Compatibility
 * Feature: Sass debug information
 * Bugfix: Sass imports not detected
 
-## Version 1.4.0 -May 22, 2013
+### Version 1.4.0 -May 22, 2013
 
 * Support for compass config.rb file (must be inside projects root folder)
 * Support deep nested imports
@@ -58,7 +58,7 @@
 * Other small fixes and improvements
 
 
-## Version 1.3.0 -May 16, 2013
+### Version 1.3.0 -May 16, 2013
 
 * New default options panel ( Ability to save default options for languages )
 * Compass Susy plugin
@@ -68,7 +68,7 @@
 * Fixed bug where app crash was caused and file settings were not preserved.
 
 
-## Version 1.2.1 -May 11, 2013
+### Version 1.2.1 -May 11, 2013
 
 * Support [Sass Bourbon](http://bourbon.io) Mixins
 * Markdown Filter For Haml
