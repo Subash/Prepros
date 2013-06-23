@@ -1,8 +1,8 @@
-<div class="modal hide fade multi-device" id="multiDeviceTesting" ng-controller="MultiDeviceCtrl">
+<div class="modal hide fade multi-device" id="multiDevice" ng-controller="MultiDeviceCtrl">
 
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
-        <h3>Multi Device Testing</h3>
+        <h3>Multi device browser refresh</h3>
     </div>
 
     <div class="modal-body">
@@ -17,8 +17,8 @@
         <div class="alert alert-error" ng-if="addresses.length == 0">No networks detected</div>
 
         <p ng-if="addresses.length > 0">
-            Multi device testing and live refresh is only available if you are using built in http server.
-            If addresses are not working check firewall permissions.</p>
+            Multi device browser refresh is only available if you are using built in http server.
+            If addresses are not working check your firewall permissions.</p>
     </div>
 
     <div class="modal-footer">

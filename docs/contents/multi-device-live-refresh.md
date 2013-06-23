@@ -1,5 +1,5 @@
 ---
-title: Multi Device Testing
+title: Multi Device Live Refresh
 template: index.jade
 ---
 
@@ -11,4 +11,4 @@ Prepros uses websockets for communication so your device must support it for liv
 
 ![LESS](img/multi-device-testing/multi.jpg)
 
-<div class="alert alert-info">Multi device testing is only availabe if you are using built in Prepros server not the custom server.</div>
+<div class="alert alert-info">Multi device testing and live refresg is only availabe if you are using built in Prepros server not the custom server.</div>
