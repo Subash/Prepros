@@ -24,7 +24,7 @@
 
     var controllers = [
         'MainCtrl',
-        'TitleBarCtrl',
+        'TitlebarCtrl',
         'SidebarCtrl',
         'FilesCtrl',
         'AboutCtrl',
