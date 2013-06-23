@@ -27,7 +27,8 @@
         'TitleBarCtrl',
         'SidebarCtrl',
         'FilesCtrl',
-        'AboutCtrl'
+        'AboutCtrl',
+        'MultiDeviceCtrl'
     ];
 
     var services = [

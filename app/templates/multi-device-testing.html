@@ -1,0 +1,27 @@
+<div class="modal hide fade multi-device" id="multiDeviceTesting" ng-controller="MultiDeviceCtrl">
+
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>Multi Device Testing</h3>
+    </div>
+
+    <div class="modal-body">
+        <p>Please enter one of the following addresses from your device to open Prepros http server.</p>
+
+        <h4>Network Address(es) to access Prepros server</h4>
+
+        <ul class="ips" ng-if="addresses.length > 0">
+            <li ng-repeat="address in addresses"><code>http://{{address.ip}}:5656</code> &nbsp; &rarr; for devices inside <code>{{address.name}}</code> network</li>
+        </ul>
+
+        <div class="alert alert-error" ng-if="addresses.length == 0">No networks detected</div>
+
+        <p ng-if="addresses.length > 0">
+            Multi device testing and live refresh is only available if you are using built in http server.
+            If addresses are not working check firewall permissions.</p>
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+    </div>
+</div>

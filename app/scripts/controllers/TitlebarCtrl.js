@@ -22,13 +22,6 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     };
 
-    //Help Link
-    $scope.help = function () {
-
-        utils.openBrowser(config.online.helpUrl);
-
-    };
-
     //Minimize app to tray by hiding the window
     $scope.toTray = function(){
         require('nw.gui').Window.get().hide();

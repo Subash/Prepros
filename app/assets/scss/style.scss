@@ -10,6 +10,7 @@
 @import 'files';
 @import 'loading';
 @import 'log';
+@import 'multi_device';
 
 
 .wrapper {
@@ -18,4 +19,8 @@
   height: 552px;
   border: 1px solid #3e3e3e;
   @include clearfix();
+}
+
+.modal.project-options.fade.in {
+  top: 5%;
 }
