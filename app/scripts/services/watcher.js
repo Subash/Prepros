@@ -49,7 +49,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 		//Watch files
 		_.each(filesToWatch, function (file) {
 
-		    //Prevent multiple events
+            //Prevent multiple events
 			var debounceCompile = _.debounce(function () {
 
                 var f = _.findWhere(files, {input: file});
