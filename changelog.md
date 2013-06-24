@@ -7,7 +7,7 @@
 * No pooling; Browser refresh is only triggered when file is compiled
 * Improved Performance
 * Improved UI
-* Pretty Live Urls (http://localhost:5656/{project-name}) instead of ids
+* Pretty Live Urls (localhost:5656/{project-name}) instead of ids
 * Support for jade `extends` watching
 * Sass unix new lines
 * Other minor bug fixes
