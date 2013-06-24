@@ -31,7 +31,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
             if(!_.contains(_files, file)) {
 
                 fs.unwatchFile(file);
-                watchingFiles = _.without(file);
+                watchingFiles = _.without(watchingFiles, file);
             }
         });
 
@@ -40,7 +40,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
             if(!_.contains(_imports, imp)) {
 
                 fs.unwatchFile(imp);
-                watchingImports = _.without(imp);
+                watchingImports = _.without(watchingImports, imp);
             }
         });
 
