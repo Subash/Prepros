@@ -1,3 +1,17 @@
+### Version 2.0.0 -June 24, 2013
+
+* Multi device live refresh [docs](http://alphapixels.com/prepros/docs/multi-device-live-refresh.html)
+* Live refresh is supported in all browsers if your are using built in server [docs](http://alphapixels.com/prepros/docs/live-refresh.html)
+* Javascript `@prepros-append` statements [docs](http://alphapixels.com/prepros/docs/js-concat-minify.html) 
+* Support for codekit style `@codekit-append/@codekit/prepend` statements  [docs](http://alphapixels.com/prepros/docs/js-concat-minify.html) 
+* No pooling; Browser refresh is only triggered when file is compiled
+* Improved Performance
+* Improved UI
+* Pretty Live Urls (http://localhost:5656/{project-name}) instead of ids
+* Support for jade `extends` watching
+* Sass unix new lines
+* Other minor bug fixes
+
 ### Version 1.7.0 -June 11, 2013
 
 * Feature: Javascript concatenation and minification [Docs](http://alphapixels.com/prepros/docs/js-concat-minify.html)
