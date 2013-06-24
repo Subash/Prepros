@@ -14,33 +14,50 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 	"use strict";
 
 	var fs = require("fs"),
-        watching = [];
+        watchingFiles = [],
+        watchingImports = [];
 
 	//Function to start watching file
 	function startWatching(data) {
 
 		var files = data.files;
+        var imports = data.imports;
 
-		var imports = data.imports;
+        var _files = _.pluck(files, 'input');
+        var _imports = _.pluck(imports, 'path');
 
-		//Remove all previous listeners
-        _.each(watching, function(filePath){
-            fs.unwatchFile(filePath);
+        _.each(watchingFiles, function(file) {
+
+            if(!_.contains(_files, file)) {
+
+                fs.unwatchFile(file);
+                watchingFiles = _.without(file);
+            }
         });
 
-        watching = [];
+        _.each(watchingImports, function(imp) {
 
+            if(!_.contains(_imports, imp)) {
+
+                fs.unwatchFile(imp);
+                watchingImports = _.without(imp);
+            }
+        });
+
+        var filesToWatch = _.difference(_files, watchingFiles);
 
 		//Watch files
-		_.each(files, function (file) {
+		_.each(filesToWatch, function (file) {
 
-			//Prevent multiple events
+		    //Prevent multiple events
 			var debounceCompile = _.debounce(function () {
 
-                if(file.config.autoCompile){
+                var f = _.findWhere(files, {input: file});
+
+                if(f.config.autoCompile){
 
                     //Compile File
-                    compiler.compile(file.id);
+                    compiler.compile(f.id);
 
                 }
 
@@ -50,25 +67,29 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
             try {
 
-                fs.watchFile(file.input, { persistent: true, interval: 200}, debounceCompile);
+                fs.watchFile(file, { persistent: true, interval: 200}, debounceCompile);
 
-                //Push to watching list so it can be closed later
-                watching.push(file.input);
+
+                watchingFiles.push(file);
 
             } catch (err) {
 
-                notification.error('Error watching file.', 'An error occurred while watching file', file.input);
+                notification.error('Error watching file.', 'An error occurred while watching file', file);
             }
 
 		});
 
+        var importsToWatch = _.difference(_imports, watchingImports);
+
 		//Watch imports
-		_.each(imports, function (imp) {
+		_.each(importsToWatch, function (imp) {
 
 			//Prevent multiple events
 			var debounceCompile = _.debounce(function () {
 
-                _.each(imp.parents, function(parentId){
+                var im = _.findWhere(imports, {path: imp});
+
+                _.each(im.parents, function(parentId){
 
                     var parentFile = projectsManager.getFileById(parentId);
 
@@ -82,14 +103,14 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
 			try {
 
-                fs.watchFile(imp.path, { persistent: true, interval: 200}, debounceCompile);
+                fs.watchFile(imp, { persistent: true, interval: 200}, debounceCompile);
 
                 //Push to watching list so it can be closed later
-                watching.push(imp.path);
+                watchingImports.push(imp);
 
 			} catch (err) {
 
-                notification.error('Error watching imported file', 'An error occurred while watching file', imp.path);
+                notification.error('Error watching imported file', 'An error occurred while watching file', imp);
 
 			}
 
