@@ -1,3 +1,7 @@
+### Version 2.0.1 -June 24, 2013
+* Fixed Critical Configurations Bug
+* Faster file watcher
+
 ### Version 2.0.0 -June 24, 2013
 
 * Multi device live refresh [docs](http://alphapixels.com/prepros/docs/multi-device-live-refresh.html)
