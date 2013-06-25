@@ -470,14 +470,12 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             newPath = newPath + fileTypes.getCompiledExtension(file.input);
         }
 
-        file.output = newPath;
-
-        file.shortOutput = newPath.replace(/\\/g, '/');
+        file.output = file.shortOutput = newPath;
 
         //Show Relative path if output file is within project folder
         if (path.relative(project.path, newPath).indexOf('.' + path.sep) === -1) {
 
-            file.shortOutput = path.relative(project.path, newPath).replace(/\\/g, '/');
+            file.shortOutput = path.relative(project.path, newPath);
         }
     }
 
