@@ -48,7 +48,17 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             show_in_taskbar: false
         });
 
-        notificationWindow.showInactive();
+        if(notificationWindow.showInactive) {
+
+            notificationWindow.showInactive();
+
+        } else {
+
+            notificationWindow.show();
+
+        }
+
+
 
         notificationWindow.on('close', function(){
             this.close(true);
