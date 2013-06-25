@@ -139,8 +139,8 @@
         <span class="label-desc">Auto Compile</span>
     </label>
     <label>
-        <input type="checkbox" ng-model="userConfig.sass.lineNumbers">
-        <span class="label-desc">Line numbers</span>
+        <input type="checkbox" ng-model="userConfig.sass.useCustomRuby">
+        <span class="label-desc">Use Custom Ruby</span>
     </label>
     <label>
         <input type="checkbox" ng-model="userConfig.sass.unixNewlines">
@@ -215,7 +215,10 @@
         <input type="checkbox" ng-model="userConfig.haml.autoCompile">
         <span class="label-desc">Auto Compile</span>
     </label>
-
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.useCustomRuby">
+        <span class="label-desc">Use Custom Ruby</span>
+    </label>
     <label>
         <input type="checkbox" ng-model="userConfig.haml.doubleQuotes">
         <span class="label-desc">Double quotes</span>
@@ -241,6 +244,10 @@
     <label>
         <input type="checkbox" ng-model="userConfig.slim.autoCompile">
         <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.sass.useCustomRuby">
+        <span class="label-desc">Use Custom Ruby</span>
     </label>
     <label>
         <input type="checkbox" ng-model="userConfig.slim.pretty">
@@ -309,18 +316,10 @@
 
 <div data-title="Advanced">
     <label>
-        <input type="checkbox" ng-model="userConfig.useCustomRuby">
-        <span class="label-desc">Use Custom Ruby for Sass and Compass</span>
-    </label>
-
-    <label ng-show="userConfig.useCustomRuby">
-        <span class="label-desc label-block">Path to ruby.exe file</span>
+        <span class="label-desc label-block">Path to custom ruby executable file</span>
+        <span class="muted label-block">It's windows only option.<br>OSX users just check use custom ruby option.</span>
         <input type="text" ng-model="userConfig.customRubyPath">
     </label>
-
-    <div class="alert alert-danger" style="width: 350px;">
-        <i class="icomoon-info"></i> These settings might hurt, Use with caution !
-    </div>
 </div>
 </div>
 

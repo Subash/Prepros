@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('sass', function (config, utils, notification) {
+prepros.factory('sass', function (config, utils) {
 
     'use strict';
 
@@ -83,7 +83,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
         if(file.config.fullCompass && file.config.compass) {
 
-            args = [config.ruby.gems.compass.path];
+            args = [config.ruby.getGem('compass')];
 
             args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
@@ -107,7 +107,7 @@ prepros.factory('sass', function (config, utils, notification) {
 
         } else {
 
-            args = [config.ruby.gems.sass.path];
+            args = [config.ruby.getGem('sass')];
 
             //Force utf-8 encoding
             args.push('-E', 'utf-8');
@@ -145,7 +145,7 @@ prepros.factory('sass', function (config, utils, notification) {
             }
 
             //Sass bourbon
-            args.push('--load-path', config.ruby.gems.bourbon.path);
+            args.push('--load-path', config.ruby.bourbon);
 
             //Line numbers
             if (file.config.lineNumbers) {
@@ -159,55 +159,39 @@ prepros.factory('sass', function (config, utils, notification) {
 
         var rubyProcess;
 
-        if(config.getUserOptions().useCustomRuby) {
 
-            try {
+        try {
 
-                if(fs.existsSync(config.getUserOptions().customRubyPath)) {
+            //Start a child process to compile the file; file.projectPath is provided by compiler.js file
+            rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
 
-                    //Start a child process to compile the file; file.projectPath is provided by compiler.js file
-                    rubyProcess = cp.spawn(config.getUserOptions().customRubyPath, args, {cwd: file.projectPath});
+            var compileErr = false;
 
-                } else {
+            //If there is a compilation error
+            rubyProcess.stderr.on('data', function (data) {
 
+                compileErr = true;
 
-                    notification.error('Invalid Ruby Path', 'Prepros was unable to run Ruby', config.getUserOptions().customRubyPath + ' not found');
+                errorCall(data.toString());
+
+            });
+
+            //Success if there is no error
+            rubyProcess.on('exit', function(){
+                if(!compileErr){
+
+                    successCall(file.input);
 
                 }
 
-            } catch(e) {
+                rubyProcess = null;
+            });
 
-                notification.error('Invalid Custom Path', 'Prepros was unable to run custom executable.', e.message);
-            }
+        } catch (e) {
 
-        } else {
-
-            //Start a child process to compile the file; file.projectPath is provided by compiler.js file
-            rubyProcess = cp.spawn(config.ruby.path, args, {cwd: file.projectPath});
+            errorCall('Unable to execute ruby' + e.message);
 
         }
-
-        var compileErr = false;
-
-        //If there is a compilation error
-        rubyProcess.stderr.on('data', function (data) {
-
-            compileErr = true;
-
-            errorCall(data.toString());
-
-        });
-
-        //Success if there is no error
-        rubyProcess.on('exit', function(){
-            if(!compileErr){
-
-                successCall(file.input);
-
-            }
-
-            rubyProcess = null;
-        });
 
     };
 

@@ -62,7 +62,7 @@ prepros.factory('slim', function (config, utils) {
 
         var compile = function (file, successCall, errorCall) {
 
-            var args = [config.ruby.gems.slim.path];
+            var args = [config.ruby.getGem('slim')];
 
             args.push('-oformat=' + file.config.format);
 
@@ -87,30 +87,38 @@ prepros.factory('slim', function (config, utils) {
 
             fs.mkdirsSync(path.dirname(file.output));
 
-            //Start a child process to compile the file
-            var rubyProcess = cp.spawn(config.ruby.path, args, {cwd: path.dirname(file.input)});
+            try {
 
-            var compileErr = false;
+                //Start a child process to compile the file
+                var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(file.input)});
 
-            //If there is a compilation error
-            rubyProcess.stderr.on('data', function (data) {
+                var compileErr = false;
 
-                compileErr = true;
+                //If there is a compilation error
+                rubyProcess.stderr.on('data', function (data) {
 
-                errorCall(data.toString() + "\n" + file.input);
+                    compileErr = true;
 
-            });
+                    errorCall(data.toString() + "\n" + file.input);
 
-            //Success if there is no error
-            rubyProcess.on('exit', function(){
-                if(!compileErr){
+                });
 
-                    successCall(file.input);
+                //Success if there is no error
+                rubyProcess.on('exit', function(){
+                    if(!compileErr){
 
-                }
+                        successCall(file.input);
 
-                rubyProcess = null;
-            });
+                    }
+
+                    rubyProcess = null;
+                });
+
+            } catch (e) {
+
+                errorCall('Unable to execute ruby' + e.message);
+
+            }
         };
 
     return {

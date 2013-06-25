@@ -59,11 +59,11 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
 
     }
 
-    for ( var gem in config.ruby.gems ) {
+    for ( var gem in config.ruby_gems ) {
 
-        if(config.ruby.gems.hasOwnProperty(gem)) {
+        if(config.ruby_gems.hasOwnProperty(gem)) {
 
-            $scope.gems.push(gem + " -> " + config.ruby.gems[gem].version);
+            $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
 
         }
 

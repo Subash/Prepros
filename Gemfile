@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'sass'
+gem 'compass'
+gem 'haml'
+gem 'kramdown'
+gem 'slim'

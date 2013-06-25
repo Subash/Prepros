@@ -34,6 +34,9 @@ prepros.factory('config', function ($http) {
     //Node modules required by the app
     var node_modules = packageData.dependencies;
 
+    //Ruby Gems
+    var ruby_gems = packageData.ruby.gems;
+
     //App version
     var version = packageData.version;
 
@@ -47,25 +50,6 @@ prepros.factory('config', function ($http) {
         authorTwitter: 'http://twitter.com/sbspk',
         authorUrl: 'http://alphapixels.com'
     };
-
-    //Ruby Executable
-    var ruby = {
-        path: path.join(packagePath, packageData.ruby.path),
-        version: packageData.ruby.version
-    };
-
-    //Gems
-    ruby.gems = {};
-    for ( var gemKey in packageData.ruby.gems ) {
-
-        if(packageData.ruby.gems.hasOwnProperty(gemKey)) {
-            ruby.gems[gemKey] = {
-
-                path: path.join(packagePath, packageData.ruby.gems[gemKey].path),
-                version: packageData.ruby.gems[gemKey].version
-            };
-        }
-    }
 
     //Read user config
     var userConfig = {};
@@ -105,6 +89,7 @@ prepros.factory('config', function ($http) {
         //Default Sass options
         sass : {
             autoCompile : true,
+            useCustomRuby: false,
             lineNumbers : false,
             unixNewlines: false,
             debug: false,
@@ -151,6 +136,7 @@ prepros.factory('config', function ($http) {
         //Default Haml Options
         haml: {
             autoCompile: true,
+            useCustomRuby: false,
             format: 'html5', //xhtml, html5
             outputStyle: 'indented', //indented, ugly
             doubleQuotes: false
@@ -159,6 +145,7 @@ prepros.factory('config', function ($http) {
         //Default Slim  Options
         slim: {
             autoCompile: true,
+            useCustomRuby: false,
             pretty: true,
             indent: 'default', //default, four, tab
             fourSpaceIndent: true,
@@ -224,12 +211,58 @@ prepros.factory('config', function ($http) {
         });
     }
 
+    //Ruby Executable
+    var ruby = {
+        version: packageData.ruby.version,
+        bourbon: path.join(packagePath, packageData.ruby.bourbon),
+        getExec: function(fileType) {
+
+            if(process.platform !== 'win32') {
+
+                return 'ruby';
+            }
+
+            if(userConfig[fileType].useCustomRuby) {
+
+                if(fs.existsSync(userConfig.customRubyPath)) {
+                    return userConfig.customRubyPath;
+                } else {
+                    return path.join(packagePath, packageData.ruby.path);
+                }
+            }
+
+            return path.join(packagePath, packageData.ruby.path);
+
+        },
+        getGem: function(fileType) {
+
+            var bin = path.join(packagePath, packageData.ruby.bin);
+
+            if(fileType !== 'compass') {
+
+                if(userConfig[fileType].useCustomRuby) {
+                    return path.join(bin, 'user' , fileType);
+                } else {
+                    return path.join(bin, 'prepros' , fileType);
+                }
+            }
+
+            if(userConfig.sass.useCustomRuby) {
+                return path.join(bin, 'user' , 'compass');
+            } else {
+                return path.join(bin, 'prepros' , 'compass');
+            }
+        }
+
+    };
+
 
     var config =  {
         cachePath: cachePath,
         basePath: basePath,
         ruby: ruby,
         node_modules: node_modules,
+        ruby_gems: ruby_gems,
         online: online,
         version: version,
         getUserOptions: getUserOptions,

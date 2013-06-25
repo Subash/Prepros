@@ -62,7 +62,7 @@ prepros.factory('haml', function (config, utils) {
 
         var compile = function (file, successCall, errorCall) {
 
-            var args = [config.ruby.gems.haml.path];
+            var args = [config.ruby.getGem('haml')];
 
             //Input and output
             args.push(file.input, file.output);
@@ -83,30 +83,39 @@ prepros.factory('haml', function (config, utils) {
 
             fs.mkdirsSync(path.dirname(file.output));
 
-            //Start a child process to compile the file
-            var rubyProcess = cp.spawn(config.ruby.path, args);
+            try {
 
-            var compileErr = false;
+                //Start a child process to compile the file
+                var rubyProcess = cp.spawn(config.ruby.getExec('haml'), args);
 
-            //If there is a compilation error
-            rubyProcess.stderr.on('data', function (data) {
+                var compileErr = false;
 
-                compileErr = true;
+                //If there is a compilation error
+                rubyProcess.stderr.on('data', function (data) {
 
-                errorCall(data.toString() + "\n" + file.input);
+                    compileErr = true;
 
-            });
+                    errorCall(data.toString() + "\n" + file.input);
 
-            //Success if there is no error
-            rubyProcess.on('exit', function(){
-                if(!compileErr){
+                });
 
-                    successCall(file.input);
+                //Success if there is no error
+                rubyProcess.on('exit', function(){
+                    if(!compileErr){
 
-                    rubyProcess = null;
+                        successCall(file.input);
 
-                }
-            });
+                        rubyProcess = null;
+
+                    }
+                });
+
+            } catch (e) {
+
+                errorCall('Unable to execute ruby' + e.message);
+
+            }
+
         };
 
     return {

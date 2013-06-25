@@ -36,7 +36,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
 
-        notificationWindow = require('nw.gui').Window.open(notificationPath, {
+        var options = {
             x: window.screen.availWidth-410,
             y: window.screen.availHeight-110,
             width: 400,
@@ -46,9 +46,15 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             resizable: false,
             show: false,
             show_in_taskbar: false
-        });
+        };
 
-        if(notificationWindow.showInactive) {
+        if(process.platform !== 'win32') {
+            options.positionY = 10;
+        }
+
+        notificationWindow = require('nw.gui').Window.open(notificationPath, options);
+
+        if(typeof notificationWindow.showInactive === 'function') {
 
             notificationWindow.showInactive();
 
