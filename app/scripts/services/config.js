@@ -73,9 +73,13 @@ prepros.factory('config', function ($http) {
         enableSuccessNotifications: true,
         enableErrorNotifications: true,
         filterPatterns: '',
-        useCustomRuby: false,
-        customRubyPath: '',
-
+        customRuby: {
+            use: false,
+            path: '',
+            sass: false,
+            slim: false,
+            haml: false
+        },
 
         //Default Less Options
         less : {
@@ -89,7 +93,6 @@ prepros.factory('config', function ($http) {
         //Default Sass options
         sass : {
             autoCompile : true,
-            useCustomRuby: false,
             lineNumbers : false,
             unixNewlines: false,
             debug: false,
@@ -136,7 +139,6 @@ prepros.factory('config', function ($http) {
         //Default Haml Options
         haml: {
             autoCompile: true,
-            useCustomRuby: false,
             format: 'html5', //xhtml, html5
             outputStyle: 'indented', //indented, ugly
             doubleQuotes: false
@@ -145,7 +147,6 @@ prepros.factory('config', function ($http) {
         //Default Slim  Options
         slim: {
             autoCompile: true,
-            useCustomRuby: false,
             pretty: true,
             indent: 'default', //default, four, tab
             fourSpaceIndent: true,
@@ -222,13 +223,9 @@ prepros.factory('config', function ($http) {
                 return 'ruby';
             }
 
-            if(userConfig[fileType].useCustomRuby) {
+            if(userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
-                if(fs.existsSync(userConfig.customRubyPath)) {
-                    return userConfig.customRubyPath;
-                } else {
-                    return path.join(packagePath, packageData.ruby.path);
-                }
+                return path.join(packagePath, packageData.ruby.path);
             }
 
             return path.join(packagePath, packageData.ruby.path);
@@ -236,24 +233,24 @@ prepros.factory('config', function ($http) {
         },
         getGem: function(fileType) {
 
+            var ft = (fileType === 'compass')? 'sass': fileType;
+
             var bin = path.join(packagePath, packageData.ruby.bin);
 
-            if(fileType !== 'compass') {
+            if(process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
 
-                if(userConfig[fileType].useCustomRuby) {
-                    return path.join(bin, 'user' , fileType);
-                } else {
-                    return path.join(bin, 'prepros' , fileType);
-                }
-            }
+                return path.join(bin, 'user' , fileType);
 
-            if(userConfig.sass.useCustomRuby) {
-                return path.join(bin, 'user' , 'compass');
+            } else if(process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
+
+                return path.join(bin, 'user' , fileType);
+
             } else {
-                return path.join(bin, 'prepros' , 'compass');
+
+                return path.join(bin, 'prepros' , fileType);
+
             }
         }
-
     };
 
 

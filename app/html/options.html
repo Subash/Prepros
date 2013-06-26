@@ -50,11 +50,13 @@
 
             };
 
+            $scope.process = global.process;
+
             //Just Close the window, The controller will catch data and save it on close event
             $scope.done = function () {
                 require('nw.gui').Window.get().close();
             }
-        })
+        });
     </script>
 
     <!--Bootstrap Tabs -->
@@ -139,10 +141,6 @@
         <span class="label-desc">Auto Compile</span>
     </label>
     <label>
-        <input type="checkbox" ng-model="userConfig.sass.useCustomRuby">
-        <span class="label-desc">Use Custom Ruby</span>
-    </label>
-    <label>
         <input type="checkbox" ng-model="userConfig.sass.unixNewlines">
         <span class="label-desc">Unix Newlines</span>
     </label>
@@ -216,10 +214,6 @@
         <span class="label-desc">Auto Compile</span>
     </label>
     <label>
-        <input type="checkbox" ng-model="userConfig.haml.useCustomRuby">
-        <span class="label-desc">Use Custom Ruby</span>
-    </label>
-    <label>
         <input type="checkbox" ng-model="userConfig.haml.doubleQuotes">
         <span class="label-desc">Double quotes</span>
     </label>
@@ -244,10 +238,6 @@
     <label>
         <input type="checkbox" ng-model="userConfig.slim.autoCompile">
         <span class="label-desc">Auto Compile</span>
-    </label>
-    <label>
-        <input type="checkbox" ng-model="userConfig.slim.useCustomRuby">
-        <span class="label-desc">Use Custom Ruby</span>
     </label>
     <label>
         <input type="checkbox" ng-model="userConfig.slim.pretty">
@@ -315,11 +305,40 @@
 </div>
 
 <div data-title="Advanced">
+
     <label>
-        <span class="label-desc label-block">Path to custom ruby executable file</span>
-        <span class="muted label-block">It's windows only option.<br>OSX users just check use custom ruby option.</span>
-        <input type="text" ng-model="userConfig.customRubyPath">
+        <input type="checkbox" ng-model="userConfig.customRuby.use">
+        <span class="label-desc">Use Custom Ruby</span>
     </label>
+
+    <div ng-if="userConfig.customRuby.use">
+        <label ng-if="process.platform == 'win32'">
+            <span class="label-desc label-block">Path to custom ruby executable file</span>
+            <input type="text" ng-model="userConfig.customRuby.path">
+        </label>
+        <div ng-if="userConfig.customRuby.path != ''">
+            <label>
+                <input type="checkbox" ng-model="userConfig.customRuby.sass">
+                <span class="label-desc">For Sass</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.customRuby.slim">
+                <span class="label-desc">For Slim</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.customRuby.haml">
+                <span class="label-desc">For HAML</span>
+            </label>
+        </div>
+
+
+    </div>
+
+    <div class="alert alert-danger" style="width: 350px;">
+        <i class="icomoon-info"></i> These settings might hurt, Use with caution !
+    </div>
+
+
 </div>
 </div>
 
