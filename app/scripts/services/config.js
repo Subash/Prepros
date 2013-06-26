@@ -17,7 +17,7 @@ prepros.factory('config', function ($http) {
         os = require('os');
 
     //Base path
-    var basePath = path.join(path.dirname(process.execPath), 'app');
+    var basePath = path.join(process.cwd(), 'app');
 
     //Package.json file url
     var packageFileUrl = path.join(basePath, '../package.json');
