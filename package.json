@@ -11,7 +11,8 @@
         "resizable": false,
         "width": 902,
         "height": 552,
-        "show": false
+        "show": false,
+        "dom_storage_quota": 40
     },
 
     "repository": {
