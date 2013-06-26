@@ -225,7 +225,7 @@ prepros.factory('config', function ($http) {
 
             if(userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
-                return path.join(packagePath, packageData.ruby.path);
+                return path.join(userConfig.customRuby.path);
             }
 
             return path.join(packagePath, packageData.ruby.path);
