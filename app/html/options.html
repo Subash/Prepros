@@ -50,6 +50,11 @@
 
             };
 
+            $scope.validRuby = function() {
+
+                return !(process.platform == 'win32' && $scope.userConfig.customRuby.path == '');
+            };
+
             $scope.process = global.process;
 
             //Just Close the window, The controller will catch data and save it on close event
@@ -316,7 +321,7 @@
             <span class="label-desc label-block">Path to custom ruby executable file</span>
             <input type="text" ng-model="userConfig.customRuby.path">
         </label>
-        <div ng-if="userConfig.customRuby.path != ''">
+        <div ng-if="validRuby()">
             <label>
                 <input type="checkbox" ng-model="userConfig.customRuby.sass">
                 <span class="label-desc">For Sass</span>
