@@ -188,7 +188,7 @@ prepros.factory('config', function ($http) {
 
         checker.success(function(data){
 
-            if(config.version !== data.version) {
+            if(version !== data.version) {
 
                 success({
                     available: true,
@@ -253,8 +253,7 @@ prepros.factory('config', function ($http) {
         }
     };
 
-
-    var config =  {
+    return {
         cachePath: cachePath,
         basePath: basePath,
         ruby: ruby,
@@ -266,10 +265,5 @@ prepros.factory('config', function ($http) {
         saveUserOptions: saveUserOptions,
         checkUpdate: checkUpdate
     };
-
-    //Push to global so other windows can also read configurations
-    global.preprosConfig = config;
-
-    return config;
 
 });
