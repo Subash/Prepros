@@ -112,9 +112,17 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             //Compile selected project file
             Mousetrap.bind(['ctrl+c', 'command+c'], function() {
 
-                if(scope.selectedFile.id){
+                if(window.getSelection().toString() !== "") {
 
-                    compiler.compile(scope.selectedFile.id);
+                    require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
+
+                } else {
+
+                    if(scope.selectedFile.id){
+
+                        compiler.compile(scope.selectedFile.id);
+                    }
+
                 }
 
                 return false;
