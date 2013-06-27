@@ -28,8 +28,8 @@ prepros.factory('config', function ($http) {
     //We need package path because everything is relative to this file
     var packagePath = path.join(basePath, '..');
 
-    //CachePath
-    var cachePath = path.join(os.tmpdir(), 'PreprosCache');
+    //CachePath push to global so that config window can clear cache
+    var cachePath = global.cachePath = path.join(os.tmpdir(), 'PreprosCache');
 
     //Node modules required by the app
     var node_modules = packageData.dependencies;
