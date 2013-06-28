@@ -4,7 +4,7 @@ node_modules/
 ruby/bourbon/*
 ruby/gems/*
 ruby/specifications/*
-ruby_win
+ruby_exec
 ffmpegsumo.dll
 icudt.dll
 libEGL.dll

@@ -220,7 +220,15 @@ prepros.factory('config', function ($http) {
 
             if(process.platform !== 'win32') {
 
-                return 'ruby';
+                if(userConfig.customRuby.use && userConfig.customRuby[fileType]) {
+
+                    return 'ruby';
+
+                } else {
+
+                    return path.join(packagePath, packageData.ruby.path);
+
+                }
             }
 
             if(userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {

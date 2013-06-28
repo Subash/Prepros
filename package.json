@@ -41,7 +41,7 @@
 
     "ruby": {
 
-        "path": "ruby_win/bin/ruby",
+        "path": "ruby_exec/bin/ruby",
         "version": "2.0.0",
         "bin": "ruby/bin",
 
