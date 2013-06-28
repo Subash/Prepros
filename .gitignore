@@ -1,9 +1,9 @@
 #Prepros App
 .idea
 node_modules/
-ruby/bourbon/*
-ruby/gems/*
-ruby/specifications/*
+ruby_gems/bourbon/*
+ruby_gems/gems/*
+ruby_gems/specifications/*
 ruby_exec
 ffmpegsumo.dll
 icudt.dll
