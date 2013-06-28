@@ -1,4 +1,13 @@
+### Version 2.1.0 -June 28, 2013
+
+* Initial OSX version
+* Custom ruby option for slim and haml
+* Fixed bug in sass imports detector
+* Copy selected text with CTRL+C
+* Other minor bug fixes and improvements
+
 ### Version 2.0.1 -June 24, 2013
+
 * Fixed Critical Configurations Bug
 * Faster file watcher
 
