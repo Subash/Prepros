@@ -70,8 +70,8 @@
         'tabs',
         'show-modal-on-click',
         'project-context-menu',
-        'file-context-menu'
-
+        'file-context-menu',
+        'copy-selected-text'
     ];
 
     //Libraries
