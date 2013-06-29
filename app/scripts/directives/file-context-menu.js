@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap */
 
 //Tooltip directive
-prepros.directive('fileContextMenu', function (compiler) {
+prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope) {
 
     'use strict';
 
@@ -50,6 +50,21 @@ prepros.directive('fileContextMenu', function (compiler) {
                 label: 'Change output',
                 click: function(){
                     element.find('.output').trigger('click');
+                }
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Reset file settings',
+                click: function(){
+
+                    projectsManager.removeFile(file.id);
+
+                    $rootScope.$apply(function(){
+
+                        projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
+
+                    });
+
                 }
             }));
 

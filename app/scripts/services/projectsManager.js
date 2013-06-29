@@ -325,7 +325,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     }
 
     //Function to add file
-    function addFile(filePath, projectPath) {
+    function addFile(filePath, projectPath, broadCast) {
 
         //Check if file already exists in files list
         var already = _.isEmpty(_.findWhere(files, {input: filePath})) ? false : true;
@@ -337,6 +337,10 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         if (isFileSupported && !already && !inImports) {
 
             files.push(fileTypes.format(filePath, projectPath));
+        }
+
+        if(broadCast) {
+            _broadCast();
         }
 
     }
@@ -490,6 +494,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         getImportById: getImportById,
 
         addProject: addProject,
+        addFile: addFile,
 
         removeFile: removeFile,
         removeProject: removeProject,
