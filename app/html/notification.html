@@ -26,6 +26,22 @@
                 e.stopPropagation();
                 require('nw.gui').Window.get().close();
             };
+
+            $(document).ready(function(){
+
+                var nWin = require('nw.gui').Window.get();
+
+
+                if(typeof nWin.showInactive === 'function') {
+
+                    nWin.showInactive();
+
+                } else {
+
+                    nWin.show();
+
+                }
+            });
         }
     </script>
 </head>

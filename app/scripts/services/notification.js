@@ -54,16 +54,6 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         notificationWindow = require('nw.gui').Window.open(notificationPath, options);
 
-        if(typeof notificationWindow.showInactive === 'function') {
-
-            notificationWindow.showInactive();
-
-        } else {
-
-            notificationWindow.show();
-
-        }
-
         notificationWindow.on('close', function(){
             this.close(true);
             notificationWindow = null;

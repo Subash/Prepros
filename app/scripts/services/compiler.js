@@ -41,11 +41,11 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             fileTypes.compile(f, function(data){
 
                 $rootScope.$apply(function(){
-                    notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
+                    notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
                 });
 
 
-                if(projectsManager.getProjectById(file.pid).config.liveRefresh) {
+                if(projectsManager.getProjectById(f.pid).config.liveRefresh) {
                     liveServer.refresh(f.output);
                 }
 
@@ -53,7 +53,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             }, function(data){
 
                 $rootScope.$apply(function(){
-                    notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
+                    notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);
                 });
 
             });
