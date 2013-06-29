@@ -4,7 +4,8 @@
 
         <a ng-href="#/files/{{file.pid}}/{{file.id}}"
            ng-class="{'active' : selectedFile.id == file.id}"
-           id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)" >
+           id="/files/{{file.pid}}/{{file.id}}" ng-dblclick="openFile(file.input)"
+           file-context-menu="file">
 
             <div class="thumb  {{file.type.toLowerCase()}}"
                  ng-class="{'no-compile': !file.config.autoCompile}">{{file.type}}

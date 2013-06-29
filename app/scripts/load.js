@@ -69,7 +69,8 @@
         'drop-project',
         'tabs',
         'show-modal-on-click',
-        'project-context-menu'
+        'project-context-menu',
+        'file-context-menu'
 
     ];
 
