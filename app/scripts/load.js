@@ -68,7 +68,8 @@
         'keyboard-shortcuts',
         'drop-project',
         'tabs',
-        'show-modal-on-click'
+        'show-modal-on-click',
+        'project-context-menu'
 
     ];
 
