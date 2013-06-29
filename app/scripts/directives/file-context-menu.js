@@ -24,14 +24,14 @@ prepros.directive('fileContextMenu', function (compiler) {
             var menu = new gui.Menu();
 
             menu.append(new gui.MenuItem({
-                label: 'Open File',
+                label: 'Open file',
                 click: function(){
                     gui.Shell.openItem(file.input);
                 }
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Compile File',
+                label: 'Compile file',
                 click: function(){
                     compiler.compile(file.id);
                 }
@@ -47,7 +47,7 @@ prepros.directive('fileContextMenu', function (compiler) {
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Change file output',
+                label: 'Change output',
                 click: function(){
                     element.find('.output').trigger('click');
                 }

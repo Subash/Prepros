@@ -41,7 +41,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer) {
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Open project live url',
+                label: 'Open project url',
                 click: function(){
 
                     if(project.config.useCustomServer){
