@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap */
 
 //Tooltip directive
-prepros.directive('projectContextMenu', function (projectsManager, liveServer) {
+prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler) {
 
     'use strict';
 
@@ -53,6 +53,20 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer) {
                         gui.Shell.openExternal(liveServer.getLiveUrl(project));
 
                     }
+                }
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Compile all files',
+                click: function(){
+
+                    var files = projectsManager.getProjectFiles(project.id);
+
+                    _.each(files, function(file){
+
+                        compiler.compile(file.id);
+
+                    });
                 }
             }));
 
