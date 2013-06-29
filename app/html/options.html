@@ -26,6 +26,8 @@
 
                 var html = $(e.currentTarget).html();
 
+                require('nw.gui').App.clearCache();
+
                 fs.remove(global.cachePath, function (err) {
 
                     if (!err) {
