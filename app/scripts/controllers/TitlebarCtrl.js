@@ -34,7 +34,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     //Close App
     $scope.close = function(){
-        require('nw.gui').Window.get().close();
+        require('nw.gui').App.closeAllWindows();
     };
 
     //Update Checker
@@ -84,14 +84,5 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
                 optionsWindow = null;
             });
         }
-
-        //Close options window when main window is closed
-        require('nw.gui').Window.get().on('close', function () {
-
-            if (optionsWindow) {
-                optionsWindow.close();
-            }
-        });
-
     };
 });

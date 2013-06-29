@@ -64,21 +64,10 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         }
 
-
-
         notificationWindow.on('close', function(){
             this.close(true);
             notificationWindow = null;
         });
-
-        //Close notification window when main window is closed
-        require('nw.gui').Window.get().on('close', function () {
-
-            if(notificationWindow) {
-                notificationWindow.close();
-            }
-        });
-
     }
 
 	function error(name, message, details){
