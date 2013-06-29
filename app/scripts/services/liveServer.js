@@ -40,14 +40,6 @@ prepros.factory('liveServer', function (config) {
 
     });
 
-    //Stop refreshing on app close
-    require('nw.gui').Window.get().on('close', function () {
-
-        wsServer.broadcast(angular.toJson({ urls: []}));
-
-    });
-
-
     //Generates live preview url
     function getLiveUrl(project) {
 
