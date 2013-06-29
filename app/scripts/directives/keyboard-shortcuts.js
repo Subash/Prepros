@@ -98,11 +98,11 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function() {
                 if(scope.selectedProject.id){
 
-                    var projects = projectsManager.getProjectFiles(scope.selectedProject.id);
+                    var files = projectsManager.getProjectFiles(scope.selectedProject.id);
 
-                    _.each(projects, function(project){
+                    _.each(files, function(file){
 
-                        compiler.compile(project.id);
+                        compiler.compile(file.id);
 
                     });
                 }
