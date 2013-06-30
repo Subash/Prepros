@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, angular*/
+/*global prepros, $, angular, _*/
 
 prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer) {
 
@@ -15,48 +15,60 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 	var fs = require('fs-extra'),
         path = require('path');
 
+    var compileQueue = [];
+
 	//function to compile
 	function compile(fid) {
 
-		var file = projectsManager.getFileById(fid);
+        if(!_.contains(compileQueue, fid)) {
 
-        var ext =  path.extname(file.input).toLowerCase();
+            compileQueue.push(fid);
 
-        //Replace file.output placeholders with real paths
-        var cfg = projectsManager.getProjectConfig(file.pid);
+            var file = projectsManager.getFileById(fid);
 
-        //Remove angular hash maps so that the change in file here won't affect files in project
-        var f = $.parseJSON(angular.toJson(file));
+            var ext =  path.extname(file.input).toLowerCase();
 
-        //Sass compiler requires project path for config.rb file
-        if(ext === '.scss' || ext === '.sass') {
+            //Replace file.output placeholders with real paths
+            var cfg = projectsManager.getProjectConfig(file.pid);
 
-            f.projectPath = projectsManager.getProjectById(file.pid).path;
-        }
+            //Remove angular hash maps so that the change in file here won't affect files in project
+            var f = $.parseJSON(angular.toJson(file));
 
-        f.output = $filter('interpolatePath')(file.output, cfg);
+            //Sass compiler requires project path for config.rb file
+            if(ext === '.scss' || ext === '.sass') {
 
-        if (fs.existsSync(f.input)) {
+                f.projectPath = projectsManager.getProjectById(file.pid).path;
+            }
 
-            fileTypes.compile(f, function(data){
+            f.output = $filter('interpolatePath')(file.output, cfg);
 
-                $rootScope.$apply(function(){
-                    notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
+            if (fs.existsSync(f.input)) {
+
+                fileTypes.compile(f, function(data){
+
+                    compileQueue = _.without(compileQueue, fid);
+
+                    $rootScope.$apply(function(){
+
+                        notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
+
+                    });
+
+                    if(projectsManager.getProjectById(f.pid).config.liveRefresh) {
+                        liveServer.refresh(f.output);
+                    }
+
+
+                }, function(data){
+
+                    compileQueue = _.without(compileQueue, fid);
+
+                    $rootScope.$apply(function(){
+                        notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);
+                    });
+
                 });
-
-
-                if(projectsManager.getProjectById(f.pid).config.liveRefresh) {
-                    liveServer.refresh(f.output);
-                }
-
-
-            }, function(data){
-
-                $rootScope.$apply(function(){
-                    notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);
-                });
-
-            });
+            }
         }
 	}
 
