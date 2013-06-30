@@ -1,6 +1,21 @@
 {
-    "__JSON_NOTE": "This file is depreciated use application/package.json instead",
-
     "version" : "2.1.0",
     "releaseDate": "June 28, 2013",
+
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sbspk/Prepros.git"
+    },
+
+    "devDependencies": {
+        "jshint": "0.5.x"
+    },
+
+    "engines": {
+        "node": ">=0.8"
+    },
+
+    "scripts": {
+        "test": "./test.sh"
+    }
 }

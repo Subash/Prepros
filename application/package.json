@@ -15,11 +15,6 @@
         "dom_storage_quota": 40
     },
 
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/sbspk/Prepros.git"
-    },
-
     "__JSON_NOTE": "All paths are relative to this json file",
 
     "version" : "2.1.0",
@@ -54,17 +49,5 @@
             "slim": "2.0.0",
             "bourbon": "3.1.6"
         }
-    },
-
-    "devDependencies": {
-        "jshint": "0.5.x"
-    },
-
-    "engines": {
-        "node": ">=0.8"
-    },
-
-    "scripts": {
-        "test": "./test.sh"
     }
 }
