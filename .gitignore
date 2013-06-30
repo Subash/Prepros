@@ -1,7 +1,5 @@
 #Prepros App
 
-.idea
-
 application/node_modules/*
 !application/node_modules/.gitkeep
 
@@ -17,7 +15,7 @@ application/ruby_gems/specifications/*
 application/ruby_exec/*
 !application/ruby_exec/.gitkeep
 
-
+.idea
 ffmpegsumo.dll
 icudt.dll
 libEGL.dll
