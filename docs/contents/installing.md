@@ -5,7 +5,7 @@ template: index.jade
 
 ### Installing the App
 
-*(Windows, Linux, MacOS 10.7+)*
+*(Windows, MacOS 10.7+)*
 
 Installing Prepros is a piece of cake. Just download Prepros [from the front page](http://alphapixels.com/prepros/) and run the executable to install and you are good to go. You don't have to worry about installing anything other than Prepros such as Sass or Compass.
 
