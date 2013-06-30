@@ -205,7 +205,11 @@ prepros.factory('javascript', function (config, utils) {
 
                 //try to compile js
                 try {
+
                     run();
+
+                    successCall(file.input);
+
                 } catch (e) {
                     errorCall(e.message);
                 }
