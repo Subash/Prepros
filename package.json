@@ -1,0 +1,6 @@
+{
+    "__JSON_NOTE": "This file is depreciated use application/package.json instead",
+
+    "version" : "2.1.0",
+    "releaseDate": "June 28, 2013",
+}
