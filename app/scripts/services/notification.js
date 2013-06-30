@@ -27,37 +27,43 @@ prepros.factory('notification', function (config, $location, $rootScope) {
     };
 
 
-    function openNotificationWindow(){
+    function openNotificationWindow(data){
 
         if(notificationWindow) {
 
-            notificationWindow.close();
+            global.notificationScope.$apply(function(){
+                global.notificationScope.$broadcast('dataChange', data);
+            });
+
+        } else {
+
+            global.preprosNotification = data;
+
+            var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
+
+            var options = {
+                x: window.screen.availWidth-410,
+                y: window.screen.availHeight-110,
+                width: 400,
+                height: 100,
+                frame: false,
+                toolbar: false,
+                resizable: false,
+                show: false,
+                show_in_taskbar: false
+            };
+
+            if(process.platform !== 'win32') {
+                options.positionY = 10;
+            }
+
+            notificationWindow = require('nw.gui').Window.open(notificationPath, options);
+
+            notificationWindow.on('close', function(){
+                this.close(true);
+                notificationWindow = null;
+            });
         }
-
-        var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
-
-        var options = {
-            x: window.screen.availWidth-410,
-            y: window.screen.availHeight-110,
-            width: 400,
-            height: 100,
-            frame: false,
-            toolbar: false,
-            resizable: false,
-            show: false,
-            show_in_taskbar: false
-        };
-
-        if(process.platform !== 'win32') {
-            options.positionY = 10;
-        }
-
-        notificationWindow = require('nw.gui').Window.open(notificationPath, options);
-
-        notificationWindow.on('close', function(){
-            this.close(true);
-            notificationWindow = null;
-        });
     }
 
 	function error(name, message, details){
@@ -68,11 +74,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
-        global.preprosNotification = {name: name, message: message, type: 'error'};
-
         if(config.getUserOptions().enableErrorNotifications){
 
-            openNotificationWindow();
+            openNotificationWindow({name: name, message: message, type: 'error'});
         }
 	}
 
@@ -85,11 +89,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
-        global.preprosNotification = {name: name, message: message, type: 'success'};
-
         if(config.getUserOptions().enableSuccessNotifications){
 
-            openNotificationWindow();
+            openNotificationWindow({name: name, message: message, type: 'success'});
         }
     };
 
