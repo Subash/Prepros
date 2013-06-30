@@ -247,15 +247,15 @@ prepros.factory('config', function ($http) {
 
             if(process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
 
-                return path.join(bin, 'custom' , fileType);
+                return path.join(bin, 'custom-' + fileType);
 
             } else if(process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
 
-                return path.join(bin, 'custom' , fileType);
+                return path.join(bin, 'custom-' + fileType);
 
             } else {
 
-                return path.join(bin, 'prepros' , fileType);
+                return path.join(bin, 'prepros-' + fileType);
 
             }
         }
