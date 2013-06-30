@@ -45,7 +45,7 @@
         "version": "2.0.0",
         "bin": "ruby_gems/bin",
 
-        "bourbon": "ruby/bourbon",
+        "bourbon": "ruby_gems/bourbon",
 
         "gems": {
             "sass": "3.2.9",
