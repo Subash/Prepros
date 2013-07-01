@@ -25,7 +25,7 @@
                     <span ng-hide="file.config.compass && file.config.fullCompass"
                           class="output" tooltip="Click to change file output path"
                           ng-click="changeFileOutput($event, file.id)">&rarr;
-                        {{file.shortOutput | interpolatePath : selectedProject.config | prettyPath | shorten}}
+                        {{file.output | interpolatePath : { config: selectedProject.config, relative: true, basePath: selectedProject.path } | prettyPath | shorten}}
                     </span>
                 </div>
 

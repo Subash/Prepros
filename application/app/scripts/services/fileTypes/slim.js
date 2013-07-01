@@ -37,15 +37,6 @@ prepros.factory('slim', function (config, utils) {
 
             }
 
-            //Find short output path
-            var shortOutput = output;
-
-            //Show Relative path if output file is within project folder
-            if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
-
-                shortOutput = path.relative(projectPath, output);
-            }
-
             return {
                 id: _id(filePath),
                 pid: _id(projectPath),
@@ -54,7 +45,6 @@ prepros.factory('slim', function (config, utils) {
                 input: filePath,
                 shortInput: shortInput,
                 output: output,
-                shortOutput: shortOutput,
                 config: config.getUserOptions().slim
             };
         };

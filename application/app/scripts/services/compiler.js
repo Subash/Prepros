@@ -29,7 +29,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             var ext =  path.extname(file.input).toLowerCase();
 
             //Replace file.output placeholders with real paths
-            var cfg = projectsManager.getProjectConfig(file.pid);
+            var prj = projectsManager.getProjectById(file.pid);
 
             //Remove angular hash maps so that the change in file here won't affect files in project
             var f = $.parseJSON(angular.toJson(file));
@@ -37,10 +37,10 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             //Sass compiler requires project path for config.rb file
             if(ext === '.scss' || ext === '.sass') {
 
-                f.projectPath = projectsManager.getProjectById(file.pid).path;
+                f.projectPath = prj.path;
             }
 
-            f.output = $filter('interpolatePath')(file.output, cfg);
+            f.output = $filter('interpolatePath')(file.output, {config: prj.config, relative: false, basePath: prj.path});
 
             if (fs.existsSync(f.input)) {
 
@@ -70,6 +70,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                 });
             }
         }
+
 	}
 
 	return{

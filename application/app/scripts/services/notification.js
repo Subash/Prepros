@@ -29,7 +29,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
     function openNotificationWindow(data){
 
-        if(notificationWindow) {
+        if(notificationWindow && global.notificationScope) {
 
             global.notificationScope.$apply(function(){
                 global.notificationScope.$broadcast('dataChange', data);

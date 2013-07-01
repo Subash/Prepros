@@ -28,15 +28,6 @@ prepros.factory('javascript', function (config, utils) {
         // Output path
         var output = path.join(path.dirname(filePath), '{{jsMinPath}}', path.basename(filePath).replace(/\.js/gi, '.min.js'));
 
-        //Find short output path
-        var shortOutput = output;
-
-        //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
-
-            shortOutput = path.relative(projectPath, output);
-        }
-
         return {
 
             id: _id(filePath),
@@ -46,7 +37,6 @@ prepros.factory('javascript', function (config, utils) {
             input: filePath,
             shortInput: shortInput,
             output: output,
-            shortOutput: shortOutput,
             config: config.getUserOptions().javascript
         };
     };

@@ -28,9 +28,6 @@ prepros.factory('coffee', function(config, utils){
         // Output path
         var output = filePath.replace(/\.coffee/gi, '.js');
 
-        //Find short output path
-        var shortOutput = output;
-
         var pathRegx = /\\coffee\\|\/coffee\//gi;
 
         //Find output path; save to /js folder if file is in /coffee folder
@@ -38,12 +35,6 @@ prepros.factory('coffee', function(config, utils){
 
             output = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
 
-        }
-
-        //Show Relative path if output file is within project folder
-        if (path.relative(projectPath, filePath).indexOf('.' + path.sep) === -1) {
-
-            shortOutput = path.relative(projectPath, output);
         }
 
         return {
@@ -55,7 +46,6 @@ prepros.factory('coffee', function(config, utils){
             input: filePath,
             shortInput: shortInput,
             output: output,
-            shortOutput: shortOutput,
             config: config.getUserOptions().coffee
         };
     };

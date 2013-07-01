@@ -27,10 +27,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
         var file = projectsManager.getFileById(id),
             project = projectsManager.getProjectById(file.pid);
 
-        //Replace file.output placeholders with real paths
-        var cfg = projectsManager.getProjectConfig(file.pid);
-
-        var out = $filter('interpolatePath')(file.output, cfg);
+        var out = $filter('interpolatePath')(file.output, {config: project.config, relative: false, basePath: project.path});
 
 
         if (fs.existsSync(path.dirname(out))) {
