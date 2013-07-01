@@ -1,4 +1,4 @@
-ENV["GEM_PATH"] = ENV["GEM_HOME"] = File.join File.dirname(__FILE__), "../../"
+ENV["GEM_PATH"] = ENV["GEM_HOME"] = File.join File.dirname(__FILE__), "../"
 
 require 'rubygems'
 
