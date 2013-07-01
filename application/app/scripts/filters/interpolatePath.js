@@ -23,16 +23,7 @@ prepros.filter('interpolatePath', function ($interpolate) {
 
         var relative = data.relative;
 
-        var p = string,
-            normalPath = path.normalize(p.replace(/\{\{jsMinPath\}\}/gi, ''));
-
-        var jsMinPath = project.config.jsMinPath;
-
-        var cssPath = project.config.cssPath;
-
-        var jsPath = project.config.jsPath;
-
-        var htmlPath = project.config.htmlPath;
+        var p = string;
 
         if(relative) {
 
@@ -45,7 +36,17 @@ prepros.filter('interpolatePath', function ($interpolate) {
 
         p = $interpolate(p)(project.config);
 
-        if(normalPath.indexOf(':') >= 0) {
+        if(string.indexOf(':') >= 0) {
+
+            var normalPath = path.normalize(string.replace(/\{\{jsMinPath\}\}/gi, ''));
+
+            var jsMinPath = project.config.jsMinPath;
+
+            var cssPath = project.config.cssPath;
+
+            var jsPath = project.config.jsPath;
+
+            var htmlPath = project.config.htmlPath;
 
             if(string.indexOf('{{jsMinPath}}')>=0 && jsMinPath.indexOf(':') >= 0) {
 
