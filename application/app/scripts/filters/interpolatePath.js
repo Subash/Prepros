@@ -34,39 +34,31 @@ prepros.filter('interpolatePath', function ($interpolate) {
             }
         }
 
-        p = $interpolate(p)(project.config);
+        var jsMinPath = project.config.jsMinPath,
+            cssPath = project.config.cssPath,
+            jsPath = project.config.jsPath,
+            htmlPath = project.config.htmlPath;
 
-        if(string.indexOf(':') >= 0) {
+        if(string.indexOf('{{jsMinPath}}')>=0 && jsMinPath.indexOf(':') >= 0) {
 
-            var normalPath = path.normalize(string.replace(/\{\{jsMinPath\}\}/gi, ''));
+            var np = path.normalize(string.replace(/\{\{jsMinPath\}\}/gi, ''));
 
-            var jsMinPath = project.config.jsMinPath;
+            p = path.join(jsMinPath, path.relative(project.path, np));
 
-            var cssPath = project.config.cssPath;
+        } else if(string.indexOf('{{htmlPath}}')>=0 && htmlPath.indexOf(':') >= 0) {
 
-            var jsPath = project.config.jsPath;
+            p = path.join(htmlPath, string.split('{{htmlPath}}').reverse()[0]);
 
-            var htmlPath = project.config.htmlPath;
+        } else if(string.indexOf('{{cssPath}}')>=0 && cssPath.indexOf(':') >= 0) {
 
-            if(string.indexOf('{{jsMinPath}}')>=0 && jsMinPath.indexOf(':') >= 0) {
+            p = path.join(cssPath, string.split('{{cssPath}}').reverse()[0]);
 
-                p = path.join(jsMinPath, path.relative(project.path, normalPath));
+        } else if(string.indexOf('{{jsPath}}')>=0 && jsPath.indexOf(':') >= 0) {
 
-            } else if(string.indexOf('{{htmlPath}}')>=0 && htmlPath.indexOf(':') >= 0) {
+            p = path.join(jsPath, string.split('{{jsPath}}').reverse()[0]);
 
-                p = path.join(htmlPath, normalPath.split('{{htmlPath}}').reverse()[0]);
-
-            } else if(string.indexOf('{{cssPath}}')>=0 && cssPath.indexOf(':') >= 0) {
-
-                p = path.join(cssPath, normalPath.split('{{cssPath}}').reverse()[0]);
-
-            } else if(string.indexOf('{{jsPath}}')>=0 && jsPath.indexOf(':') >= 0) {
-
-                p = path.join(jsPath, normalPath.split('{{jsPath}}').reverse()[0]);
-
-            }
         }
 
-        return p;
+        return $interpolate(p)(project.config);
     };
 });
