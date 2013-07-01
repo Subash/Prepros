@@ -36,9 +36,7 @@ prepros.filter('interpolatePath', function ($interpolate) {
 
         if(relative) {
 
-            var isRelative = !(path.relative(project.path, string).indexOf('.' + path.sep) >=0
-                ||
-                path.relative(project.path, string).indexOf(':')>=0);
+            var isRelative = !(path.relative(project.path, string).indexOf('.' + path.sep) >=0 || path.relative(project.path, string).indexOf(':')>=0);
 
             if(isRelative) {
                 p = path.relative(project.path, string);
