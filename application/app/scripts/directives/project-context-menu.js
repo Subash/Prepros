@@ -24,14 +24,14 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
             var menu = new gui.Menu();
 
             menu.append(new gui.MenuItem({
-                label: 'Open project folder',
+                label: 'Open Project Folder',
                 click: function(){
                     gui.Shell.openItem(project.path);
                 }
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Refresh project',
+                label: 'Refresh Project',
                 click: function(){
 
                     scope.$apply(function(){
@@ -41,7 +41,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Open project url',
+                label: 'Open Project URL',
                 click: function(){
 
                     if(project.config.useCustomServer){
@@ -57,7 +57,17 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Compile all files',
+                label: 'Copy Project URL',
+                click: function(){
+
+                    var url = (project.config.useCustomServer)? project.config.useCustomServer: liveServer.getLiveUrl(project);
+
+                    require('nw.gui').Clipboard.get().set(url, 'text');
+                }
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Compile All Files',
                 click: function(){
 
                     var files = projectsManager.getProjectFiles(project.id);
@@ -71,7 +81,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Remove project',
+                label: 'Remove Project',
                 click: function(){
 
                     scope.$apply(function(){

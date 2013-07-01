@@ -24,37 +24,37 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
             var menu = new gui.Menu();
 
             menu.append(new gui.MenuItem({
-                label: 'Open file',
+                label: 'Open File',
                 click: function(){
                     gui.Shell.openItem(file.input);
                 }
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Compile file',
+                label: 'Compile File',
                 click: function(){
                     compiler.compile(file.id);
                 }
             }));
 
-            var explorer = (process.platform === 'win32')? 'explorer': 'finder';
+            var explorer = (process.platform === 'win32')? 'Explorer': 'Finder';
 
             menu.append(new gui.MenuItem({
-                label: 'Show in ' + explorer,
+                label: 'Show In ' + explorer,
                 click: function(){
                     gui.Shell.showItemInFolder(file.input);
                 }
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Change output',
+                label: 'Change Output',
                 click: function(){
                     element.find('.output').trigger('click');
                 }
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Reset file settings',
+                label: 'Reset File Settings',
                 click: function(){
 
                     projectsManager.removeFile(file.id);
