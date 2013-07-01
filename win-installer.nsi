@@ -46,7 +46,7 @@ Section "MainSection" SEC01
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
 
   SetOutPath "$INSTDIR"
-  SetOverwrite try
+  SetOverwrite on
   File /r "app"
   File /r "node_modules"
   File /r "ruby_exec"
