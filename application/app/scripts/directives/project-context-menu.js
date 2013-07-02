@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap */
+/*global prepros, $, _, Mousetrap, alertify */
 
 //Tooltip directive
 prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler) {

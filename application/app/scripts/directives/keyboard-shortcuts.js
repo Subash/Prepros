@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap */
+/*global prepros, $, _, Mousetrap, alertify */
 
 //Directive for keyboard shortcuts
 prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
