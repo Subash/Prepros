@@ -76,7 +76,7 @@
 
     //Libraries
     libraries.forEach(function(lib) {
-        jScripts.push('scripts/libraries/' + lib + '.js');
+        jScripts.push('vendor/' + lib + '.js');
     });
 
     //Angularjs App

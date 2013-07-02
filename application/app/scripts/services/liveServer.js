@@ -168,8 +168,8 @@ prepros.factory('liveServer', function (config) {
 
     });
 
-    app.use('/lr/', express.static(config.basePath + '/scripts/libraries/'));
-    app.use('/lr/', express.directory(config.basePath + '/scripts/libraries/'));
+    app.use('/lr/', express.static(config.basePath + '/vendor/'));
+    app.use('/lr/', express.directory(config.basePath + '/vendor/'));
 
     refreshServer.on('request', function (request) {
 
