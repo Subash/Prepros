@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _, $ */
+/*global prepros,  _, $, alertify */
 
 //Title Bar controls
 prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, $rootScope) {
