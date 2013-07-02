@@ -57,11 +57,19 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 label: 'Reset File Settings',
                 click: function(){
 
-                    projectsManager.removeFile(file.id);
+                    alertify.set({ buttonFocus: "none", buttonReverse: true});
+                    alertify.confirm('Are you sure you want to reset the settings of this file?', function(y){
 
-                    $rootScope.$apply(function(){
+                        if(y) {
 
-                        projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
+                            projectsManager.removeFile(file.id);
+
+                            $rootScope.$apply(function(){
+
+                                projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
+
+                            });
+                        }
 
                     });
 

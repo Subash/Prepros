@@ -1,3 +1,9 @@
 @import url("bootstrap.css");
 @import url("source-sans-pro.css");
+@import url("alertify.css");
 @import url("../icomoon/style.css");
+
+//Alertify overrides
+.alertify-button {
+	color: #fff !important;
+}

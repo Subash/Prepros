@@ -85,9 +85,14 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             Mousetrap.bind(['ctrl+d', 'command+d'], function() {
                 if(scope.selectedProject.id){
 
-                    scope.$apply(function(){
+                    alertify.set({ buttonFocus: "ok", buttonReverse: true});
+                    alertify.confirm('Are you sure you want to remove this project?', function(y){
 
-                        projectsManager.removeProject(scope.selectedProject.id);
+                        if(y) {
+                            scope.$apply(function(){
+                                projectsManager.removeProject(scope.selectedProject.id);
+                            });
+                        }
 
                     });
                 }

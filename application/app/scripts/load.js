@@ -18,6 +18,7 @@
         'jquery.min',
         'underscore.min',
         'bootstrap.min',
+        'alertify.min',
         'mousetrap.min',
         'angular'
     ];
