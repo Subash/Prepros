@@ -72,42 +72,33 @@ function startSocket(callback){
 	});
 }
 
-
-//function to start refreshing tabs
-function startRefreshing(tab){
-
-	'use strict';
-
-    var callback = function() {
-
-        var parsedUrl = parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host;
-
-        if(tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
-
-            chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
-        }
-
-    };
-
-	if(!socketRunning) {
-
-		startSocket(callback);
-
-	} else {
-
-        callback();
-    }
-
-
-}
-
 //Try to run refreshing on tab update
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 	'use strict';
 
     if(tab.status === 'complete') {
-        startRefreshing(tab);
+
+        var callback = function() {
+
+            var parsedUrl = parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host;
+
+            if(tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
+
+                chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
+            }
+
+        };
+
+        if(!socketRunning) {
+
+            startSocket(callback);
+
+        } else {
+
+            callback();
+        }
+
     }
 
 });
