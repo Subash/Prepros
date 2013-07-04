@@ -34,7 +34,6 @@
         var nwWindow = require('nw.gui').Window.get();
         nwWindow.show();
         nwWindow.focus();
-        nwWindow.requestAttention(true);
 
     }).listen(port, '127.0.0.1', function () {
 
