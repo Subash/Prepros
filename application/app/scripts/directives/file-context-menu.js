@@ -37,6 +37,18 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 }
             }));
 
+            menu.append(new gui.MenuItem({
+                label: 'Toggle Auto Compile',
+                click: function(){
+
+                    $rootScope.$apply(function(){
+                        var f = _.findWhere(scope.files, {id: file.id});
+
+                        f.config.autoCompile = !f.config.autoCompile;
+                    });
+                }
+            }));
+
             var explorer = (process.platform === 'win32')? 'Explorer': 'Finder';
 
             menu.append(new gui.MenuItem({
