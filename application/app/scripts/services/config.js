@@ -216,6 +216,7 @@ prepros.factory('config', function ($http) {
     var ruby = {
         version: packageData.ruby.version,
         bourbon: path.join(packagePath, packageData.ruby.bourbon),
+        neat: path.join(packagePath, packageData.ruby.neat),
         getExec: function(fileType) {
 
             if(process.platform !== 'win32') {

@@ -137,6 +137,9 @@ prepros.factory('sass', function (config, utils) {
             //Sass bourbon
             args.push('--load-path', config.ruby.bourbon);
 
+            //Bourbon neat framework
+            args.push('--load-path', config.ruby.neat);
+
             //Line numbers
             if (file.config.lineNumbers) {
                 args.push('--line-numbers');
