@@ -466,8 +466,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //Function to change file output path
     function changeFileOutput(id, newPath){
 
-        var file = getFileById(id),
-            project = getProjectById(file.pid);
+        var file = getFileById(id);
 
         if(path.extname(path.basename(newPath)) === ''){
 
