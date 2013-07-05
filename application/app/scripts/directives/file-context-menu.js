@@ -52,7 +52,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
             var explorer = (process.platform === 'win32')? 'Explorer': 'Finder';
 
             menu.append(new gui.MenuItem({
-                label: 'Show In ' + explorer,
+                label: 'Show in ' + explorer,
                 click: function(){
                     gui.Shell.showItemInFolder(file.input);
                 }
