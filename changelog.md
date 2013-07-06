@@ -1,7 +1,7 @@
 ### Version 2.2.0 -July 06, 2013
 
 * Fixed bourbon path bug
-* Support for bourbon [neat](http://bourbon.io/neat)
+* Support for bourbon [neat](http://neat.bourbon.io)
 * Added alertify notifications
 * Support for absolute paths for html, css and javascripts folder
 * File and project context menus
