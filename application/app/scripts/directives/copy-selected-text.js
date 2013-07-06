@@ -22,7 +22,7 @@ prepros.directive('copySelectedText', function () {
             var menu = new gui.Menu();
 
             menu.append(new gui.MenuItem({
-                label: 'Copy selected text',
+                label: 'Copy',
                 click: function(){
                     require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
                 }
