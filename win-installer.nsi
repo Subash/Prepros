@@ -58,7 +58,6 @@ Section "MainSection" SEC01
   File "libGLESv2.dll"
   File "nw.pak"
   File "package.json"
-  File "libEGL.dll"
   File "Prepros.exe"
   
 SectionEnd
