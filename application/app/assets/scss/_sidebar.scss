@@ -69,7 +69,7 @@
   .animate-enter,
    .animate-leave
    {
-    @include transition(all 400ms);
+    -webkit-transition: all 400ms;
      position: relative;
    }
 

@@ -231,7 +231,7 @@ $duration : .5s;
   }
 
   .slide-leave, .slide-enter {
-    @include transition(all $duration);
+    -webkit-transition: all $duration;
   }
 
   .slide-enter {
@@ -249,12 +249,14 @@ $duration : .5s;
     right: 0px;
     opacity: 1;
     top: 0px;
-    @include transform2d(scale(0,0));
+    -webkit-transform: scale(0,0);
+    transform: scale(0,0);
   }
   .slide-leave.slide-leave-active {
     right: -222px;
     opacity: 0;
     top: 222px;
-    @include transform2d(scale(.5,.5));
+    -webkit-transform: scale(.5,.5);
+    transform: scale(.5,.5);
   }
 }
