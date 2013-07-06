@@ -1,3 +1,15 @@
+### Version 2.2.0 -July 06, 2013
+
+* Fixed bourbon path bug
+* Support for bourbon [neat](http://bourbon.io/neat)
+* Added alertify notifications
+* Support for absolute paths for html, css and javascripts folder
+* File and project context menus
+* Fixed edge case bug in js minification and concatenation
+* Improved performance
+* Bourbon updated to version 3.1.8
+* Other minor bug fixes and performance improvements
+
 ### Version 2.1.0 -June 28, 2013
 
 * Initial OSX version
