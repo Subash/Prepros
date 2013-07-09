@@ -5,13 +5,18 @@ clear
 cd ../../
 
 #Grab Latest Commit Hash for Version Number
-VERSION=`cat ./package.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["version"]'`
+#VERSION=`cat ./package.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["version"]'`
+VERSION=`node -e "var config = require('./package.json'); console.log(config.version);"`
 LATEST_COMMIT=`git log -1 --format="%h"`
 
-if [ -d "~/.prepros_build" ]; then
-	rm -Rf ~/.prepros_build
-fi
+GEM_SASS_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.sass);"`
+GEM_COMPASS_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.compass);"`
+GEM_HAML_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.haml);"`
+GEM_SLIM_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.slim);"`
+GEM_BOURBON_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.bourbon);"`
+GEM_NEAT_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.neat);"`
 
+rm -Rf ~/.prepros_build
 #Create Build Directories
 mkdir ~/.prepros_build
 
@@ -23,6 +28,7 @@ mkdir ~/.prepros_build/osx
 mkdir ~/.prepros_build/osx/app.nw
 cp -R ./application/ ~/.prepros_build/osx/app.nw
 cp ./build/osx/app.icns  ~/.prepros_build/osx/app.icns
+cp ./build/osx/less_1253.patch  ~/.prepros_build/less_1253.patch
 cd ~/.prepros_build/osx/app.nw
 
 rm -Rf ./ruby
@@ -30,6 +36,9 @@ rm -Rf ./ruby
 #Removed and re-populate Node Modules
 rm -Rf ./node_modules
 npm install
+
+cd ./node_modules/less/lib/less/
+patch parser.js < ~/.prepros_build/less_1253.patch
 
 #Start Building Ruby
 mkdir ~/.prepros_build/downloads
@@ -40,13 +49,29 @@ cd 2.0.0-p195
 
 cp -R * ~/.prepros_build/osx/app.nw/ruby_exec
 
+cd ~/.prepros_build/osx/app.nw/ruby_gems
+export GEM_HOME=`pwd`
+
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_SASS_VERSION" sass --no-ri --no-rdoc
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_COMPASS_VERSION" compass --no-ri --no-rdoc
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_HAML_VERSION" haml --no-ri --no-rdoc
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_SLIM_VERSION" slim --no-ri --no-rdoc
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_BOURBON_VERSION" bourbon --no-ri --no-rdoc
+~/.prepros_build/osx/app.nw/ruby_exec/bin/gem install --version "= $GEM_NEAT_VERSION" neat --no-ri --no-rdoc
+rm -Rf *.gem
+
 cd ~/.prepros_build
 
 
 #Download Node-Webkit for OSX
-wget https://s3.amazonaws.com/node-webkit/v0.6.1/node-webkit-v0.6.1-osx-ia32.zip
-unzip node-webkit-v0.6.1-osx-ia32.zip
+wget https://s3.amazonaws.com/node-webkit/v0.6.2/node-webkit-v0.6.2-osx-ia32.zip
+unzip node-webkit-v0.6.2-osx-ia32.zip
 cd node-webkit.app/Contents/Resources
+
+#Cleanup Un-needed files
+find . -name ".bin" -exec rm -rf {} \;
+find . -name ".git" -exec rm -rf {} \;
+find . -name ".gitkeep" -exec rm -f {} \;
 
 #Remove Node-Webkit Icon & Replace with Prepros
 rm ./nw.icns
