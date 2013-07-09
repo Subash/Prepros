@@ -5,8 +5,7 @@ clear
 cd ../../
 
 #Grab Latest Commit Hash for Version Number
-#VERSION=`cat ./package.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["version"]'`
-VERSION=`node -e "var config = require('./package.json'); console.log(config.version);"`
+VERSION=`node -e "var config = require('./application/package.json'); console.log(config.version);"`
 LATEST_COMMIT=`git log -1 --format="%h"`
 
 GEM_SASS_VERSION=`node -e "var config = require('./application/package.json'); console.log(config.ruby.gems.sass);"`
