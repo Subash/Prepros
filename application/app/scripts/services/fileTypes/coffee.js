@@ -76,7 +76,7 @@ prepros.factory('coffee', function(config, utils){
 
                     if (file.config.uglify) {
 
-                        javascript = ugly.minify(javascript, {fromString: true}).code;
+                        javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
                     }
 
                     fs.outputFile(file.output, javascript, function (err) {

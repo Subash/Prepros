@@ -121,13 +121,15 @@ prepros.factory('config', function ($http) {
         coffee: {
             autoCompile: true,
             bare: false,
-            uglify: false
+            uglify: false,
+            mangle: true
         },
 
         //Default javascript options
         javascript: {
             autoCompile: true,
-            uglify: true
+            uglify: true,
+            mangle: true
         },
 
         //Default Jade  Options

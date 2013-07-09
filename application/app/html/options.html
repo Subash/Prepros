@@ -282,6 +282,10 @@
         <input type="checkbox" ng-model="userConfig.coffee.uglify">
         <span class="label-desc">Uglify</span>
     </label>
+    <label ng-if="userConfig.coffee.uglify">
+        <input type="checkbox" ng-model="userConfig.coffee.mangle">
+        <span class="label-desc">Mangle Variable Names</span>
+    </label>
 </div>
 
 <div data-title="Javascript">
@@ -292,6 +296,10 @@
     <label>
         <input type="checkbox" ng-model="userConfig.javascript.uglify">
         <span class="label-desc">Uglify</span>
+    </label>
+    <label ng-if="userConfig.javascript.uglify">
+        <input type="checkbox" ng-model="userConfig.javascript.mangle">
+        <span class="label-desc">Mangle Variable Names</span>
     </label>
 </div>
 
