@@ -84,7 +84,7 @@
             }));
 
             tray_menu.append(new nw.gui.MenuItem({
-                label: 'Exit App',
+                label: 'Exit Prepros',
                 click: function () {
                     nw.window.close();
                 }
