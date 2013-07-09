@@ -1,0 +1,26 @@
+From 62c1937ab0bfc986e49114f59f4e832152254c80 Mon Sep 17 00:00:00 2001
+From: posco2k8 <posco2k8@github.fake>
+Date: Tue, 2 Apr 2013 22:56:54 -0500
+Subject: [PATCH] Refactor Node.js detection.
+
+Node.js detection fails if any node modules set global.window.
+---
+ lib/less/parser.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/less/parser.js b/lib/less/parser.js
+index fda5573..afd9ec5 100644
+--- a/lib/less/parser.js
++++ b/lib/less/parser.js
+@@ -7,7 +7,7 @@ if (typeof environment === "object" && ({}).toString.call(environment) === "[obj
+     else                                { less = window.less = {} }
+     tree = less.tree = {};
+     less.mode = 'rhino';
+-} else if (typeof(window) === 'undefined') {
++} else if (typeof(exports) === 'object') {
+     // Node.js
+     less = exports,
+     tree = require('./tree');
+-- 
+1.7.12.4 (Apple Git-37)
+
