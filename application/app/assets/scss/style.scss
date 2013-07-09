@@ -1,4 +1,3 @@
-@import 'mixins';
 @import 'third-party';
 @import 'custom-scrollbars';
 @import 'base';
@@ -18,7 +17,12 @@
   width: 952;
   height: 552px;
   border: 1px solid #3e3e3e;
-  @include clearfix();
+  &:after {
+        content: "";
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
 }
 
 .modal.project-options.fade.in {

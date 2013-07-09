@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap */
+/*global prepros, $, _, Mousetrap, alertify */
 
 //Tooltip directive
 prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope) {
@@ -37,10 +37,22 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 }
             }));
 
+            menu.append(new gui.MenuItem({
+                label: 'Toggle Auto Compile',
+                click: function(){
+
+                    $rootScope.$apply(function(){
+                        var f = _.findWhere(scope.files, {id: file.id});
+
+                        f.config.autoCompile = !f.config.autoCompile;
+                    });
+                }
+            }));
+
             var explorer = (process.platform === 'win32')? 'Explorer': 'Finder';
 
             menu.append(new gui.MenuItem({
-                label: 'Show In ' + explorer,
+                label: 'Show in ' + explorer,
                 click: function(){
                     gui.Shell.showItemInFolder(file.input);
                 }
@@ -57,11 +69,19 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 label: 'Reset File Settings',
                 click: function(){
 
-                    projectsManager.removeFile(file.id);
+                    alertify.set({ buttonFocus: "none", buttonReverse: true});
+                    alertify.confirm('Are you sure you want to reset the settings of this file?', function(y){
 
-                    $rootScope.$apply(function(){
+                        if(y) {
 
-                        projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
+                            projectsManager.removeFile(file.id);
+
+                            $rootScope.$apply(function(){
+
+                                projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
+
+                            });
+                        }
 
                     });
 

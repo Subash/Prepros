@@ -18,6 +18,7 @@
         'jquery.min',
         'underscore.min',
         'bootstrap.min',
+        'alertify.min',
         'mousetrap.min',
         'angular'
     ];
@@ -76,7 +77,7 @@
 
     //Libraries
     libraries.forEach(function(lib) {
-        jScripts.push('scripts/libraries/' + lib + '.js');
+        jScripts.push('vendor/' + lib + '.js');
     });
 
     //Angularjs App

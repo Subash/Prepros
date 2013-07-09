@@ -137,6 +137,9 @@ prepros.factory('sass', function (config, utils) {
             //Sass bourbon
             args.push('--load-path', config.ruby.bourbon);
 
+            //Bourbon neat framework
+            args.push('--load-path', config.ruby.neat);
+
             //Line numbers
             if (file.config.lineNumbers) {
                 args.push('--line-numbers');
@@ -147,41 +150,35 @@ prepros.factory('sass', function (config, utils) {
 
         }
 
-        var rubyProcess;
+        var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
+
+        rubyProcess.on('error', function(e) {
+            errorCall('Unable to execute ruby —error ' + e.message);
+        });
+
+        var compileErr = false;
+
+        //If there is a compilation error
+        rubyProcess.stderr.on('data', function (data) {
+
+            compileErr = true;
+
+            errorCall(data.toString());
+
+        });
+
+        //Success if there is no error
+        rubyProcess.on('exit', function(){
+            if(!compileErr){
+
+                successCall(file.input);
+
+            }
+
+            rubyProcess = null;
+        });
 
 
-        try {
-
-            //Start a child process to compile the file; file.projectPath is provided by compiler.js file
-            rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
-
-            var compileErr = false;
-
-            //If there is a compilation error
-            rubyProcess.stderr.on('data', function (data) {
-
-                compileErr = true;
-
-                errorCall(data.toString());
-
-            });
-
-            //Success if there is no error
-            rubyProcess.on('exit', function(){
-                if(!compileErr){
-
-                    successCall(file.input);
-
-                }
-
-                rubyProcess = null;
-            });
-
-        } catch (e) {
-
-            errorCall('Unable to execute ruby' + e.message);
-
-        }
 
     };
 

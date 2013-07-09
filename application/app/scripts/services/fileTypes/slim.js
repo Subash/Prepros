@@ -77,38 +77,34 @@ prepros.factory('slim', function (config, utils) {
 
             fs.mkdirsSync(path.dirname(file.output));
 
-            try {
+            //Start a child process to compile the file
+            var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(file.input)});
 
-                //Start a child process to compile the file
-                var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(file.input)});
+            rubyProcess.on('error', function(e) {
+                errorCall('Unable to execute ruby —error ' + e.message);
+            });
 
-                var compileErr = false;
+            var compileErr = false;
 
-                //If there is a compilation error
-                rubyProcess.stderr.on('data', function (data) {
+            //If there is a compilation error
+            rubyProcess.stderr.on('data', function (data) {
 
-                    compileErr = true;
+                compileErr = true;
 
-                    errorCall(data.toString() + "\n" + file.input);
+                errorCall(data.toString() + "\n" + file.input);
 
-                });
+            });
 
-                //Success if there is no error
-                rubyProcess.on('exit', function(){
-                    if(!compileErr){
+            //Success if there is no error
+            rubyProcess.on('exit', function(){
+                if(!compileErr){
 
-                        successCall(file.input);
+                    successCall(file.input);
 
-                    }
+                }
 
-                    rubyProcess = null;
-                });
-
-            } catch (e) {
-
-                errorCall('Unable to execute ruby' + e.message);
-
-            }
+                rubyProcess = null;
+            });
         };
 
     return {

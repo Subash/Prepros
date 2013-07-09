@@ -63,7 +63,7 @@ prepros.factory('javascript', function (config, utils) {
 
                         try {
 
-                            javascript = ugly.minify(javascript, {fromString: true}).code;
+                            javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
 
                         } catch(e) {
 
@@ -154,7 +154,7 @@ prepros.factory('javascript', function (config, utils) {
 
                                 try {
 
-                                    js = ugly.minify(js, {fromString: true}).code;
+                                    js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
 
                                 } catch(e) {
 

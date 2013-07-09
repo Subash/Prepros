@@ -3,8 +3,11 @@
 application/node_modules/*
 !application/node_modules/.gitkeep
 
-application/ruby_gems/bourbon/*
-!application/ruby_gems/bourbon/.gitkeep
+application/ruby_gems/bourbon/bourbon/*
+!application/ruby_gems/bourbon/bourbon/.gitkeep
+
+application/ruby_gems/bourbon/neat/*
+!application/ruby_gems/bourbon/neat/.gitkeep
 
 application/ruby_gems/gems/*
 !application/ruby_gems/gems/.gitkeep

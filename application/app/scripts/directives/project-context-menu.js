@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap */
+/*global prepros, $, _, Mousetrap, alertify */
 
 //Tooltip directive
 prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler) {
@@ -84,8 +84,15 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Remove Project',
                 click: function(){
 
-                    scope.$apply(function(){
-                        projectsManager.removeProject(project.id);
+                    alertify.set({ buttonFocus: "none", buttonReverse: true});
+                    alertify.confirm('Are you sure you want to remove this project?', function(y){
+
+                        if(y) {
+                            scope.$apply(function(){
+                                projectsManager.removeProject(project.id);
+                            });
+                        }
+
                     });
                 }
             }));

@@ -34,7 +34,6 @@
         var nwWindow = require('nw.gui').Window.get();
         nwWindow.show();
         nwWindow.focus();
-        nwWindow.requestAttention(true);
 
     }).listen(port, '127.0.0.1', function () {
 
@@ -85,7 +84,7 @@
             }));
 
             tray_menu.append(new nw.gui.MenuItem({
-                label: 'Exit App',
+                label: 'Exit Prepros',
                 click: function () {
                     nw.window.close();
                 }

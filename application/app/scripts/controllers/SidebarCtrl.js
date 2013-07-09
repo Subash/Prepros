@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _, $ */
+/*global prepros,  _, $, alertify */
 
 //Title Bar controls
 prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, $rootScope) {
@@ -66,7 +66,18 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
 
     //Function to remove project
     $scope.removeProject = function(){
-        projectsManager.removeProject($scope.selectedProject.id);
+
+        alertify.set({ buttonFocus: "none" });
+        alertify.confirm('Are you sure you want to remove this project?', function(y){
+
+            if(y) {
+                $scope.$apply(function(){
+                    projectsManager.removeProject($scope.selectedProject.id);
+                });
+            }
+
+        });
+
     };
 
 });

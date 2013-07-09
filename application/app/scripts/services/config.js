@@ -86,8 +86,8 @@ prepros.factory('config', function ($http) {
             autoCompile: true,
             compress : false,
             lineNumbers: false,
-            strictMath: true,
-            strictUnits: true
+            strictMath: false,
+            strictUnits: false
         },
 
         //Default Sass options
@@ -121,13 +121,15 @@ prepros.factory('config', function ($http) {
         coffee: {
             autoCompile: true,
             bare: false,
-            uglify: false
+            uglify: false,
+            mangle: true
         },
 
         //Default javascript options
         javascript: {
             autoCompile: true,
-            uglify: true
+            uglify: true,
+            mangle: true
         },
 
         //Default Jade  Options
@@ -216,6 +218,7 @@ prepros.factory('config', function ($http) {
     var ruby = {
         version: packageData.ruby.version,
         bourbon: path.join(packagePath, packageData.ruby.bourbon),
+        neat: path.join(packagePath, packageData.ruby.neat),
         getExec: function(fileType) {
 
             if(process.platform !== 'win32') {
