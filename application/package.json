@@ -40,8 +40,8 @@
         "version": "2.0.0",
         "gemPath": "ruby_gems",
 
-        "bourbon": "ruby_gems/bourbon/bourbon",
-        "neat": "ruby_gems/bourbon/neat",
+        "bourbon": "bourbon/bourbon",
+        "neat": "bourbon/neat",
 
         "gems": {
             "sass": "3.2.9",
