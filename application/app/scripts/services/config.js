@@ -246,19 +246,21 @@ prepros.factory('config', function ($http) {
 
             var ft = (fileType === 'compass')? 'sass': fileType;
 
-            var bin = path.join(packagePath, packageData.ruby.bin);
+            var loader = path.join(basePath, 'ruby/gem_loader.rb');
+
+            var gemPath = path.join(packagePath, packageData.ruby.gemPath);
 
             if(process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
 
-                return path.join(bin, 'custom-' + fileType);
+                return [loader, 'custom', fileType];
 
             } else if(process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
 
-                return path.join(bin, 'custom-' + fileType);
+                return [loader, 'custom', fileType];
 
             } else {
 
-                return path.join(bin, 'prepros-' + fileType);
+                return [loader, gemPath, fileType];
 
             }
         }

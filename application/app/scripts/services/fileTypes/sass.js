@@ -73,7 +73,7 @@ prepros.factory('sass', function (config, utils) {
 
         if(file.config.fullCompass && file.config.compass) {
 
-            args = [config.ruby.getGem('compass')];
+            args = config.ruby.getGem('compass');
 
             args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
@@ -97,7 +97,7 @@ prepros.factory('sass', function (config, utils) {
 
         } else {
 
-            args = [config.ruby.getGem('sass')];
+            args = config.ruby.getGem('sass');
 
             //Force utf-8 encoding
             args.push('-E', 'utf-8');

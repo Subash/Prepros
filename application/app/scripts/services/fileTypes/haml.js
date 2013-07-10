@@ -52,7 +52,7 @@ prepros.factory('haml', function (config, utils) {
 
         var compile = function (file, successCall, errorCall) {
 
-            var args = [config.ruby.getGem('haml')];
+            var args = config.ruby.getGem('haml');
 
             //Input and output
             args.push(file.input, file.output);

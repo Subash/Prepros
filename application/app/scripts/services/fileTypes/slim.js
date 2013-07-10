@@ -52,7 +52,7 @@ prepros.factory('slim', function (config, utils) {
 
         var compile = function (file, successCall, errorCall) {
 
-            var args = [config.ruby.getGem('slim')];
+            var args = config.ruby.getGem('slim');
 
             args.push('-oformat=' + file.config.format);
 

@@ -38,7 +38,7 @@
 
         "path": "ruby_exec/bin/ruby",
         "version": "2.0.0",
-        "bin": "ruby_gems/bin",
+        "gemPath": "ruby_gems",
 
         "bourbon": "ruby_gems/bourbon/bourbon",
         "neat": "ruby_gems/bourbon/neat",
