@@ -28,25 +28,39 @@ prepros.factory('importsVisitor', function () {
             importReg;
 
         //Strip Comments
-        if(ext !== '.js') {
+        if (ext !== '.js') {
             data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
             data = data.replace(/\/\/.*/g, '');
         }
 
 
-        if (ext === '.less') { importReg = /@import\s['"]*([^\n;"']+)[;"']/g; }
-        if (ext === '.scss') { importReg = /@import\s['"]*([^;]+)[;"']/g; }
-        if (ext === '.sass') { importReg = /@import\s+(.*)/g; }
-        if (ext === '.styl') { importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g; }
-        if (ext === '.jade') { importReg = /(?:include|extends)\s+(.*)/g; }
-        if (ext === '.slim') { importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g; }
-        if (ext === '.js'  ) { importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi; }
+        if (ext === '.less') {
+            importReg = /@import\s['"]*([^\n;"']+)[;"']/g;
+        }
+        if (ext === '.scss') {
+            importReg = /@import\s['"]*([^;]+)[;"']/g;
+        }
+        if (ext === '.sass') {
+            importReg = /@import\s+(.*)/g;
+        }
+        if (ext === '.styl') {
+            importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g;
+        }
+        if (ext === '.jade') {
+            importReg = /(?:include|extends)\s+(.*)/g;
+        }
+        if (ext === '.slim') {
+            importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g;
+        }
+        if (ext === '.js') {
+            importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
+        }
 
         //Automatically add extension
         var autoExt = ['.less', '.styl', '.js', '.jade'];
 
 
-        if(ext !== '.sass' && ext !== '.scss'){
+        if (ext !== '.sass' && ext !== '.scss') {
 
             while ((result = importReg.exec(data)) !== null) {
 
@@ -59,7 +73,7 @@ prepros.factory('importsVisitor', function () {
                     importedFilePath = path.join(basedir, result[1]);
                 }
 
-                if(_.contains(autoExt, ext)) {
+                if (_.contains(autoExt, ext)) {
 
                     //Add extension if file doesn't have that
                     if (path.extname(importedFilePath).toLowerCase() !== ext) {
@@ -81,7 +95,7 @@ prepros.factory('importsVisitor', function () {
 
                 var res = result[1].replace(/"|'/gi, '').split(',');
 
-                _.each(res, function(imp){
+                _.each(res, function (imp) {
 
                     imp = imp.trim();
 
@@ -125,11 +139,11 @@ prepros.factory('importsVisitor', function () {
         fileImports[0] = visitImports(filePath);
 
         //Get imports of imports up to four levels
-        for(var i=1; i<5; i++) {
+        for (var i = 1; i < 5; i++) {
 
             fileImports[i] = [];
 
-            _.each(fileImports[i-1], function(importedFile){
+            _.each(fileImports[i - 1], function (importedFile) {
 
                 fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile)));
 

@@ -17,9 +17,9 @@ prepros.directive('showModalOnClick', function ($timeout) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            $timeout(function(){
+            $timeout(function () {
 
-                element.on('click', function(){
+                element.on('click', function () {
 
                     $(attrs.showModalOnClick).modal('toggle');
 

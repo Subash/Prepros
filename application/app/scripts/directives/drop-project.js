@@ -40,15 +40,15 @@ prepros.directive('dropProject', function (projectsManager) {
                     //Check if it is a directory and not a drive
                     if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
 
-                        scope.$apply(function(){
+                        scope.$apply(function () {
                             //Add to projects
                             projectsManager.addProject(file.path);
                         });
 
 
-                    } else if(stats.isFile() && path.dirname(path.dirname(file.path)) !== path.dirname(file.path)) {
+                    } else if (stats.isFile() && path.dirname(path.dirname(file.path)) !== path.dirname(file.path)) {
 
-                        scope.$apply(function(){
+                        scope.$apply(function () {
                             //Add to projects
                             projectsManager.addProject(path.dirname(file.path));
                         });

@@ -25,16 +25,16 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
             menu.append(new gui.MenuItem({
                 label: 'Open Project Folder',
-                click: function(){
+                click: function () {
                     gui.Shell.openItem(project.path);
                 }
             }));
 
             menu.append(new gui.MenuItem({
                 label: 'Refresh Project',
-                click: function(){
+                click: function () {
 
-                    scope.$apply(function(){
+                    scope.$apply(function () {
                         projectsManager.refreshProjectFiles(project.id);
                     });
                 }
@@ -42,9 +42,9 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
             menu.append(new gui.MenuItem({
                 label: 'Open Project URL',
-                click: function(){
+                click: function () {
 
-                    if(project.config.useCustomServer){
+                    if (project.config.useCustomServer) {
 
                         gui.Shell.openExternal(project.config.customServerUrl);
 
@@ -58,9 +58,9 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
             menu.append(new gui.MenuItem({
                 label: 'Copy Project URL',
-                click: function(){
+                click: function () {
 
-                    var url = (project.config.useCustomServer)? project.config.useCustomServer: liveServer.getLiveUrl(project);
+                    var url = (project.config.useCustomServer) ? project.config.useCustomServer : liveServer.getLiveUrl(project);
 
                     require('nw.gui').Clipboard.get().set(url, 'text');
                 }
@@ -68,11 +68,11 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
             menu.append(new gui.MenuItem({
                 label: 'Compile All Files',
-                click: function(){
+                click: function () {
 
                     var files = projectsManager.getProjectFiles(project.id);
 
-                    _.each(files, function(file){
+                    _.each(files, function (file) {
 
                         compiler.compile(file.id);
 
@@ -82,13 +82,13 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
             menu.append(new gui.MenuItem({
                 label: 'Remove Project',
-                click: function(){
+                click: function () {
 
                     alertify.set({ buttonFocus: "none", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to remove this project?', function(y){
+                    alertify.confirm('Are you sure you want to remove this project?', function (y) {
 
-                        if(y) {
-                            scope.$apply(function(){
+                        if (y) {
+                            scope.$apply(function () {
                                 projectsManager.removeProject(project.id);
                             });
                         }
@@ -97,7 +97,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 }
             }));
 
-            element.on('contextmenu', function(e){
+            element.on('contextmenu', function (e) {
 
                 e.preventDefault();
 

@@ -23,30 +23,30 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
     };
 
     //Minimize app to tray by hiding the window
-    $scope.toTray = function(){
+    $scope.toTray = function () {
         require('nw.gui').Window.get().hide();
     };
 
     //Minimize app
-    $scope.minimize = function(){
+    $scope.minimize = function () {
         require('nw.gui').Window.get().minimize();
     };
 
     //Close App
-    $scope.close = function(){
+    $scope.close = function () {
         require('nw.gui').App.closeAllWindows();
     };
 
     //Update Checker
-    $scope.goWebsite = function(){
+    $scope.goWebsite = function () {
 
         utils.openBrowser(config.online.url);
 
     };
 
-    config.checkUpdate(function(data){
+    config.checkUpdate(function (data) {
 
-        if(data.available){
+        if (data.available) {
             $scope.appUpdate = true;
         }
 

@@ -13,30 +13,30 @@ prepros.factory('storage', function () {
 
     'use strict';
 
-	var fs = require('fs-extra'),
+    var fs = require('fs-extra'),
         path = require('path');
 
-	//function to save files list
-	function saveFiles(files) {
+    //function to save files list
+    function saveFiles(files) {
 
         localStorage.PreprosFiles = angular.toJson(files, false);
-	}
+    }
 
-	//Function to save project list to json
-	function saveProjects(projects) {
+    //Function to save project list to json
+    function saveProjects(projects) {
 
         localStorage.PreprosProjects = angular.toJson(projects, false);
 
-	}
+    }
 
-	//Function to save imports list to json
-	function saveImports(imports) {
+    //Function to save imports list to json
+    function saveImports(imports) {
 
         localStorage.PreprosImports = angular.toJson(imports, false);
-	}
+    }
 
-	//Get projects list from projects.json file
-	function getProjects() {
+    //Get projects list from projects.json file
+    function getProjects() {
 
         var projects = [];
 
@@ -44,7 +44,7 @@ prepros.factory('storage', function () {
 
             projects = angular.fromJson(localStorage.PreprosProjects || '[]');
 
-        } catch(e) {
+        } catch (e) {
 
             window.alert('Error Reading Projects ! Reverting to defaults.');
 
@@ -53,10 +53,10 @@ prepros.factory('storage', function () {
         }
 
         return projects;
-	}
+    }
 
-	//Get files list from files.json file
-	function getFiles() {
+    //Get files list from files.json file
+    function getFiles() {
 
         var files = [];
 
@@ -64,7 +64,7 @@ prepros.factory('storage', function () {
 
             files = angular.fromJson(localStorage.PreprosFiles || '[]');
 
-        } catch(e) {
+        } catch (e) {
 
             window.alert('Error Reading Files ! Reverting to defaults.');
 
@@ -73,10 +73,10 @@ prepros.factory('storage', function () {
         }
 
         return files;
-	}
+    }
 
-	//Get files from files.json file
-	function getImports() {
+    //Get files from files.json file
+    function getImports() {
 
         var imports = [];
 
@@ -84,7 +84,7 @@ prepros.factory('storage', function () {
 
             imports = angular.fromJson(localStorage.PreprosImports || '[]');
 
-        } catch(e) {
+        } catch (e) {
 
             window.alert('Error Reading Imports ! Reverting to defaults.');
 
@@ -93,18 +93,18 @@ prepros.factory('storage', function () {
         }
 
         return imports;
-	}
+    }
 
-	//Return projects list and files list
-	return {
+    //Return projects list and files list
+    return {
 
-		getProjects : getProjects,
-		saveProjects: saveProjects,
+        getProjects: getProjects,
+        saveProjects: saveProjects,
 
-		getFiles    : getFiles,
-		saveFiles   : saveFiles,
+        getFiles: getFiles,
+        saveFiles: saveFiles,
 
-		getImports  : getImports,
-		saveImports : saveImports
-	};
+        getImports: getImports,
+        saveImports: saveImports
+    };
 });

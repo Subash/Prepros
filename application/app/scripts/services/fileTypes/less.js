@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('less', function(config, utils){
+prepros.factory('less', function (config, utils) {
 
     'use strict';
 
@@ -18,7 +18,7 @@ prepros.factory('less', function(config, utils){
         _id = utils.id;
 
 
-    var format = function(filePath, projectPath){
+    var format = function (filePath, projectPath) {
 
         //File name
         var name = path.basename(filePath);
@@ -32,7 +32,7 @@ prepros.factory('less', function(config, utils){
         var pathRegx = /\\less\\|\/less\//gi;
 
         //Find output path; save to user defined css folder if file is in less folder
-        if(filePath.match(pathRegx)) {
+        if (filePath.match(pathRegx)) {
 
             output = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
 
@@ -42,7 +42,7 @@ prepros.factory('less', function(config, utils){
             id: _id(filePath),
             pid: _id(projectPath),
             name: name,
-            type : 'Less',
+            type: 'Less',
             input: filePath,
             shortInput: shortInput,
             output: output,
@@ -53,7 +53,7 @@ prepros.factory('less', function(config, utils){
 
 
     //Compile Less
-    var compile = function(file, successCall, errorCall){
+    var compile = function (file, successCall, errorCall) {
 
         var less = require('less');
 
@@ -61,7 +61,7 @@ prepros.factory('less', function(config, utils){
 
         var importPath = path.dirname(file.input);
 
-        if(file.config.compress){
+        if (file.config.compress) {
 
             options.yuicompress = file.config.compress;
 
@@ -73,7 +73,7 @@ prepros.factory('less', function(config, utils){
         var parser = new (less.Parser)({
             paths: [importPath],
             filename: file.input,
-            dumpLineNumbers: (file.config.lineNumbers)? 'comments': false
+            dumpLineNumbers: (file.config.lineNumbers) ? 'comments' : false
         });
 
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
@@ -88,7 +88,7 @@ prepros.factory('less', function(config, utils){
                     parser.parse(data.toString(), function (e, tree) {
                         if (e) {
 
-                            errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
+                            errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
 
                         }
                         if (!e) {
@@ -112,9 +112,9 @@ prepros.factory('less', function(config, utils){
 
                                 });
 
-                            } catch(e ){
+                            } catch (e) {
 
-                                errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
+                                errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
 
                             }
 
@@ -123,7 +123,7 @@ prepros.factory('less', function(config, utils){
                     });
                 } catch (e) {
 
-                    errorCall(e.message + "\n"  + e.filename + ' line ' + e.line);
+                    errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
                 }
 
             }

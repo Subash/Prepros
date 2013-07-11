@@ -26,9 +26,9 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
         date: ""
     };
 
-    config.checkUpdate(function(data){
+    config.checkUpdate(function (data) {
 
-        if(data.available) {
+        if (data.available) {
             $scope.update = {
                 available: true,
                 version: data.version,
@@ -41,7 +41,7 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
 
         $scope.checking = false;
 
-    }, function(){
+    }, function () {
 
         $scope.errorChecking = true;
 
@@ -49,9 +49,9 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
 
     });
 
-    for ( var nm in config.node_modules ) {
+    for (var nm in config.node_modules) {
 
-        if(config.node_modules.hasOwnProperty(nm)) {
+        if (config.node_modules.hasOwnProperty(nm)) {
 
             $scope.node_modules.push(nm + " -> " + config.node_modules[nm]);
 
@@ -59,9 +59,9 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
 
     }
 
-    for ( var gem in config.ruby_gems ) {
+    for (var gem in config.ruby_gems) {
 
-        if(config.ruby_gems.hasOwnProperty(gem)) {
+        if (config.ruby_gems.hasOwnProperty(gem)) {
 
             $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
 

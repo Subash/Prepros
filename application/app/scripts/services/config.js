@@ -82,36 +82,36 @@ prepros.factory('config', function ($http) {
         },
 
         //Default Less Options
-        less : {
+        less: {
             autoCompile: true,
-            compress : false,
+            compress: false,
             lineNumbers: false,
             strictMath: false,
             strictUnits: false
         },
 
         //Default Sass options
-        sass : {
-            autoCompile : true,
-            lineNumbers : false,
+        sass: {
+            autoCompile: true,
+            lineNumbers: false,
             unixNewlines: false,
             debug: false,
-            compass : false,
+            compass: false,
             fullCompass: false,
-            outputStyle : 'expanded' //compressed, nested, expanded, compact
+            outputStyle: 'expanded' //compressed, nested, expanded, compact
         },
 
 
         //Default Stylus Options
-        stylus : {
+        stylus: {
             autoCompile: true,
-            lineNumbers : false,
-            nib : false,
-            compress : false
+            lineNumbers: false,
+            nib: false,
+            compress: false
         },
 
         //Default Markdown Options
-        markdown : {
+        markdown: {
             autoCompile: true,
             sanitize: false,
             gfm: true
@@ -159,9 +159,9 @@ prepros.factory('config', function ($http) {
     //Fill in the undefined values from default configurations
     userConfig = _.defaults(userConfig, defaultConfig);
 
-    for ( var configKey in userConfig ) {
+    for (var configKey in userConfig) {
 
-        if(userConfig.hasOwnProperty(configKey) && typeof userConfig[configKey] === 'object') {
+        if (userConfig.hasOwnProperty(configKey) && typeof userConfig[configKey] === 'object') {
 
             userConfig[configKey] = _.defaults(userConfig[configKey], defaultConfig[configKey]);
         }
@@ -182,15 +182,15 @@ prepros.factory('config', function ($http) {
         userConfig = $.parseJSON(angular.toJson(options));
     }
 
-    function checkUpdate(success, fail){
+    function checkUpdate(success, fail) {
 
         var opt = {method: 'get', url: online.updateFileUrl, cache: false};
 
         var checker = $http(opt);
 
-        checker.success(function(data){
+        checker.success(function (data) {
 
-            if(version !== data.version) {
+            if (version !== data.version) {
 
                 success({
                     available: true,
@@ -206,9 +206,9 @@ prepros.factory('config', function ($http) {
             }
         });
 
-        checker.error(function(){
+        checker.error(function () {
 
-            if(fail){
+            if (fail) {
                 fail();
             }
         });
@@ -219,11 +219,11 @@ prepros.factory('config', function ($http) {
         version: packageData.ruby.version,
         bourbon: path.join(packagePath, packageData.ruby.bourbon),
         neat: path.join(packagePath, packageData.ruby.neat),
-        getExec: function(fileType) {
+        getExec: function (fileType) {
 
-            if(process.platform !== 'win32') {
+            if (process.platform !== 'win32') {
 
-                if(userConfig.customRuby.use && userConfig.customRuby[fileType]) {
+                if (userConfig.customRuby.use && userConfig.customRuby[fileType]) {
 
                     return 'ruby';
 
@@ -234,7 +234,7 @@ prepros.factory('config', function ($http) {
                 }
             }
 
-            if(userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
+            if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
                 return path.join(userConfig.customRuby.path);
             }
@@ -242,19 +242,19 @@ prepros.factory('config', function ($http) {
             return path.join(packagePath, packageData.ruby.path);
 
         },
-        getGem: function(fileType) {
+        getGem: function (fileType) {
 
-            var ft = (fileType === 'compass')? 'sass': fileType;
+            var ft = (fileType === 'compass') ? 'sass' : fileType;
 
             var loader = path.join(basePath, 'ruby/gem_loader.rb');
 
             var gemPath = path.join(packagePath, packageData.ruby.gemPath);
 
-            if(process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
+            if (process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
 
                 return [loader, 'custom', fileType];
 
-            } else if(process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
+            } else if (process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
 
                 return [loader, 'custom', fileType];
 

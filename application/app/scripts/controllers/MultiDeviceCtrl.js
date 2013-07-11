@@ -21,17 +21,17 @@ prepros.controller('MultiDeviceCtrl', function ($scope) {
 
     $scope.addresses = [];
 
-    _.each(ifacesKeys, function(face) {
+    _.each(ifacesKeys, function (face) {
 
-        var add = _.filter(ifaces[face], function(f){
+        var add = _.filter(ifaces[face], function (f) {
             return f.family === "IPv4" && !f.internal;
         });
 
-        if(!_.isEmpty(add)) {
-            _.each(add, function(a) {
+        if (!_.isEmpty(add)) {
+            _.each(add, function (a) {
                 $scope.addresses.push({
                     name: face,
-                    ip : a.address
+                    ip: a.address
                 });
             });
         }

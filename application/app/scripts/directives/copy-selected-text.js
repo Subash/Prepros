@@ -23,16 +23,16 @@ prepros.directive('copySelectedText', function () {
 
             menu.append(new gui.MenuItem({
                 label: 'Copy',
-                click: function(){
+                click: function () {
                     require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
                 }
             }));
 
-            element.on('contextmenu', function(e){
+            element.on('contextmenu', function (e) {
 
                 e.preventDefault();
 
-                if(window.getSelection().toString() !== "") {
+                if (window.getSelection().toString() !== "") {
 
                     menu.popup(e.pageX, e.pageY);
 

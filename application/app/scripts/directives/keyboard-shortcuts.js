@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap, alertify */
 
 //Directive for keyboard shortcuts
-prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, compiler, utils){
+prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils) {
 
     'use strict';
 
@@ -18,10 +18,10 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
 
     return {
         restrict: 'A',
-        link: function(scope){
+        link: function (scope) {
 
             //New Project
-            Mousetrap.bind(['ctrl+n', 'command+n'], function() {
+            Mousetrap.bind(['ctrl+n', 'command+n'], function () {
 
                 var elm = $('<input type="file" nwdirectory>');
 
@@ -39,7 +39,7 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
                         //Check if it is a directory and not a drive
                         if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
 
-                            scope.$apply(function(){
+                            scope.$apply(function () {
 
                                 //Add to projects
                                 projectsManager.addProject(file.path);
@@ -55,10 +55,10 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             });
 
             //Refresh Project Files
-            Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function() {
-                if(scope.selectedProject.id){
+            Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function () {
+                if (scope.selectedProject.id) {
 
-                    scope.$apply(function(){
+                    scope.$apply(function () {
 
                         projectsManager.refreshProjectFiles(scope.selectedProject.id);
 
@@ -69,9 +69,9 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             });
 
             //Open Live Url
-            Mousetrap.bind(['ctrl+l', 'command+l'], function() {
+            Mousetrap.bind(['ctrl+l', 'command+l'], function () {
 
-                if(scope.selectedProject.id){
+                if (scope.selectedProject.id) {
 
                     var url = liveServer.getLiveUrl(scope.selectedProject);
 
@@ -82,14 +82,14 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             });
 
             //Remove Project
-            Mousetrap.bind(['ctrl+d', 'command+d'], function() {
-                if(scope.selectedProject.id){
+            Mousetrap.bind(['ctrl+d', 'command+d'], function () {
+                if (scope.selectedProject.id) {
 
                     alertify.set({ buttonFocus: "ok", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to remove this project?', function(y){
+                    alertify.confirm('Are you sure you want to remove this project?', function (y) {
 
-                        if(y) {
-                            scope.$apply(function(){
+                        if (y) {
+                            scope.$apply(function () {
                                 projectsManager.removeProject(scope.selectedProject.id);
                             });
                         }
@@ -100,12 +100,12 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             });
 
             //Compile all project files
-            Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function() {
-                if(scope.selectedProject.id){
+            Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function () {
+                if (scope.selectedProject.id) {
 
                     var files = projectsManager.getProjectFiles(scope.selectedProject.id);
 
-                    _.each(files, function(file){
+                    _.each(files, function (file) {
 
                         compiler.compile(file.id);
 
@@ -115,15 +115,15 @@ prepros.directive('keyboardShortcuts', function(projectsManager, liveServer, com
             });
 
             //Compile selected project file
-            Mousetrap.bind(['ctrl+c', 'command+c'], function() {
+            Mousetrap.bind(['ctrl+c', 'command+c'], function () {
 
-                if(window.getSelection().toString() !== "") {
+                if (window.getSelection().toString() !== "") {
 
                     require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
 
                 } else {
 
-                    if(scope.selectedFile.id){
+                    if (scope.selectedFile.id) {
 
                         compiler.compile(scope.selectedFile.id);
                     }

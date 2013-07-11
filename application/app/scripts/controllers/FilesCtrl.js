@@ -17,7 +17,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
         path = require('path');
 
     //Change file output
-    $scope.changeFileOutput = function(event, id){
+    $scope.changeFileOutput = function (event, id) {
 
         event.preventDefault();
         event.stopPropagation();
@@ -46,14 +46,14 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
 
         $(elm).on('change', function (e) {
 
-            $scope.$apply(function(){
+            $scope.$apply(function () {
                 projectsManager.changeFileOutput(id, e.currentTarget.files[0].path);
             });
         });
     };
 
     //Open file with default editor
-    $scope.openFile= function(file) {
+    $scope.openFile = function (file) {
 
         require('nw.gui').Shell.openExternal(file);
 
@@ -61,7 +61,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
 
 
     //Compile file
-    $scope.compile = function(){
+    $scope.compile = function () {
         compiler.compile($scope.selectedFile.id);
     };
 

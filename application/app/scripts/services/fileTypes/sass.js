@@ -33,7 +33,7 @@ prepros.factory('sass', function (config, utils) {
         var pathRegx = /\\sass\\|\\scss\\|\/sass\/|\/scss\//gi;
 
         //Find output path; save to user defined css folder if file is in sass or scss folder
-        if(filePath.match(pathRegx)) {
+        if (filePath.match(pathRegx)) {
 
             output = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
 
@@ -46,7 +46,7 @@ prepros.factory('sass', function (config, utils) {
             input: filePath,
             shortInput: shortInput,
             output: output,
-            config : config.getUserOptions().sass
+            config: config.getUserOptions().sass
         };
 
         var ext = path.extname(filePath);
@@ -69,9 +69,9 @@ prepros.factory('sass', function (config, utils) {
 
     var compile = function (file, successCall, errorCall) {
 
-        var args =[];
+        var args = [];
 
-        if(file.config.fullCompass && file.config.compass) {
+        if (file.config.fullCompass && file.config.compass) {
 
             args = config.ruby.getGem('compass');
 
@@ -88,7 +88,7 @@ prepros.factory('sass', function (config, utils) {
             }
 
             //Debug info
-            if(file.config.debug){
+            if (file.config.debug) {
 
                 args.push('--debug-info');
             }
@@ -102,7 +102,7 @@ prepros.factory('sass', function (config, utils) {
             //Force utf-8 encoding
             args.push('-E', 'utf-8');
 
-            if(file.config.unixNewlines) {
+            if (file.config.unixNewlines) {
 
                 args.push('--unix-newlines');
             }
@@ -123,7 +123,7 @@ prepros.factory('sass', function (config, utils) {
             args.push('--style', file.config.outputStyle);
 
             //Debug info
-            if(file.config.debug){
+            if (file.config.debug) {
 
                 args.push('--debug');
             }
@@ -152,7 +152,7 @@ prepros.factory('sass', function (config, utils) {
 
         var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
 
-        rubyProcess.on('error', function(e) {
+        rubyProcess.on('error', function (e) {
             errorCall('Unable to execute ruby —error ' + e.message);
         });
 
@@ -168,8 +168,8 @@ prepros.factory('sass', function (config, utils) {
         });
 
         //Success if there is no error
-        rubyProcess.on('exit', function(){
-            if(!compileErr){
+        rubyProcess.on('exit', function () {
+            if (!compileErr) {
 
                 successCall(file.input);
 
@@ -177,7 +177,6 @@ prepros.factory('sass', function (config, utils) {
 
             rubyProcess = null;
         });
-
 
 
     };

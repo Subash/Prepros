@@ -17,13 +17,13 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
         path = require('path');
 
 
-    $scope.openProjectFolder= function(folder) {
+    $scope.openProjectFolder = function (folder) {
 
         require('nw.gui').Shell.openItem(folder);
 
     };
 
-    $scope.addProject = function(){
+    $scope.addProject = function () {
 
         //Function to add new project
         var elm = $('<input type="file" nwdirectory>');
@@ -35,7 +35,7 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
             var file = e.currentTarget.files[0].path;
 
             //Must notify scope after async operation
-            $scope.$apply(function(){
+            $scope.$apply(function () {
                 projectsManager.addProject(file);
             });
 
@@ -43,16 +43,16 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     };
 
     //function to refresh project files
-    $scope.refreshFiles = function(){
+    $scope.refreshFiles = function () {
 
         projectsManager.refreshProjectFiles($scope.selectedProject.id);
 
     };
 
     //Function to open live url
-    $scope.openLiveUrl = function(){
+    $scope.openLiveUrl = function () {
 
-        if($scope.selectedProject.config.useCustomServer){
+        if ($scope.selectedProject.config.useCustomServer) {
 
             utils.openBrowser($scope.selectedProject.config.customServerUrl);
 
@@ -65,13 +65,13 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     };
 
     //Function to remove project
-    $scope.removeProject = function(){
+    $scope.removeProject = function () {
 
         alertify.set({ buttonFocus: "none" });
-        alertify.confirm('Are you sure you want to remove this project?', function(y){
+        alertify.confirm('Are you sure you want to remove this project?', function (y) {
 
-            if(y) {
-                $scope.$apply(function(){
+            if (y) {
+                $scope.$apply(function () {
                     projectsManager.removeProject($scope.selectedProject.id);
                 });
             }

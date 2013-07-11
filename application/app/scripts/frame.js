@@ -43,21 +43,21 @@
             };
 
             //Wait 200ms for app to load and show window to prevent flash of unloaded content
-            window.setTimeout(function(){
+            window.setTimeout(function () {
                 nw.window.show();
             }, 200);
 
-            window.addEventListener("dragenter",function(e){
+            window.addEventListener("dragenter", function (e) {
                 e.preventDefault();
-            },false);
+            }, false);
 
-            window.addEventListener("dragover",function(e){
+            window.addEventListener("dragover", function (e) {
                 e.preventDefault();
-            },false);
+            }, false);
 
-            window.addEventListener("drop",function(e){
+            window.addEventListener("drop", function (e) {
                 e.preventDefault();
-            },false);
+            }, false);
 
             //Tray icon
             var tray_icon = new nw.gui.Tray({

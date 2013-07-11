@@ -16,7 +16,7 @@ prepros.factory('liveServer', function (config) {
     var express = require('express'),
         app = express(),
         WebSocketServer = require('websocket').server,
-        urls= [],
+        urls = [],
         serverProjects = [];
 
     //Start listening
@@ -47,7 +47,7 @@ prepros.factory('liveServer', function (config) {
 
             var url = require('url');
             var parsed = url.parse(project.config.customServerUrl);
-            return parsed.protocol + '//'  + parsed.host;
+            return parsed.protocol + '//' + parsed.host;
 
         } else {
 
@@ -57,7 +57,7 @@ prepros.factory('liveServer', function (config) {
 
 
     //Live reload middleware inspired by https://github.com/intesso/connect-livereload
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
 
         var writeHead = res.writeHead;
         var write = res.write;
@@ -69,16 +69,16 @@ prepros.factory('liveServer', function (config) {
 
         filepath = filepath.slice(-1) === '/' ? filepath + 'index.html' : filepath;
 
-        if (path.extname( filepath ) !== '.html') {
+        if (path.extname(filepath) !== '.html') {
 
             return next();
         }
 
-        res.push = function(chunk) {
+        res.push = function (chunk) {
             res.data = (res.data || '') + chunk;
         };
 
-        res.inject = res.write = function(string, encoding) {
+        res.inject = res.write = function (string, encoding) {
 
             if (string !== undefined) {
 
@@ -97,7 +97,7 @@ prepros.factory('liveServer', function (config) {
             return true;
         };
 
-        res.end = function(string, encoding) {
+        res.end = function (string, encoding) {
             res.writeHead = writeHead;
             res.end = end;
             var result = res.inject(string, encoding);
@@ -122,7 +122,7 @@ prepros.factory('liveServer', function (config) {
         urls = [];
         serverProjects = [];
 
-        _.each(projects, function(project){
+        _.each(projects, function (project) {
 
             if (!project.config.useCustomServer) {
 
@@ -132,7 +132,7 @@ prepros.factory('liveServer', function (config) {
 
                 app.use(projectUrl, express.directory(project.path, {icons: true}));
 
-                serverProjects.push({ name: project.name, url : projectUrl});
+                serverProjects.push({ name: project.name, url: projectUrl});
             }
 
             if (project.config.useCustomServer) {
@@ -146,7 +146,7 @@ prepros.factory('liveServer', function (config) {
 
     }
 
-    var refreshServer =  new WebSocketServer({
+    var refreshServer = new WebSocketServer({
 
         //Live reload connection port
         httpServer: app.listen(25690),

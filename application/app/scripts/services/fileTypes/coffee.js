@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('coffee', function(config, utils){
+prepros.factory('coffee', function (config, utils) {
 
     'use strict';
 
@@ -31,7 +31,7 @@ prepros.factory('coffee', function(config, utils){
         var pathRegx = /\\coffee\\|\/coffee\//gi;
 
         //Find output path; save to /js folder if file is in /coffee folder
-        if(filePath.match(pathRegx)) {
+        if (filePath.match(pathRegx)) {
 
             output = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
 
@@ -58,7 +58,7 @@ prepros.factory('coffee', function(config, utils){
 
         var options = {};
 
-        if(file.config.bare){
+        if (file.config.bare) {
 
             options.bare = true;
         }

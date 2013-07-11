@@ -17,9 +17,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
     var notificationWindow, log = [];
 
     //Inject function in global so that notification can show log
-    global.showLog = function(){
+    global.showLog = function () {
 
-        $rootScope.$apply(function(){
+        $rootScope.$apply(function () {
             $location.path('/log');
         });
 
@@ -27,11 +27,11 @@ prepros.factory('notification', function (config, $location, $rootScope) {
     };
 
 
-    function openNotificationWindow(data){
+    function openNotificationWindow(data) {
 
-        if(notificationWindow && global.notificationScope) {
+        if (notificationWindow && global.notificationScope) {
 
-            global.notificationScope.$apply(function(){
+            global.notificationScope.$apply(function () {
                 global.notificationScope.$broadcast('dataChange', data);
             });
 
@@ -42,8 +42,8 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
 
             var options = {
-                x: window.screen.availWidth-410,
-                y: window.screen.availHeight-110,
+                x: window.screen.availWidth - 410,
+                y: window.screen.availHeight - 110,
                 width: 400,
                 height: 100,
                 frame: false,
@@ -53,59 +53,59 @@ prepros.factory('notification', function (config, $location, $rootScope) {
                 show_in_taskbar: false
             };
 
-            if(process.platform !== 'win32') {
+            if (process.platform !== 'win32') {
                 options.y = 10;
             }
 
             notificationWindow = require('nw.gui').Window.open(notificationPath, options);
 
-            notificationWindow.on('close', function(){
+            notificationWindow.on('close', function () {
                 this.close(true);
                 notificationWindow = null;
             });
         }
     }
 
-	function error(name, message, details){
+    function error(name, message, details) {
 
         log.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
 
-        log = (log.length>=20)? log.slice(0, 19): log;
+        log = (log.length >= 20) ? log.slice(0, 19) : log;
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
-        if(config.getUserOptions().enableErrorNotifications){
+        if (config.getUserOptions().enableErrorNotifications) {
 
             openNotificationWindow({name: name, message: message, type: 'error'});
         }
-	}
+    }
 
     //Function to success notification
-    var success = function(name, message, details){
+    var success = function (name, message, details) {
 
         log.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
 
-        log = (log.length>=20)? log.slice(0, 19): log;
+        log = (log.length >= 20) ? log.slice(0, 19) : log;
 
         $rootScope.$broadcast('logUpdate', {log: log});
 
-        if(config.getUserOptions().enableSuccessNotifications){
+        if (config.getUserOptions().enableSuccessNotifications) {
 
             openNotificationWindow({name: name, message: message, type: 'success'});
         }
     };
 
     //Clear Log
-    var clearLog = function(){
+    var clearLog = function () {
         log = [];
         $rootScope.$broadcast('logUpdate', {log: log});
     };
 
     return {
-		error: error,
+        error: error,
         success: success,
         clearLog: clearLog,
-        log : log
+        log: log
     };
 
 });

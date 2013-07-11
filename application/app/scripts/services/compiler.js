@@ -10,23 +10,23 @@
 
 prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer) {
 
-	"use strict";
+    "use strict";
 
-	var fs = require('fs-extra'),
+    var fs = require('fs-extra'),
         path = require('path');
 
     var compileQueue = [];
 
-	//function to compile
-	function compile(fid) {
+    //function to compile
+    function compile(fid) {
 
-        if(!_.contains(compileQueue, fid)) {
+        if (!_.contains(compileQueue, fid)) {
 
             compileQueue.push(fid);
 
             var file = projectsManager.getFileById(fid);
 
-            var ext =  path.extname(file.input).toLowerCase();
+            var ext = path.extname(file.input).toLowerCase();
 
             //Replace file.output placeholders with real paths
             var prj = projectsManager.getProjectById(file.pid);
@@ -35,7 +35,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             var f = $.parseJSON(angular.toJson(file));
 
             //Sass compiler requires project path for config.rb file
-            if(ext === '.scss' || ext === '.sass') {
+            if (ext === '.scss' || ext === '.sass') {
 
                 f.projectPath = prj.path;
             }
@@ -44,26 +44,26 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
             if (fs.existsSync(f.input)) {
 
-                fileTypes.compile(f, function(data){
+                fileTypes.compile(f, function (data) {
 
                     compileQueue = _.without(compileQueue, fid);
 
-                    $rootScope.$apply(function(){
+                    $rootScope.$apply(function () {
 
                         notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
 
                     });
 
-                    if(projectsManager.getProjectById(f.pid).config.liveRefresh) {
+                    if (projectsManager.getProjectById(f.pid).config.liveRefresh) {
                         liveServer.refresh(f.output);
                     }
 
 
-                }, function(data){
+                }, function (data) {
 
                     compileQueue = _.without(compileQueue, fid);
 
-                    $rootScope.$apply(function(){
+                    $rootScope.$apply(function () {
                         notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);
                     });
 
@@ -71,11 +71,11 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
             }
         }
 
-	}
+    }
 
-	return{
-		compile      : compile
-	};
+    return{
+        compile: compile
+    };
 
 });
 

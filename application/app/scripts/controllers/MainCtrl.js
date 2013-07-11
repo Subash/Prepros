@@ -9,8 +9,7 @@
 /*global prepros,  _ , $*/
 
 //App controller
-prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage,
-                                        projectsManager, liveServer, watcher, notification) {
+prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, liveServer, watcher, notification) {
 
     'use strict';
 
@@ -30,7 +29,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     $scope.log = notification.log;
 
     ///File Change
-    var throttleFileChange = _.throttle(function(){
+    var throttleFileChange = _.throttle(function () {
 
         storage.saveFiles($scope.files);
 
@@ -43,7 +42,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     }, 1500);
 
     //Projects Change
-    var throttleProjectsChange = _.throttle(function(){
+    var throttleProjectsChange = _.throttle(function () {
 
         storage.saveProjects($scope.projects);
         liveServer.startServing($scope.projects);
@@ -51,7 +50,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     }, 1500);
 
     //Imports Change
-    var throttleImportsChange = _.throttle(function(){
+    var throttleImportsChange = _.throttle(function () {
 
         storage.saveImports($scope.imports);
 
@@ -63,19 +62,19 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     }, 1500);
 
-    $scope.$watch('files', function(){
+    $scope.$watch('files', function () {
 
         throttleFileChange();
 
     }, true);
 
-    $scope.$watch('projects', function(){
+    $scope.$watch('projects', function () {
 
         throttleProjectsChange();
 
     }, true);
 
-    $scope.$watch('imports', function(){
+    $scope.$watch('imports', function () {
 
         throttleImportsChange();
 
@@ -91,11 +90,11 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
         $scope.files = data.files;
         $scope.imports = data.imports;
 
-        if($scope.selectedProject.id){
+        if ($scope.selectedProject.id) {
 
             var projectExists = _.findWhere($scope.projects, {id: $scope.selectedProject.id});
 
-            if(!projectExists) {
+            if (!projectExists) {
 
                 $scope.selectedProject = {};
                 $scope.selectedProjectFiles = [];
@@ -108,7 +107,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
             }
         }
 
-        if($scope.selectedFile.id){
+        if ($scope.selectedFile.id) {
 
             var fileExists = _.findWhere($scope.files, {id: $scope.selectedFile.id});
 
@@ -121,11 +120,11 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
         }
     });
 
-    $scope.$on('$routeChangeSuccess', function (){
+    $scope.$on('$routeChangeSuccess', function () {
 
         $scope.path = $route.current.path;
 
-        if($scope.path === 'files') {
+        if ($scope.path === 'files') {
 
             var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
 
@@ -175,12 +174,12 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
 
     //Function to clear log
-    $scope.clearLog = function(){
+    $scope.clearLog = function () {
         notification.clearLog();
     };
 
     //Update log on log change event
-    $scope.$on('logUpdate', function(e, data) {
+    $scope.$on('logUpdate', function (e, data) {
         $scope.log = data.log;
     });
 

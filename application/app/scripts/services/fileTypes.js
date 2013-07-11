@@ -20,8 +20,8 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         sass: sass,
         scss: sass,
         styl: stylus,
-        md : markdown,
-        markdown : markdown,
+        md: markdown,
+        markdown: markdown,
         coffee: coffee,
         js: javascript,
         jade: jade,
@@ -49,7 +49,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
     }
 
     //Function to check if extension is supported
-    function isExtSupported(filePath){
+    function isExtSupported(filePath) {
 
         var extname = path.extname(filePath).toLowerCase();
 
@@ -93,7 +93,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
     }
 
     //Get the default extension of compiled output
-    function getCompiledExtension(filePath){
+    function getCompiledExtension(filePath) {
 
         var ext = path.extname(filePath).slice(1);
 
@@ -101,15 +101,15 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         var js = ['coffee', 'js'];
         var html = ['jade', 'haml', 'md', 'markdown', 'slim'];
 
-        if(_.contains(css, ext)){
+        if (_.contains(css, ext)) {
 
             return '.css';
 
-        } else if(_.contains(html, ext)) {
+        } else if (_.contains(html, ext)) {
 
             return config.getUserOptions().htmlExtension;
 
-        } else if(_.contains(js, ext)){
+        } else if (_.contains(js, ext)) {
 
             return '.js';
 
@@ -127,13 +127,13 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
 
         var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js'];
 
-        return (_.contains(can, ext))? importsVisitor.getImports(filePath) : [];
+        return (_.contains(can, ext)) ? importsVisitor.getImports(filePath) : [];
 
     }
 
 
     return {
-        compile : compile,
+        compile: compile,
         format: format,
         isExtSupported: isExtSupported,
         getImports: getImports,

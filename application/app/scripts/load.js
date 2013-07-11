@@ -76,7 +76,7 @@
     ];
 
     //Libraries
-    libraries.forEach(function(lib) {
+    libraries.forEach(function (lib) {
         jScripts.push('vendor/' + lib + '.js');
     });
 
@@ -94,7 +94,7 @@
     });
 
     //Controllers
-    controllers.forEach(function(controller) {
+    controllers.forEach(function (controller) {
         jScripts.push('scripts/controllers/' + controller + '.js');
     });
 
@@ -109,10 +109,10 @@
     });
 
     //Load scripts and bootstrap
-    $LAB.setOptions({AlwaysPreserveOrder:true});
+    $LAB.setOptions({AlwaysPreserveOrder: true});
 
     $LAB.script(jScripts)
-        .wait(function(){
+        .wait(function () {
             angular.bootstrap(document, ['prepros']);
         });
 })();

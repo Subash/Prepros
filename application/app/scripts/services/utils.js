@@ -9,33 +9,33 @@
 /*global prepros, $, _ */
 prepros.factory('utils', function () {
 
-	'use strict';
+    'use strict';
 
-	var md5 = require('MD5');
+    var md5 = require('MD5');
 
-	function id(string){
+    function id(string) {
 
-		return md5(string.toLowerCase()).substr(8,8);
-	}
+        return md5(string.toLowerCase()).substr(8, 8);
+    }
 
     //Shows loading overlay
-    function showLoading(){
+    function showLoading() {
 
         $('body').append('<div class="loading-overlay"><div class="container"><div class="loading-icon icomoon-spinner"></div></div></div>');
     }
 
     //Hide loading animation
-    function hideLoading(){
+    function hideLoading() {
 
-        _.delay(function(){
-            $('body .loading-overlay').fadeOut(200, function(){
+        _.delay(function () {
+            $('body .loading-overlay').fadeOut(200, function () {
                 $(this).remove();
             });
         }, 200);
     }
 
     //Open Browser
-    function openBrowser(url){
+    function openBrowser(url) {
 
         require('nw.gui').Shell.openExternal(url);
 

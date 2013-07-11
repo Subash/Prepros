@@ -55,7 +55,7 @@ prepros.factory('javascript', function (config, utils) {
 
             } else {
 
-                var run = function(){
+                var run = function () {
 
                     var javascript = data.toString();
 
@@ -65,9 +65,9 @@ prepros.factory('javascript', function (config, utils) {
 
                             javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
 
-                        } catch(e) {
+                        } catch (e) {
 
-                            throw {message: 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ file.input};
+                            throw {message: 'Error on line ' + e.line + ' col ' + e.col + ' ' + e.message + ' of ' + file.input};
                         }
                     }
 
@@ -76,16 +76,16 @@ prepros.factory('javascript', function (config, utils) {
                         prepend: /\/\/(?:\s|)@(?:prepros|codekit)-prepend\s+(.*)/gi
                     };
 
-                    var read = function(filePathToRead) {
+                    var read = function (filePathToRead) {
 
                         var importedFiles = {
-                            append : [],
-                            prepend : []
+                            append: [],
+                            prepend: []
                         };
 
                         var regs = Object.keys(importReg);
 
-                        _.each(regs, function(reg) {
+                        _.each(regs, function (reg) {
 
                             var result;
 
@@ -112,7 +112,7 @@ prepros.factory('javascript', function (config, utils) {
 
                                 } else {
 
-                                    throw {message: 'Imported file "'+ importedFile +'" not found \n Imported by "' + file.input + '"'};
+                                    throw {message: 'Imported file "' + importedFile + '" not found \n Imported by "' + file.input + '"'};
                                 }
                             }
                         });
@@ -123,19 +123,19 @@ prepros.factory('javascript', function (config, utils) {
                         };
                     };
 
-                    var get = function(append){
+                    var get = function (append) {
 
-                        var imps =[];
-                        imps[0] = (append)? read(file.input).append: read(file.input).prepend;
+                        var imps = [];
+                        imps[0] = (append) ? read(file.input).append : read(file.input).prepend;
 
                         //Get imports of imports up to four levels
-                        for(var i=1; i<5; i++) {
+                        for (var i = 1; i < 5; i++) {
 
                             imps[i] = [];
 
-                            _.each(imps[i-1], function(importedFile){
+                            _.each(imps[i - 1], function (importedFile) {
 
-                                imps[i] = _.uniq(_.union(imps[i], (append)? read(importedFile).append: read(importedFile).prepend));
+                                imps[i] = _.uniq(_.union(imps[i], (append) ? read(importedFile).append : read(importedFile).prepend));
                             });
                         }
 
@@ -143,10 +143,10 @@ prepros.factory('javascript', function (config, utils) {
 
                     };
 
-                    var join = function(files, append) {
+                    var join = function (files, append) {
 
                         //Remove repeated imports
-                        _.each(_.uniq(_.flatten(files)), function(imp) {
+                        _.each(_.uniq(_.flatten(files)), function (imp) {
 
                             var js = fs.readFileSync(imp).toString();
 
@@ -156,13 +156,13 @@ prepros.factory('javascript', function (config, utils) {
 
                                     js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
 
-                                } catch(e) {
+                                } catch (e) {
 
-                                    throw {message: 'Error on line '+ e.line + ' col ' + e.col + ' '+ e.message + ' of '+ imp};
+                                    throw {message: 'Error on line ' + e.line + ' col ' + e.col + ' ' + e.message + ' of ' + imp};
                                 }
                             }
 
-                            if(append) {
+                            if (append) {
 
                                 javascript = javascript + js;
 
@@ -180,14 +180,14 @@ prepros.factory('javascript', function (config, utils) {
                     join(appends, true);
                     join(prepends, false);
 
-                    _.each(importReg, function(reg){
+                    _.each(importReg, function (reg) {
 
                         javascript = javascript.replace(new RegExp(reg.source + '\n', 'gi'), '');
                     });
 
                     try {
                         fs.outputFileSync(file.output, javascript);
-                    } catch(e) {
+                    } catch (e) {
                         throw e;
                     }
                 };

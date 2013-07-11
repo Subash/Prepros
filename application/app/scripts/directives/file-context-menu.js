@@ -25,23 +25,23 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
 
             menu.append(new gui.MenuItem({
                 label: 'Open File',
-                click: function(){
+                click: function () {
                     gui.Shell.openItem(file.input);
                 }
             }));
 
             menu.append(new gui.MenuItem({
                 label: 'Compile File',
-                click: function(){
+                click: function () {
                     compiler.compile(file.id);
                 }
             }));
 
             menu.append(new gui.MenuItem({
                 label: 'Toggle Auto Compile',
-                click: function(){
+                click: function () {
 
-                    $rootScope.$apply(function(){
+                    $rootScope.$apply(function () {
                         var f = _.findWhere(scope.files, {id: file.id});
 
                         f.config.autoCompile = !f.config.autoCompile;
@@ -49,34 +49,34 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 }
             }));
 
-            var explorer = (process.platform === 'win32')? 'Explorer': 'Finder';
+            var explorer = (process.platform === 'win32') ? 'Explorer' : 'Finder';
 
             menu.append(new gui.MenuItem({
                 label: 'Show in ' + explorer,
-                click: function(){
+                click: function () {
                     gui.Shell.showItemInFolder(file.input);
                 }
             }));
 
             menu.append(new gui.MenuItem({
                 label: 'Change Output',
-                click: function(){
+                click: function () {
                     element.find('.output').trigger('click');
                 }
             }));
 
             menu.append(new gui.MenuItem({
                 label: 'Reset File Settings',
-                click: function(){
+                click: function () {
 
                     alertify.set({ buttonFocus: "none", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to reset the settings of this file?', function(y){
+                    alertify.confirm('Are you sure you want to reset the settings of this file?', function (y) {
 
-                        if(y) {
+                        if (y) {
 
                             projectsManager.removeFile(file.id);
 
-                            $rootScope.$apply(function(){
+                            $rootScope.$apply(function () {
 
                                 projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
 
@@ -88,7 +88,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 }
             }));
 
-            element.on('contextmenu', function(e){
+            element.on('contextmenu', function (e) {
 
                 e.preventDefault();
 

@@ -17,7 +17,7 @@ prepros.directive('tooltip', function ($timeout) {
         restrict: 'A',
         link: function (scope, element, attrs) {
 
-            $timeout(function(){
+            $timeout(function () {
 
                 element.tooltip({delay: 500, title: attrs.tooltip, container: '.wrapper'});
 

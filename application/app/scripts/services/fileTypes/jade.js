@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('jade', function(config, utils){
+prepros.factory('jade', function (config, utils) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ prepros.factory('jade', function(config, utils){
         var pathRegx = /\\jade\\|\/jade\//gi;
 
         //Find output path; save to /html folder if file is in /jade folder
-        if(filePath.match(pathRegx)) {
+        if (filePath.match(pathRegx)) {
 
             output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
