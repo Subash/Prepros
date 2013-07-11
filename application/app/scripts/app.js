@@ -12,7 +12,7 @@
 
 var prepros = angular.module('prepros', []).config(function ($routeProvider, $compileProvider) {
 
-    //Sanitize unsafe url
+    //Whitelist file urls
     $compileProvider.urlSanitizationWhitelist(/^\s*(file):/);
 
     //Routers
