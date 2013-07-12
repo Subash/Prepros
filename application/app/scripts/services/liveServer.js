@@ -124,13 +124,13 @@ prepros.factory('liveServer', function (config) {
 
         _.each(projects, function (project) {
 
+            var projectUrl = '/' + project.config.serverUrl + '/';
+
+            app.use(projectUrl, express.static(project.path));
+
+            app.use(projectUrl, express.directory(project.path, {icons: true}));
+
             if (!project.config.useCustomServer) {
-
-                var projectUrl = '/' + project.config.serverUrl + '/';
-
-                app.use(projectUrl, express.static(project.path));
-
-                app.use(projectUrl, express.directory(project.path, {icons: true}));
 
                 serverProjects.push({ name: project.name, url: projectUrl});
             }
