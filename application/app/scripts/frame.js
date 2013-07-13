@@ -61,20 +61,16 @@
 
             //Tray icon
             var tray_icon = null;
-            if (process.platform !== 'win32') {
 
-                tray_icon = new nw.gui.Tray({
-                    icon: 'app/assets/img/icons/16.png' //Relative to package.json file
-                });
+            var trayOptions = {
+                icon: 'app/assets/img/icons/16.png' //Relative to package.json file
+            };
 
-            } else {
-
-                tray_icon = new nw.gui.Tray({
-                    title: 'Prepros App',
-                    icon: 'app/assets/img/icons/16.png' //Relative to package.json file
-                });
-
+            if(process.platform === 'win32') {
+                trayOptions.title = 'Prepros App';
             }
+
+            tray_icon = new nw.gui.Tray(trayOptions);
 
             //Tray Icon Right Click Menu
             var tray_menu = new nw.gui.Menu();
