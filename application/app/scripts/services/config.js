@@ -153,6 +153,14 @@ prepros.factory('config', function ($http) {
             indent: 'default', //default, four, tab
             fourSpaceIndent: true,
             format: ':html5' //:xhtml, :html4, :html5, :html
+        },
+
+        //Default Coffeescript Options
+        livescript: {
+            autoCompile: true,
+            bare: false,
+            uglify: false,
+            mangle: true
         }
     };
 

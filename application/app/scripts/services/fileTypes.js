@@ -10,7 +10,7 @@
 
 'use strict';
 
-prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, config, importsVisitor) {
+prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, livescript, config, importsVisitor) {
 
     var path = require('path');
 
@@ -26,7 +26,8 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         js: javascript,
         jade: jade,
         haml: haml,
-        slim: slim
+        slim: slim,
+        ls: livescript
     };
 
 
@@ -62,7 +63,8 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
             '.js', //Javascript
             '.jade', //Jade
             '.haml',  //Haml
-            '.slim'  //Slim
+            '.slim',  //Slim
+            '.ls' //LiveScript
         ];
 
         return _.contains(supportedExtensions, extname);
@@ -98,7 +100,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         var ext = path.extname(filePath).slice(1);
 
         var css = ['scss', 'sass', 'stylus', 'less'];
-        var js = ['coffee', 'js'];
+        var js = ['coffee', 'ls', 'js'];
         var html = ['jade', 'haml', 'md', 'markdown', 'slim'];
 
         if (_.contains(css, ext)) {

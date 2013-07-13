@@ -8,6 +8,7 @@ $js: #b66ff4;
 $haml: #036564;
 $md: #b24c32;
 $slim: #45ADA8;
+$livescript: #369bd7;
 
 $duration : .5s;
 
@@ -158,6 +159,12 @@ $duration : .5s;
       border-right: 5px solid $slim;
       &:after {
         border-right: 5px solid $slim;
+      }
+    }
+    .ls {
+      border-right: 5px solid $livescript;
+      &:after {
+        border-right: 5px solid $livescript;
       }
     }
 
