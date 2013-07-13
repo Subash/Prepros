@@ -280,6 +280,25 @@
     </label>
 </div>
 
+<div data-title="LiveScript">
+    <label>
+        <input type="checkbox" ng-model="userConfig.livescript.autoCompile">
+        <span class="label-desc">Auto Compile</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.livescript.bare">
+        <span class="label-desc">Bare</span>
+    </label>
+    <label>
+        <input type="checkbox" ng-model="userConfig.livescript.uglify">
+        <span class="label-desc">Uglify</span>
+    </label>
+    <label ng-if="userConfig.livescript.uglify">
+        <input type="checkbox" ng-model="userConfig.livescript.mangle">
+        <span class="label-desc">Mangle Variable Names</span>
+    </label>
+</div>
+
 <div data-title="Javascript">
     <label>
         <input type="checkbox" ng-model="userConfig.javascript.autoCompile">

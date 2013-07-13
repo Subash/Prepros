@@ -60,10 +60,21 @@
             }, false);
 
             //Tray icon
-            var tray_icon = new nw.gui.Tray({
-                title: 'Prepros App',
-                icon: 'app/assets/img/icons/16.png' //Relative to package.json file
-            });
+            var tray_icon = null;
+            if (process.platform !== 'win32') {
+
+                tray_icon = new nw.gui.Tray({
+                    icon: 'app/assets/img/icons/16.png' //Relative to package.json file
+                });
+
+            } else {
+
+                tray_icon = new nw.gui.Tray({
+                    title: 'Prepros App',
+                    icon: 'app/assets/img/icons/16.png' //Relative to package.json file
+                });
+
+            }
 
             //Tray Icon Right Click Menu
             var tray_menu = new nw.gui.Menu();
