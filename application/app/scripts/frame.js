@@ -60,8 +60,6 @@
             }, false);
 
             //Tray icon
-            var tray_icon = null;
-
             var trayOptions = {
                 icon: 'app/assets/img/icons/16.png' //Relative to package.json file
             };
@@ -70,7 +68,7 @@
                 trayOptions.title = 'Prepros App';
             }
 
-            tray_icon = new nw.gui.Tray(trayOptions);
+            var tray_icon = new nw.gui.Tray(trayOptions);
 
             //Tray Icon Right Click Menu
             var tray_menu = new nw.gui.Menu();
