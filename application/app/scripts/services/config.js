@@ -161,6 +161,10 @@ prepros.factory('config', function ($http) {
             bare: false,
             uglify: false,
             mangle: true
+        },
+
+        image: {
+            autoCompile: true
         }
     };
 
