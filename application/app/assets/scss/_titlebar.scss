@@ -45,10 +45,22 @@
 
     .dropdown-menu {
       text-align: left;
+      -webkit-filter: drop-shadow(0px 0px 5px rgba(0,0,0,.5));
+      box-shadow: none;
       i {
         display: inline-block;
         margin-right: 5px;
         line-height: 20px;
+      }
+      &::after {
+        position: absolute;
+        top: -6px;
+        right: 10px;
+        display: inline-block;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        border-left: 6px solid transparent;
+        content: '';
       }
     }
   }
