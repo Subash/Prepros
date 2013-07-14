@@ -29,6 +29,7 @@
         'SidebarCtrl',
         'FilesCtrl',
         'AboutCtrl',
+        'LogCtrl',
         'MultiDeviceCtrl',
         'OptimImageCtrl'
     ];

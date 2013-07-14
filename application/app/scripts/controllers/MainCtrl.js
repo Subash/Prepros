@@ -9,7 +9,7 @@
 /*global prepros,  _ , $*/
 
 //App controller
-prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, liveServer, watcher, notification) {
+prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, liveServer, watcher) {
 
     'use strict';
 
@@ -25,8 +25,6 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
     $scope.selectedProject = {};
 
     $scope.selectedProjectFiles = [];
-
-    $scope.log = notification.log;
 
     ///File Change
     var throttleFileChange = _.throttle(function () {
@@ -171,16 +169,4 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
         }
 
     });
-
-
-    //Function to clear log
-    $scope.clearLog = function () {
-        notification.clearLog();
-    };
-
-    //Update log on log change event
-    $scope.$on('logUpdate', function (e, data) {
-        $scope.log = data.log;
-    });
-
 });
