@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _ , $*/
 
-//Files List controls
+//About Window Controller
 prepros.controller('AboutCtrl', function ($scope, config, utils) {
 
     'use strict';

@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, unused: false*/
 /*global prepros,  _ , $*/
 
-//Files List controls
+//Controller for multiple device
 prepros.controller('MultiDeviceCtrl', function ($scope) {
 
     'use strict';
