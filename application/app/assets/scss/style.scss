@@ -26,5 +26,11 @@
 }
 
 .modal.project-options.fade.in {
-  top: 5%;
+  width: auto;
+  margin-left: -210px;
+}
+
+.project-options .js-options label {
+  margin-left: 0;
+  margin-bottom: 0;
 }

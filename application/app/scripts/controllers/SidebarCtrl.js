@@ -23,25 +23,6 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
 
     };
 
-    $scope.addProject = function () {
-
-        //Function to add new project
-        var elm = $('<input type="file" nwdirectory>');
-
-        elm.trigger('click');
-
-        $(elm).on('change', function (e) {
-
-            var file = e.currentTarget.files[0].path;
-
-            //Must notify scope after async operation
-            $scope.$apply(function () {
-                projectsManager.addProject(file);
-            });
-
-        });
-    };
-
     //function to refresh project files
     $scope.refreshFiles = function () {
 

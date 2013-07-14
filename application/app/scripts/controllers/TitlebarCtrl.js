@@ -52,6 +52,25 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
     });
 
+    $scope.addProject = function () {
+
+        //Function to add new project
+        var elm = $('<input type="file" nwdirectory>');
+
+        elm.trigger('click');
+
+        $(elm).on('change', function (e) {
+
+            var file = e.currentTarget.files[0].path;
+
+            //Must notify scope after async operation
+            $scope.$apply(function () {
+                projectsManager.addProject(file);
+            });
+
+        });
+    };
+
     //Open Options Window
     var optionsWindow;
     $scope.openOptionsWindow = function () {
@@ -70,8 +89,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
 
             optionsWindow = require('nw.gui').Window.open(optionsPath, {
                 position: 'center',
-                width: 600,
-                height: 580,
+                width: 450,
+                height: 500,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',

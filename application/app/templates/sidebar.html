@@ -7,13 +7,11 @@
     </ul>
 
     <div class="controls" ng-class="{'show' : selectedProject.id}">
-
-        <div class="new-project icomoon-plus" tooltip="Add new project" ng-click="addProject()"></div>
         <div class="refresh icomoon-spinner-2" tooltip="Refresh Files" ng-click="refreshFiles()"></div>
         <div class="options icomoon-cog" tooltip="Project Options" show-modal-on-click="#optionsModal"></div>
+        <div class="options icomoon-images" tooltip="Optimize Images" show-modal-on-click="#optimImage"></div>
         <div class="open icomoon-globe" tooltip="Open project live url" ng-click="openLiveUrl()"></div>
         <div class="remove icomoon-remove" tooltip="Remove project" ng-click="removeProject()"></div>
-
     </div>
 
 </div>

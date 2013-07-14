@@ -6,7 +6,10 @@
   box-shadow: 1px 1px 2px #d3d3d3;
   .controls {
     float: right;
-    a {
+    * {
+      -webkit-app-region: no-drag;
+    }
+    > a, > div {
       display: block;
       float: left;
       margin-top: 5px;
@@ -18,7 +21,6 @@
       text-align: center;
       text-decoration: none;
       cursor: default;
-      -webkit-app-region: no-drag;
       &.highlight {
         color: rgba(250, 86, 33, 1);
       }
@@ -29,6 +31,24 @@
       &:active {
         color: rgba(250, 86, 33, 1);
         background: rgba(250, 86, 33, 0.4);
+      }
+    }
+
+    /*Fix inconsistent behavior caused by small icon*/
+    .dropdown > i {
+      font-size: 17px;
+      display: block;
+      padding-top: 6px;
+      height: 100%;
+      width: 100%;
+    }
+
+    .dropdown-menu {
+      text-align: left;
+      i {
+        display: inline-block;
+        margin-right: 5px;
+        line-height: 20px;
       }
     }
   }

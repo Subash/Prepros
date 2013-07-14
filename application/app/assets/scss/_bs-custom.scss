@@ -51,6 +51,8 @@ label {
   border: none;
   &:hover {
     background: #CCC;
+    color: inherit;
+    text-decoration: none;
   }
 
   &:active {
@@ -68,7 +70,29 @@ select {
   white-space: nowrap;
 }
 
+.modal {
+  border: 2px solid #BCBCBC;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.nav-tabs, .tabs-left, .tabs-right {
+  > li > a {
+    border-radius: 0 !important;
+  }
+}
+
+.tabs-left li.active a {
+  border-width: 0;
+  border-left: 3px solid #888;
+  &:hover {
+    border-width: 0;
+    border-left: 3px solid #888;
+  }
+}
+
 .modal-backdrop,
 .modal-backdrop.fade.in {
   opacity: 0.5;
+  background: rgba(255, 255, 255, 0.35);
 }

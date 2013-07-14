@@ -13,22 +13,22 @@
 
                 <label>
                     <span class="label-desc label-block">Project Name</span>
-                    <input ng-model="selectedProject.name" type="text" class="span4">
+                    <input ng-model="selectedProject.name" type="text" class="span5">
                 </label>
 
                 <label>
-                    <input type="checkbox" ng-model="selectedProject.config.liveRefresh" class="span4">
+                    <input type="checkbox" ng-model="selectedProject.config.liveRefresh" class="span5">
                     <span class="label-desc">Live Refresh</span>
                 </label>
 
                 <label>
-                    <input type="checkbox" ng-model="selectedProject.config.useCustomServer" class="span4">
+                    <input type="checkbox" ng-model="selectedProject.config.useCustomServer" class="span5">
                     <span class="label-desc">Use Custom server</span>
                 </label>
 
                 <label ng-show="selectedProject.config.useCustomServer">
                     <span class="label-desc label-block">Server URL</span>
-                    <input type="text" ng-model="selectedProject.config.customServerUrl" class="span4">
+                    <input type="text" ng-model="selectedProject.config.customServerUrl" class="span5">
                 </label>
             </div>
 
@@ -36,22 +36,20 @@
 
                 <label>
                     <span class="label-desc label-block">CSS Folder</span>
-                    <input type="text" ng-model="selectedProject.config.cssPath" class="span4">
+                    <input type="text" ng-model="selectedProject.config.cssPath" class="span5">
                 </label>
 
-                <label>
-                    <span class="label-desc label-block">Javascripts Folder</span>
-                    <input type="text" ng-model="selectedProject.config.jsPath" class="span4">
-                </label>
+                <div class="label-desc label-block js-options">
+                    <label for="config-js-folder" class="span3">Js Folder</label>
+                    <label for="config-jsmin-folder" class="span2">Js MinFolder</label>
+                </div>
 
-                <label>
-                    <span class="label-desc label-block">Minified Javascripts Folder</span>
-                    <input type="text" ng-model="selectedProject.config.jsMinPath" class="span4">
-                </label>
+                <input type="text" ng-model="selectedProject.config.jsPath" class="span3" id="config-js-folder">
+                <input type="text" ng-model="selectedProject.config.jsMinPath" class="span2" id="config-jsmin-folder">
 
                 <label>
                     <span class="label-desc label-block">HTML Folder</span>
-                    <input type="text" ng-model="selectedProject.config.htmlPath" class="span4">
+                    <input type="text" ng-model="selectedProject.config.htmlPath" class="span5">
                 </label>
             </div>
 
@@ -60,7 +58,7 @@
                 <label>
                     <span class="label-desc label-block">Filter Patterns</span>
                     <span class="muted label-block">Please enter comma separated list</span>
-                    <input type="text" ng-model="selectedProject.config.filterPatterns" class="span4">
+                    <input type="text" ng-model="selectedProject.config.filterPatterns" class="span5">
                 </label>
 
             </div>
@@ -68,6 +66,6 @@
     </div>
 
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+        <a href="#" class="prepros-button" data-dismiss="modal">Close</a>
     </div>
 </div>

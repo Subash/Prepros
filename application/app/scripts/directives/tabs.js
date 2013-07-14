@@ -39,8 +39,8 @@ prepros.directive('bsTabs', function ($parse, $compile, $timeout) {
                     value = getter(scope);
 
                 scope.panes = [];
-                var $tabs = iElement.find('ul.nav-tabs');
-                var $panes = iElement.find('div.tab-content');
+                var $tabs = iElement.find('ul.nav-tabs:eq(0)');
+                var $panes = iElement.find('div.tab-content:eq(0)');
 
 
                 var activeTab = 0, id, title, active;

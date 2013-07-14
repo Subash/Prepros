@@ -29,7 +29,8 @@
         'SidebarCtrl',
         'FilesCtrl',
         'AboutCtrl',
-        'MultiDeviceCtrl'
+        'MultiDeviceCtrl',
+        'OptimImageCtrl'
     ];
 
     var services = [
