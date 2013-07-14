@@ -56,7 +56,8 @@
         'jade',
         'haml',
         'slim',
-        'livescript'
+        'livescript',
+        'image'
     ];
 
     var filters = [

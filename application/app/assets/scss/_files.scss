@@ -9,6 +9,7 @@ $haml: #036564;
 $md: #b24c32;
 $slim: #45ADA8;
 $livescript: #369bd7;
+$images: #53b53b;
 
 $duration : .5s;
 
@@ -165,6 +166,12 @@ $duration : .5s;
       border-right: 5px solid $livescript;
       &:after {
         border-right: 5px solid $livescript;
+      }
+    }
+    .img {
+      border-right: 5px solid $images;
+      &:after {
+        border-right: 5px solid $images;
       }
     }
 

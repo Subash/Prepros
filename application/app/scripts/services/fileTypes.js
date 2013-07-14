@@ -10,7 +10,7 @@
 
 'use strict';
 
-prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, livescript, config, importsVisitor) {
+prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, livescript, image, config, importsVisitor) {
 
     var path = require('path');
 
@@ -27,7 +27,13 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         jade: jade,
         haml: haml,
         slim: slim,
-        ls: livescript
+        ls: livescript,
+        png: image,
+        tiff: image,
+        tif: image,
+        gif: image,
+        jpg: image,
+        jpeg: image
     };
 
 
@@ -64,7 +70,12 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
             '.jade', //Jade
             '.haml',  //Haml
             '.slim',  //Slim
-            '.ls' //LiveScript
+            '.ls', //LiveScript
+            '.png', //Image
+            '.tiff', //Image
+            '.gif', //Image
+            '.jpg', //Image
+            '.jpeg' //Image
         ];
 
         return _.contains(supportedExtensions, extname);
@@ -102,6 +113,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         var css = ['scss', 'sass', 'stylus', 'less'];
         var js = ['coffee', 'ls', 'js'];
         var html = ['jade', 'haml', 'md', 'markdown', 'slim'];
+        var image = ['.png','.gif','.tif','.tiff','.jpg','.jpeg'];
 
         if (_.contains(css, ext)) {
 
@@ -114,6 +126,10 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         } else if (_.contains(js, ext)) {
 
             return '.js';
+
+        } else if (_.contains(image, ext)) {
+
+            return ext;
 
         } else {
 

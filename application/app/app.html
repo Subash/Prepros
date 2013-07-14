@@ -80,7 +80,11 @@
 
                         <span class="file-name">{{selectedFile.name}}</span>
 
-                        <label>
+                        <label ng-if="selectedFile.type == 'img'">
+                            <input type="checkbox" ng-model="selectedFile.config.autoCompile">
+                            <span class="label-desc">Auto Optimize</span>
+                        </label>
+                        <label ng-if="selectedFile.type != 'img'">
                             <input type="checkbox" ng-model="selectedFile.config.autoCompile">
                             <span class="label-desc">Auto Compile</span>
                         </label>
@@ -88,7 +92,8 @@
                         <!-- Load options template -->
                         <div ng-include src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
 
-                        <button class="compile prepros-button" ng-click="compile()">Compile</button>
+                        <button class="compile prepros-button" ng-click="compile()" ng-if="selectedFile.type == 'img'">Optimize</button>
+                        <button class="compile prepros-button" ng-click="compile()" ng-if="selectedFile.type != 'img'">Compile</button>
 
                     </div>
                 </div>
