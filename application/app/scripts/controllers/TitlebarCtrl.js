@@ -9,7 +9,7 @@
 /*global prepros,  _, $*/
 
 //Title Bar controls
-prepros.controller('TitlebarCtrl', function ($scope, config, utils) {
+prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsManager) {
 
     'use strict';
 

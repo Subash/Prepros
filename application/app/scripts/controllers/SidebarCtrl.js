@@ -9,7 +9,7 @@
 /*global prepros,  _, $, alertify */
 
 //Title Bar controls
-prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, $rootScope) {
+prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer) {
 
     'use strict';
 
