@@ -155,7 +155,7 @@ prepros.factory('config', function ($http) {
             format: ':html5' //:xhtml, :html4, :html5, :html
         },
 
-        //Default Coffeescript Options
+        //Default Livescript Options
         livescript: {
             autoCompile: true,
             bare: false,
