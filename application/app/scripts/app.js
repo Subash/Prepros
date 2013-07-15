@@ -21,5 +21,6 @@ var prepros = angular.module('prepros', []).config(function ($routeProvider, $co
         .when('/files/:pid', {path: 'files'})
         .when('/files/:pid/:fid', {path: 'files'})
         .when('/log', {path: 'log'})
+        .when('/optim/:pid', {path: 'optim'})
         .otherwise({redirectTo: '/home'});
 });

@@ -19,7 +19,7 @@ $duration : .5s;
   margin-top: 10px;
   margin-left: 10px;
   width: 680px;
-  ul {
+  .files {
     display: block;
     float: left;
     overflow-x: hidden;
@@ -44,7 +44,7 @@ $duration : .5s;
     }
   }
 
-  &.show-options ul {
+  &.show-options .files {
     width: 450px;
     -webkit-transition: width $duration;
   }

@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap, alertify */
 
 //Tooltip directive
-prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler) {
+prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope) {
 
     'use strict';
 
@@ -76,6 +76,16 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
 
                         compiler.compile(file.id);
 
+                    });
+                }
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Optimize Images',
+                click: function () {
+
+                    $rootScope.$apply(function(){
+                        $location.path('/optim/' + project.id);
                     });
                 }
             }));

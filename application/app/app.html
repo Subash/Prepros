@@ -59,6 +59,25 @@
 
                 </div>
 
+                <div ng-controller="OptimImageCtrl">
+
+                    <div ng-if="path == 'optim'">
+
+                        <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
+
+                        <!-- There are no files -->
+                        <div class="no-files" ng-if="projectImages.length == 0">
+
+                            <h1 class="icomoon-sad"></h1>
+
+                            <p>No images found.</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
                 <div ng-if="path == 'files'">
 
                     <!-- Files list -->
