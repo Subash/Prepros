@@ -254,7 +254,7 @@ prepros.factory('config', function ($http) {
 
             var ft = (fileType === 'compass') ? 'sass' : fileType;
 
-            var loader = path.join(basePath, 'bin/gem_loader.rb');
+            var loader = path.join(basePath, '../bin/gem_loader.rb');
 
             var gemPath = path.join(packagePath, packageData.ruby.gemPath);
 

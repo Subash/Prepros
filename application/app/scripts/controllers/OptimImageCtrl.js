@@ -15,19 +15,19 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
     var fs = require('fs-extra');
     var path = require('path');
-    var jpegtran = path.join(config.basePath, 'bin/jpegtran/win32/jpegtran.exe');
-    var optipng = path.join(config.basePath, 'bin/optipng/win32/optipng.exe');
+    var jpegtran = path.join(config.basePath, '../bin/jpegtran/win32/jpegtran.exe');
+    var optipng = path.join(config.basePath, '../bin/optipng/win32/optipng.exe');
 
     if (process.platform !== 'win32') {
 
-        jpegtran = path.join(config.basePath, 'bin/jpegtran/osx/jpegtran');
-        optipng = path.join(config.basePath, 'bin/optipng/osx/optipng');
+        jpegtran = path.join(config.basePath, '../bin/jpegtran/osx/jpegtran');
+        optipng = path.join(config.basePath, '../bin/optipng/osx/optipng');
 
     }
 
     if(process.platform === 'win32' && process.arch === 'x64') {
 
-       jpegtran = path.join(config.basePath, 'bin/jpegtran/win64/jpegtran');
+       jpegtran = path.join(config.basePath, '../bin/jpegtran/win64/jpegtran');
     }
 
     var cp = require('child_process');
