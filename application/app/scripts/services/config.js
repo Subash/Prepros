@@ -72,7 +72,7 @@ prepros.factory('config', function ($http) {
         htmlExtension: '.html',
         enableSuccessNotifications: true,
         enableErrorNotifications: true,
-        filterPatterns: '',
+        filterPatterns: 'node_modules', //Filter node modules folder by default
         customRuby: {
             use: false,
             path: '',
