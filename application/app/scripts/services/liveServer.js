@@ -69,7 +69,9 @@ prepros.factory('liveServer', function (config) {
 
         filepath = filepath.slice(-1) === '/' ? filepath + 'index.html' : filepath;
 
-        if (path.extname(filepath) !== '.html') {
+        var html = ['.html', '.htm'];
+
+        if (!_.contains(html, path.extname(filepath))) {
 
             return next();
         }
