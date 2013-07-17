@@ -190,38 +190,6 @@ prepros.factory('config', function ($http) {
         userConfig = $.parseJSON(angular.toJson(options));
     }
 
-    function checkUpdate(success, fail) {
-
-        var opt = {method: 'get', url: online.updateFileUrl, cache: false};
-
-        var checker = $http(opt);
-
-        checker.success(function (data) {
-
-            if (version !== data.version) {
-
-                success({
-                    available: true,
-                    version: data.version,
-                    date: data.releaseDate
-                });
-            } else {
-                success({
-                    available: false,
-                    version: version,
-                    date: data.releaseDate
-                });
-            }
-        });
-
-        checker.error(function () {
-
-            if (fail) {
-                fail();
-            }
-        });
-    }
-
     //Ruby Executable
     var ruby = {
         version: packageData.ruby.version,
@@ -283,8 +251,7 @@ prepros.factory('config', function ($http) {
         online: online,
         version: version,
         getUserOptions: getUserOptions,
-        saveUserOptions: saveUserOptions,
-        checkUpdate: checkUpdate
+        saveUserOptions: saveUserOptions
     };
 
 });

@@ -7,7 +7,7 @@
 
 /*jshint browser: true, node: true*/
 /*global prepros, $, _ */
-prepros.factory('utils', function () {
+prepros.factory('utils', function (config, $http) {
 
     'use strict';
 
@@ -41,10 +41,44 @@ prepros.factory('utils', function () {
 
     }
 
+    //Check update
+    function checkUpdate(success, fail) {
+
+        var opt = {method: 'get', url: config.online.updateFileUrl, cache: false};
+
+        var checker = $http(opt);
+
+        checker.success(function (data) {
+
+            if (config.version !== data.version) {
+
+                success({
+                    available: true,
+                    version: data.version,
+                    date: data.releaseDate
+                });
+            } else {
+                success({
+                    available: false,
+                    version: config.version,
+                    date: data.releaseDate
+                });
+            }
+        });
+
+        checker.error(function () {
+
+            if (fail) {
+                fail();
+            }
+        });
+    }
+
     return {
         id: id,
         showLoading: showLoading,
         hideLoading: hideLoading,
-        openBrowser: openBrowser
+        openBrowser: openBrowser,
+        checkUpdate: checkUpdate
     };
 });

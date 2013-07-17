@@ -44,7 +44,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
 
     };
 
-    config.checkUpdate(function (data) {
+    utils.checkUpdate(function (data) {
 
         if (data.available) {
             $scope.appUpdate = true;

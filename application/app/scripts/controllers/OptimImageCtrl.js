@@ -69,6 +69,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
 
         $(e.currentTarget).addClass('optimizing');
+        $(e.currentTarget).attr('disabled', 'true');
         $(e.currentTarget).children('span').text('');
 
         var cmd = [];
@@ -90,6 +91,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
         cp.execFile(executable, cmd, function(err) {
 
             $(e.currentTarget).removeClass('optimizing');
+            $(e.currentTarget).removeAttr('disabled');
 
             if(err) {
 

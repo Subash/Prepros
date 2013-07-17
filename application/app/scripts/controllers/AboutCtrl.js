@@ -26,7 +26,7 @@ prepros.controller('AboutCtrl', function ($scope, config, utils) {
         date: ""
     };
 
-    config.checkUpdate(function (data) {
+    utils.checkUpdate(function (data) {
 
         if (data.available) {
             $scope.update = {
