@@ -65,45 +65,67 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
         });
     }
 
+    //Prevent subsequent optimizations
+    var compileList = [];
+
     $scope.optimize = function(e, file) {
 
+        if(!_.contains(compileList, file)) {
 
-        $(e.currentTarget).addClass('optimizing');
-        $(e.currentTarget).attr('disabled', 'true');
-        $(e.currentTarget).children('span').text('');
+            compileList.push(file);
 
-        var cmd = [];
-        var executable;
-        var ext = path.extname(file).slice(1);
+            var $target = $(e.currentTarget);
 
-        if(_.contains(png, ext)) {
+            $target.addClass('optimizing');
+            $target.attr('disabled', 'true');
+            $target.children('span').text('');
 
-            executable = optipng;
-            cmd = [file];
+            var cmd = [];
+            var executable;
+            var ext = path.extname(file).slice(1);
 
-        } else {
+            if(_.contains(png, ext)) {
 
-            executable = jpegtran;
-            cmd = ['-outfile', file, '-optimize', file];
-
-        }
-
-        cp.execFile(executable, cmd, function(err) {
-
-            $(e.currentTarget).removeClass('optimizing');
-            $(e.currentTarget).removeAttr('disabled');
-
-            if(err) {
-
-                $(e.currentTarget).addClass('failed');
-                $(e.currentTarget).children('span').text('Failed');
+                executable = optipng;
+                cmd = [file];
 
             } else {
 
-                $(e.currentTarget).addClass('done');
-                $(e.currentTarget).children('span').text('Done');
+                executable = jpegtran;
+                cmd = ['-outfile', file, '-optimize', file];
+
             }
-        });
+
+            cp.execFile(executable, cmd, function(err) {
+
+                compileList = _.without(compileList, file);
+
+                $target.delay(300)
+                    .queue(function() {
+                        $target.removeClass('optimizing');
+                        $target.removeAttr('disabled');
+                        $target.dequeue();
+                    });
+
+                if(err) {
+
+                    $target.delay(0)
+                        .queue(function() {
+                            $target.addClass('failed');
+                            $target.children('span').text('Failed');
+                            $target.dequeue();
+                        });
+                } else {
+
+                    $target.delay(0)
+                        .queue(function() {
+                            $target.addClass('done');
+                            $target.children('span').text('Done');
+                            $target.dequeue();
+                        });
+                }
+            });
+        }
     };
 
     $scope.$on('$routeChangeSuccess', function () {
