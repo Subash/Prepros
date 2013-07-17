@@ -150,6 +150,7 @@ prepros.factory('sass', function (config, utils) {
 
         }
 
+        //file.project path is exclusively provided to sass by compile provider
         var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
 
         rubyProcess.on('error', function (e) {
