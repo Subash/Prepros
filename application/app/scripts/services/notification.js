@@ -29,11 +29,14 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
     function openNotificationWindow(data) {
 
-        if (notificationWindow && global.notificationScope) {
+        if (notificationWindow) {
 
-            global.notificationScope.$apply(function () {
-                global.notificationScope.$broadcast('dataChange', data);
-            });
+            //Test if notification scope exists; There can be open window not fully loaded
+            if(global.notificationScope) {
+                global.notificationScope.$apply(function () {
+                    global.notificationScope.$broadcast('dataChange', data);
+                });
+            }
 
         } else {
 
