@@ -76,7 +76,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
     $scope.openOptionsWindow = function () {
 
         //Inject config object to global so options window can read it
-        global.userConfig = config.getUserOptions();
+        global.preprosConfig = config;
 
         if (optionsWindow) {
 
@@ -97,9 +97,11 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
                 resizable: false
             });
 
-            optionsWindow.on('close', function () {
-                config.saveUserOptions(global.userConfig);
-                optionsWindow.close(true);
+            optionsWindow.on('saveOptions', function (data) {
+                config.saveUserOptions(data);
+            });
+
+            optionsWindow.on('closed', function () {
                 optionsWindow = null;
             });
         }
