@@ -12,28 +12,26 @@
             var nwWindow = require('nw.gui').Window.get();
             nwWindow.setAlwaysOnTop(true);
 
-            global.notificationScope = $scope;
-
-            $scope.notification = global.preprosNotification;
+            $scope.notification = {};
 
             var timer = _.delay(function(){
                 nwWindow.close()
             }, 3000);
 
-            $scope.$on('dataChange', function(e, data){
+            require('nw.gui').Window.get().on('updateNotification', function(data){
+                $scope.$apply(function(){
+                    $scope.notification = data;
 
-                $scope.notification = data;
+                    window.clearTimeout(timer);
 
-                window.clearTimeout(timer);
-
-                timer =  _.delay(function(){
-                    nwWindow.close()
-                }, 3000);
-
+                    timer =  _.delay(function(){
+                        nwWindow.close()
+                    }, 3000);
+                })
             });
 
             $scope.openLog = function(){
-                global.showLog();
+                require('nw.gui').Window.get().emit('showLog');
             };
 
             $scope.close= function(e){

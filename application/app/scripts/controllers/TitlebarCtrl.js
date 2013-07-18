@@ -102,6 +102,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
             });
 
             optionsWindow.on('closed', function () {
+                optionsWindow.removeAllListeners();
                 optionsWindow = null;
             });
         }

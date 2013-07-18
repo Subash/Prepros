@@ -17,7 +17,7 @@
             var fs = require('fs-extra');
 
             //Cross window communication hack
-            $scope.userConfig = global.userConfig;
+            $scope.userConfig = global.preprosConfig.getUserOptions();
 
             //Clear Prepros Cache
             $scope.clearCache = function (e) {
@@ -28,7 +28,7 @@
 
                 require('nw.gui').App.clearCache();
 
-                fs.remove(global.cachePath, function (err) {
+                fs.remove(global.preprosConfig.cachePath, function (err) {
 
                     if (!err) {
 
@@ -61,6 +61,7 @@
 
             //Just Close the window, The controller will catch data and save it on close event
             $scope.done = function () {
+                require('nw.gui').Window.get().emit('saveOptions', $scope.userConfig);
                 require('nw.gui').Window.get().close();
             }
         });

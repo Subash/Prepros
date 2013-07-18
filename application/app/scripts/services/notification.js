@@ -16,31 +16,13 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
     var notificationWindow, log = [];
 
-    //Inject function in global so that notification can show log
-    global.showLog = function () {
-
-        $rootScope.$apply(function () {
-            $location.path('/log');
-        });
-
-        require('nw.gui').Window.get().show();
-    };
-
-
     function openNotificationWindow(data) {
 
         if (notificationWindow) {
 
-            //Test if notification scope exists; There can be open window not fully loaded
-            if(global.notificationScope) {
-                global.notificationScope.$apply(function () {
-                    global.notificationScope.$broadcast('dataChange', data);
-                });
-            }
+            notificationWindow.emit('updateNotification', data);
 
         } else {
-
-            global.preprosNotification = data;
 
             var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
 
@@ -62,8 +44,20 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
             notificationWindow = require('nw.gui').Window.open(notificationPath, options);
 
-            notificationWindow.on('close', function () {
+            notificationWindow.on('loaded', function(){
+                notificationWindow.emit('updateNotification', data);
+            });
+
+            notificationWindow.on('showLog', function () {
+                $rootScope.$apply(function () {
+                    $location.path('/log');
+                });
+                require('nw.gui').Window.get().show();
+            });
+
+            notificationWindow.on('closed', function () {
                 this.close(true);
+                notificationWindow.removeAllListeners();
                 notificationWindow = null;
             });
         }
