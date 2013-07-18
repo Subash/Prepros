@@ -56,7 +56,6 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             });
 
             notificationWindow.on('closed', function () {
-                this.close(true);
                 notificationWindow.removeAllListeners();
                 notificationWindow = null;
             });
