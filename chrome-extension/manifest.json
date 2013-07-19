@@ -1,17 +1,17 @@
 {
-	"name": "Prepros",
-	"version": "2.1.0",
-	"manifest_version": 2,
-	"description": "Live refresh extension for Prepros App",
-	"permissions": ["tabs", "<all_urls>"],
-	"offline_enabled": true,
-	"minimum_chrome_version": "18",
-	"background": {
-		"scripts": ["scripts/background.js"]
-	},
-	"icons": {
-		"16": "img/icon.png",
-		"48": "img/icon.png",
-		"128": "img/icon.png"
-	}
+    "name": "Prepros",
+    "version": "2.1.0",
+    "manifest_version": 2,
+    "description": "Live refresh extension for Prepros App",
+    "permissions": ["tabs", "<all_urls>"],
+    "offline_enabled": true,
+    "minimum_chrome_version": "18",
+    "background": {
+        "scripts": ["scripts/background.js"]
+    },
+    "icons": {
+        "16": "img/icon.png",
+        "48": "img/icon.png",
+        "128": "img/icon.png"
+    }
 }

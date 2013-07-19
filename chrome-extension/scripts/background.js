@@ -1,7 +1,6 @@
-
 /*global chrome*/
 
-Array.prototype.contains = function(item) {
+Array.prototype.contains = function (item) {
 
     'use strict';
 
@@ -14,39 +13,39 @@ Array.prototype.contains = function(item) {
     return false;
 };
 
-function parseUrl(string){
+function parseUrl(string) {
 
-	'use strict';
+    'use strict';
 
-	var parser = document.createElement('a');
+    var parser = document.createElement('a');
 
-	parser.href = string;
+    parser.href = string;
 
-	return parser;
+    return parser;
 }
 
 var socketRunning = false,
-	liveUrls = [];
+    liveUrls = [];
 
-function startSocket(callback){
+function startSocket(callback) {
 
-	'use strict';
+    'use strict';
 
-	var socket = new WebSocket('ws://localhost:5656');
+    var socket = new WebSocket('ws://localhost:5656');
 
-	socket.addEventListener('message', function(evt){
+    socket.addEventListener('message', function (evt) {
 
         liveUrls = [];
 
-        JSON.parse(evt.data).urls.forEach(function(url) {
+        JSON.parse(evt.data).urls.forEach(function (url) {
 
             liveUrls.push(url);
 
-            chrome.tabs.getAllInWindow(null, function(tabs){
+            chrome.tabs.getAllInWindow(null, function (tabs) {
 
-                tabs.forEach(function(tab){
+                tabs.forEach(function (tab) {
 
-                    if(liveUrls.contains(parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
+                    if (liveUrls.contains(parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host)) {
 
                         chrome.tabs.reload(tab.id, { bypassCache: true });
 
@@ -55,42 +54,42 @@ function startSocket(callback){
             });
 
         });
-	});
+    });
 
-	socket.addEventListener('open', function(){
+    socket.addEventListener('open', function () {
 
-		socketRunning = true;
+        socketRunning = true;
 
         callback();
-		
-	});
 
-	socket.addEventListener('close', function(){
+    });
 
-		socketRunning = false;
+    socket.addEventListener('close', function () {
 
-	});
+        socketRunning = false;
+
+    });
 }
 
 //Try to run refreshing on tab update
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
-	'use strict';
+    'use strict';
 
-    if(tab.status === 'complete') {
+    if (tab.status === 'complete') {
 
-        var callback = function() {
+        var callback = function () {
 
             var parsedUrl = parseUrl(tab.url).protocol + '//' + parseUrl(tab.url).host;
 
-            if(tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
+            if (tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
 
                 chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
             }
 
         };
 
-        if(!socketRunning) {
+        if (!socketRunning) {
 
             startSocket(callback);
 
