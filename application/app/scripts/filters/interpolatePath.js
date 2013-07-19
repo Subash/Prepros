@@ -59,7 +59,7 @@ prepros.filter('interpolatePath', function ($interpolate) {
 
         }
 
-        p = $interpolate(p)(project.config);
+        p = path.normalize($interpolate(p)(project.config));
 
         project = null;
         data = null;
