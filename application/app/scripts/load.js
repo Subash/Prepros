@@ -42,7 +42,6 @@
         'notification',
         'projectsManager',
         'importsVisitor',
-        'importsVisitor',
         'storage',
         'utils',
         'fileTypes'

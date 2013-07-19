@@ -35,7 +35,7 @@ prepros.factory('storage', function () {
         localStorage.PreprosImports = angular.toJson(imports, false);
     }
 
-    //Get projects list from projects.json file
+    //Get projects list from localStorage
     function getProjects() {
 
         var projects = [];
@@ -55,7 +55,7 @@ prepros.factory('storage', function () {
         return projects;
     }
 
-    //Get files list from files.json file
+    //Get files list from localStorage
     function getFiles() {
 
         var files = [];
@@ -75,7 +75,7 @@ prepros.factory('storage', function () {
         return files;
     }
 
-    //Get files from files.json file
+    //Get files from localStorage
     function getImports() {
 
         var imports = [];
