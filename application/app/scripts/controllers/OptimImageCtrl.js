@@ -25,9 +25,9 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
     }
 
-    if(process.platform === 'win32' && process.arch === 'x64') {
+    if (process.platform === 'win32' && process.arch === 'x64') {
 
-       jpegtran = path.join(config.basePath, '../bin/jpegtran/win64/jpegtran');
+        jpegtran = path.join(config.basePath, '../bin/jpegtran/win64/jpegtran');
     }
 
     var cp = require('child_process');
@@ -36,7 +36,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
     var jpg = ['jpg', 'jpeg'];
 
-    var png = ['png','gif','tif','tiff'];
+    var png = ['png', 'gif', 'tif', 'tiff'];
 
     var supportedTypes = _.union(png, jpg);
 
@@ -68,9 +68,9 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
     //Prevent subsequent optimizations
     var compileList = [];
 
-    $scope.optimize = function(e, file) {
+    $scope.optimize = function (e, file) {
 
-        if(!_.contains(compileList, file)) {
+        if (!_.contains(compileList, file)) {
 
             compileList.push(file);
 
@@ -84,7 +84,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
             var executable;
             var ext = path.extname(file).slice(1);
 
-            if(_.contains(png, ext)) {
+            if (_.contains(png, ext)) {
 
                 executable = optipng;
                 cmd = [file];
@@ -96,21 +96,21 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
             }
 
-            cp.execFile(executable, cmd, function(err) {
+            cp.execFile(executable, cmd, function (err) {
 
                 compileList = _.without(compileList, file);
 
                 $target.delay(300)
-                    .queue(function() {
+                    .queue(function () {
                         $target.removeClass('optimizing');
                         $target.removeAttr('disabled');
                         $target.dequeue();
                     });
 
-                if(err) {
+                if (err) {
 
                     $target.delay(0)
-                        .queue(function() {
+                        .queue(function () {
                             $target.addClass('failed');
                             $target.children('span').text('Failed');
                             $target.dequeue();
@@ -118,7 +118,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
                 } else {
 
                     $target.delay(0)
-                        .queue(function() {
+                        .queue(function () {
                             $target.addClass('done');
                             $target.children('span').text('Done');
                             $target.dequeue();
@@ -132,7 +132,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
         var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
 
-        if($route.current.path === 'optim' &&  projectExists) {
+        if ($route.current.path === 'optim' && projectExists) {
 
             try {
 

@@ -64,7 +64,7 @@
                 icon: 'app/assets/img/icons/16.png' //Relative to package.json file
             };
 
-            if(process.platform === 'win32') {
+            if (process.platform === 'win32') {
                 trayOptions.title = 'Prepros App';
             }
 

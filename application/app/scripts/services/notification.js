@@ -44,7 +44,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
             notificationWindow = require('nw.gui').Window.open(notificationPath, options);
 
-            notificationWindow.on('loaded', function(){
+            notificationWindow.on('loaded', function () {
                 notificationWindow.emit('updateNotification', data);
             });
 

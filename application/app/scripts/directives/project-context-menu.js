@@ -84,7 +84,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Optimize Images',
                 click: function () {
 
-                    $rootScope.$apply(function(){
+                    $rootScope.$apply(function () {
                         $location.path('/optim/' + project.id);
                     });
                 }
