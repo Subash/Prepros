@@ -79,35 +79,35 @@
 
     //Libraries
     libraries.forEach(function (lib) {
-        jScripts.push('vendor/' + lib + '.js');
+        jScripts.push('js/vendor/' + lib + '.js');
     });
 
     //Angularjs App
-    jScripts.push('scripts/app.js');
+    jScripts.push('js/app/app.js');
 
     //Services
     services.forEach(function (service) {
-        jScripts.push('scripts/services/' + service + '.js');
+        jScripts.push('js/app/services/' + service + '.js');
     });
 
     //File types
     fileTypes.forEach(function (type) {
-        jScripts.push('scripts/services/fileTypes/' + type + '.js');
+        jScripts.push('js/app/services/fileTypes/' + type + '.js');
     });
 
     //Controllers
     controllers.forEach(function (controller) {
-        jScripts.push('scripts/controllers/' + controller + '.js');
+        jScripts.push('js/app/controllers/' + controller + '.js');
     });
 
     //Filters
     filters.forEach(function (filter) {
-        jScripts.push('scripts/filters/' + filter + '.js');
+        jScripts.push('js/app/filters/' + filter + '.js');
     });
 
     //Directives
     directives.forEach(function (directive) {
-        jScripts.push('scripts/directives/' + directive + '.js');
+        jScripts.push('js/app/directives/' + directive + '.js');
     });
 
     //Load scripts and bootstrap

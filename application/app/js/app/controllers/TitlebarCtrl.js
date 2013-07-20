@@ -85,7 +85,7 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
 
         } else {
 
-            var optionsPath = 'file:///' + path.normalize(config.basePath + '/html/options.html');
+            var optionsPath = 'file:///' + path.normalize(config.basePath + '/templates/options.html');
 
             optionsWindow = require('nw.gui').Window.open(optionsPath, {
                 position: 'center',

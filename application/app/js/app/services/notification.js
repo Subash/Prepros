@@ -24,7 +24,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         } else {
 
-            var notificationPath = 'file:///' + path.normalize(config.basePath + '/html/notification.html');
+            var notificationPath = 'file:///' + path.normalize(config.basePath + '/templates/notification.html');
 
             var options = {
                 x: window.screen.availWidth - 410,
