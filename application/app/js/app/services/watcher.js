@@ -49,25 +49,19 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         //Watch files
         _.each(filesToWatch, function (file) {
 
-            //Prevent multiple events
-            var debounceCompile = _.debounce(function () {
-
-                var f = _.findWhere(files, {input: file});
-
-                if (f.config.autoCompile) {
-
-                    //Compile File
-                    compiler.compile(f.id);
-
-                }
-
-
-            }, 200, true);
-
             try {
 
-                fs.watchFile(file, { persistent: true, interval: 200}, debounceCompile);
+                fs.watchFile(file, { persistent: true, interval: 200}, function(){
 
+                    var f = _.findWhere(files, {input: file});
+
+                    if (f.config.autoCompile) {
+
+                        //Compile File
+                        compiler.compile(f.id);
+
+                    }
+                });
 
                 watchingFiles.push(file);
 
@@ -83,26 +77,22 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         //Watch imports
         _.each(importsToWatch, function (imp) {
 
-            //Prevent multiple events
-            var debounceCompile = _.debounce(function () {
-
-                var im = _.findWhere(imports, {path: imp});
-
-                _.each(im.parents, function (parentId) {
-
-                    var parentFile = projectsManager.getFileById(parentId);
-
-                    if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
-
-                        compiler.compile(parentId);
-                    }
-                });
-
-            }, 200, true);
-
             try {
 
-                fs.watchFile(imp, { persistent: true, interval: 200}, debounceCompile);
+                fs.watchFile(imp, { persistent: true, interval: 200}, function(){
+
+                    var im = _.findWhere(imports, {path: imp});
+
+                    _.each(im.parents, function (parentId) {
+
+                        var parentFile = projectsManager.getFileById(parentId);
+
+                        if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
+
+                            compiler.compile(parentId);
+                        }
+                    });
+                });
 
                 //Push to watching list so it can be closed later
                 watchingImports.push(imp);
