@@ -96,7 +96,10 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
             }
 
-            cp.execFile(executable, cmd, function (err) {
+            //Spawn child process to optimize image
+            var optimizeProcess = cp.spawn(executable, cmd);
+
+            var commonCall = function() {
 
                 compileList = _.without(compileList, file);
 
@@ -106,24 +109,44 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
                         $target.removeAttr('disabled');
                         $target.dequeue();
                     });
+            };
 
-                if (err) {
+            var errorCall = function(){
 
-                    $target.delay(0)
-                        .queue(function () {
-                            $target.addClass('failed');
-                            $target.children('span').text('Failed');
-                            $target.dequeue();
-                        });
+                commonCall();
+
+                $target.delay(0)
+                    .queue(function () {
+                        $target.addClass('failed');
+                        $target.children('span').text('Failed');
+                        $target.dequeue();
+                    });
+            };
+
+            var successCall= function() {
+
+                commonCall();
+
+                $target.delay(0)
+                    .queue(function () {
+                        $target.addClass('done');
+                        $target.children('span').text('Done');
+                        $target.dequeue();
+                    });
+            };
+
+            optimizeProcess.on('error', function (e) {
+                errorCall();
+            });
+
+            optimizeProcess.on('exit', function (data) {
+
+                if (data.toString() !== '0') {
+                    errorCall();
                 } else {
-
-                    $target.delay(0)
-                        .queue(function () {
-                            $target.addClass('done');
-                            $target.children('span').text('Done');
-                            $target.dequeue();
-                        });
+                    successCall();
                 }
+                optimizeProcess = null;
             });
         }
     };
