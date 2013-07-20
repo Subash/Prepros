@@ -170,8 +170,8 @@ prepros.factory('liveServer', function (config) {
 
     });
 
-    app.use('/lr/', express.static(config.basePath + '/vendor/'));
-    app.use('/lr/', express.directory(config.basePath + '/vendor/'));
+    app.use('/lr/', express.static(config.basePath + '/js/vendor/'));
+    app.use('/lr/', express.directory(config.basePath + '/js/vendor/'));
 
     refreshServer.on('request', function (request) {
 
