@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros, angular, _, $*/
 
-prepros.factory('config', function ($http) {
+prepros.factory('config', function () {
 
     'use strict';
 
@@ -125,6 +125,14 @@ prepros.factory('config', function ($http) {
             mangle: true
         },
 
+        //Default Livescript Options
+        livescript: {
+            autoCompile: true,
+            bare: false,
+            uglify: false,
+            mangle: true
+        },
+
         //Default javascript options
         javascript: {
             autoCompile: true,
@@ -153,14 +161,6 @@ prepros.factory('config', function ($http) {
             indent: 'default', //default, four, tab
             fourSpaceIndent: true,
             format: ':html5' //:xhtml, :html4, :html5, :html
-        },
-
-        //Default Livescript Options
-        livescript: {
-            autoCompile: true,
-            bare: false,
-            uglify: false,
-            mangle: true
         }
     };
 
