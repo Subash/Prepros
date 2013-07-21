@@ -22,6 +22,11 @@ prepros.factory('liveServer', function (config) {
     //Start listening
     var httpServer = app.listen(5656);
 
+    httpServer.on('error', function (err) {
+        window.alert('Unable to start internal server, Please close the app that is using port 5656. error: ' + err.message);
+        require('nw.gui').App.quit();
+    });
+
     //Start websocket server for automatic browser refresh
     var wsServer = new WebSocketServer({
 
@@ -148,10 +153,18 @@ prepros.factory('liveServer', function (config) {
 
     }
 
+    //Live refresh server on port 25690
+    var lServer = app.listen(25690);
+
+    lServer.on('error', function (err) {
+        window.alert('Unable to start live refresh server, Please close the app that is using port 25690. error: ' + err.message);
+        require('nw.gui').App.quit();
+    });
+
     var refreshServer = new WebSocketServer({
 
         //Live reload connection port
-        httpServer: app.listen(25690),
+        httpServer: lServer,
 
         autoAcceptConnections: false
 
