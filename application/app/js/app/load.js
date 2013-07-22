@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global $LAB, angular*/
 
-(function () {
+function bootstrapPrepros() {
 
     'use strict';
 
@@ -117,4 +117,4 @@
         .wait(function () {
             angular.bootstrap(document, ['prepros']);
         });
-})();
+}

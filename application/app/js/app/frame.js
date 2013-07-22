@@ -7,7 +7,7 @@
 
 
 /*jshint browser: true, node: true*/
-/*global $, CustomEvent*/
+/*global $, CustomEvent, bootstrapPrepros*/
 
 (function () {
 
@@ -36,6 +36,9 @@
         nwWindow.focus();
 
     }).listen(port, '127.0.0.1', function () {
+
+            //Load scripts
+            bootstrapPrepros();
 
             var nw = {
                 gui: require('nw.gui'),
