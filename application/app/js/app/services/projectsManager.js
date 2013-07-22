@@ -90,13 +90,29 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
 
-            var isNotUsed = _.isEmpty(_.where(projects, function (p) {
-                p.config.serverUrl = serverUrl;
-            }));
+            var urlNotUsed = function(url) {
 
-            if (isNotUsed && serverUrl !== '') {
+                return _.isEmpty(_.find(projects, function(p){ return p.config.serverUrl === url; }));
+            };
 
-                project.config.serverUrl = serverUrl;
+            if(serverUrl !== '') {
+
+                if (urlNotUsed(serverUrl)) {
+
+                    project.config.serverUrl = serverUrl;
+
+                } else {
+
+                    for (var i=1; i<6; i++) {
+
+                        var newUrl = serverUrl + '-' + i;
+
+                        if(urlNotUsed(newUrl)) {
+                            project.config.serverUrl = newUrl;
+                            break;
+                        }
+                    }
+                }
             }
 
             //Push project to projects list
