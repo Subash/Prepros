@@ -183,6 +183,7 @@ prepros.factory('liveServer', function (config) {
 
     });
 
+    //Serve livereload.js from /lr/ path which points to vendor dir
     app.use('/lr/', express.static(config.basePath + '/js/vendor/'));
     app.use('/lr/', express.directory(config.basePath + '/js/vendor/'));
 
