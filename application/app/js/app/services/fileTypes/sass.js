@@ -170,11 +170,14 @@ prepros.factory('sass', function (config, utils) {
 
         //Success if there is no error
         rubyProcess.on('exit', function () {
+
             if (!compileErr) {
 
                 successCall(file.input);
 
             }
+
+            rubyProcess.removeAllListeners();
 
             rubyProcess = null;
         });

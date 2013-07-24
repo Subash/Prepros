@@ -97,6 +97,8 @@ prepros.factory('haml', function (config, utils) {
 
                 successCall(file.input);
 
+                rubyProcess.removeAllListeners();
+
                 rubyProcess = null;
 
             }

@@ -103,6 +103,8 @@ prepros.factory('slim', function (config, utils) {
 
             }
 
+            rubyProcess.removeAllListeners();
+
             rubyProcess = null;
         });
     };
