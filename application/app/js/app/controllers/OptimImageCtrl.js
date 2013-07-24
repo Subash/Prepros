@@ -146,6 +146,8 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
                 } else {
                     successCall();
                 }
+
+                optimizeProcess.removeAllListeners();
                 optimizeProcess = null;
             });
         }
