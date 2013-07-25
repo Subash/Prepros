@@ -18,13 +18,13 @@
     }
 
     &.error {
-      background: rgba(red, .06);
+      background: rgba(red, .15);
       .name {
         color: rgba(red, .4);
       }
     }
     &.success {
-      background: rgba(green, .06);
+      background: rgba(green, .15);
       .name {
         color: rgba(green, .4);
       }
