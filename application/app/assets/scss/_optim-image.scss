@@ -26,11 +26,11 @@
         display: none;
       }
       &.done {
-        background: green;
+        background: #8A9B0F;
         color: #fff;
       }
       &.failed {
-        background: red;
+        background: #FF4242;
         color: #fff;
       }
       &.optimizing {
@@ -42,7 +42,7 @@
       }
     }
     .thumb {
-      background: #f8c137;
+      background: #8A9B0F;
       left: 7px;
       top: 7px;
       position: absolute;
