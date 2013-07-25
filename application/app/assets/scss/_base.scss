@@ -4,12 +4,12 @@
 }
 
 *:focus {
-  outline-color: #53777A !important;
+  outline: none !important;
 }
 
 body {
   -webkit-user-select: none;
-  background: #efefef;
+  background: #fff;
   color: #666;
   font-family: SourceSansPro;
   cursor: default;

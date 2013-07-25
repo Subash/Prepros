@@ -1,30 +1,34 @@
-input[type=checkbox] {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  line-height: 1.7em;
-  border: 2px solid #AAA;
-  padding: 0;
-  margin: 0 5px;
-  position: relative;
+input:focus, select:focus, select:active {
+  box-shadow: none !important;
 }
 
 input[type='text'] {
-  border: 2px solid #AAA;
+  border: 1px solid #BBB;
   border-radius: 0;
   padding: 3px 8px;
   box-sizing: content-box;
   &:focus {
-    border: 2px solid #AAA;
+    border: 1px solid #BBB;
   }
+}
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  line-height: 1.7em;
+  border: 1px solid #BBB;
+  padding: 0;
+  margin: 0 5px;
+  position: relative;
 }
 
 input[type=checkbox]:checked:after {
   font-family: Icomoon;
   content: '\e0f0';
   line-height: 1em;
-  font-size: 10px;
-  color: #aaa;
+  font-size: 11px;
+  color: #BBB;
   position: absolute;
   top: 2px;
   left: 2px;
@@ -45,9 +49,9 @@ label {
 
 .prepros-button {
   display: inline-block;
-  color: #666;
-  background: #AAA;
-  padding: 8px 12px;
+  color: #888;
+  background: #BBB;
+  padding: 8px 11px;
   border: none;
   &:hover {
     background: #CCC;
@@ -56,13 +60,13 @@ label {
   }
 
   &:active {
-    background: #8A9B0F;
+    background: #53777A;
     color: #efefef;
   }
 }
 
 select {
-  border: 2px solid #AAA;
+  border: 1px solid #BBB;
   border-radius: 0;
 }
 
@@ -72,7 +76,7 @@ select {
 }
 
 .modal {
-  border: 2px solid #BCBCBC;
+  border: 1px solid #CCC;
   box-shadow: none;
   border-radius: 0;
 }
@@ -80,6 +84,13 @@ select {
 .nav-tabs, .tabs-left, .tabs-right {
   > li > a {
     border-radius: 0 !important;
+  }
+}
+
+.nav-tabs a {
+  color: inherit;
+  &:hover {
+    color: inherit;
   }
 }
 
@@ -96,4 +107,8 @@ select {
 .modal-backdrop.fade.in {
   opacity: 0.5;
   background: rgba(255, 255, 255, 0.35);
+}
+
+.modal .modal-header {
+  text-transform: capitalize;
 }
