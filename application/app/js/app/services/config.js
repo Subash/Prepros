@@ -86,8 +86,8 @@ prepros.factory('config', function () {
             autoCompile: true,
             compress: false,
             lineNumbers: false,
-            strictMath: true,
-            strictUnits: true
+            strictMath: false,
+            strictUnits: false
         },
 
         //Default Sass options
