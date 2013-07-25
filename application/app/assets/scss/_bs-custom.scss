@@ -76,7 +76,7 @@ select {
 }
 
 .modal {
-  border: 1px solid #CCC;
+  border: 1px solid #AAA;
   box-shadow: none;
   border-radius: 0;
 }
@@ -106,7 +106,7 @@ select {
 .modal-backdrop,
 .modal-backdrop.fade.in {
   opacity: 0.5;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(#000, 0.35);
 }
 
 .modal .modal-header {
