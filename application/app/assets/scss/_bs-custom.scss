@@ -94,15 +94,6 @@ select {
   }
 }
 
-.tabs-left li.active a {
-  border-width: 0;
-  border-left: 3px solid #888;
-  &:hover {
-    border-width: 0;
-    border-left: 3px solid #888;
-  }
-}
-
 .modal-backdrop,
 .modal-backdrop.fade.in {
   opacity: 0.5;

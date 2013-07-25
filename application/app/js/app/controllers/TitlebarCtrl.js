@@ -89,8 +89,8 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
 
             optionsWindow = require('nw.gui').Window.open(optionsPath, {
                 position: 'center',
-                width: 500,
-                height: 500,
+                width: 600,
+                height: 450,
                 frame: true,
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
