@@ -16,7 +16,7 @@ If you drag and drop a file instead of the folder, The parent folder of the file
 
 __2. Using [ + ] button.__
 
-You can add new project to Prepros by clicking the plus icon located near the bottom left part of Prepros window.
+You can add new project to Prepros by clicking the plus icon on the title bar of app window.
 
 ![Using plus icon to add new project](img/projects/plus-icon.jpg)
 
@@ -30,9 +30,9 @@ When You select a project on Prepros a toolbar appears next to the `plus` icon. 
 
 __About icons (in the order of image above)__
 
-* Add new project
 * Refresh project files
 * Project options
+* [Optimize Images](image-optimization.html)
 * Open [project live url](live-refresh.html)
 * Remove project
 
@@ -41,7 +41,7 @@ __About icons (in the order of image above)__
 ### Project Options
 There are many options availabe to manage your projects. You can open options window by clicking the options button on the project toolbar.
 
-![Project Options](img/projects/options.PNG)
+![Project Options](img/projects/options.jpg)
 
 Options window contain the options whch you can use to manage your project options. There are three tabs on project options window.
 

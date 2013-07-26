@@ -11,7 +11,7 @@ Prepros uses websockets for communication so your browser must it for the live r
 
 You have to [install](installing.html) browser extension for the live refresh to work with custom server.
 
-If you open file directly in the browser from file system ~~~ the live refresh won't work ~~~ (It works from version 2.0 with browser extension). You have to click on the `globe` icon on the project toolbar to open live url with built in http server. You can also hit `CTRL+L` to open the live url of the selected project.
+If you open file directly in the browser from file system ~~live refresh won't work~~ (It works from version 2.0 with browser extension). You have to click on the `globe` icon on the project toolbar to open live url with built in http server. You can also hit `CTRL+L` to open the live url of the selected project.
 
 ![Click to open Live url](img/live-refresh/open-live-url.jpg)
 

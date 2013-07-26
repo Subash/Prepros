@@ -9,6 +9,6 @@ Please click the `phone` icon on the top right corner of the Prepros window to g
 
 Prepros uses websockets for communication so your device must support it for live refresh to work.
 
-![LESS](img/multi-device-testing/multi.jpg)
+![LESS](img/multi-device-live-refresh/multi.jpg)
 
 <div class="alert alert-info">Multi device testing and live refresh is only availabe if you are using built in Prepros server not the custom server.</div>

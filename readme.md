@@ -12,6 +12,7 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 ##Features
 * Compile less, sass, scss, compass, coffeescript, stylus, jade, slim, markdown, haml and livescript files
 * No dependencies (sass compass etc..)
+* Image optimization
 * Live browser refresh
 * Javascript minification and concatenation
 * @imports detection and watching

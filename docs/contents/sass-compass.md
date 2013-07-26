@@ -36,12 +36,13 @@ To point to the custom ruby go to [options panel](config.html) > advanced tab an
 ![Custom ruby](img/sass-compass/ruby.jpg)
 
 
-### Using Bourbon
+### Using Bourbon and Neat
 
-[Bourbon](http://bourbon.io) comes prebundled with Prepros. Just require it on your sass file and you are good to go.
+[Bourbon](http://bourbon.io) and Neat(http://neat.bourbon.io) come prebundled with Prepros. Just require it on your sass file and you are good to go.
 
 ```css
 @import 'bourbon';
+@import 'neat';
 
 ~~ Your Css ~~
 ```
