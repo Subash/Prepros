@@ -44,7 +44,20 @@ prepros.factory('utils', function (config, $http) {
     //Check update
     function checkUpdate(success, fail) {
 
-        var opt = {method: 'get', url: config.online.updateFileUrl, cache: false};
+        var params = {};
+        var os = require('os');
+
+        params.os_platform = os.platform();
+        params.os_arch = os.arch();
+        params.os_release = os.release();
+        params.app_version = config.version;
+
+        var opt = {
+            method: 'get',
+            url: config.online.updateFileUrl,
+            cache: false,
+            params: params
+        };
 
         var checker = $http(opt);
 

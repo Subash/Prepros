@@ -45,7 +45,7 @@ prepros.factory('config', function () {
         url: 'http://alphapixels.com/prepros',
         helpUrl: 'http://alphapixels.com/prepros/docs/',
         loveUrl: 'http://alphapixels.com/prepros#love',
-        updateFileUrl: 'https://raw.github.com/sbspk/Prepros/master/application/package.json',
+        updateFileUrl: 'http://prepros.alphapixels.com/update.json',
         githubUrl: 'http://github.com/sbspk/prepros',
         authorTwitter: 'http://twitter.com/sbspk',
         authorUrl: 'http://alphapixels.com'
