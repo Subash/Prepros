@@ -1,7 +1,13 @@
 head
-	title= 'Prepros :: ' + page.title
+	title=page.title
+	meta(name='viewport')(content='width=device-width, initial-scale=1')
+	meta(name='charset')(content='utf-8')
+	meta(name='description')(content='Compile less, sass, scss, compass, stylus, cofffeescript, jade, haml, slim and markdown with live browser refresh.')
 	link(rel="author")(href="https://plus.google.com/u/0/114513538860360992504/posts")
+	link(rel='chrome-webstore-item')(href="https://chrome.google.com/webstore/detail/bnlfjdjbjiabcgkkjaicjepbhhmeonlm")	
 	link(rel='stylesheet')(href='http://alphapixels.com/prepros/css/style.css')
+	script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+	script(src='http://alphapixels.com/prepros/js/prism.min.js')
 	script.
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

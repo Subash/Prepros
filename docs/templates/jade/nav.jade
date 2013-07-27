@@ -1,25 +1,13 @@
-header
-	.container
-		.row
-			div.span4
-				a(href="http://alphapixels.com/prepros")
-					h1.logo Prepros
-			div.span8
-				nav
-					ul.clearfix.pull-right
-						li
-							a(href='http://alphapixels.com/prepros/docs')
-								span.title Docs
-								span.detail More About Prepros
-						li
-							a(href='http://alphapixels.com/prepros/faq.html')
-								span.title Faq
-								span.detail Burning Questions
-						li
-							a(href='http://alphapixels.com/prepros/changelog.html')
-								span.title Changelog
-								span.detail What's new in Prepros
-						li
-							a(href='http://github.com/sbspk/prepros')
-								span.title Github
-								span.detail ♥ Open Source
+nav
+	.row
+		.large-8.small-12.columns
+			a(href="/prepros") Home
+			a(href="/prepros/#download") Download
+			a(href="/prepros/docs/") Docs
+			a(href="/prepros/faq.html") FAQ
+			a(href="/prepros/changelog.html") Changelog
+		.paypal-donate.large-4.small-12.columns
+			form(action="https://www.paypal.com/cgi-bin/webscr")(method="post")(target="_blank")
+				input(type="hidden")(name="cmd")(value="_s-xclick")
+				input(type="hidden")(name="hosted_button_id")(value="EGLVFC4YQK7WL")
+				input(type="image")(src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif")(name="submit")(alt="PayPal - The safer, easier way to pay online!")(onClick="ga('send', 'event', 'Donate Top');")
