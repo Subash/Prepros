@@ -1,3 +1,16 @@
+### Version 2.3.0 -July 27, 2013
+
+* Image optimization [docs](http://alphapixels.com/prepros/docs/image-optimization.html)
+* LiveScript Support [docs](http://alphapixels.com/prepros/docs/livescript.html)
+* Mangle option for uglifyjs
+* Disabled LESS strict maths and units to match default behavior
+* LESS updated to 1.4.1
+* Fixed edge case notifications bug
+* Fixed crash on port error
+* Fixed bug in project urls
+* Improved UI
+* Minor bug fixes and performance improvements
+
 ### Version 2.2.0 -July 06, 2013
 
 * Fixed bourbon path bug
