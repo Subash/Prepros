@@ -115,7 +115,7 @@
 * Some code and performance improvements
 
 
-## Version 1.2.0 -May 07, 2013
+### Version 1.2.0 -May 07, 2013
 
 * Fixed app crash on project folder delete
 * Added Keyboard shortcuts
@@ -133,7 +133,7 @@ CTRL+SHIFT+C : Compile all project files
 * Option to select installation folder
 * Some code and performance improvements
 
-## Version 1.1.2 -May 04, 2013
+### Version 1.1.2 -May 04, 2013
 
 * Option to disable markdown sanitization and gfm.
 * Ability to save application state; App opens where you left it.
@@ -143,6 +143,6 @@ CTRL+SHIFT+C : Compile all project files
 * Cleaner codebase.
 
 
-## Version 1.1.1 -May 01, 2013
+### Version 1.1.1 -May 01, 2013
 
 * Initial release
