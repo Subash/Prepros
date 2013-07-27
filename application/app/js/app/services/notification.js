@@ -68,7 +68,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log = (log.length >= 20) ? log.slice(0, 19) : log;
 
-        $rootScope.$broadcast('logUpdate', {log: log});
+        $rootScope.$broadcast('logUpdate');
 
         if (config.getUserOptions().enableErrorNotifications) {
 
@@ -83,7 +83,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         log = (log.length >= 20) ? log.slice(0, 19) : log;
 
-        $rootScope.$broadcast('logUpdate', {log: log});
+        $rootScope.$broadcast('logUpdate');
 
         if (config.getUserOptions().enableSuccessNotifications) {
 
@@ -91,17 +91,19 @@ prepros.factory('notification', function (config, $location, $rootScope) {
         }
     };
 
-    //Clear Log
-    var clearLog = function () {
+    var clearLog = function() {
         log = [];
-        $rootScope.$broadcast('logUpdate', {log: log});
+        $rootScope.$broadcast('logUpdate');
+    };
+
+    var getLog = function() {
+        return log;
     };
 
     return {
         error: error,
         success: success,
-        clearLog: clearLog,
-        log: log
+        getLog: getLog,
+        clearLog: clearLog
     };
-
 });

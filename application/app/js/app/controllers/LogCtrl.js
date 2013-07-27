@@ -13,7 +13,7 @@ prepros.controller('LogCtrl', function ($scope, notification) {
 
     'use strict';
 
-    $scope.log = notification.log;
+    $scope.log = notification.getLog();
 
     //Function to clear log
     $scope.clearLog = function () {
@@ -21,7 +21,7 @@ prepros.controller('LogCtrl', function ($scope, notification) {
     };
 
     //Update log on log change event
-    $scope.$on('logUpdate', function (e, data) {
-        $scope.log = data.log;
+    $scope.$on('logUpdate', function () {
+        $scope.log = notification.getLog();
     });
 });
