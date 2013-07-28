@@ -9,7 +9,8 @@ Right click the project and click the image optimization option on the context m
 
 Click on the optimize button then Prepros will optimize the image.
 
-Minified js file that end with `min.js` are ignored by Prepros.
+<br><br>
+<iframe width="640" height="480" src="//www.youtube.com/embed/pSbDjIlVv5Q" frameborder="0" allowfullscreen></iframe><br><br>
 
 ![Image Optimization](img/image-optimization/1.jpg)<br>
 <br>
