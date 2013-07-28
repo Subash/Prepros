@@ -48,6 +48,8 @@ Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite on
   File /r "app"
+  File /r "bin"
+  File /r "bourbon"
   File /r "node_modules"
   File /r "ruby_exec"
   File /r "ruby_gems"
