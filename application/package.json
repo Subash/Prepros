@@ -2,6 +2,7 @@
     "name": "Prepros",
     "main": "app/app.html",
     "single-instance": false,
+    "dom_storage_quota": 40,
     "window": {
         "title": "Prepros",
         "icon": "app/assets/img/icons/128.png",
@@ -11,8 +12,7 @@
         "resizable": false,
         "width": 902,
         "height": 552,
-        "show": false,
-        "dom_storage_quota": 40
+        "show": false
     },
 
     "__JSON_NOTE": "All paths are relative to this json file",
