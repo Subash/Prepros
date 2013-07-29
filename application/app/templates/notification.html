@@ -43,6 +43,7 @@
 
                 var nWin = require('nw.gui').Window.get();
 
+
                 if(typeof nWin.showInactive === 'function') {
 
                     nWin.showInactive();
@@ -50,6 +51,7 @@
                 } else {
 
                     nWin.show();
+                    nWin.blur();
                 }
             });
         }
