@@ -1,3 +1,7 @@
+### Version 2.3.1 -July 30, 2013
+
+* Fixed OSX notifications bug
+
 ### Version 2.3.0 -July 27, 2013
 
 * Image optimization [docs](http://alphapixels.com/prepros/docs/image-optimization.html)
