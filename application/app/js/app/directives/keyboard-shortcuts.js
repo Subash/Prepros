@@ -133,6 +133,13 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
                 return false;
             });
 
+            Mousetrap.bind(['esc'], function () {
+
+                require('nw.gui').Window.get().hide();
+
+                return false;
+            });
+
         }
     };
 
