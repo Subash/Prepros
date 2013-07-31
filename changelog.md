@@ -1,3 +1,7 @@
+### Version 2.3.2 -July 31, 2013
+
+* Fixed OSX Sass bug
+
 ### Version 2.3.1 -July 30, 2013
 
 * Fixed OSX notifications bug
