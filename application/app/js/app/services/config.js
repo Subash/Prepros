@@ -199,10 +199,10 @@ prepros.factory('config', function () {
 
             if (process.platform !== 'win32') {
 
-                if (userConfig.customRuby.use && userConfig.customRuby[fileType]) {
+                if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
-                    return 'ruby';
-
+                    return path.join(userConfig.customRuby.path);
+                
                 } else {
 
                     return path.join(packagePath, packageData.ruby.path);
