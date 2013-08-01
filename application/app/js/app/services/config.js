@@ -196,23 +196,10 @@ prepros.factory('config', function () {
         bourbon: path.join(packagePath, packageData.ruby.bourbon),
         neat: path.join(packagePath, packageData.ruby.neat),
         getExec: function (fileType) {
-
-            if (process.platform !== 'win32') {
-
-                if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
-
-                    return path.join(userConfig.customRuby.path);
-                
-                } else {
-
-                    return path.join(packagePath, packageData.ruby.path);
-
-                }
-            }
-
+            
             if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
-                return path.join(userConfig.customRuby.path);
+                return path.normalize(userConfig.customRuby.path);
             }
 
             return path.join(packagePath, packageData.ruby.path);
