@@ -512,6 +512,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         refreshProjectFiles: refreshProjectFiles,
         getProjectFiles: getProjectFiles,
         getProjectConfig: getProjectConfig,
-        changeFileOutput: changeFileOutput
+        changeFileOutput: changeFileOutput,
+        matchFilters: matchFileFilters
     };
 });

@@ -54,7 +54,7 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
             } else {
 
-                if (_.contains(supportedTypes, path.extname(fp).slice(1))) {
+                if (_.contains(supportedTypes, path.extname(fp).slice(1)) && !projectsManager.matchFilters($scope.selectedProject.id, fp)) {
                     $scope.projectImages.push({
                         path: fp,
                         type: path.extname(fp).slice(1),
