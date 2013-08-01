@@ -212,12 +212,8 @@ prepros.factory('config', function () {
             var loader = path.join(basePath, '../bin/gem_loader.rb');
 
             var gemPath = path.join(packagePath, packageData.ruby.gemPath);
-
-            if (process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
-
-                return [loader, 'custom', fileType];
-
-            } else if (process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
+            
+            if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
 
                 return [loader, 'custom', fileType];
 
