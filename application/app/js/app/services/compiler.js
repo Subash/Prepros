@@ -18,18 +18,20 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
     var compileQueue = [];
 
     //function to compile
-    function compile(fid) {
+    function compile(pid, fid) {
 
-        if (!_.contains(compileQueue, fid)) {
+        var queueId =  fid+pid;
 
-            compileQueue.push(fid);
+        if (!_.contains(compileQueue)) {
 
-            var file = projectsManager.getFileById(fid);
+            compileQueue.push(queueId);
+
+            var file = projectsManager.getFileById(pid, fid);
 
             var ext = path.extname(file.input).toLowerCase();
 
             //Replace file.output placeholders with real paths
-            var prj = projectsManager.getProjectById(file.pid);
+            var prj = projectsManager.getProjectById(pid);
 
             //Remove angular hash maps so that the change in file here won't affect files in project
             var f = $.parseJSON(angular.toJson(file));
@@ -46,7 +48,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
                 fileTypes.compile(f, function (data) {
 
-                    compileQueue = _.without(compileQueue, fid);
+                    compileQueue = _.without(compileQueue, queueId);
 
                     $rootScope.$apply(function () {
 
@@ -61,7 +63,7 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
                 }, function (data) {
 
-                    compileQueue = _.without(compileQueue, fid);
+                    compileQueue = _.without(compileQueue, queueId);
 
                     $rootScope.$apply(function () {
                         notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);

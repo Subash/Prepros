@@ -123,13 +123,13 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
     }
 
     //Function return list of imports if file supports importing
-    function getImports(filePath) {
+    function getImports(filePath, projectPath) {
 
         var ext = path.extname(filePath).slice(1);
 
         var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js'];
 
-        return (_.contains(can, ext)) ? importsVisitor.getImports(filePath) : [];
+        return (_.contains(can, ext)) ? importsVisitor.getImports(filePath, projectPath) : [];
 
     }
 

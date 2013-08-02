@@ -17,7 +17,7 @@ prepros.factory('importsVisitor', function () {
         path = require('path');
 
     //Function to get files list imported by another file; returns the list of imported files that exist
-    function visitImports(filePath) {
+    function visitImports(filePath, projectsPath) {
 
         var importedFiles = [],
             ext = path.extname(filePath).toLowerCase(),
@@ -81,8 +81,9 @@ prepros.factory('importsVisitor', function () {
                     }
                 }
 
+                //File must be inside project folder
                 //Check if file exists
-                if (fs.existsSync(importedFilePath)) {
+                if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectsPath).indexOf('./') < 0) {
 
                     importedFiles.push(importedFilePath);
                 }
@@ -113,12 +114,14 @@ prepros.factory('importsVisitor', function () {
                     //First check for partial file
                     var importedWithPartial = path.normalize(path.dirname(importedFilePath) + path.sep + '_' + path.basename(importedFilePath));
 
+
+
                     //Check if file exists
-                    if (fs.existsSync(importedWithPartial)) {
+                    if (fs.existsSync(importedWithPartial) && path.relative(importedWithPartial, projectsPath).indexOf('./') < 0) {
 
                         importedFiles.push(importedWithPartial);
 
-                    } else if (fs.existsSync(importedFilePath)) {
+                    } else if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectsPath).indexOf('./') < 0) {
 
                         importedFiles.push(importedFilePath);
 
@@ -132,11 +135,11 @@ prepros.factory('importsVisitor', function () {
 
 
     //Function to visit imports with nested support
-    function getImports(filePath) {
+    function getImports(filePath, projectPath) {
 
         var fileImports = [];
 
-        fileImports[0] = visitImports(filePath);
+        fileImports[0] = visitImports(filePath, projectPath);
 
         //Get imports of imports up to four levels
         for (var i = 1; i < 5; i++) {
@@ -145,7 +148,7 @@ prepros.factory('importsVisitor', function () {
 
             _.each(fileImports[i - 1], function (importedFile) {
 
-                fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile)));
+                fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile, projectPath)));
 
             });
         }

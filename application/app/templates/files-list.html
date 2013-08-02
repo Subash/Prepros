@@ -1,6 +1,6 @@
 <ul class="files">
 
-    <li class="file" ng-repeat="file in selectedProjectFiles|orderBy:'name'">
+    <li class="file" ng-repeat="file in selectedProject.files|orderBy:'name'">
 
         <a ng-href="#/files/{{file.pid}}/{{file.id}}"
            ng-class="{'active' : selectedFile.id == file.id}"
@@ -24,7 +24,7 @@
                 <div>
                     <span ng-hide="file.config.compass && file.config.fullCompass"
                           class="output" tooltip="Click to change file output path"
-                          ng-click="changeFileOutput($event, file.id)">&rarr;
+                          ng-click="changeFileOutput($event, file.pid, file.id)">&rarr;
                         {{file.output | interpolatePath : { config: selectedProject.config, relative: true, basePath: selectedProject.path } | prettyPath | shorten}}
                     </span>
                 </div>
