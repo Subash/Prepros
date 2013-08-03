@@ -23,8 +23,8 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         var files = data.files;
         var imports = data.imports;
 
-        var _files = _.pluck(files, 'input');
-        var _imports = _.pluck(imports, 'path');
+        var _files = _.uniq(_.pluck(files, 'input'));
+        var _imports = _.uniq(_.pluck(imports, 'path'));
 
         _.each(watchingFiles, function (file) {
 
@@ -58,7 +58,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                     if (f.config.autoCompile) {
 
                         //Compile File
-                        compiler.compile(f.id);
+                        compiler.compile(f.pid, f.id);
 
                     }
                 });
@@ -85,11 +85,11 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                     _.each(im.parents, function (parentId) {
 
-                        var parentFile = projectsManager.getFileById(parentId);
+                        var parentFile = projectsManager.getFileById(im.pid, parentId);
 
                         if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
 
-                            compiler.compile(parentId);
+                            compiler.compile(im.pid, parentId);
                         }
                     });
                 });

@@ -107,7 +107,7 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
 
                     _.each(files, function (file) {
 
-                        compiler.compile(file.id);
+                        compiler.compile(file.pid, file.id);
 
                     });
                 }
@@ -125,7 +125,7 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
 
                     if (scope.selectedFile.id) {
 
-                        compiler.compile(scope.selectedFile.id);
+                        compiler.compile(scope.selectedFile.pid, scope.selectedFile.id);
                     }
 
                 }

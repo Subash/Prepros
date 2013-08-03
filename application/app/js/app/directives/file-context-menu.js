@@ -33,7 +33,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
             menu.append(new gui.MenuItem({
                 label: 'Compile File',
                 click: function () {
-                    compiler.compile(file.id);
+                    compiler.compile(file.pid, file.id);
                 }
             }));
 
@@ -42,8 +42,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 click: function () {
 
                     $rootScope.$apply(function () {
-                        var f = _.findWhere(scope.files, {id: file.id});
-
+                        var f = _.findWhere(scope.selectedProject.files, {id: file.id});
                         f.config.autoCompile = !f.config.autoCompile;
                     });
                 }
@@ -74,12 +73,8 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
 
                         if (y) {
 
-                            projectsManager.removeFile(file.id);
-
                             $rootScope.$apply(function () {
-
-                                projectsManager.addFile(file.input, projectsManager.getProjectById(file.pid).path, true);
-
+                                projectsManager.resetFileSettings(file.pid, file.id);
                             });
                         }
 

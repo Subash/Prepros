@@ -15,7 +15,7 @@ prepros.factory('utils', function (config, $http) {
 
     function id(string) {
 
-        return md5(string.toLowerCase()).substr(8, 8);
+        return md5(string.toLowerCase().replace(/\\/gi, '/')).substr(8, 8);
     }
 
     //Shows loading overlay

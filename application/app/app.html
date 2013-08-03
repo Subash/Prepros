@@ -81,10 +81,10 @@
                 <div ng-if="path == 'files'">
 
                     <!-- Files list -->
-                    <div ng-include src="'templates/files-list.html'" ng-if="selectedProjectFiles.length != 0"></div>
+                    <div ng-include src="'templates/files-list.html'" ng-if="selectedProject.files.length != 0"></div>
 
                     <!-- There are no files -->
-                    <div class="no-files" ng-if="selectedProjectFiles.length == 0">
+                    <div class="no-files" ng-if="selectedProject.files.length == 0">
 
                         <h1 class="icomoon-sad"></h1>
 

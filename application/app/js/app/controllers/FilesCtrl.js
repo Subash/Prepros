@@ -17,15 +17,15 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
         path = require('path');
 
     //Change file output
-    $scope.changeFileOutput = function (event, id) {
+    $scope.changeFileOutput = function (event, pid, id) {
 
         event.preventDefault();
         event.stopPropagation();
 
         var wd;
 
-        var file = projectsManager.getFileById(id),
-            project = projectsManager.getProjectById(file.pid);
+        var file = projectsManager.getFileById(pid, id),
+            project = projectsManager.getProjectById(pid);
 
         var out = $filter('interpolatePath')(file.output, {config: project.config, relative: false, basePath: project.path});
 
@@ -47,7 +47,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
         $(elm).on('change', function (e) {
 
             $scope.$apply(function () {
-                projectsManager.changeFileOutput(id, e.currentTarget.files[0].path);
+                projectsManager.changeFileOutput(pid, id, e.currentTarget.files[0].path);
             });
         });
     };
@@ -62,7 +62,7 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
 
     //Compile file
     $scope.compile = function () {
-        compiler.compile($scope.selectedFile.id);
+        compiler.compile($scope.selectedFile.pid, $scope.selectedFile.id);
     };
 
 });
