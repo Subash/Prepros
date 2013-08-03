@@ -54,7 +54,7 @@
 
             $scope.validRuby = function() {
 
-                return !(process.platform == 'win32' && $scope.userConfig.customRuby.path == '');
+                return !($scope.userConfig.customRuby.path == '');
             };
 
             $scope.process = global.process;
@@ -373,11 +373,15 @@
             </label>
 
             <div ng-if="userConfig.customRuby.use">
-                <label ng-if="process.platform == 'win32'">
+                <label>
                     <span class="label-desc label-block">Path to custom ruby executable file</span>
                     <input type="text" ng-model="userConfig.customRuby.path">
                 </label>
                 <div ng-if="validRuby()">
+                    <label>
+                        <input type="checkbox" ng-model="userConfig.customRuby.legacyRuby">
+                        <span class="label-desc">Legacy Ruby (&lt; v1.9.0)</span>
+                    </label>
                     <label>
                         <input type="checkbox" ng-model="userConfig.customRuby.sass">
                         <span class="label-desc">For Sass</span>
