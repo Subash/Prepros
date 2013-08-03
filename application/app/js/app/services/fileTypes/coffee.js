@@ -22,9 +22,6 @@ prepros.factory('coffee', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = filePath.replace(/\.coffee/gi, '.js');
 
@@ -33,7 +30,11 @@ prepros.factory('coffee', function (config, utils) {
         //Find output path; save to /js folder if file is in /coffee folder
         if (filePath.match(pathRegx)) {
 
-            output = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+
+            if(utils.isFileInsideFolder(projectPath, output)) {
+                output = customOutput;
+            }
 
         }
 
@@ -43,9 +44,8 @@ prepros.factory('coffee', function (config, utils) {
             pid: pid,
             name: name,
             type: 'Coffee',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().coffee
         };
     };

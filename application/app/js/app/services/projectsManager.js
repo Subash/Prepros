@@ -27,7 +27,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     function addProject(folder) {
 
         //Check if folder already exists in project list
-        var already = _.isEmpty(_.findWhere(projects, {path: folder.toLowerCase()})) ? false : true;
+        var already = _.isEmpty(_.findWhere(projects, {path: folder})) ? false : true;
 
         var project_id = _id(new Date().toISOString() + folder);
 
@@ -38,7 +38,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             var project = {
                 id: project_id,
                 name: path.basename(folder),
-                path: folder.toLowerCase(),
+                path: folder,
                 files: [],
                 imports: [],
                 config: {
@@ -189,7 +189,14 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         var inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
 
         if (!already && !inImports) {
-            getProjectById(pid).files.push(fileTypes.format(pid, fileId, filePath, getProjectById(pid).path));
+
+            try {
+                getProjectById(pid).files.push(fileTypes.format(pid, fileId, filePath, getProjectById(pid).path));
+            }
+             catch(e ){
+                 console.log(e.stack);
+            }
+
         }
     }
 
@@ -202,7 +209,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     function resetFileSettings(pid, fid) {
         var f = getFileById(pid, fid);
         removeFile(pid, fid);
-        addFile(pid, f.input);
+        addFile(pid, f.id, f.input);
         _broadCast();
     }
 
@@ -261,7 +268,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             getProjectById(pid).imports.push({
                 id: impid,
                 pid: pid,
-                path: importedPath,
+                path: path.relative(getProjectById(pid).path, importedPath),
                 parents: [fid]
             });
 
@@ -347,7 +354,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         _.each(getProjectFiles(pid), function (file) {
 
             //Remove if matches filter patterns or doesn't exist
-            if (matchFileFilters(pid, file.input) || !fs.existsSync(file.input)) {
+            if (matchFileFilters(pid, path.join(folder, file.input)) || !fs.existsSync(path.join(folder, file.input))) {
 
                 removeFile(pid, file.id);
 
@@ -398,7 +405,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                 _.each(oldImports, function (imp) {
 
-                    if (!_.contains(file.imports, imp.path)) {
+                    if (!_.contains(file.imports, path.join(folder, imp.path))) {
 
                         removeImportParent(imp.id, file_id);
                     }
@@ -406,6 +413,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             });
 
             _broadCast();
+
 
             utils.hideLoading();
 

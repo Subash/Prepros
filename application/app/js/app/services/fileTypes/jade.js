@@ -21,9 +21,6 @@ prepros.factory('jade', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = filePath.replace(/\.jade/gi, config.getUserOptions().htmlExtension);
 
@@ -32,7 +29,11 @@ prepros.factory('jade', function (config, utils) {
         //Find output path; save to /html folder if file is in /jade folder
         if (filePath.match(pathRegx)) {
 
-            output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+
+            if(utils.isFileInsideFolder(projectPath, output)) {
+                output = customOutput;
+            }
 
         }
 
@@ -41,9 +42,8 @@ prepros.factory('jade', function (config, utils) {
             pid: pid,
             name: name,
             type: 'Jade',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().jade
         };
     };

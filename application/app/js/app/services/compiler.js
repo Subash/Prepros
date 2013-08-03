@@ -42,7 +42,13 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                 f.projectPath = prj.path;
             }
 
-            f.output = $filter('interpolatePath')(file.output, {config: prj.config, relative: false, basePath: prj.path});
+            f.input = $filter('fullPath')(file.input, { basePath: prj.path});
+
+            //Interpolate path to replace css/js dirs
+            f.output = $filter('interpolatePath')(file.output, {config: prj.config});
+
+            //Get full path of a file
+            f.output = $filter('fullPath')(f.output, { basePath: prj.path});
 
             if (fs.existsSync(f.input)) {
 

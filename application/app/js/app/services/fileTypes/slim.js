@@ -22,9 +22,6 @@ prepros.factory('slim', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = filePath.replace(/\.slim/gi, config.getUserOptions().htmlExtension);
 
@@ -33,7 +30,11 @@ prepros.factory('slim', function (config, utils) {
         //Find output path; save to /html folder if file is in /slim folder
         if (filePath.match(pathRegx)) {
 
-            output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+
+            if(utils.isFileInsideFolder(projectPath, output)) {
+                output = customOutput;
+            }
 
         }
 
@@ -42,9 +43,8 @@ prepros.factory('slim', function (config, utils) {
             pid: pid,
             name: name,
             type: 'Slim',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().slim
         };
     };

@@ -9,7 +9,7 @@
 /*global prepros, _*/
 
 //Imports Visitor
-prepros.factory('importsVisitor', function () {
+prepros.factory('importsVisitor', function (utils) {
 
     'use strict';
 
@@ -82,8 +82,7 @@ prepros.factory('importsVisitor', function () {
                 }
 
                 //File must be inside project folder
-                //Check if file exists
-                if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
 
                     importedFiles.push(importedFilePath);
                 }
@@ -114,14 +113,11 @@ prepros.factory('importsVisitor', function () {
                     //First check for partial file
                     var importedWithPartial = path.normalize(path.dirname(importedFilePath) + path.sep + '_' + path.basename(importedFilePath));
 
-
-
-                    //Check if file exists
-                    if (fs.existsSync(importedWithPartial) && path.relative(importedWithPartial, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                    if (fs.existsSync(importedWithPartial) && utils.isFileInsideFolder(projectPath, importedWithPartial)) {
 
                         importedFiles.push(importedWithPartial);
 
-                    } else if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                    } else if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
 
                         importedFiles.push(importedFilePath);
 

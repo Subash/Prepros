@@ -9,7 +9,7 @@
 /*global prepros,  _ , $*/
 
 //Files List controls
-prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter) {
+prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter, utils) {
 
     'use strict';
 
@@ -27,8 +27,10 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
         var file = projectsManager.getFileById(pid, id),
             project = projectsManager.getProjectById(pid);
 
-        var out = $filter('interpolatePath')(file.output, {config: project.config, relative: false, basePath: project.path});
+        //Interpolate path to replace css/js dirs
+        var out = $filter('interpolatePath')(file.output, {config: project.config});
 
+        out = $filter('fullPath')(out, { basePath: project.path});
 
         if (fs.existsSync(path.dirname(out))) {
 
@@ -46,8 +48,15 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
 
         $(elm).on('change', function (e) {
 
+            var output = e.currentTarget.files[0].path;
+
+            if(utils.isFileInsideFolder(project.path, e.currentTarget.files[0].path)) {
+
+                output = path.relative(project.path, output);
+            }
+
             $scope.$apply(function () {
-                projectsManager.changeFileOutput(pid, id, e.currentTarget.files[0].path);
+                projectsManager.changeFileOutput(pid, id, output);
             });
         });
     };

@@ -22,18 +22,19 @@ prepros.factory('livescript', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = filePath.replace(/\.ls/gi, '.js');
 
         var pathRegx = /\\livescript\\|\/livescript\//gi;
 
-        //Find output path; save to /js folder if file is in /livescript folder
+        //Find output path; save to /js folder if file is in /livescript foldervar customOutput;
         if (filePath.match(pathRegx)) {
 
-            output = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+
+            if(utils.isFileInsideFolder(projectPath, output)) {
+                output = customOutput;
+            }
 
         }
 
@@ -43,9 +44,8 @@ prepros.factory('livescript', function (config, utils) {
             pid: pid,
             name: name,
             type: 'LS',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().livescript
         };
     };

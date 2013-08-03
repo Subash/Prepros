@@ -63,7 +63,8 @@ function bootstrapPrepros() {
     var filters = [
         'shorten',
         'interpolatePath',
-        'prettyPath'
+        'prettyPath',
+        'fullPath'
     ];
 
     var directives = [

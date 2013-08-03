@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter) {
 
     "use strict";
 
@@ -20,86 +20,70 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
     //Function to start watching file
     function startWatching(data) {
 
+
         var files = data.files;
         var imports = data.imports;
 
-        var _files = _.uniq(_.pluck(files, 'input'));
-        var _imports = _.uniq(_.pluck(imports, 'path'));
-
-        _.each(watchingFiles, function (file) {
-
-            if (!_.contains(_files, file)) {
-
-                fs.unwatchFile(file);
-                watchingFiles = _.without(watchingFiles, file);
-            }
+        _.each(watchingFiles, function(file) {
+            fs.unwatchFile(file);
         });
 
-        _.each(watchingImports, function (imp) {
-
-            if (!_.contains(_imports, imp)) {
-
-                fs.unwatchFile(imp);
-                watchingImports = _.without(watchingImports, imp);
-            }
+        _.each(watchingImports, function(file) {
+            fs.unwatchFile(file);
         });
-
-        var filesToWatch = _.difference(_files, watchingFiles);
 
         //Watch files
-        _.each(filesToWatch, function (file) {
+        _.each(files, function (file) {
+
+            var filePath = $filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path});
 
             try {
 
-                fs.watchFile(file, { persistent: true, interval: 200}, function(){
+                fs.watchFile(filePath, { persistent: true, interval: 200}, function(){
 
-                    var f = _.findWhere(files, {input: file});
-
-                    if (f.config.autoCompile) {
+                    if (file.config.autoCompile) {
 
                         //Compile File
-                        compiler.compile(f.pid, f.id);
+                        compiler.compile(file.pid, file.id);
 
                     }
                 });
 
-                watchingFiles.push(file);
+                watchingFiles.push(filePath);
 
             } catch (err) {
 
-                notification.error('Error watching file.', 'An error occurred while watching file', file);
+                notification.error('Error watching file.', 'An error occurred while watching file', filePath);
             }
 
         });
 
-        var importsToWatch = _.difference(_imports, watchingImports);
-
         //Watch imports
-        _.each(importsToWatch, function (imp) {
+        _.each(imports, function (imp) {
+
+            var importPath = $filter('fullPath')(imp.path, { basePath: projectsManager.getProjectById(imp.pid).path});
 
             try {
 
                 fs.watchFile(imp, { persistent: true, interval: 200}, function(){
 
-                    var im = _.findWhere(imports, {path: imp});
+                    _.each(imp.parents, function (parentId) {
 
-                    _.each(im.parents, function (parentId) {
-
-                        var parentFile = projectsManager.getFileById(im.pid, parentId);
+                        var parentFile = projectsManager.getFileById(imp.pid, parentId);
 
                         if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
 
-                            compiler.compile(im.pid, parentId);
+                            compiler.compile(imp.pid, parentId);
                         }
                     });
                 });
 
                 //Push to watching list so it can be closed later
-                watchingImports.push(imp);
+                watchingImports.push(importPath);
 
             } catch (err) {
 
-                notification.error('Error watching imported file', 'An error occurred while watching file', imp);
+                notification.error('Error watching imported file', 'An error occurred while watching file', importPath);
 
             }
 

@@ -11,7 +11,8 @@ prepros.factory('utils', function (config, $http) {
 
     'use strict';
 
-    var md5 = require('MD5');
+    var md5 = require('MD5'),
+        path = require('path');
 
     function id(string) {
 
@@ -87,11 +88,17 @@ prepros.factory('utils', function (config, $http) {
         });
     }
 
+    function isFileInsideFolder(folder, file) {
+
+        return file.toLowerCase().indexOf(folder.toLowerCase()) === 0;
+    }
+
     return {
         id: id,
         showLoading: showLoading,
         hideLoading: hideLoading,
         openBrowser: openBrowser,
-        checkUpdate: checkUpdate
+        checkUpdate: checkUpdate,
+        isFileInsideFolder: isFileInsideFolder
     };
 });

@@ -22,9 +22,6 @@ prepros.factory('javascript', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = path.join(path.dirname(filePath), '{{jsMinPath}}', path.basename(filePath).replace(/\.js/gi, '.min.js'));
 
@@ -34,9 +31,8 @@ prepros.factory('javascript', function (config, utils) {
             pid: pid,
             name: name,
             type: 'JS',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().javascript
         };
     };

@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap, alertify */
 
 //Tooltip directive
-prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope) {
+prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter) {
 
     'use strict';
 
@@ -26,7 +26,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
             menu.append(new gui.MenuItem({
                 label: 'Open File',
                 click: function () {
-                    gui.Shell.openItem(file.input);
+                    gui.Shell.openItem($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
                 }
             }));
 
@@ -53,7 +53,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
             menu.append(new gui.MenuItem({
                 label: 'Show in ' + explorer,
                 click: function () {
-                    gui.Shell.showItemInFolder(file.input);
+                    gui.Shell.showItemInFolder($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
                 }
             }));
 

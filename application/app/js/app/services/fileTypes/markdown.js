@@ -21,9 +21,6 @@ prepros.factory('markdown', function (config, utils) {
         //File name
         var name = path.basename(filePath);
 
-        //Relative input path
-        var shortInput = path.relative(projectPath, filePath);
-
         // Output path
         var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
 
@@ -32,7 +29,11 @@ prepros.factory('markdown', function (config, utils) {
         //Find output path; save to user defined html folder if file is in md or markdown folder
         if (filePath.match(pathRegx)) {
 
-            output = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+
+            if(utils.isFileInsideFolder(projectPath, output)) {
+                output = customOutput;
+            }
 
         }
 
@@ -41,9 +42,8 @@ prepros.factory('markdown', function (config, utils) {
             pid: pid,
             name: name,
             type: 'MD',
-            input: filePath,
-            shortInput: shortInput,
-            output: output,
+            input: path.relative(projectPath, filePath),
+            output: path.relative(projectPath, output),
             config: config.getUserOptions().markdown
         };
     };

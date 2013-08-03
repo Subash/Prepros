@@ -71,10 +71,9 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 click: function () {
 
                     var files = projectsManager.getProjectFiles(project.id);
-
                     _.each(files, function (file) {
 
-                        compiler.compile(file.id);
+                        compiler.compile(project.id, file.id);
 
                     });
                 }
