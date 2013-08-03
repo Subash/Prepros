@@ -27,7 +27,7 @@ prepros.factory('livescript', function (config, utils) {
 
         var pathRegx = /\\livescript\\|\/livescript\//gi;
 
-        //Find output path; save to /js folder if file is in /livescript foldervar customOutput;
+        //Find output path; save to /js folder if file is in /livescript folder
         if (filePath.match(pathRegx)) {
 
             var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
