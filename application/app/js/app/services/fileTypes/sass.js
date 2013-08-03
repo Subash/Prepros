@@ -99,7 +99,7 @@ prepros.factory('sass', function (config, utils) {
 
             args = config.ruby.getGem('sass');
 
-            if(process.platform === 'win32') {
+            if(!(config.getUserOptions().customRuby.use===true && config.getUserOptions().customRuby.legacyRuby===true)) {
                 //Force utf-8 encoding
                 args.push('-E', 'utf-8');
             }

@@ -379,6 +379,10 @@
                 </label>
                 <div ng-if="validRuby()">
                     <label>
+                        <input type="checkbox" ng-model="userConfig.customRuby.legacyRuby">
+                        <span class="label-desc">Legacy Ruby (&lt; v1.9.0)</span>
+                    </label>
+                    <label>
                         <input type="checkbox" ng-model="userConfig.customRuby.sass">
                         <span class="label-desc">For Sass</span>
                     </label>
