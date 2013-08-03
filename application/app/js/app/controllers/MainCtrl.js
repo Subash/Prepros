@@ -24,19 +24,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
         //storage.saveProjects($scope.projects);
         liveServer.startServing($scope.projects);
 
-        var filesList = [];
-
-        var importsList = [];
-
-        _.each($scope.projects, function(project) {
-            filesList = _.union(filesList, project.files);
-        });
-
-        _.each($scope.projects, function(project) {
-            importsList =  _.union(importsList, project.imports);
-        });
-
-        watcher.startWatching({files: filesList, imports: importsList});
+        watcher.startWatching($scope.projects);
 
         storage.put($scope.projects);
 
