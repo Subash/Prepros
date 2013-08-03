@@ -18,7 +18,7 @@ prepros.factory('stylus', function (config, utils) {
         _id = utils.id;
 
 
-    var format = function (filePath, projectPath) {
+    var format = function (pid, fid, filePath, projectPath) {
 
         //File name
         var name = path.basename(filePath);
@@ -39,8 +39,8 @@ prepros.factory('stylus', function (config, utils) {
         }
 
         return {
-            id: _id(filePath),
-            pid: _id(projectPath),
+            id: fid,
+            pid: pid,
             name: name,
             type: 'Stylus',
             input: filePath,

@@ -32,11 +32,11 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
 
 
     //function to format file based on it's type
-    function format(filePath, projectPath) {
+    function format(pid, fid, filePath, projectPath) {
 
         var extname = path.extname(filePath).toLowerCase().slice(1);
 
-        return typeMap[extname].format(filePath, projectPath);
+        return typeMap[extname].format(pid, fid, filePath, projectPath);
 
     }
 

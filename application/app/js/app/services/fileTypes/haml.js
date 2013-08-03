@@ -17,7 +17,7 @@ prepros.factory('haml', function (config, utils) {
         cp = require('child_process'),
         _id = utils.id;
 
-    var format = function (filePath, projectPath) {
+    var format = function (pid, fid, filePath, projectPath) {
 
         //File name
         var name = path.basename(filePath);
@@ -38,8 +38,8 @@ prepros.factory('haml', function (config, utils) {
         }
 
         return {
-            id: _id(filePath),
-            pid: _id(projectPath),
+            id: fid,
+            pid: pid,
             name: name,
             type: 'Haml',
             input: filePath,

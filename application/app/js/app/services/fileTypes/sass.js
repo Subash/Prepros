@@ -19,7 +19,7 @@ prepros.factory('sass', function (config, utils) {
         _id = utils.id;
 
 
-    var format = function (filePath, projectPath) {
+    var format = function (pid, fid, filePath, projectPath) {
 
         //File name
         var name = path.basename(filePath);
@@ -40,8 +40,8 @@ prepros.factory('sass', function (config, utils) {
         }
 
         var file = {
-            id: _id(filePath),
-            pid: _id(projectPath),
+            id: fid,
+            pid: pid,
             name: name,
             input: filePath,
             shortInput: shortInput,
