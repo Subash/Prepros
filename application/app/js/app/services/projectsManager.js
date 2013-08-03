@@ -39,6 +39,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                 id: project_id,
                 name: path.basename(folder),
                 path: folder.toLowerCase(),
+                files: [],
+                imports: [],
                 config: {
                     liveRefresh: true,
                     serverUrl: project_id,
@@ -49,9 +51,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     jsPath: config.getUserOptions().jsPath,
                     htmlPath: config.getUserOptions().htmlPath,
                     jsMinPath: config.getUserOptions().jsMinPath
-                },
-                files: [],
-                imports: []
+                }
             };
 
             var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
