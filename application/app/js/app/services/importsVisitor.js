@@ -17,7 +17,7 @@ prepros.factory('importsVisitor', function () {
         path = require('path');
 
     //Function to get files list imported by another file; returns the list of imported files that exist
-    function visitImports(filePath, projectsPath) {
+    function visitImports(filePath, projectPath) {
 
         var importedFiles = [],
             ext = path.extname(filePath).toLowerCase(),
@@ -83,7 +83,7 @@ prepros.factory('importsVisitor', function () {
 
                 //File must be inside project folder
                 //Check if file exists
-                if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectsPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
 
                     importedFiles.push(importedFilePath);
                 }
@@ -117,11 +117,11 @@ prepros.factory('importsVisitor', function () {
 
 
                     //Check if file exists
-                    if (fs.existsSync(importedWithPartial) && path.relative(importedWithPartial, projectsPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                    if (fs.existsSync(importedWithPartial) && path.relative(importedWithPartial, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
 
                         importedFiles.push(importedWithPartial);
 
-                    } else if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectsPath).replace(/\\/gi, '/').indexOf('./') < 0) {
+                    } else if (fs.existsSync(importedFilePath) && path.relative(importedFilePath, projectPath).replace(/\\/gi, '/').indexOf('./') < 0) {
 
                         importedFiles.push(importedFilePath);
 
