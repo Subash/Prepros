@@ -78,7 +78,8 @@ prepros.factory('config', function () {
             path: '',
             sass: false,
             slim: false,
-            haml: false
+            haml: false,
+            legacyRuby: false
         },
 
         //Default Less Options
@@ -196,23 +197,10 @@ prepros.factory('config', function () {
         bourbon: path.join(packagePath, packageData.ruby.bourbon),
         neat: path.join(packagePath, packageData.ruby.neat),
         getExec: function (fileType) {
-
-            if (process.platform !== 'win32') {
-
-                if (userConfig.customRuby.use && userConfig.customRuby[fileType]) {
-
-                    return 'ruby';
-
-                } else {
-
-                    return path.join(packagePath, packageData.ruby.path);
-
-                }
-            }
-
+            
             if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
 
-                return path.join(userConfig.customRuby.path);
+                return path.normalize(userConfig.customRuby.path);
             }
 
             return path.join(packagePath, packageData.ruby.path);
@@ -225,12 +213,8 @@ prepros.factory('config', function () {
             var loader = path.join(basePath, '../bin/gem_loader.rb');
 
             var gemPath = path.join(packagePath, packageData.ruby.gemPath);
-
-            if (process.platform !== 'win32' && userConfig.customRuby.use && userConfig.customRuby[ft]) {
-
-                return [loader, 'custom', fileType];
-
-            } else if (process.platform === 'win32' && userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
+            
+            if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[ft]) {
 
                 return [loader, 'custom', fileType];
 
