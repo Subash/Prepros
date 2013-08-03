@@ -42,9 +42,9 @@ patch parser.js < ~/.prepros_build/less_1253.patch
 #Start Building Ruby
 mkdir ~/.prepros_build/downloads
 cd ~/.prepros_build/downloads
-wget https://raw.github.com/tokaido/tokaidoapp/master/Tokaido/2.0.0-p195.zip
-unzip 2.0.0-p195.zip
-cd 2.0.0-p195
+wget http://rvm.io/binaries/osx/10.8/x86_64/ruby-2.0.0-p247.tar.bz2
+tar -jxf ruby-2.0.0-p247.tar.bz2
+cd ruby-2.0.0-p247
 
 cp -R * ~/.prepros_build/osx/app.nw/ruby_exec
 
