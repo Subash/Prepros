@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, angular*/
+/*global prepros, angular, _*/
 
 //Storage
 prepros.factory('storage', function () {
@@ -19,7 +19,7 @@ prepros.factory('storage', function () {
     //Function to save project list to json
     function put(projects) {
 
-        localStorage.PreprosProjects = angular.toJson(projects, false);
+        localStorage.PreprosData = angular.toJson(projects, false);
 
     }
 
@@ -30,7 +30,22 @@ prepros.factory('storage', function () {
 
         try {
 
-            projects = angular.fromJson(localStorage.PreprosProjects || '[]');
+            projects = angular.fromJson(localStorage.PreprosData || '[]');
+
+            //Load from config file
+            _.each(Object.keys(projects), function(pid) {
+
+                if(fs.existsSync(projects[pid].path + path.sep + 'Prepros.json')) {
+
+                    var pPath = projects[pid].path;
+
+                    var pr = JSON.parse(fs.readFileSync(projects[pid].path + path.sep + 'Prepros.json'));
+
+                    pr.path = pPath;
+
+                    projects[pid] = pr;
+                }
+            });
 
         } catch (e) {
 

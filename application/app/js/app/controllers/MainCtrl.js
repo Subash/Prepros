@@ -6,12 +6,15 @@
  */
 
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _ , $*/
+/*global prepros,  _ , $, angular*/
 
 //App controller
 prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, liveServer, watcher) {
 
     'use strict';
+
+    var fs = require('fs-extra');
+    var path = require('path');
 
     //Files and projects
     $scope.projects = projectsManager.projects;
@@ -28,7 +31,20 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
         storage.put($scope.projects);
 
-    }, 1500);
+        process.nextTick(function() {
+            _.each($scope.projects, function(project) {
+
+                fs.exists(project.path + path.sep + 'Prepros.json', function (exists) {
+
+                    if(exists) {
+                        projectsManager.createProjectConfigFile(project);
+                    }
+
+                });
+            });
+        });
+
+    }, 2000);
 
     $scope.$watch('projects', function () {
 

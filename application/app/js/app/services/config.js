@@ -51,6 +51,13 @@ prepros.factory('config', function () {
         authorUrl: 'http://alphapixels.com'
     };
 
+    //Older projects and files are not compatible with this version
+    if('PreprosProjects' in localStorage) {
+        localStorage.removeItem('PreprosProjects');
+        localStorage.removeItem('PreprosFiles');
+        localStorage.removeItem('PreprosImports');
+    }
+
     //Read user config
     var userConfig = {};
     try {

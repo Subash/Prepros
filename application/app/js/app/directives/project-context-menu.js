@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap, alertify */
+/*global prepros, $, _, Mousetrap, alertify, angular */
 
 //Tooltip directive
 prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope) {
@@ -14,6 +14,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
     'use strict';
 
     var gui = require('nw.gui');
+    var fs = require('fs-extra');
 
     return {
         restrict: 'A',
@@ -37,6 +38,14 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                     scope.$apply(function () {
                         projectsManager.refreshProjectFiles(project.id);
                     });
+                }
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Create Prepros Config File',
+                click: function () {
+
+                    projectsManager.createProjectConfigFile(project);
                 }
             }));
 

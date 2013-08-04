@@ -6,14 +6,14 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros,  _*/
+/*global prepros,  _, angular*/
 
 //Storage
 prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, $rootScope, $location) {
 
     'use strict';
 
-    var fs = require('fs'),
+    var fs = require('fs-extra'),
         path = require('path'),
         _id = utils.id;
 
@@ -34,51 +34,63 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         //If project doesn't exist
         if (!already) {
 
-            //Project to push
-            var project = {
-                id: project_id,
-                name: path.basename(folder),
-                path: folder,
-                files: [],
-                imports: [],
-                config: {
-                    liveRefresh: true,
-                    serverUrl: project_id,
-                    filterPatterns: '',
-                    useCustomServer: false,
-                    customServerUrl: '',
-                    cssPath: config.getUserOptions().cssPath,
-                    jsPath: config.getUserOptions().jsPath,
-                    htmlPath: config.getUserOptions().htmlPath,
-                    jsMinPath: config.getUserOptions().jsMinPath
-                }
-            };
+            var project = {};
 
-            var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
+            if(fs.existsSync(folder + path.sep + 'Prepros.json')) {
 
-            var urlNotUsed = function(url) {
+                project = JSON.parse(fs.readFileSync(folder + path.sep + 'Prepros.json'));
 
-                return _.isEmpty(_.find(projects, function(p){ return p.config.serverUrl === url; }));
-            };
+                project.path = folder;
 
-            if(serverUrl !== '') {
+            } else {
 
-                if (urlNotUsed(serverUrl)) {
+                //Project to push
+                project = {
+                    id: project_id,
+                    name: path.basename(folder),
+                    path: folder,
+                    files: [],
+                    imports: [],
+                    config: {
+                        liveRefresh: true,
+                        serverUrl: project_id,
+                        filterPatterns: '',
+                        useCustomServer: false,
+                        customServerUrl: '',
+                        cssPath: config.getUserOptions().cssPath,
+                        jsPath: config.getUserOptions().jsPath,
+                        htmlPath: config.getUserOptions().htmlPath,
+                        jsMinPath: config.getUserOptions().jsMinPath
+                    }
+                };
 
-                    project.config.serverUrl = serverUrl;
+                var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
 
-                } else {
+                var urlNotUsed = function(url) {
 
-                    for (var i=1; i<6; i++) {
+                    return _.isEmpty(_.find(projects, function(p){ return p.config.serverUrl === url; }));
+                };
 
-                        var newUrl = serverUrl + '-' + i;
+                if(serverUrl !== '') {
 
-                        if(urlNotUsed(newUrl)) {
-                            project.config.serverUrl = newUrl;
-                            break;
+                    if (urlNotUsed(serverUrl)) {
+
+                        project.config.serverUrl = serverUrl;
+
+                    } else {
+
+                        for (var i=1; i<6; i++) {
+
+                            var newUrl = serverUrl + '-' + i;
+
+                            if(urlNotUsed(newUrl)) {
+                                project.config.serverUrl = newUrl;
+                                break;
+                            }
                         }
                     }
                 }
+
             }
 
             //Push project to projects list
@@ -87,7 +99,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
             refreshProjectFiles(project.id);
 
             //Redirect to newly added project
-            $location.path('/files/' + project_id);
+            $location.path('/files/' + project.id);
 
             _broadCast();
         }
@@ -452,6 +464,16 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         file.output = newPath;
     }
 
+    //Function to create Project Config File
+    function createProjectConfigFile(project) {
+        try {
+            fs.outputFile(project.path + path.sep + 'Prepros.json', angular.toJson(_.omit(project, 'path'), true));
+        } catch(e) {
+            //Do nothing
+        }
+
+    }
+
     return {
         projects: projects,
 
@@ -471,6 +493,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         getProjectConfig: getProjectConfig,
         changeFileOutput: changeFileOutput,
         matchFilters: matchFileFilters,
-        resetFileSettings: resetFileSettings
+        resetFileSettings: resetFileSettings,
+        createProjectConfigFile: createProjectConfigFile
     };
 });
