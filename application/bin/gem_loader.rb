@@ -2,6 +2,8 @@ if ARGV.first != "custom"
 	ENV["GEM_PATH"] = ENV["GEM_HOME"] = ARGV.first
 end
 
+Encoding.default_external = 'UTF-8'
+
 ARGV.shift
 
 gem_to_load = ARGV.first
