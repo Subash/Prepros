@@ -349,13 +349,10 @@
             <div ng-if="userConfig.customRuby.use">
                 <label>
                     <span class="label-desc label-block">Path to custom ruby executable file</span>
+                    <span class="muted label-block">You can enter <code>ruby</code> if it's installed on your path.</span>
                     <input type="text" ng-model="userConfig.customRuby.path">
                 </label>
                 <div ng-if="userConfig.customRuby.path">
-                    <label>
-                        <input type="checkbox" ng-model="userConfig.customRuby.legacyRuby">
-                        <span class="label-desc">Legacy Ruby (&lt; v1.9.0)</span>
-                    </label>
                     <label>
                         <input type="checkbox" ng-model="userConfig.customRuby.sass">
                         <span class="label-desc">For Sass</span>

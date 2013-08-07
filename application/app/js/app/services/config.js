@@ -85,8 +85,7 @@ prepros.factory('config', function () {
             path: '',
             sass: false,
             slim: false,
-            haml: false,
-            legacyRuby: false
+            haml: false
         },
 
         //Default Less Options
