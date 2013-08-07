@@ -93,8 +93,6 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--debug-info');
             }
 
-            args.push('--force');
-
         } else {
 
             args = config.ruby.getGem('sass');
