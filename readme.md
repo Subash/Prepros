@@ -24,4 +24,6 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 ##TODO
 * Frameworks
 * JsHint and JsLint
-* Live browser refresh extension for firefox
+* Live browser refresh extension for
+  * Firefox
+  * Safari
