@@ -75,9 +75,6 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
     var optionsWindow;
     $scope.openOptionsWindow = function () {
 
-        //Inject config object to global so options window can read it
-        global.preprosConfig = config;
-
         if (optionsWindow) {
 
             optionsWindow.show();
@@ -95,6 +92,10 @@ prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsMana
                 toolbar: false,
                 icon: 'app/assets/img/icons/128.png',
                 resizable: false
+            });
+
+            optionsWindow.on('loaded', function () {
+                optionsWindow.emit('loadAppConfig', config);
             });
 
             optionsWindow.on('saveOptions', function (data) {

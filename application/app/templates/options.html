@@ -17,53 +17,24 @@
             var fs = require('fs-extra');
 
             //Cross window communication hack
-            $scope.userConfig = global.preprosConfig.getUserOptions();
+            $scope.userConfig = {};
 
-            //Clear Prepros Cache
-            $scope.clearCache = function (e) {
+            require('nw.gui').Window.get().on('loadAppConfig', function(data) {
+                $scope.$apply(function() {
+                    $scope.userConfig = data.getUserOptions();
+                })
+            });
 
-                $(e.currentTarget).attr('disabled');
-
-                var html = $(e.currentTarget).html();
-
-                require('nw.gui').App.clearCache();
-
-                fs.remove(global.preprosConfig.cachePath, function (err) {
-
-                    if (!err) {
-
-                        $(e.currentTarget).html('Cleared');
-
-                        setTimeout(function () {
-
-                            $(e.currentTarget).removeAttr('disabled');
-
-                            $(e.currentTarget).html(html);
-
-                        }, 1000)
-
-                    } else {
-
-                        alert('Failed ! because of ' + err.message);
-
-                    }
-
-                });
-
-            };
-
-            $scope.validRuby = function() {
-
-                return !($scope.userConfig.customRuby.path == '');
-            };
-
-            $scope.process = global.process;
-
-            //Just Close the window, The controller will catch data and save it on close event
-            $scope.done = function () {
-                require('nw.gui').Window.get().emit('saveOptions', $scope.userConfig);
+            $scope.close = function () {
                 require('nw.gui').Window.get().close();
-            }
+            };
+
+            $scope.save = function () {
+                require('nw.gui').Window.get().emit('saveOptions', $scope.userConfig);
+                $scope.close();
+            };
+
+
         });
     </script>
 
@@ -95,9 +66,6 @@
                 <span class="label-desc label-block">Exclude files that contain following patterns</span>
                 <span class="muted label-block">Please enter comma separated list</span>
                 <input type="text" ng-model="userConfig.filterPatterns">
-            </label>
-            <label class="label-block">
-                <button class="prepros-button" ng-click="clearCache($event)">Clear Prepros Cache</button>
             </label>
         </div>
 
@@ -383,7 +351,7 @@
                     <span class="label-desc label-block">Path to custom ruby executable file</span>
                     <input type="text" ng-model="userConfig.customRuby.path">
                 </label>
-                <div ng-if="validRuby()">
+                <div ng-if="userConfig.customRuby.path">
                     <label>
                         <input type="checkbox" ng-model="userConfig.customRuby.legacyRuby">
                         <span class="label-desc">Legacy Ruby (&lt; v1.9.0)</span>
@@ -410,7 +378,8 @@
     </div>
 
     <!-- Done -->
-    <button ng-click="done()" class="prepros-button" style="margin: 10px; position: absolute; bottom: 10px; right: 10px;;">Done</button>
+    <button ng-click="save()" class="prepros-button" style="margin: 10px; position: absolute; bottom: 10px; right: 85px;;">Save Options</button>
+    <button ng-click="close()" class="prepros-button" style="margin: 10px; position: absolute; bottom: 10px; right: 10px;;">Cancel</button>
 
 </body>
 </html>
