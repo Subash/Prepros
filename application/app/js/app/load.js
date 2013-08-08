@@ -44,7 +44,8 @@ function bootstrapPrepros() {
         'importsVisitor',
         'storage',
         'utils',
-        'fileTypes'
+        'fileTypes',
+        'exceptionHandler'
     ];
 
     var fileTypes = [
