@@ -16,7 +16,8 @@ prepros.factory('less', function (config, utils) {
     var fs = require('fs-extra'),
         path = require('path'),
         _id = utils.id,
-        autoprefixer = require('autoprefixer');
+        autoprefixer = require('autoprefixer'),
+        cssmin = require('ycssmin').cssmin;
 
 
     var format = function (pid, fid, filePath, projectPath) {
@@ -113,6 +114,11 @@ prepros.factory('less', function (config, utils) {
                                         } else {
 
                                             css =  autoprefixer().compile(css);
+                                        }
+
+                                        if(file.config.compress) {
+
+                                            css = cssmin(css);
                                         }
 
                                     } catch (e) {

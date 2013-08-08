@@ -17,7 +17,8 @@ prepros.factory('sass', function (config, utils) {
         path = require('path'),
         cp = require('child_process'),
         _id = utils.id,
-        autoprefixer = require('autoprefixer');
+        autoprefixer = require('autoprefixer'),
+        cssmin = require('ycssmin').cssmin;
 
 
     var format = function (pid, fid, filePath, projectPath) {
@@ -184,6 +185,11 @@ prepros.factory('sass', function (config, utils) {
                     } else {
 
                         css =  autoprefixer().compile(css);
+                    }
+
+                    if(file.config.outputStyle === "compressed") {
+
+                        css = cssmin(css);
                     }
 
                     fs.outputFile(file.output, css);
