@@ -33,7 +33,8 @@
         "nib": "0.9.1",
         "stylus": "0.34.1",
         "uglify-js": "2.3.6",
-        "websocket": "1.0.8"
+        "websocket": "1.0.8",
+        "ycssmin": "1.0.1"
     },
 
     "ruby": {

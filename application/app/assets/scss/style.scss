@@ -36,3 +36,10 @@
   margin-left: 0;
   margin-bottom: 0;
 }
+
+#aboutModal {
+  .tab-content {
+    max-height: 250px;
+    overflow: auto;
+  }
+}
