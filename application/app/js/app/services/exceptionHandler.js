@@ -22,12 +22,14 @@ prepros.factory('$exceptionHandler',function(){
     process.on('uncaughtException', function(err) {
         var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
         require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
+        window.alert('An exception occurred.\nPlease contact developers.');
         console.error(err.stack);
     });
 
     return function(err){
         var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
         require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
+        window.alert('An exception occurred.\nPlease contact developers.');
         console.error(err.stack);
     };
 });
