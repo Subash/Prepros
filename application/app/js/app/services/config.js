@@ -94,7 +94,8 @@ prepros.factory('config', function () {
             compress: false,
             lineNumbers: false,
             strictMath: false,
-            strictUnits: false
+            strictUnits: false,
+            autoprefixer: false
         },
 
         //Default Sass options
@@ -105,7 +106,8 @@ prepros.factory('config', function () {
             debug: false,
             compass: false,
             fullCompass: false,
-            outputStyle: 'expanded' //compressed, nested, expanded, compact
+            outputStyle: 'expanded', //compressed, nested, expanded, compact
+            autoprefixer: false
         },
 
 
@@ -114,7 +116,8 @@ prepros.factory('config', function () {
             autoCompile: true,
             lineNumbers: false,
             nib: false,
-            compress: false
+            compress: false,
+            autoprefixer: false
         },
 
         //Default Markdown Options

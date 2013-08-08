@@ -15,7 +15,8 @@ prepros.factory('stylus', function (config, utils) {
 
     var fs = require('fs-extra'),
         path = require('path'),
-        _id = utils.id;
+        _id = utils.id,
+        autoprefixer = require('autoprefixer');
 
 
     var format = function (pid, fid, filePath, projectPath) {
@@ -99,6 +100,18 @@ prepros.factory('stylus', function (config, utils) {
                         errorCall(err.message);
 
                     } else {
+
+                        if(file.config.autoprefixer) {
+
+                            try {
+
+                                css =  autoprefixer.compile(css);
+
+                            } catch (e) {
+
+                                errorCall('Failed to compile file due to autoprefixer error '+ e.message);
+                            }
+                        }
 
                         fs.outputFile(file.output, css, function (err) {
 

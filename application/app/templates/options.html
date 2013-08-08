@@ -127,6 +127,10 @@
                 <span class="label-desc">Full Compass Support</span>
             </label>
             <label>
+                <input type="checkbox" ng-model="userConfig.sass.autoprefixer">
+                <span class="label-desc">Auto Prefix CSS</span>
+            </label>
+            <label>
                 <span class="label-desc label-block">Output Style</span>
                 <select ng-model="userConfig.sass.outputStyle">
                     <option value="compressed">Compressed</option>
@@ -161,6 +165,10 @@
                 <input type="checkbox" ng-model="userConfig.less.compress">
                 <span class="label-desc">Compress CSS</span>
             </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.less.autoprefixer">
+                <span class="label-desc">Auto Prefix CSS</span>
+            </label>
         </div>
 
         <div data-title="Stylus">
@@ -182,6 +190,10 @@
             <label>
                 <input type="checkbox" ng-model="userConfig.stylus.config.nib">
                 <span class="label-desc">Use Nib</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.stylus.autoprefixer">
+                <span class="label-desc">Auto Prefix CSS</span>
             </label>
         </div>
 

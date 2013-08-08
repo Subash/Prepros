@@ -16,7 +16,8 @@ prepros.factory('sass', function (config, utils) {
     var fs = require('fs-extra'),
         path = require('path'),
         cp = require('child_process'),
-        _id = utils.id;
+        _id = utils.id,
+        autoprefixer = require('autoprefixer');
 
 
     var format = function (pid, fid, filePath, projectPath) {
@@ -165,6 +166,22 @@ prepros.factory('sass', function (config, utils) {
 
         //Success if there is no error
         rubyProcess.on('exit', function () {
+
+            if(file.config.autoprefixer) {
+
+                try {
+
+                    var prefixed =  autoprefixer.compile(fs.readFileSync(file.output).toString());
+                    fs.outputFile(file.output, prefixed);
+
+                } catch (e) {
+
+                    errorCall('Failed to compile file due to autoprefixer error '+ e.message);
+                    compileErr = true;
+                }
+            }
+
+
 
             if (!compileErr) {
 
