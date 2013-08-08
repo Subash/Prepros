@@ -42,6 +42,9 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                 f.projectPath = prj.path;
             }
 
+            //Less, Sass, Stylus compilers require autoprefixer options from project options
+            f.config.autoprefixerBrowsers = prj.config.autoprefixerBrowsers;
+
             f.input = $filter('fullPath')(file.input, { basePath: prj.path});
 
             //Interpolate path to replace css/js dirs

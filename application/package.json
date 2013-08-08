@@ -21,6 +21,7 @@
     "releaseDate": "July 30, 2013",
 
     "dependencies": {
+        "autoprefixer": "0.7.20130808",
         "coffee-script": "1.6.3",
         "express": "3.3.4",
         "fs-extra": "0.6.3",

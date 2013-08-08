@@ -105,7 +105,18 @@ prepros.factory('stylus', function (config, utils) {
 
                             try {
 
-                                css =  autoprefixer.compile(css);
+                                if(file.config.autoprefixerBrowsers) {
+
+                                    var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                        return i.trim();
+                                    });
+
+                                    css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                                } else {
+
+                                    css =  autoprefixer().compile(css);
+                                }
 
                             } catch (e) {
 

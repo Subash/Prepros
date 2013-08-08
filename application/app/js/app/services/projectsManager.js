@@ -60,7 +60,8 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                         cssPath: config.getUserOptions().cssPath,
                         jsPath: config.getUserOptions().jsPath,
                         htmlPath: config.getUserOptions().htmlPath,
-                        jsMinPath: config.getUserOptions().jsMinPath
+                        jsMinPath: config.getUserOptions().jsMinPath,
+                        autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers
                     }
                 };
 

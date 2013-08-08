@@ -171,8 +171,22 @@ prepros.factory('sass', function (config, utils) {
 
                 try {
 
-                    var prefixed =  autoprefixer.compile(fs.readFileSync(file.output).toString());
-                    fs.outputFile(file.output, prefixed);
+                    var css = fs.readFileSync(file.output).toString();
+
+                    if(file.config.autoprefixerBrowsers) {
+
+                        var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
+                            return i.trim();
+                        });
+
+                        css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                    } else {
+
+                        css =  autoprefixer().compile(css);
+                    }
+
+                    fs.outputFile(file.output, css);
 
                 } catch (e) {
 
