@@ -37,6 +37,10 @@
         "ycssmin": "1.0.1"
     },
 
+    "scripts": {
+        "install" : "patch node_modules/less/lib/less/parser.js < less.patch"
+    },
+
     "ruby": {
 
         "path": "ruby_exec/bin/ruby",
