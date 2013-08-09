@@ -174,7 +174,7 @@ prepros.factory('sass', function (config, utils) {
 
         rubyProcess.stdout.on('data', function (data) {
 
-            if(data.toString().indexOf('Error') >= 0) {
+            if(data.toString().toLowerCase().indexOf('error') >= 0) {
 
                 compileErr = true;
 
