@@ -95,10 +95,8 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--debug-info');
             }
 
-            if(process.platform !== 'win32') {
-                //No Colours for certain Shells
-                args.push('--no-color');
-            }
+            //Debug info
+            args.push('--boring');
 
         } else {
 
@@ -147,11 +145,6 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--line-numbers');
             }
 
-            if(process.platform !== 'win32') {
-                //No Colours for certain Shells
-                args.push('--no-color');
-            }
-
             //Make output dir if it doesn't exist
             fs.mkdirsSync(path.dirname(file.output));
 
@@ -169,9 +162,13 @@ prepros.factory('sass', function (config, utils) {
         //If there is a compilation error
         rubyProcess.stderr.on('data', function (data) {
 
-            compileErr = true;
+            //Dirty workaround to check if the message is real error or not
+            if(data.toString().length > 20) {
 
-            errorCall(data.toString());
+                compileErr = true;
+
+                errorCall(data.toString());
+            }
 
         });
 
