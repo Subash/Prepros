@@ -95,6 +95,9 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--debug-info');
             }
 
+            //No Colours for certain Shells
+            args.push('--no-color');
+
         } else {
 
             args = config.ruby.getGem('sass');
@@ -141,6 +144,9 @@ prepros.factory('sass', function (config, utils) {
             if (file.config.lineNumbers) {
                 args.push('--line-numbers');
             }
+
+            //No Colours for certain Shells
+            args.push('--no-color');
 
             //Make output dir if it doesn't exist
             fs.mkdirsSync(path.dirname(file.output));
