@@ -95,8 +95,10 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--debug-info');
             }
 
-            //No Colours for certain Shells
-            args.push('--no-color');
+            if(process.platform !== 'win32') {
+                //No Colours for certain Shells
+                args.push('--no-color');
+            }
 
         } else {
 
@@ -145,8 +147,10 @@ prepros.factory('sass', function (config, utils) {
                 args.push('--line-numbers');
             }
 
-            //No Colours for certain Shells
-            args.push('--no-color');
+            if(process.platform !== 'win32') {
+                //No Colours for certain Shells
+                args.push('--no-color');
+            }
 
             //Make output dir if it doesn't exist
             fs.mkdirsSync(path.dirname(file.output));
@@ -171,45 +175,53 @@ prepros.factory('sass', function (config, utils) {
 
         });
 
+        rubyProcess.stdout.on('data', function (data) {
+
+            if(data.toString().indexOf('Error') >= 0) {
+
+                compileErr = true;
+
+                errorCall(data.toString());
+            }
+        });
+
         //Success if there is no error
         rubyProcess.on('exit', function () {
 
-            if(file.config.autoprefixer) {
-
-                try {
-
-                    var css = fs.readFileSync(file.output).toString();
-
-                    if(file.config.autoprefixerBrowsers) {
-
-                        var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                            return i.trim();
-                        });
-
-                        css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
-
-                    } else {
-
-                        css =  autoprefixer().compile(css);
-                    }
-
-                    if(file.config.outputStyle === "compressed") {
-
-                        css = cssmin(css);
-                    }
-
-                    fs.outputFile(file.output, css);
-
-                } catch (e) {
-
-                    errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                    compileErr = true;
-                }
-            }
-
-
-
             if (!compileErr) {
+
+                if(file.config.autoprefixer && fs.existsSync(file.output)) {
+
+                    try {
+
+                        var css = fs.readFileSync(file.output).toString();
+
+                        if(file.config.autoprefixerBrowsers) {
+
+                            var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                return i.trim();
+                            });
+
+                            css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                        } else {
+
+                            css =  autoprefixer().compile(css);
+                        }
+
+                        if(file.config.outputStyle === "compressed") {
+
+                            css = cssmin(css);
+                        }
+
+                        fs.outputFile(file.output, css);
+
+                    } catch (e) {
+
+                        errorCall('Failed to compile file due to autoprefixer error '+ e.message);
+                        compileErr = true;
+                    }
+                }
 
                 successCall(file.input);
 

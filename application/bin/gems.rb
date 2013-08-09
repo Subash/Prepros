@@ -2,7 +2,9 @@ if ARGV.first != "custom"
 	ENV["GEM_PATH"] = ENV["GEM_HOME"] = ARGV.first
 end
 
-Encoding.default_external = 'UTF-8'
+if (defined?(Encoding))
+	Encoding.default_external = 'UTF-8'
+end
 
 ARGV.shift
 

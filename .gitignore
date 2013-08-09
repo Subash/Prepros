@@ -3,20 +3,14 @@
 application/node_modules/*
 !application/node_modules/.gitkeep
 
-application/bourbon/bourbon/*
-!application/bourbon/bourbon/.gitkeep
+application/gems/gems/*
+!application/gems/gems/.gitkeep
 
-application/bourbon/neat/*
-!application/bourbon/neat/.gitkeep
+application/gems/specifications/*
+!application/gems/specifications/.gitkeep
 
-application/ruby_gems/gems/*
-!application/ruby_gems/gems/.gitkeep
-
-application/ruby_gems/specifications/*
-!application/ruby_gems/specifications/.gitkeep
-
-application/ruby_exec/*
-!application/ruby_exec/.gitkeep
+application/ruby/*
+!application/ruby/.gitkeep
 
 .idea
 ffmpegsumo.dll
