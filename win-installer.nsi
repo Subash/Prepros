@@ -49,10 +49,9 @@ Section "MainSection" SEC01
   SetOverwrite on
   File /r "app"
   File /r "bin"
-  File /r "bourbon"
+  File /r "gems"
   File /r "node_modules"
-  File /r "ruby_exec"
-  File /r "ruby_gems"
+  File /r "ruby"
   
   File "ffmpegsumo.dll"
   File "icudt.dll"
