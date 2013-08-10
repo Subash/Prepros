@@ -34,7 +34,7 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
         process.nextTick(function() {
             _.each($scope.projects, function(project) {
 
-                fs.exists(project.path + path.sep + 'Prepros.json', function (exists) {
+                fs.exists(project.path + path.sep + 'prepros.json', function (exists) {
 
                     if(exists) {
                         projectsManager.createProjectConfigFile(project);

@@ -36,9 +36,9 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             var project = {};
 
-            if(fs.existsSync(folder + path.sep + 'Prepros.json')) {
+            if(fs.existsSync(folder + path.sep + 'prepros.json')) {
 
-                project = JSON.parse(fs.readFileSync(folder + path.sep + 'Prepros.json'));
+                project = JSON.parse(fs.readFileSync(folder + path.sep + 'prepros.json'));
 
                 project.path = folder;
 
@@ -469,7 +469,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     //Function to create Project Config File
     function createProjectConfigFile(project) {
         try {
-            fs.outputFile(project.path + path.sep + 'Prepros.json', angular.toJson(_.omit(project, 'path'), true));
+            fs.outputFile(project.path + path.sep + 'prepros.json', angular.toJson(_.omit(project, 'path'), true));
         } catch(e) {
             //Do nothing
         }
