@@ -53,6 +53,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     imports: [],
                     config: {
                         liveRefresh: true,
+                        liveRefreshDelay: config.getUserOptions().liveRefreshDelay,
                         serverUrl: project_id,
                         filterPatterns: '',
                         useCustomServer: false,

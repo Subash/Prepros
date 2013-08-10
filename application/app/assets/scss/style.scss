@@ -28,16 +28,16 @@
 }
 
 .modal.project-options.fade.in {
-  width: auto;
-  margin-left: -210px;
+  width: 435px;
+  margin-left: -224px;
 }
 
 .project-options .js-options label {
-  margin-left: 0;
+  margin-left: 4px;
   margin-bottom: 0;
 }
 
-#aboutModal {
+.modal {
   .tab-content {
     max-height: 250px;
     overflow: auto;

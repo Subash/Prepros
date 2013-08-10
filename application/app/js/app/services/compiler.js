@@ -65,8 +65,10 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
                     });
 
-                    if (projectsManager.getProjectById(f.pid).config.liveRefresh) {
-                        liveServer.refresh(f.output);
+                    var pj = projectsManager.getProjectById(f.pid);
+
+                    if (pj.config.liveRefresh) {
+                        liveServer.refresh(f.output, pj.config.liveRefreshDelay);
                     }
 
 

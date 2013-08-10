@@ -21,15 +21,20 @@
                     <span class="label-desc">Live Refresh</span>
                 </label>
 
-                <label>
-                    <input type="checkbox" ng-model="selectedProject.config.useCustomServer" class="span5">
-                    <span class="label-desc">Use Custom server</span>
-                </label>
+                <section ng-if="selectedProject.config.liveRefresh">
 
-                <label ng-show="selectedProject.config.useCustomServer">
-                    <span class="label-desc label-block">Server URL</span>
-                    <input type="text" ng-model="selectedProject.config.customServerUrl" class="span5">
-                </label>
+                    <label>
+                        <input type="checkbox" ng-model="selectedProject.config.useCustomServer" class="span5">
+                        <span class="label-desc">Use Custom server</span>
+                    </label>
+
+                    <label ng-if="selectedProject.config.useCustomServer">
+                        <span class="label-desc label-block">Server URL</span>
+                        <input type="text" ng-model="selectedProject.config.customServerUrl" class="span5">
+                    </label>
+
+                </section>
+
             </div>
 
             <div data-title="Output Folders">
@@ -64,6 +69,10 @@
                     <span class="label-desc label-block">Autoprefixer Browsers</span>
                     <span class="muted label-block">Please enter comma separated list</span>
                     <input type="text" ng-model="selectedProject.config.autoprefixerBrowsers" class="span5" placeholder="Default Browsers">
+                </label>
+                <label>
+                    <span class="label-desc label-block">Live Refresh Delay in milliseconds</span>
+                    <input type="text" ng-model="selectedProject.config.liveRefreshDelay" class="span5" placeholder="A value is required">
                 </label>
             </div>
         </div>

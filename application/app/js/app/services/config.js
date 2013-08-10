@@ -81,6 +81,7 @@ prepros.factory('config', function () {
         enableErrorNotifications: true,
         filterPatterns: 'node_modules', //Filter node modules folder by default
         autoprefixerBrowsers: '',
+        liveRefreshDelay: 0,
         customRuby: {
             use: false,
             path: '',

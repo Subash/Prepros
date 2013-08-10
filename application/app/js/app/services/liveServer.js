@@ -195,7 +195,7 @@ prepros.factory('liveServer', function (config) {
 
     });
 
-    function refresh(file) {
+    function refresh(file, delay) {
 
         var data = JSON.stringify([
             'refresh', {
@@ -205,7 +205,18 @@ prepros.factory('liveServer', function (config) {
             }
         ]);
 
-        refreshServer.broadcast(data);
+        if(parseInt(delay, 10)) {
+
+            setTimeout(function() {
+
+                refreshServer.broadcast(data);
+
+            }, parseInt(delay, 10));
+
+        } else {
+
+            refreshServer.broadcast(data);
+        }
     }
 
     //Return
