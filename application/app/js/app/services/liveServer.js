@@ -96,7 +96,7 @@ prepros.factory('liveServer', function (config) {
                     'a.src="http://" + window.location.host + "/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=25690"})();' +
                     '</script>';
 
-                res.push(body.replace(/<\/body>/, function (w) {
+                res.push(body.replace(/<\/body>/i, function (w) {
                     return snippet + w;
                 }));
             }
