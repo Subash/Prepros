@@ -9,13 +9,15 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer) {
 
     "use strict";
 
     var fs = require("fs"),
-        watchingFiles = [],
-        watchingImports = [];
+        chokidar = require('chokidar'),
+        path = require('path');
+
+        var watchedProjects = [];
 
     //Function to start watching file
     function startWatching(projects) {
@@ -23,9 +25,19 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         var files = [];
         var imports = [];
 
+        var newProjects = [];
+
         _.each(projects, function(project){
             files = _.union(files, project.files);
             imports = _.union(imports, project.imports);
+            newProjects.push(project.id);
+        });
+
+        _.each(watchedProjects, function(project) {
+            if(!_.contains(newProjects, project.pid)) {
+                project.watcher.close();
+                watchedProjects = _.reject(watchedProjects, function(pr){ return pr.pid === project.pid; });
+            }
         });
 
         var _files = [];
@@ -46,68 +58,62 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
             _imports.push(fullImp);
         });
 
-        _.each(watchingFiles, function (file) {
+        _.each(projects, function(project) {
 
-            if (!_.contains(_files, file)) {
+            if(!_.contains(_.pluck(watchedProjects, 'pid'), project.id)) {
 
-                fs.unwatchFile(file.split('|')[0]);
-                watchingFiles = _.without(watchingFiles, file);
-            }
-        });
-
-        _.each(watchingImports, function (imp) {
-
-            if (!_.contains(_imports, imp)) {
-
-                fs.unwatchFile(imp.split('|')[0]);
-                watchingImports = _.without(watchingImports, imp);
-            }
-        });
-
-        var filesToWatch = _.difference(_files, watchingFiles);
-        var importsToWatch = _.difference(_imports, watchingImports);
-
-        //Watch files
-        _.each(filesToWatch, function (file) {
-
-            var fileData = file.split('|');
-
-            fs.watchFile(fileData[0], { persistent: true, interval: 200}, function(){
-
-                var f = projectsManager.getFileById(fileData[1], fileData[2]);
-
-                if (f.config.autoCompile) {
-
-                    //Compile File
-                    compiler.compile(f.pid, f.id);
-                }
-            });
-
-            watchingFiles.push(file);
-        });
-
-        //Watch imports
-        _.each(importsToWatch, function (imp) {
-
-            var fileData = imp.split('|');
-
-            fs.watchFile(fileData[0], { persistent: true, interval: 200}, function(){
-
-                var im = projectsManager.getImportById(fileData[1], fileData[2]);
-
-                _.each(im.parents, function (parentId) {
-
-                    var parentFile = projectsManager.getFileById(im.pid, parentId);
-
-                    if (parentFile.config.autoCompile) {
-
-                        compiler.compile(im.pid, parentId);
-                    }
+                var watcher = chokidar.watch(project.path, {
+                    ignored: /^\./, ignorePermissionErrors: true,
+                    usePolling : !config.getUserOptions().experimentalFileWatcher
                 });
-            });
 
-            //Push to watching list so it can be closed later
-            watchingImports.push(imp);
+                watcher.on('change', function(fpath) {
+
+                    if (project.config.liveRefresh) {
+                        liveServer.refresh(fpath, project.config.liveRefreshDelay);
+                    }
+
+                    _.each(_files, function(file) {
+
+                        var sf = file.split('|');
+
+                        if(path.relative(sf[0], fpath)=== "") {
+
+                            var f = projectsManager.getFileById(sf[1], sf[2]);
+
+                            if (f.config.autoCompile) {
+
+                                //Compile File
+                                compiler.compile(f.pid, f.id);
+                            }
+
+                        }
+                    });
+
+                    _.each(_imports, function(file) {
+
+                        var sf = file.split('|');
+
+                        if(path.relative(sf[0], fpath)=== "") {
+
+                            var im = projectsManager.getImportById(sf[1], sf[2]);
+
+                            _.each(im.parents, function (parentId) {
+
+                                var parentFile = projectsManager.getFileById(im.pid, parentId);
+
+                                if (parentFile.config.autoCompile) {
+
+                                    compiler.compile(im.pid, parentId);
+                                }
+                            });
+
+                        }
+                    });
+                });
+
+                watchedProjects.push({pid: project.id, watcher : watcher});
+            }
         });
     }
 

@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros, $, angular, _*/
 
-prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer) {
+prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer, config) {
 
     "use strict";
 
@@ -64,13 +64,6 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                         notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
 
                     });
-
-                    var pj = projectsManager.getProjectById(f.pid);
-
-                    if (pj.config.liveRefresh) {
-                        liveServer.refresh(f.output, pj.config.liveRefreshDelay);
-                    }
-
 
                 }, function (data) {
 
