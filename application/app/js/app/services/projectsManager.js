@@ -266,6 +266,11 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         importedFile.parents = _.without(importedFile.parents, fid);
 
+        //Remove import if parent list is empty
+        if(_.isEmpty(importedFile.parents)) {
+            removeImport(pid, impid);
+        }
+
         _broadCast();
     }
 
@@ -295,7 +300,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         }
 
         //Remove any file that is in files list and is imported by this file
-        removeFile(impid);
+        removeFile(pid, impid);
 
     }
 
@@ -421,7 +426,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                     if (!_.contains(file.imports, path.join(folder, imp.path))) {
 
-                        removeImportParent(imp.id, file_id);
+                        removeImportParent(imp.pid, imp.id, file_id);
                     }
                 });
             });
