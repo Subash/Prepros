@@ -33,11 +33,26 @@
 }
 
 .project-options .js-options label {
-  margin-left: 4px;
+  margin-left: 0;
   margin-bottom: 0;
 }
 
+.project-options .js-options label:last-child {
+  margin-left: 20px;
+}
+
+#config-jsmin-folder {
+  margin-left: 12px;
+}
+
 .modal {
+  .tab-content {
+    max-height: 280px;
+    overflow: auto;
+  }
+}
+
+#aboutModal {
   .tab-content {
     max-height: 250px;
     overflow: auto;
