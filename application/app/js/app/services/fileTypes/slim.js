@@ -32,7 +32,7 @@ prepros.factory('slim', function (config, utils) {
 
             var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
-            if(utils.isFileInsideFolder(projectPath, output)) {
+            if(utils.isFileInsideFolder(projectPath, customOutput)) {
                 output = customOutput;
             }
 
