@@ -1,0 +1,150 @@
+{
+  "id": "9c1fc471",
+  "name": "Prepros",
+  "files": [
+    {
+      "id": "7e70da7e",
+      "pid": "9c1fc471",
+      "name": "style.scss",
+      "input": "scss\\style.scss",
+      "output": "{{cssPath}}\\style.css",
+      "config": {
+        "autoCompile": true,
+        "lineNumbers": false,
+        "unixNewlines": false,
+        "debug": false,
+        "compass": false,
+        "fullCompass": false,
+        "outputStyle": "compressed",
+        "autoprefixer": false
+      },
+      "type": "Scss"
+    }
+  ],
+  "imports": [
+    {
+      "id": "a5d7703b",
+      "pid": "9c1fc471",
+      "path": "scss\\_third-party.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "646cfd6e",
+      "pid": "9c1fc471",
+      "path": "scss\\_custom-scrollbars.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "e8485c04",
+      "pid": "9c1fc471",
+      "path": "scss\\_base.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "4a9f40b8",
+      "pid": "9c1fc471",
+      "path": "scss\\_bs-custom.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "af96af62",
+      "pid": "9c1fc471",
+      "path": "scss\\_sidebar.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "bdc1538e",
+      "pid": "9c1fc471",
+      "path": "scss\\_titlebar.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "0ea04351",
+      "pid": "9c1fc471",
+      "path": "scss\\_content.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "707927a1",
+      "pid": "9c1fc471",
+      "path": "scss\\_notifications.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "a842c82c",
+      "pid": "9c1fc471",
+      "path": "scss\\_files.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "84aafd8f",
+      "pid": "9c1fc471",
+      "path": "scss\\_loading.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "c736a581",
+      "pid": "9c1fc471",
+      "path": "scss\\_log.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "e00bf18f",
+      "pid": "9c1fc471",
+      "path": "scss\\_multi-device.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "492d613a",
+      "pid": "9c1fc471",
+      "path": "scss\\_optim-image.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    },
+    {
+      "id": "6354f8dd",
+      "pid": "9c1fc471",
+      "path": "scss\\_options-window.scss",
+      "parents": [
+        "7e70da7e"
+      ]
+    }
+  ],
+  "config": {
+    "liveRefresh": true,
+    "liveRefreshDelay": 0,
+    "filterPatterns": "",
+    "useCustomServer": false,
+    "customServerUrl": "",
+    "cssPath": "css",
+    "jsPath": "js",
+    "htmlPath": "html",
+    "jsMinPath": "min",
+    "autoprefixerBrowsers": ""
+  }
+}
