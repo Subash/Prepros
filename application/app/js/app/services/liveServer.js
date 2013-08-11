@@ -17,52 +17,61 @@ prepros.factory('liveServer', function (config) {
         app = express(),
         WebSocketServer = require('websocket').server,
         urls = [],
-        serverProjects = [];
+        portfinder = require('portfinder'),
+        url = require('url');
+
+    var MAIN_SERVER_PORT = 5656;
+    var LIVERELOAD_SERVER_PORT = 25690;
+
+    var projectsBeingServed = {};
 
     //Start listening
-    var httpServer = app.listen(5656);
-
+    var httpServer = app.listen(MAIN_SERVER_PORT);
     httpServer.on('error', function (err) {
-        window.alert('Unable to start internal server, Please close the app that is using port 5656. error: ' + err.message);
+        window.alert('Unable to start internal server, Please close the app that is using port ' + MAIN_SERVER_PORT + '. error: ' + err.message);
         require('nw.gui').App.quit();
     });
 
     //Start websocket server for automatic browser refresh
     var wsServer = new WebSocketServer({
-
         httpServer: httpServer,
-
         autoAcceptConnections: false
-
     });
 
     //Send the list of urls to refresh to extension on connect
     wsServer.on('request', function (request) {
-
         request.accept('', request.origin);
-
         wsServer.broadcast(angular.toJson({urls: urls}));
+    });
 
+    //Live refresh server
+    var lServer = app.listen(LIVERELOAD_SERVER_PORT);
+    lServer.on('error', function (err) {
+        window.alert('Unable to start live refresh server, Please close the app that is using port ' + LIVERELOAD_SERVER_PORT + '. error: ' + err.message);
+        require('nw.gui').App.quit();
+    });
+
+    //Serve livereload.js from /lr/ path which points to vendor dir
+    app.use('/lr/', express.static(config.basePath + '/js/vendor/'));
+    app.use('/lr/', express.directory(config.basePath + '/js/vendor/'));
+
+    var refreshServer = new WebSocketServer({
+        httpServer: lServer,
+        autoAcceptConnections: false
+    });
+
+    refreshServer.on('request', function (request) {
+        request.accept('', request.origin);
+        refreshServer.broadcast(("!!ver:1.6"));
     });
 
     //Generates live preview url
     function getLiveUrl(project) {
-
-        if (project.config.useCustomServer) {
-
-            var url = require('url');
-            var parsed = url.parse(project.config.customServerUrl);
-            return parsed.protocol + '//' + parsed.host;
-
-        } else {
-
-            return 'http://localhost:5656/' + project.config.serverUrl + '/';
-        }
+        var port = projectsBeingServed[project.id].port;
+        return 'http://localhost:' + port;
     }
 
-
-    //Live reload middleware inspired by https://github.com/intesso/connect-livereload
-    app.use(function (req, res, next) {
+    var liveReloadMiddleWare = function (req, res, next) {
 
         var writeHead = res.writeHead;
         var write = res.write;
@@ -93,7 +102,7 @@ prepros.factory('liveServer', function (config) {
 
                 var snippet = '<script>' +
                     '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
-                    'a.src="http://" + window.location.host + "/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=25690"})();' +
+                    'a.src="http://" + window.location.hostname + ": ' + MAIN_SERVER_PORT + '/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=' + LIVERELOAD_SERVER_PORT + '"})();' +
                     '</script>';
 
                 res.push(body.replace(/<\/body>/i, function (w) {
@@ -121,54 +130,38 @@ prepros.factory('liveServer', function (config) {
         };
 
         next();
-    });
+    };
 
     //function to add project to server
     function startServing(projects) {
 
         urls = [];
-        serverProjects = [];
 
         _.each(projects, function (project) {
 
-            var projectUrl = '/' + project.config.serverUrl + '/';
+            if(_.isEmpty(projectsBeingServed[project.id])) {
+                portfinder.getPort(function (err, port) {
 
-            app.use(projectUrl, express.static(project.path));
-
-            app.use(projectUrl, express.directory(project.path, {icons: true}));
-
-            if (!project.config.useCustomServer) {
-
-                serverProjects.push({ name: project.name, url: projectUrl});
+                    var app = express();
+                    var server = app.listen(port);
+                    projectsBeingServed[project.id] = { name: project.name, port: port, app: app, server: server};
+                    projectsBeingServed[project.id].url = getLiveUrl(project);
+                    app.use(liveReloadMiddleWare);
+                    app.use('/', express.static(project.path));
+                    app.use('/', express.directory(project.path, {icons: true}));
+                });
             }
 
-            if (project.config.useCustomServer) {
-
-                urls.push(getLiveUrl(project));
+            if(project.config.useCustomServer) {
+                var parsed = url.parse(project.config.customServerUrl);
+                urls.push(parsed.protocol + '//' + parsed.host);
             }
+
         });
 
         //Send data to browser extensions
         wsServer.broadcast(angular.toJson({urls: urls}));
-
     }
-
-    //Live refresh server on port 25690
-    var lServer = app.listen(25690);
-
-    lServer.on('error', function (err) {
-        window.alert('Unable to start live refresh server, Please close the app that is using port 25690. error: ' + err.message);
-        require('nw.gui').App.quit();
-    });
-
-    var refreshServer = new WebSocketServer({
-
-        //Live reload connection port
-        httpServer: lServer,
-
-        autoAcceptConnections: false
-
-    });
 
     //Index page for projects
     app.set('views', config.basePath + '/templates/live-server');
@@ -178,20 +171,8 @@ prepros.factory('liveServer', function (config) {
     app.get('/', function (req, res) {
 
         res.render('index', {
-            projects: serverProjects
+            projects: projectsBeingServed
         });
-
-    });
-
-    //Serve livereload.js from /lr/ path which points to vendor dir
-    app.use('/lr/', express.static(config.basePath + '/js/vendor/'));
-    app.use('/lr/', express.directory(config.basePath + '/js/vendor/'));
-
-    refreshServer.on('request', function (request) {
-
-        request.accept('', request.origin);
-
-        refreshServer.broadcast(("!!ver:1.6"));
 
     });
 

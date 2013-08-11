@@ -62,7 +62,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                     config: {
                         liveRefresh: true,
                         liveRefreshDelay: config.getUserOptions().liveRefreshDelay,
-                        serverUrl: project_id,
                         filterPatterns: '',
                         useCustomServer: false,
                         customServerUrl: '',
@@ -73,34 +72,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
                         autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers
                     }
                 };
-
-                var serverUrl = project.name.replace(/\s/gi, '-').replace(/[^a-zA-Z0-9\-_]/g, '');
-
-                var urlNotUsed = function(url) {
-
-                    return _.isEmpty(_.find(projects, function(p){ return p.config.serverUrl === url; }));
-                };
-
-                if(serverUrl !== '') {
-
-                    if (urlNotUsed(serverUrl)) {
-
-                        project.config.serverUrl = serverUrl;
-
-                    } else {
-
-                        for (var i=1; i<6; i++) {
-
-                            var newUrl = serverUrl + '-' + i;
-
-                            if(urlNotUsed(newUrl)) {
-                                project.config.serverUrl = newUrl;
-                                break;
-                            }
-                        }
-                    }
-                }
-
             }
 
             //Push project to projects list
