@@ -64,21 +64,19 @@
             </label>
             <label>
                 <span class="label-desc label-block">HTML File Extension</span>
-                <input type="text" ng-model="userConfig.htmlExtension">
+                <input type="text" class="span4" ng-model="userConfig.htmlExtension">
             </label>
             <label>
-                <span class="label-desc label-block">Exclude files that contain following patterns</span>
-                <span class="muted label-block">Please enter comma separated list</span>
-                <input type="text" ng-model="userConfig.filterPatterns">
+                <span class="label-desc label-block">File and folder filters ( Separate with comma )</span>
+                <input type="text" class="span4" ng-model="userConfig.filterPatterns">
             </label>
             <label>
-                <span class="label-desc label-block">Autoprefixer Browsers</span>
-                <span class="muted label-block">Please enter comma separated list.</span>
-                <input type="text" ng-model="userConfig.autoprefixerBrowsers" placeholder="Default Browsers">
+                <span class="label-desc label-block">Autoprefixer Browsers  ( Separate with comma )</span>
+                <input type="text" class="span4" ng-model="userConfig.autoprefixerBrowsers" placeholder="Default Browsers">
             </label>
             <label>
                 <span class="label-desc label-block">Live Refresh Delay in milliseconds</span>
-                <input type="text" ng-model="userConfig.liveRefreshDelay" placeholder="A value is required">
+                <input type="text" class="span4" ng-model="userConfig.liveRefreshDelay" placeholder="A value is required">
             </label>
         </div>
 
@@ -88,19 +86,19 @@
 
             <label>
                 <span class="label-desc label-block">CSS Folder</span>
-                <input type="text" ng-model="userConfig.cssPath">
+                <input type="text" class="span4" ng-model="userConfig.cssPath">
             </label>
             <label>
                 <span class="label-desc label-block">JavaScripts Folder</span>
-                <input type="text" ng-model="userConfig.jsPath">
+                <input type="text" class="span4" ng-model="userConfig.jsPath">
             </label>
             <label>
                 <span class="label-desc label-block">Minified Javascripts Folder</span>
-                <input type="text" ng-model="userConfig.jsMinPath">
+                <input type="text" class="span4" ng-model="userConfig.jsMinPath">
             </label>
             <label>
                 <span class="label-desc label-block">Html Folder</span>
-                <input type="text" ng-model="userConfig.htmlPath">
+                <input type="text" class="span4" ng-model="userConfig.htmlPath">
             </label>
 
         </div>
@@ -375,7 +373,7 @@
                 <label>
                     <span class="label-desc label-block">Path to custom ruby executable file</span>
                     <span class="muted label-block">You can enter <code>ruby</code> if it's installed on your path.</span>
-                    <input type="text" ng-model="userConfig.customRuby.path">
+                    <input type="text" class="span4" ng-model="userConfig.customRuby.path">
                 </label>
                 <div ng-if="userConfig.customRuby.path">
                     <label>
