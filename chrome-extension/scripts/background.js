@@ -87,7 +87,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
             if (tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
 
-                var snippet = ' (function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/getlivesnippet?pid=' + livePids[parsedUrl] + '";})();'
+                var snippet = ' (function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/prepros.js?pid=' + livePids[parsedUrl] + '";})();'
 
                 chrome.tabs.executeScript(tab.id, {code: snippet});
             }
