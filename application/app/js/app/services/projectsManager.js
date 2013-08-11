@@ -36,9 +36,17 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
             var project = {};
 
+            //Try to read prepros.json file
             if(fs.existsSync(folder + path.sep + 'prepros.json')) {
 
-                project = JSON.parse(fs.readFileSync(folder + path.sep + 'prepros.json'));
+                try {
+
+                    project = JSON.parse(fs.readFileSync(folder + path.sep + 'prepros.json'));
+
+                } catch(e) {}
+            }
+
+            if(project.id) {
 
                 project.path = folder;
 
