@@ -70,7 +70,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                 watcher.on('change', function(fpath) {
 
                     if (project.config.liveRefresh) {
-                        liveServer.refresh(fpath, project.config.liveRefreshDelay);
+                        liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                     }
 
                     _.each(_files, function(file) {

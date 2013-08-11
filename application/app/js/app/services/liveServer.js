@@ -14,6 +14,7 @@ prepros.factory('liveServer', function (config) {
     'use strict';
 
     var express = require('express'),
+        fs = require('fs'),
         app = express(),
         WebSocketServer = require('websocket').server,
         urls = [],
@@ -21,7 +22,6 @@ prepros.factory('liveServer', function (config) {
         url = require('url');
 
     var MAIN_SERVER_PORT = 5656;
-    var LIVERELOAD_SERVER_PORT = 25690;
 
     var projectsBeingServed = {};
 
@@ -44,25 +44,25 @@ prepros.factory('liveServer', function (config) {
         wsServer.broadcast(angular.toJson({urls: urls}));
     });
 
-    //Live refresh server
-    var lServer = app.listen(LIVERELOAD_SERVER_PORT);
-    lServer.on('error', function (err) {
-        window.alert('Unable to start live refresh server, Please close the app that is using port ' + LIVERELOAD_SERVER_PORT + '. error: ' + err.message);
-        require('nw.gui').App.quit();
-    });
-
     //Serve livereload.js from /lr/ path which points to vendor dir
-    app.use('/lr/', express.static(config.basePath + '/js/vendor/'));
-    app.use('/lr/', express.directory(config.basePath + '/js/vendor/'));
+    app.use('/livereload.js', function(req, res, next) {
 
-    var refreshServer = new WebSocketServer({
-        httpServer: lServer,
-        autoAcceptConnections: false
+        fs.readFile(config.basePath + '/js/vendor/livereload.js', function(err, data) {
+            res.setHeader('Content-Type', 'text/javascript');
+            res.send(data.toString());
+        });
     });
 
-    refreshServer.on('request', function (request) {
-        request.accept('', request.origin);
-        refreshServer.broadcast(("!!ver:1.6"));
+    app.use('/getlivesnippet', function(req, res, next) {
+
+        if('pid' in req.query) {
+
+            if(req.query.pid in projectsBeingServed) {
+                res.setHeader('Content-Type', 'text/javascript');
+                var snippet = '(function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '";})()';
+                res.send(snippet);
+            }
+        }
     });
 
     //Generates live preview url
@@ -101,15 +101,18 @@ prepros.factory('liveServer', function (config) {
                 var body = string instanceof Buffer ? string.toString(encoding) : string;
 
                 var snippet = '<script>' +
-                    '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
-                    'a.src="http://" + window.location.hostname + ":' + MAIN_SERVER_PORT + '/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=' + LIVERELOAD_SERVER_PORT + '"})();' +
+                    '(function(){var script = document.createElement("script");document.querySelector("body").appendChild(script);' +
+                    'script.src="http://" + window.location.hostname + ":' + MAIN_SERVER_PORT + '/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port })();' +
                     '</script>';
 
-                res.push(body.replace(/<\/body>/i, function (w) {
-                    return snippet + w;
-                }));
-            }
+                if(/<\/body>/i.test(body)) {
+                    body =  body.replace(/<\/body>/i, snippet);
+                } else {
+                    body = body + snippet;
+                }
 
+                res.push(body);
+            }
             return true;
         };
 
@@ -139,22 +142,44 @@ prepros.factory('liveServer', function (config) {
 
         _.each(projects, function (project) {
 
-            if(_.isEmpty(projectsBeingServed[project.id])) {
+            if(!(project.id in projectsBeingServed)) {
+
                 portfinder.getPort(function (err, port) {
 
                     var app = express();
                     var server = app.listen(port);
-                    projectsBeingServed[project.id] = { name: project.name, port: port, app: app, server: server};
+                    var lServer = new WebSocketServer({
+                        httpServer: server,
+                        autoAcceptConnections: false
+                    });
+
+                    lServer.on('request', function (request) {
+                        request.accept('', request.origin);
+                        lServer.broadcast(("!!ver:1.6"));
+                    });
+
+                    projectsBeingServed[project.id] = {
+                        name: project.name,
+                        port: port, app: app,
+                        server: server,
+                        lServer: lServer
+                    };
+
                     projectsBeingServed[project.id].url = getLiveUrl(project);
+
                     app.use(liveReloadMiddleWare);
                     app.use('/', express.static(project.path));
                     app.use('/', express.directory(project.path, {icons: true}));
+
                 });
             }
 
             if(project.config.useCustomServer) {
+
                 var parsed = url.parse(project.config.customServerUrl);
-                urls.push(parsed.protocol + '//' + parsed.host);
+
+                urls.push(parsed.protocol + '//' + parsed.host + '|' + project.id);
+
             }
 
         });
@@ -176,7 +201,7 @@ prepros.factory('liveServer', function (config) {
 
     });
 
-    function refresh(file, delay) {
+    function refresh(pid, file, delay) {
 
         var data = JSON.stringify([
             'refresh', {
@@ -190,13 +215,13 @@ prepros.factory('liveServer', function (config) {
 
             setTimeout(function() {
 
-                refreshServer.broadcast(data);
+                projectsBeingServed[pid].lServer.broadcast(data);
 
             }, parseInt(delay, 10));
 
         } else {
 
-            refreshServer.broadcast(data);
+            projectsBeingServed[pid].lServer.broadcast(data);
         }
     }
 

@@ -73,7 +73,7 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
 
                 if (scope.selectedProject.id) {
 
-                    var url = liveServer.getLiveUrl(scope.selectedProject);
+                    var url = (scope.selectedProject.config.useCustomServer) ? scope.selectedProject.config.customServerUrl : liveServer.getLiveUrl(scope.selectedProject);
 
                     utils.openBrowser(url);
 

@@ -26,6 +26,7 @@ function parseUrl(string) {
 
 var socketRunning = false,
     liveUrls = [];
+    livePids = [];
 
 function startSocket(callback) {
 
@@ -36,10 +37,12 @@ function startSocket(callback) {
     socket.addEventListener('message', function (evt) {
 
         liveUrls = [];
+        livePids = {};
 
         JSON.parse(evt.data).urls.forEach(function (url) {
 
-            liveUrls.push(url);
+            liveUrls.push(url.split('|')[0]);
+            livePids[url.split('|')[0]] = url.split('|')[1];
 
             chrome.tabs.getAllInWindow(null, function (tabs) {
 
@@ -84,7 +87,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
             if (tab.url.match(/^file:\/\/\//gi) || liveUrls.contains(parsedUrl)) {
 
-                chrome.tabs.executeScript(tab.id, {file: 'scripts/refresh.js'});
+                var snippet = ' (function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/getlivesnippet?pid=' + livePids[parsedUrl] + '";})();'
+
+                chrome.tabs.executeScript(tab.id, {code: snippet});
             }
 
         };
