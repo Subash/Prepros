@@ -102,7 +102,7 @@ prepros.factory('liveServer', function (config) {
 
                 var snippet = '<script>' +
                     '(function(){var a=document.createElement("script");document.querySelector("body").appendChild(a);' +
-                    'a.src="http://" + window.location.hostname + ": ' + MAIN_SERVER_PORT + '/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=' + LIVERELOAD_SERVER_PORT + '"})();' +
+                    'a.src="http://" + window.location.hostname + ":' + MAIN_SERVER_PORT + '/lr/livereload.js?snipver=1&host=" + window.location.hostname + "&port=' + LIVERELOAD_SERVER_PORT + '"})();' +
                     '</script>';
 
                 res.push(body.replace(/<\/body>/i, function (w) {
