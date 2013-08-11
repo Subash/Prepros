@@ -63,7 +63,8 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
             if(!_.contains(_.pluck(watchedProjects, 'pid'), project.id)) {
 
                 var watcher = chokidar.watch(project.path, {
-                    ignored: /^\./, ignorePermissionErrors: true,
+                    ignored: /\\\.|\/\./,
+                    ignorePermissionErrors: true,
                     usePolling : !config.getUserOptions().experimentalFileWatcher
                 });
 
