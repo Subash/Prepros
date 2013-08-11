@@ -112,6 +112,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                     });
                 });
 
+                watcher.on('error', function(err) {
+                    notification.error('Error', 'An error occurred while watching project folder.' , project.path + ' ' + err.message);
+                });
+
                 watchedProjects.push({pid: project.id, watcher : watcher});
             }
         });
