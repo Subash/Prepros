@@ -5,7 +5,7 @@ head
 	meta(name='description')(content='Compile less, sass, scss, compass, stylus, cofffeescript, jade, haml, slim and markdown with live browser refresh.')
 	link(rel="author")(href="https://plus.google.com/u/0/114513538860360992504/posts")
 	link(rel='chrome-webstore-item')(href="https://chrome.google.com/webstore/detail/bnlfjdjbjiabcgkkjaicjepbhhmeonlm")	
-	link(rel='stylesheet')(href='http://alphapixels.com/prepros/css/style.css?5')
+	link(rel='stylesheet')(href='http://alphapixels.com/prepros/css/style.css?6')
 	script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
 	script(src='http://alphapixels.com/prepros/js/prism.min.js')
 	script.
@@ -23,14 +23,3 @@ head
 			bsa.src = '//s3.buysellads.com/ac/bsa.js';
 			(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
 		})();
-	script.
-		$(document).ready(function() {
-			if(window.location.hash == "#love") {
-				window.location = '/prepros/sponsor.html'
-			}
-
-			$('.donate').click(function(e) {
-				window.location = '/prepros/sponsor.html'
-				return false;
-			})
-		})
