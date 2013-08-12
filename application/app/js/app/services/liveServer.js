@@ -53,7 +53,7 @@ prepros.factory('liveServer', function (config) {
         });
     });
 
-    app.use('/prepros.js', function(req, res, next) {
+    app.use('/prepros.js', function(req, res) {
 
         if('pid' in req.query) {
 
