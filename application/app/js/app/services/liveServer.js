@@ -155,7 +155,7 @@ prepros.factory('liveServer', function (config) {
 
                     lServer.on('request', function (request) {
                         request.accept('', request.origin);
-                        lServer.broadcast(("!!ver:1.6"));
+                        lServer.broadcast("!!ver:1.6");
                     });
 
                     projectsBeingServed[project.id] = {
