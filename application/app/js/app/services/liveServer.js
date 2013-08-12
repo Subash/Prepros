@@ -107,6 +107,7 @@ prepros.factory('liveServer', function (config) {
 
                 if(/<\/body>/i.test(body)) {
                     body =  body.replace(/<\/body>/i, snippet);
+                    body = body + '</body>';
                 } else {
                     body = body + snippet;
                 }
