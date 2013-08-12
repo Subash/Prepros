@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes) {
 
     "use strict";
 
@@ -70,7 +70,11 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                 watcher.on('change', function(fpath) {
 
-                    if (project.config.liveRefresh) {
+
+                    //Do not refresh on preprocessable file change
+
+                    if (project.config.liveRefresh && !fileTypes.isExtSupported(fpath)) {
+
                         liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                     }
 
