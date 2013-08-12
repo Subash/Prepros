@@ -57,6 +57,18 @@ prepros.factory('jade', function (config, utils) {
             pretty: file.config.pretty
         };
 
+        var isJSOutput = (file.output.split(".").pop() == "js");
+        var templateName = file.output.split("\\").pop().split(".");
+        templateName.pop();
+        templateName = templateName.join("_");
+
+        if (isJSOutput) {
+            //alert("Output should be js!");
+            options.client = true;
+            options.compileDebug = false;
+        }
+
+
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
             if (err) {
 
@@ -67,7 +79,15 @@ prepros.factory('jade', function (config, utils) {
                 try {
                     var fn = jadeCompiler.compile(data.toString(), options);
 
-                    var html = fn();
+                    var html;
+                    if (isJSOutput) {
+                        //alert("Output should be js!");
+                        html = fn.toString();
+                        html = "var Templates = Templates || {}\n" + html;
+                        html = html.replace(/function anonymous/,"Templates."+templateName+" = function");
+                    } else {
+                        html = fn();
+                    }
 
                     fs.outputFile(file.output, html, function (err) {
 
