@@ -71,9 +71,8 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                 watcher.on('change', function(fpath) {
 
 
-                    //Do not refresh on preprocessable file change
-
-                    if (project.config.liveRefresh && !fileTypes.isExtSupported(fpath)) {
+                    //Do not refresh on preprocessable files except javascript
+                    if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || /\.js/i.test(fpath))) {
 
                         liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                     }
