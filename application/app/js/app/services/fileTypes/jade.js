@@ -64,9 +64,9 @@ prepros.factory('jade', function (config, utils) {
 
         if (isJSOutput) {
             //alert("Output should be js!");
-            options["client"] = true;
-            options["compileDebug"] = false;
-        };
+            options.client = true;
+            options.compileDebug = false;
+        }
 
 
         fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
@@ -79,14 +79,15 @@ prepros.factory('jade', function (config, utils) {
                 try {
                     var fn = jadeCompiler.compile(data.toString(), options);
 
+                    var html;
                     if (isJSOutput) {
                         //alert("Output should be js!");
                         html = fn.toString();
                         html = "Templates = Templates || {}\n" + html;
                         html = html.replace(/function anonymous/,"Templates[\""+templateName+"\"] = function");
                     } else {
-                        var html = fn();
-                    };
+                        html = fn();
+                    }
 
                     fs.outputFile(file.output, html, function (err) {
 
