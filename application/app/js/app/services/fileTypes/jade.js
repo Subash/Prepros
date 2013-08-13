@@ -57,13 +57,12 @@ prepros.factory('jade', function (config, utils) {
             pretty: file.config.pretty
         };
 
-        var isJSOutput = (file.output.split(".").pop() == "js");
+        var isJSOutput = (path.extname(file.output) === "js");
         var templateName = file.output.split("\\").pop().split(".");
         templateName.pop();
         templateName = templateName.join("_");
 
         if (isJSOutput) {
-            //alert("Output should be js!");
             options.client = true;
             options.compileDebug = false;
         }
@@ -81,7 +80,6 @@ prepros.factory('jade', function (config, utils) {
 
                     var html;
                     if (isJSOutput) {
-                        //alert("Output should be js!");
                         html = fn.toString();
                         html = "var Templates = Templates || {}\n" + html;
                         html = html.replace(/function anonymous/,"Templates."+templateName+" = function");
