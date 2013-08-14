@@ -79,6 +79,8 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         //Sass partials are not supported
         var sass = ['sass', 'scss'];
 
+        var isDotFile = /\\\.|\/\./.test(filePath);
+
         var partial = /^_/;
 
         var isSassPartial = _.contains(sass, extname) && partial.exec(path.basename(filePath));
@@ -90,7 +92,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
 
         var isMinified = _.contains(js, extname) && minified.exec(path.basename(filePath));
 
-        return isExtSupported(filePath) && !isSassPartial && !isMinified;
+        return isExtSupported(filePath) && !isSassPartial && !isMinified && !isDotFile;
 
     }
 
