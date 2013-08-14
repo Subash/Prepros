@@ -39,7 +39,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             };
 
             if (process.platform !== 'win32') {
-                options.y = 10;
+                options.y = 30;
             }
 
             notificationWindow = require('nw.gui').Window.open(notificationPath, options);
