@@ -95,14 +95,6 @@
       ]
     },
     {
-      "id": "84aafd8f",
-      "pid": "9c1fc471",
-      "path": "scss\\_loading.scss",
-      "parents": [
-        "7e70da7e"
-      ]
-    },
-    {
       "id": "c736a581",
       "pid": "9c1fc471",
       "path": "scss\\_log.scss",

@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap, angular */
 
 //Tooltip directive
-prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope, notification) {
+prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope, utils) {
 
     'use strict';
 
@@ -104,7 +104,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Remove Project',
                 click: function () {
 
-                    var confirmMsg = notification.notifier.notify({
+                    var confirmMsg = utils.notifier.notify({
                         message: "Are you sure you want to remove this project?",
                         type: "warning",
                         buttons: [

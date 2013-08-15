@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap*/
 
 //Directive for keyboard shortcuts
-prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils, $rootScope, notification) {
+prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils, $rootScope) {
 
     'use strict';
 
@@ -85,7 +85,7 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
             Mousetrap.bind(['ctrl+d', 'command+d'], function () {
                 if (scope.selectedProject.id) {
 
-                    var confirmMsg = notification.notifier.notify({
+                    var confirmMsg = utils.notifier.notify({
                         message: "Are you sure you want to remove this project?",
                         type: "warning",
                         buttons: [

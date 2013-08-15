@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap*/
 
 //Tooltip directive
-prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter, notification) {
+prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter, utils) {
 
     'use strict';
 
@@ -68,7 +68,7 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 label: 'Reset File Settings',
                 click: function () {
 
-                    var confirmMsg = notification.notifier.notify({
+                    var confirmMsg = utils.notifier.notify({
                         message: "Are you sure you want to reset the settings of this file?",
                         type: "warning",
                         buttons: [

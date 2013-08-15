@@ -9,7 +9,7 @@
 /*global prepros,  _, $*/
 
 //Title Bar controls
-prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, notification) {
+prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer) {
 
     'use strict';
 
@@ -48,7 +48,7 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     //Function to remove project
     $scope.removeProject = function () {
 
-        var confirmMsg = notification.notifier.notify({
+        var confirmMsg = utils.notifier.notify({
             message: "Are you sure you want to remove this project?",
             type: "warning",
             buttons: [
