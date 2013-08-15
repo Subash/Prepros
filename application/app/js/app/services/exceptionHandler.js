@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, _*/
+/*global prepros, _, $*/
 
 //Exception handler service
 prepros.factory('$exceptionHandler',function(){
