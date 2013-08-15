@@ -6,10 +6,10 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap, alertify */
+/*global prepros, $, _, Mousetrap*/
 
 //Tooltip directive
-prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter) {
+prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter, notification) {
 
     'use strict';
 
@@ -68,17 +68,25 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
                 label: 'Reset File Settings',
                 click: function () {
 
-                    alertify.set({ buttonFocus: "none", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to reset the settings of this file?', function (y) {
-
-                        if (y) {
-
-                            $rootScope.$apply(function () {
-                                projectsManager.resetFileSettings(file.pid, file.id);
-                            });
-                        }
-
+                    var confirmMsg = notification.notifier.notify({
+                        message: "Are you sure you want to reset the settings of this file?",
+                        type: "warning",
+                        buttons: [
+                            {'data-role': 'ok', text: 'Yes'},
+                            {'data-role': 'cancel', text: 'No'}
+                        ],
+                        destroy: true
                     });
+
+                    confirmMsg.on('click:ok', function(){
+
+                        this.destroy();
+                        $rootScope.$apply(function () {
+                            projectsManager.resetFileSettings(file.pid, file.id);
+                        });
+                    });
+
+                    confirmMsg.on('click:cancel', 'destroy');
 
                 }
             }));

@@ -6,10 +6,10 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap, alertify */
+/*global prepros, $, _, Mousetrap*/
 
 //Directive for keyboard shortcuts
-prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils) {
+prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils, $rootScope, notification) {
 
     'use strict';
 
@@ -85,16 +85,25 @@ prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, co
             Mousetrap.bind(['ctrl+d', 'command+d'], function () {
                 if (scope.selectedProject.id) {
 
-                    alertify.set({ buttonFocus: "ok", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to remove this project?', function (y) {
-
-                        if (y) {
-                            scope.$apply(function () {
-                                projectsManager.removeProject(scope.selectedProject.id);
-                            });
-                        }
-
+                    var confirmMsg = notification.notifier.notify({
+                        message: "Are you sure you want to remove this project?",
+                        type: "warning",
+                        buttons: [
+                            {'data-role': 'ok', text: 'Yes'},
+                            {'data-role': 'cancel', text: 'No'}
+                        ],
+                        destroy: true
                     });
+
+                    confirmMsg.on('click:ok', function(){
+
+                        this.destroy();
+                        $rootScope.$apply(function () {
+                            projectsManager.removeProject(scope.selectedProject.id);
+                        });
+                    });
+
+                    confirmMsg.on('click:cancel', 'destroy');
                 }
                 return false;
             });

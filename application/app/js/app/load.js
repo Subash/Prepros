@@ -18,7 +18,8 @@ function bootstrapPrepros() {
         'jquery.min',
         'underscore.min',
         'bootstrap.min',
-        'alertify.min',
+        'backbone.min',
+        'backbone-notifier.min',
         'mousetrap.min',
         'angular'
     ];

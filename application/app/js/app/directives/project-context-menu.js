@@ -6,10 +6,10 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap, alertify, angular */
+/*global prepros, $, _, Mousetrap, angular */
 
 //Tooltip directive
-prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope) {
+prepros.directive('projectContextMenu', function (projectsManager, liveServer, compiler, $location, $rootScope, notification) {
 
     'use strict';
 
@@ -104,16 +104,25 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Remove Project',
                 click: function () {
 
-                    alertify.set({ buttonFocus: "none", buttonReverse: true});
-                    alertify.confirm('Are you sure you want to remove this project?', function (y) {
-
-                        if (y) {
-                            scope.$apply(function () {
-                                projectsManager.removeProject(project.id);
-                            });
-                        }
-
+                    var confirmMsg = notification.notifier.notify({
+                        message: "Are you sure you want to remove this project?",
+                        type: "warning",
+                        buttons: [
+                            {'data-role': 'ok', text: 'Yes'},
+                            {'data-role': 'cancel', text: 'No'}
+                        ],
+                        destroy: true
                     });
+
+                    confirmMsg.on('click:ok', function(){
+
+                        this.destroy();
+                        $rootScope.$apply(function () {
+                            projectsManager.removeProject(project.id);
+                        });
+                    });
+
+                    confirmMsg.on('click:cancel', 'destroy');
                 }
             }));
 

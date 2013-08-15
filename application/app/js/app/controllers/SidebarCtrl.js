@@ -6,10 +6,10 @@
  */
 
 /*jshint browser: true, node: true, unused: false*/
-/*global prepros,  _, $, alertify */
+/*global prepros,  _, $*/
 
 //Title Bar controls
-prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer) {
+prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, liveServer, notification) {
 
     'use strict';
 
@@ -48,17 +48,25 @@ prepros.controller('SidebarCtrl', function ($scope, projectsManager, utils, live
     //Function to remove project
     $scope.removeProject = function () {
 
-        alertify.set({ buttonFocus: "none" });
-        alertify.confirm('Are you sure you want to remove this project?', function (y) {
-
-            if (y) {
-                $scope.$apply(function () {
-                    projectsManager.removeProject($scope.selectedProject.id);
-                });
-            }
-
+        var confirmMsg = notification.notifier.notify({
+            message: "Are you sure you want to remove this project?",
+            type: "warning",
+            buttons: [
+                {'data-role': 'ok', text: 'Yes'},
+                {'data-role': 'cancel', text: 'No'}
+            ],
+            destroy: true
         });
 
+        confirmMsg.on('click:ok', function(){
+
+            this.destroy();
+            $scope.$apply(function () {
+                projectsManager.removeProject($scope.selectedProject.id);
+            });
+        });
+
+        confirmMsg.on('click:cancel', 'destroy');
     };
 
 });
