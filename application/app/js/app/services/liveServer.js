@@ -99,8 +99,10 @@ prepros.factory('liveServer', function (config) {
                 var body = string instanceof Buffer ? string.toString(encoding) : string;
 
                 var snippet = '<script>' +
-                    '(function(){var script = document.createElement("script");document.querySelector("body").appendChild(script);' +
-                    'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port })();' +
+                    '(function(){var script = document.createElement("script");' +
+                    'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
+                    'document.body.appendChild(script);' +
+                    '})();' +
                     '</script>';
 
                 if(/<\/body>/i.test(body)) {
