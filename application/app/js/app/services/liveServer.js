@@ -47,10 +47,8 @@ prepros.factory('liveServer', function (config) {
     //Serve livereload.js from /lr/ path which points to vendor dir
     app.use('/livereload.js', function(req, res, next) {
 
-        fs.readFile(config.basePath + '/js/vendor/livereload.js', function(err, data) {
-            res.setHeader('Content-Type', 'text/javascript');
-            res.send(data.toString());
-        });
+        res.sendfile(config.basePath + '/js/vendor/livereload.js');
+
     });
 
     app.use('/prepros.js', function(req, res) {
@@ -102,7 +100,7 @@ prepros.factory('liveServer', function (config) {
 
                 var snippet = '<script>' +
                     '(function(){var script = document.createElement("script");document.querySelector("body").appendChild(script);' +
-                    'script.src="http://" + window.location.hostname + ":' + MAIN_SERVER_PORT + '/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port })();' +
+                    'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port })();' +
                     '</script>';
 
                 if(/<\/body>/i.test(body)) {
@@ -167,6 +165,10 @@ prepros.factory('liveServer', function (config) {
                     };
 
                     projectsBeingServed[project.id].url = getLiveUrl(project);
+
+                    app.use('/livereload.js', function(req, res) {
+                        res.sendfile(config.basePath + '/js/vendor/livereload.js');
+                    });
 
                     app.use(liveReloadMiddleWare);
                     app.use('/', express.static(project.path));
