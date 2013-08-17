@@ -82,35 +82,35 @@ function bootstrapPrepros() {
 
     //Libraries
     libraries.forEach(function (lib) {
-        jScripts.push('js/vendor/' + lib + '.js');
+        jScripts.push('vendor/' + lib + '.js');
     });
 
     //Angularjs App
-    jScripts.push('js/app/app.js');
+    jScripts.push('scripts/app.js');
 
     //Services
     services.forEach(function (service) {
-        jScripts.push('js/app/services/' + service + '.js');
+        jScripts.push('scripts/services/' + service + '.js');
     });
 
     //File types
     fileTypes.forEach(function (type) {
-        jScripts.push('js/app/services/fileTypes/' + type + '.js');
+        jScripts.push('scripts/services/fileTypes/' + type + '.js');
     });
 
     //Controllers
     controllers.forEach(function (controller) {
-        jScripts.push('js/app/controllers/' + controller + '.js');
+        jScripts.push('scripts/controllers/' + controller + '.js');
     });
 
     //Filters
     filters.forEach(function (filter) {
-        jScripts.push('js/app/filters/' + filter + '.js');
+        jScripts.push('scripts/filters/' + filter + '.js');
     });
 
     //Directives
     directives.forEach(function (directive) {
-        jScripts.push('js/app/directives/' + directive + '.js');
+        jScripts.push('scripts/directives/' + directive + '.js');
     });
 
     //Load scripts and bootstrap
