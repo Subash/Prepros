@@ -8,9 +8,9 @@
 /*jshint browser: true, node: true*/
 /*global prepros, _*/
 
-'use strict';
-
 prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, javascript, jade, haml, slim, livescript, config, importsVisitor) {
+
+    'use strict';
 
     var path = require('path');
 

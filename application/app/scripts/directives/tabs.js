@@ -8,9 +8,9 @@
 /*jshint browser: true, node: true*/
 /*global prepros, angular, $ */
 
-'use strict';
-
 prepros.directive('bsTabs', function ($parse, $compile, $timeout) {
+
+    'use strict';
 
     var template = '<div class="tabs">' +
         '<ul class="nav nav-tabs">' +

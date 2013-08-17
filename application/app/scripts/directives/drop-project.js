@@ -8,10 +8,11 @@
 /*jshint browser: true, node: true*/
 /*global prepros, $, _, Mousetrap */
 
-'use strict';
 
 //Drag and drop directive
 prepros.directive('dropProject', function (projectsManager) {
+
+    'use strict';
 
     return {
 
