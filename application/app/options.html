@@ -4,14 +4,18 @@
 <head>
     <title>Prepros Options</title>
 
-    <script src="../js/vendor/jquery.min.js"></script>
-    <script src="../js/vendor/angular.js"></script>
-    <script src="../js/vendor/bootstrap.min.js"></script>
-    <link href="../assets/css/style.css" rel="stylesheet">
+    <script src="vendor/jquery.min.js"></script>
+    <script src="vendor/angular.js"></script>
+    <script src="vendor/bootstrap.min.js"></script>
+    <link href="assets/css/style.css" rel="stylesheet">
     <script>
-
         var prepros = angular.module('prepros', []);
+    </script>
 
+    <!--Bootstrap Tabs -->
+    <script src="scripts/directives/tabs.js"></script>
+
+    <script>
         prepros.controller('OptionsCtrl', function ($scope) {
 
             var fs = require('fs-extra');
@@ -41,9 +45,6 @@
 
         });
     </script>
-
-    <!--Bootstrap Tabs -->
-    <script src="../js/app/directives/tabs.js"></script>
 
 </head>
 <body ng-controller="OptionsCtrl" class="prepros-options">
