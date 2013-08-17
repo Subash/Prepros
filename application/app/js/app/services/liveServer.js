@@ -45,13 +45,13 @@ prepros.factory('liveServer', function (config) {
     });
 
     //Serve livereload.js from /lr/ path which points to vendor dir
-    app.use('/livereload.js', function(req, res, next) {
+    app.get('/livereload.js', function(req, res, next) {
 
         res.sendfile(config.basePath + '/js/vendor/livereload.js');
 
     });
 
-    app.use('/prepros.js', function(req, res) {
+    app.get('/prepros.js', function(req, res) {
 
         if('pid' in req.query) {
 
@@ -168,13 +168,13 @@ prepros.factory('liveServer', function (config) {
 
                     projectsBeingServed[project.id].url = getLiveUrl(project);
 
-                    app.use('/livereload.js', function(req, res) {
+                    app.get('/livereload.js', function(req, res) {
                         res.sendfile(config.basePath + '/js/vendor/livereload.js');
                     });
 
                     app.use(liveReloadMiddleWare);
-                    app.use('/', express.static(project.path));
-                    app.use('/', express.directory(project.path, {icons: true}));
+                    app.use(express.static(project.path));
+                    app.use(express.directory(project.path, {icons: true}));
 
                 });
             }
