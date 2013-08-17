@@ -47,7 +47,7 @@ prepros.factory('liveServer', function (config) {
     //Serve livereload.js from /lr/ path which points to vendor dir
     app.get('/livereload.js', function(req, res, next) {
 
-        res.sendfile(config.basePath + '/js/vendor/livereload.js');
+        res.sendfile(config.basePath + '/vendor/livereload.js');
 
     });
 
@@ -169,7 +169,7 @@ prepros.factory('liveServer', function (config) {
                     projectsBeingServed[project.id].url = getLiveUrl(project);
 
                     app.get('/livereload.js', function(req, res) {
-                        res.sendfile(config.basePath + '/js/vendor/livereload.js');
+                        res.sendfile(config.basePath + '/vendor/livereload.js');
                     });
 
                     app.use(liveReloadMiddleWare);
