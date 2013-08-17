@@ -111,6 +111,7 @@
 
                 //Save application state url on exit
                 localStorage.PreprosStateUrl = window.location.hash;
+                nw.gui.App.closeAllWindows();
                 this.close(true);
 
             });
