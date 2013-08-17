@@ -8,10 +8,12 @@
 /*jshint browser: true, node: true*/
 /*global prepros, _ */
 
-'use strict';
 
 //Filter to shorten the string
 prepros.filter('shorten', function () {
+
+    'use strict';
+
     return function (string) {
         if (string.length > 65) {
 

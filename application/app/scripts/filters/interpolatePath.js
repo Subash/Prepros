@@ -8,9 +8,9 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-'use strict';
-
 prepros.filter('interpolatePath', function ($interpolate) {
+
+    'use strict';
 
     var path = require('path');
 

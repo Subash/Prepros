@@ -8,9 +8,10 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-'use strict';
 
 prepros.filter('fullPath', function () {
+
+    'use strict';
 
     var path = require('path');
 

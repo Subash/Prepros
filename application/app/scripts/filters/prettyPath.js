@@ -8,9 +8,10 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-'use strict';
-
 prepros.filter('prettyPath', function () {
+
+    'use strict';
+
     return function (string) {
 
         return string.replace(/\\/g, '/');
