@@ -53,7 +53,7 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Open Project URL',
                 click: function () {
 
-                    var url = (project.config.useCustomServer) ? project.config.customServerUrl : liveServer.getLiveUrl(project);
+                    var url = liveServer.getLiveUrl(project);
 
                     gui.Shell.openExternal(url);
                 }
@@ -63,17 +63,9 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 label: 'Copy Project URL',
                 click: function () {
 
-                    var url = (project.config.useCustomServer) ? project.config.customServerUrl : liveServer.getLiveUrl(project);
+                    var url = liveServer.getLiveUrl(project);
 
                     require('nw.gui').Clipboard.get().set(url, 'text');
-                }
-            }));
-
-            menu.append(new gui.MenuItem({
-                label: 'Copy Internal URL',
-                click: function () {
-
-                    require('nw.gui').Clipboard.get().set(liveServer.getLiveUrl(project), 'text');
                 }
             }));
 

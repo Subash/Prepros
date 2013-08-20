@@ -33,6 +33,7 @@
         "MD5": "1.1.0",
         "nib": "0.9.1",
         "portfinder": "0.2.1",
+        "request": "2.27.0",
         "stylus": "0.36.1",
         "uglify-js": "2.3.6",
         "websocket": "1.0.8",

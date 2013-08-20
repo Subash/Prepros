@@ -59,9 +59,9 @@
 
                 </div>
 
-                <div ng-controller="OptimImageCtrl">
+                <div ng-if="path == 'optim'">
 
-                    <div ng-if="path == 'optim'">
+                    <div ng-controller="OptimImageCtrl">
 
                         <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
 

@@ -19,7 +19,8 @@ prepros.factory('liveServer', function (config) {
         WebSocketServer = require('websocket').server,
         urls = [],
         portfinder = require('portfinder'),
-        url = require('url');
+        url = require('url'),
+        request = require('request');
 
     var MAIN_SERVER_PORT = 5656;
 
@@ -30,37 +31,6 @@ prepros.factory('liveServer', function (config) {
     httpServer.on('error', function (err) {
         window.alert('Unable to start internal server, Please close the app that is using port ' + MAIN_SERVER_PORT + '. error: ' + err.message);
         require('nw.gui').App.quit();
-    });
-
-    //Start websocket server for automatic browser refresh
-    var wsServer = new WebSocketServer({
-        httpServer: httpServer,
-        autoAcceptConnections: false
-    });
-
-    //Send the list of urls to refresh to extension on connect
-    wsServer.on('request', function (request) {
-        request.accept('', request.origin);
-        wsServer.broadcast(angular.toJson({urls: urls}));
-    });
-
-    //Serve livereload.js from /lr/ path which points to vendor dir
-    app.get('/livereload.js', function(req, res, next) {
-
-        res.sendfile(config.basePath + '/vendor/livereload.js');
-
-    });
-
-    app.get('/prepros.js', function(req, res) {
-
-        if('pid' in req.query) {
-
-            if(req.query.pid in projectsBeingServed) {
-                res.setHeader('Content-Type', 'text/javascript');
-                var snippet = '(function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '";})()';
-                res.send(snippet);
-            }
-        }
     });
 
     //Generates live preview url
@@ -105,8 +75,8 @@ prepros.factory('liveServer', function (config) {
                     '})();' +
                     '</script>';
 
-                if(/<\/body>/i.test(body)) {
-                    body =  body.replace(/<\/body>/i, snippet);
+                if(/<\/(:?\s|)body(:?\s|)>/i.test(body)) {
+                    body =  body.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
                     body += '</body>';
                 } else {
                     body += snippet;
@@ -161,7 +131,8 @@ prepros.factory('liveServer', function (config) {
 
                     projectsBeingServed[project.id] = {
                         name: project.name,
-                        port: port, app: app,
+                        port: port,
+                        app: app,
                         server: server,
                         lServer: lServer
                     };
@@ -172,25 +143,81 @@ prepros.factory('liveServer', function (config) {
                         res.sendfile(config.basePath + '/vendor/livereload.js');
                     });
 
+                    app.use(function(req, res, next) {
+
+                        if(project.config.useCustomServer) {
+
+                            var options = {
+                                host: url.parse(project.config.customServerUrl).host,
+                                port: url.parse(project.config.customServerUrl).port,
+                                uri: url.parse(project.config.customServerUrl).protocol + '//' + url.parse(project.config.customServerUrl).host + url.parse(req.url).path,
+                                method : req.method,
+                                cookie: req.cookie,
+                                followRedirect: false
+                            };
+
+                            var urlRegx = new RegExp("(http|https)://" + url.parse(project.config.customServerUrl).host + "(:" + url.parse(project.config.customServerUrl).port + "|)", "gi");
+
+                            var rqs = request(options, function (err, response, body) {
+                                if(err) {
+                                    res.end('Custom Server Unreachable Check Settings.');
+                                }
+                            });
+
+                            var hasbody = false;
+                            var snippet = '<script>' +
+                                '(function(){var script = document.createElement("script");' +
+                                'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
+                                'document.body.appendChild(script);' +
+                                '})();' +
+                                '</script>';
+
+                            rqs.on('response', function(r) {
+
+                                res.setHeader('Content-Type', r.headers['content-type']);
+                                res.statusCode = r.statusCode;
+                                if(r.headers.location) {
+                                    return res.redirect(r.headers.location.replace(urlRegx, ''));
+                                }
+
+                                rqs.on('data', function(d) {
+
+                                    if(/html/gi.test(r.headers['content-type'])) {
+
+                                        var html = (d.toString().replace(urlRegx, ''));
+
+                                        if(/<\/(:?\s|)body(:?\s|)>/i.test(html)) {
+                                            html =  html.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
+                                            html += '</body>';
+                                            hasbody = true;
+                                        }
+
+                                        res.write(html);
+
+                                    } else {
+                                        res.write(d, "binary");
+                                    }
+                                });
+
+                                rqs.on('end', function() {
+                                    if(!hasbody && /html/gi.test(r.headers['content-type'])) {
+                                        res.write(snippet);
+                                    }
+                                    res.end();
+                                });
+                            });
+                        } else {
+                            next();
+                        }
+                    });
+
                     app.use(liveReloadMiddleWare);
                     app.use(express.static(project.path));
                     app.use(express.directory(project.path, {icons: true}));
 
                 });
             }
-
-            if(project.config.useCustomServer) {
-
-                var parsed = url.parse(project.config.customServerUrl);
-
-                urls.push(parsed.protocol + '//' + parsed.host + '|' + project.id);
-
-            }
-
         });
-
-        //Send data to browser extensions
-        wsServer.broadcast(angular.toJson({urls: urls}));
     }
 
     //Index page for projects
