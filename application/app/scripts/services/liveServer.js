@@ -33,6 +33,34 @@ prepros.factory('liveServer', function (config) {
         require('nw.gui').App.quit();
     });
 
+    //Start websocket server for automatic browser refresh
+    var wsServer = new WebSocketServer({
+        httpServer: httpServer,
+        autoAcceptConnections: false
+    });
+
+    //Send the list of urls to refresh to extension on connect
+    wsServer.on('request', function (request) {
+        request.accept('', request.origin);
+        wsServer.broadcast(angular.toJson({urls: urls}));
+    });
+
+    app.get('/livereload.js', function(req, res, next) {
+        res.sendfile(config.basePath + '/vendor/livereload.js');
+    });
+
+    app.get('/prepros.js', function(req, res) {
+
+        if('pid' in req.query) {
+
+            if(req.query.pid in projectsBeingServed) {
+                res.setHeader('Content-Type', 'text/javascript');
+                var snippet = '(function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '";})()';
+                res.send(snippet);
+            }
+        }
+    });
+
     //Generates live preview url
     function getLiveUrl(project) {
         var port = projectsBeingServed[project.id].port;
@@ -217,7 +245,18 @@ prepros.factory('liveServer', function (config) {
 
                 });
             }
+
+            if(project.config.useCustomServer) {
+
+                var parsed = url.parse(project.config.customServerUrl);
+
+                urls.push(parsed.protocol + '//' + parsed.host + '|' + project.id);
+            }
         });
+
+        //Send data to browser extensions
+        wsServer.broadcast(angular.toJson({urls: urls}));
+
     }
 
     //Index page for projects
