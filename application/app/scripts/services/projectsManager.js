@@ -171,26 +171,52 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     /**
      * Function to add a new file to project
      * @param {string} pid  Project id
-     * @param {string} fileId  File id
      * @param {string} filePath  Path to  file
      */
-    function addFile(pid, fileId, filePath) {
+    function addFile(pid, filePath) {
 
-        //Check if file already exists in files list
-        var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: fileId})) ? false : true;
+        if(fs.existsSync(filePath) && fileTypes.isFileSupported(filePath)) {
 
-        var inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
+            var fileId = _id(path.relative(getProjectById(pid).path, filePath));
 
-        if (!already && !inImports) {
+            //Check if file already exists in files list
+            var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: fileId})) ? false : true;
 
-            try {
+            var inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
+
+            if (!already && !inImports) {
                 getProjectById(pid).files.push(fileTypes.format(pid, fileId, filePath, getProjectById(pid).path));
+                refreshFile(pid, fileId);
             }
-             catch(e ){
-                 console.log(e.stack);
-            }
-
         }
+    }
+
+    function refreshFile(pid, fileId) {
+
+
+        var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
+
+        var fileImports = fileTypes.getImports(fPath, getProjectById(pid).path);
+
+        var oldImports = getFileImports(pid, fileId);
+
+        _.each(fileImports, function(imp) {
+            addImport(pid, fileId, imp);
+        });
+
+        _.each(oldImports, function (imp) {
+
+            var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
+
+            if (!_.contains(fileImports, fullImpPath)) {
+
+                removeImportParent(imp.pid, imp.id, fileId);
+
+                addFile(pid, fullImpPath);
+            }
+        });
+
+        _broadCast();
     }
 
     /**
@@ -202,7 +228,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     function resetFileSettings(pid, fid) {
         var f = getFileById(pid, fid);
         removeFile(pid, fid);
-        addFile(pid, f.id, f.input);
+        addFile(pid, f.input);
         _broadCast();
     }
 
@@ -366,50 +392,21 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                 var projectFiles = getFilesInDir(folder);
 
-                var filesToAdd = [];
-
                 _.each(projectFiles, function (file) {
 
                     if (!matchFileFilters(pid, file)) {
 
-                        filesToAdd.push({
-                            path: file,
-                            imports: fileTypes.getImports(file, folder)
-                        });
-                    }
-                });
+                        //Generate unique id for file
+                        var file_id = _id(path.relative(getProjectById(pid).path, file));
 
-                //Check if file is in the imports list of another file
-                //If it is ignore the file
-                var importsOfAllFiles = _.uniq(_.flatten(_.pluck(filesToAdd, 'imports')));
+                        var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
 
-                _.each(filesToAdd, function (file) {
-
-                    //Generate unique id for file
-                    var file_id = _id(path.relative(getProjectById(pid).path, file.path));
-
-                    //Check
-                    if (!_.contains(importsOfAllFiles, file.path)) {
-
-                        //Add file
-                        addFile(pid, file_id, file.path);
-
-                        //Add imports
-                        _.each(file.imports, function (imp) {
-                            addImport(pid, file_id, imp);
-                        });
-                    }
-
-                    //Remove any previously imported file that is not imported anymore
-                    var oldImports = getFileImports(pid, file_id);
-
-                    _.each(oldImports, function (imp) {
-
-                        if (!_.contains(file.imports, path.join(folder, imp.path))) {
-
-                            removeImportParent(imp.pid, imp.id, file_id);
+                        if(already) {
+                            refreshFile(pid, file_id);
+                        } else {
+                            addFile(pid, file);
                         }
-                    });
+                    }
                 });
 
                 $rootScope.$apply(function() {
@@ -475,6 +472,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         addProject: addProject,
         addFile: addFile,
+        refreshFile: refreshFile,
 
         removeFile: removeFile,
         removeProject: removeProject,

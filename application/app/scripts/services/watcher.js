@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes, $rootScope) {
 
     "use strict";
 
@@ -84,6 +84,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                         if(path.relative(sf[0], fpath)=== "") {
 
                             var f = projectsManager.getFileById(sf[1], sf[2]);
+
+                            $rootScope.$apply(function() {
+                                projectsManager.refreshFile(f.pid, f.id);
+                            });
 
                             if (f.config.autoCompile) {
 
