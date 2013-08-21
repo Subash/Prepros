@@ -39,14 +39,20 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                 usePolling : !config.getUserOptions().experimental.fileWatcher
             });
 
-            watcher.on('add', function(fpath){
+            var debounceAdd = _.debounce(function(fpath) {
+
+                if(!fs.existsSync(fpath)) {
+                    return;
+                }
 
                 if(config.getUserOptions().experimental.autoAddRemoveFile) {
                     $rootScope.$apply(function() {
                         projectsManager.addFile(project.id, fpath);
                     });
                 }
-            });
+            }, 200);
+
+            watcher.on('add', debounceAdd);
 
             var debounceUnlink = _.debounce(function(fpath) {
 
@@ -56,11 +62,11 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                 if(config.getUserOptions().experimental.autoAddRemoveFile) {
                     $rootScope.$apply(function() {
-                        projectsManager.removeFile(utils.id(path.relative(project.path, fpath)));
+                        projectsManager.removeFile(project.id, utils.id(path.relative(project.path, fpath)));
                     });
                 }
 
-            }, 500);
+            }, 200);
 
             watcher.on('unlink', debounceUnlink);
 
