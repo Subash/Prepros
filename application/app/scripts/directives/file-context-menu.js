@@ -82,7 +82,9 @@ prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootS
 
                         this.destroy();
                         $rootScope.$apply(function () {
-                            projectsManager.resetFileSettings(file.pid, file.id);
+                            var filePath = $filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path});
+                            projectsManager.removeFile(file.pid, file.id);
+                            projectsManager.addFile(file.pid, filePath);
                         });
                     });
 

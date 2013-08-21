@@ -22,11 +22,15 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
         var queueId =  fid+pid;
 
-        if (!_.contains(compileQueue)) {
-
-            compileQueue.push(queueId);
+        if (!_.contains(compileQueue, queueId)) {
 
             var file = projectsManager.getFileById(pid, fid);
+
+            if(_.isEmpty(file)) {
+                return;
+            }
+
+            compileQueue.push(queueId);
 
             var ext = path.extname(file.input).toLowerCase();
 

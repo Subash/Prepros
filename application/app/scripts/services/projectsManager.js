@@ -88,17 +88,38 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     //Function to get project by it's id
     function getProjectById(id) {
-        return _.findWhere(projects, {id: id});
+
+        var project = _.findWhere(projects, {id: id});
+
+        if(!_.isEmpty(project)) {
+            return project;
+        }
+
+        return {};
     }
 
     //function to get all project files
     function getProjectFiles(pid) {
-        return getProjectById(pid).files;
+
+        var project = getProjectById(pid);
+
+        if(!_.isEmpty(project)) {
+            return project.files;
+        }
+
+        return [];
     }
 
     //function to get all project imports
     function getProjectImports(pid) {
-        return getProjectById(pid).imports;
+
+        var project = getProjectById(pid);
+
+        if(!_.isEmpty(project)) {
+            return project.imports;
+        }
+
+        return [];
     }
 
     /**
@@ -108,7 +129,14 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
      */
 
     function getImportById(pid, id) {
-        return _.findWhere(getProjectById(pid).imports, {id: id});
+
+        var imp = _.findWhere(getProjectImports(pid), {id: id});
+
+        if(!_.isEmpty(imp)) {
+            return imp;
+        }
+
+        return {};
     }
 
     /**
@@ -118,20 +146,41 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
      */
 
     function getFileById(pid, fid) {
-        return _.findWhere(getProjectById(pid).files, {id: fid});
+
+        var imp = _.findWhere(getProjectFiles(pid), {id: fid});
+
+        if(!_.isEmpty(imp)) {
+            return imp;
+        }
+
+        return {};
     }
 
     //Function to get current Project config
     function getProjectConfig(pid) {
-        return getProjectById(pid).config;
+
+        var project = getProjectById(pid);
+
+        if(_.isEmpty(project)) {
+            return project.config;
+        }
+
+        return {};
     }
 
     //Function to get file imports in imports list
     function getFileImports(pid, fid) {
 
-        return _.filter(getProjectById(pid).imports, function (im) {
-            return _.contains(im.parents, fid);
-        });
+        var imports = getProjectImports(pid);
+
+        if(!_.isEmpty(imports)) {
+
+            return _.filter(imports, function (im) {
+                return _.contains(im.parents, fid);
+            });
+        }
+
+        return [];
     }
 
     //Function to match files against global and project specific filters
@@ -193,30 +242,32 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     function refreshFile(pid, fileId) {
 
+        if(!_.isEmpty(getFileById(pid, fileId))) {
 
-        var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
+            var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
 
-        var fileImports = fileTypes.getImports(fPath, getProjectById(pid).path);
+            var fileImports = fileTypes.getImports(fPath, getProjectById(pid).path);
 
-        var oldImports = getFileImports(pid, fileId);
+            var oldImports = getFileImports(pid, fileId);
 
-        _.each(fileImports, function(imp) {
-            addImport(pid, fileId, imp);
-        });
+            _.each(fileImports, function(imp) {
+                addImport(pid, fileId, imp);
+            });
 
-        _.each(oldImports, function (imp) {
+            _.each(oldImports, function (imp) {
 
-            var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
+                var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
 
-            if (!_.contains(fileImports, fullImpPath)) {
+                if (!_.contains(fileImports, fullImpPath)) {
 
-                removeImportParent(imp.pid, imp.id, fileId);
+                    removeImportParent(imp.pid, imp.id, fileId);
 
-                addFile(pid, fullImpPath);
-            }
-        });
+                    addFile(pid, fullImpPath);
+                }
+            });
 
-        _broadCast();
+            _broadCast();
+        }
     }
 
     /**
@@ -224,13 +275,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
      * @param pid {string} Project id
      * @param fid {string} File id
      */
-
-    function resetFileSettings(pid, fid) {
-        var f = getFileById(pid, fid);
-        removeFile(pid, fid);
-        addFile(pid, f.input);
-        _broadCast();
-    }
 
     //Function to remove a file
     function removeFile(pid, id) {
@@ -445,12 +489,15 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         var file = getFileById(pid, id);
 
-        if (path.extname(path.basename(newPath)) === '') {
+        if(!_.isEmpty(file)) {
 
-            newPath = newPath + fileTypes.getCompiledExtension(file.input);
+            if (path.extname(path.basename(newPath)) === '') {
+
+                newPath = newPath + fileTypes.getCompiledExtension(file.input);
+            }
+
+            file.output = newPath;
         }
-
-        file.output = newPath;
     }
 
     //Function to create Project Config File
@@ -483,7 +530,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         getProjectConfig: getProjectConfig,
         changeFileOutput: changeFileOutput,
         matchFilters: matchFileFilters,
-        resetFileSettings: resetFileSettings,
         createProjectConfigFile: createProjectConfigFile
     };
 });
