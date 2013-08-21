@@ -9,7 +9,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes, $rootScope) {
+prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes, $rootScope, utils) {
 
     "use strict";
 
@@ -41,14 +41,36 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
             watcher.on('add', function(fpath){
 
-                if(config.getUserOptions().experimental.autoAddFile) {
+                if(config.getUserOptions().experimental.autoAddRemoveFile) {
                     $rootScope.$apply(function() {
                         projectsManager.addFile(project.id, fpath);
                     });
                 }
             });
 
-            watcher.on('change', function(fpath) {
+            var debounceUnlink = _.debounce(function(fpath) {
+
+                if(fs.existsSync(fpath)) {
+                    return;
+                }
+
+                if(config.getUserOptions().experimental.autoAddRemoveFile) {
+                    $rootScope.$apply(function() {
+                        projectsManager.removeFile(utils.id(path.relative(project.path, fpath)));
+                    });
+                }
+
+            }, 500);
+
+            watcher.on('unlink', debounceUnlink);
+
+            var changeDelay = config.getUserOptions().experimental.fileWatcher? 100 : 0;
+
+            var debounceChange = _.debounce(function(fpath) {
+
+                if(!fs.existsSync(fpath)) {
+                    return;
+                }
 
                 //Do not refresh on preprocessable files except javascript, markdown and also exclude prepros.json file
                 if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || /\.(md|markdown)/i.test(fpath) || /\.js/i.test(fpath)) && !/prepros\.json/.test(fpath)) {
@@ -91,10 +113,12 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                         });
                     }
                 });
-            });
+            }, changeDelay);
+
+            watcher.on('change', debounceChange);
 
             watcher.on('error', function(err) {
-                notification.error('Error', 'An error occurred while watching project folder.' , project.path + ' ' + err.message);
+                //Ignore all errors;  there are too many to notify the user
             });
 
             projectsBeingWatched.push({id: project.id, watcher: watcher});

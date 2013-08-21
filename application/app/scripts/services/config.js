@@ -83,8 +83,8 @@ prepros.factory('config', function () {
         autoprefixerBrowsers: '',
         liveRefreshDelay: 0,
         experimental : {
-            fileWatcher: true,
-            autoAddFile: true
+            fileWatcher: false,
+            autoAddRemoveFile: true
         },
 
         customRuby: {
