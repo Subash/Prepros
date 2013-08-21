@@ -85,8 +85,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                             var f = projectsManager.getFileById(sf[1], sf[2]);
 
-                            $rootScope.$apply(function() {
-                                projectsManager.refreshFile(f.pid, f.id);
+                            process.nextTick(function() {
+                                $rootScope.$apply(function() {
+                                    projectsManager.refreshFile(f.pid, f.id);
+                                });
                             });
 
                             if (f.config.autoCompile) {
