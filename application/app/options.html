@@ -393,7 +393,12 @@
             </div>
 
             <label>
-                <input type="checkbox" ng-model="userConfig.experimentalFileWatcher">
+                <input type="checkbox" ng-model="userConfig.experimental.autoAddFile">
+                <span class="label-desc">Automatically Add File Without Refreshing</span>
+            </label>
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.experimental.fileWatcher">
                 <span class="label-desc"> Enable Faster Event Based File Watcher</span>
             </label>
             <div class="alert alert-info">Event based file watcher greatly improves performance and battery life. You can disable it if you are having any troubles.</div>

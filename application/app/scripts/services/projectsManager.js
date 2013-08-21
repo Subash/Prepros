@@ -273,7 +273,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
     /**
      * Resets the settings of a file to defaults
      * @param pid {string} Project id
-     * @param fid {string} File id
+     * @param id {string} File id
      */
 
     //Function to remove a file
@@ -416,58 +416,51 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         utils.showLoading();
 
-        process.nextTick(function() {
+        var folder = getProjectById(pid).path;
 
-            var folder = getProjectById(pid).path;
+        //Remove file that doesn't exist or matches the filter pattern
+        _.each(getProjectFiles(pid), function (file) {
 
-            //Remove file that doesn't exist or matches the filter pattern
-            _.each(getProjectFiles(pid), function (file) {
+            //Remove if matches filter patterns or doesn't exist
+            if (matchFileFilters(pid, path.join(folder, file.input)) || !fs.existsSync(path.join(folder, file.input))) {
 
-                //Remove if matches filter patterns or doesn't exist
-                if (matchFileFilters(pid, path.join(folder, file.input)) || !fs.existsSync(path.join(folder, file.input))) {
+                removeFile(pid, file.id);
 
-                    removeFile(pid, file.id);
+            }
 
+        });
+
+        if (fs.existsSync(folder)) {
+
+            var projectFiles = getFilesInDir(folder);
+
+            _.each(projectFiles, function (file) {
+
+                if (!matchFileFilters(pid, file)) {
+
+                    //Generate unique id for file
+                    var file_id = _id(path.relative(getProjectById(pid).path, file));
+
+                    var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
+
+                    if(already) {
+                        refreshFile(pid, file_id);
+                    } else {
+                        addFile(pid, file);
+                    }
                 }
-
             });
 
-            if (fs.existsSync(folder)) {
+            _broadCast();
 
-                var projectFiles = getFilesInDir(folder);
+            utils.hideLoading();
 
-                _.each(projectFiles, function (file) {
+        } else {
 
-                    if (!matchFileFilters(pid, file)) {
+            removeProject(pid);
 
-                        //Generate unique id for file
-                        var file_id = _id(path.relative(getProjectById(pid).path, file));
-
-                        var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
-
-                        if(already) {
-                            refreshFile(pid, file_id);
-                        } else {
-                            addFile(pid, file);
-                        }
-                    }
-                });
-
-                $rootScope.$apply(function() {
-                    _broadCast();
-                });
-
-                utils.hideLoading();
-
-            } else {
-
-                $rootScope.$apply(function() {
-                    removeProject(pid);
-                });
-
-                utils.hideLoading();
-            }
-        });
+            utils.hideLoading();
+        }
     }
 
     //Function to remove project

@@ -35,7 +35,17 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
             var watcher = chokidar.watch(project.path, {
                 ignored: /\\\.|\/\./,
                 ignorePermissionErrors: true,
-                usePolling : !config.getUserOptions().experimentalFileWatcher
+                ignoreInitial: true,
+                usePolling : !config.getUserOptions().experimental.fileWatcher
+            });
+
+            watcher.on('add', function(fpath){
+
+                if(config.getUserOptions().experimental.autoAddFile) {
+                    $rootScope.$apply(function() {
+                        projectsManager.addFile(project.id, fpath);
+                    });
+                }
             });
 
             watcher.on('change', function(fpath) {
@@ -52,17 +62,15 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                     if(path.relative(filePath, fpath)=== "") {
 
-                        process.nextTick(function() {
-                            $rootScope.$apply(function() {
-                                projectsManager.refreshFile(file.pid, file.id);
-                            });
-                        });
-
                         if (file.config.autoCompile) {
 
                             //Compile File
                             compiler.compile(file.pid, file.id);
                         }
+
+                        $rootScope.$apply(function() {
+                            projectsManager.refreshFile(file.pid, file.id);
+                        });
                     }
                 });
 
