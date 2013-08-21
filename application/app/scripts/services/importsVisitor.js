@@ -35,7 +35,7 @@ prepros.factory('importsVisitor', function (utils) {
 
 
         if (ext === '.less') {
-            importReg = /@import\s['"]*([^\n;"']+)[;"']/g;
+            importReg = /@import\s+[url\('"]*(.*)["'\)]/g;
         }
         if (ext === '.scss') {
             importReg = /@import\s['"]*([^;]+)[;"']/g;
