@@ -39,38 +39,44 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                 usePolling : !config.getUserOptions().experimental.fileWatcher
             });
 
-            var debounceAdd = _.debounce(function(fpath) {
+            var timeOutAdd = function(fpath) {
 
-                if(!fs.existsSync(fpath)) {
-                    return;
-                }
+                window.setTimeout(function() {
 
-                if(config.getUserOptions().experimental.autoAddRemoveFile) {
-                    $rootScope.$apply(function() {
-                        projectsManager.addFile(project.id, fpath);
-                    });
-                }
-            }, 200);
+                    if(!fs.existsSync(fpath)) {
+                        return;
+                    }
 
-            watcher.on('add', debounceAdd);
+                    if(config.getUserOptions().experimental.autoAddRemoveFile) {
+                        $rootScope.$apply(function() {
+                            projectsManager.addFile(project.id, fpath);
+                        });
+                    }
+                }, 200);
+            };
 
-            var debounceUnlink = _.debounce(function(fpath) {
+            watcher.on('add', timeOutAdd);
 
-                if(fs.existsSync(fpath)) {
-                    return;
-                }
+            var timeOutUnlink = function(fpath) {
 
-                if(config.getUserOptions().experimental.autoAddRemoveFile) {
-                    $rootScope.$apply(function() {
-                        projectsManager.removeFile(project.id, utils.id(path.relative(project.path, fpath)));
-                    });
-                }
+                window.setTimeout(function() {
 
-            }, 200);
+                    if(fs.existsSync(fpath)) {
+                        return;
+                    }
 
-            watcher.on('unlink', debounceUnlink);
+                    if(config.getUserOptions().experimental.autoAddRemoveFile) {
+                        $rootScope.$apply(function() {
+                            projectsManager.removeFile(project.id, utils.id(path.relative(project.path, fpath)));
+                        });
+                    }
 
-            var changeDelay = config.getUserOptions().experimental.fileWatcher? 100 : 0;
+                }, 200);
+            };
+
+            watcher.on('unlink', timeOutUnlink);
+
+            var changeDelay = config.getUserOptions().experimental.fileWatcher? 50 : 0;
 
             var debounceChange = _.debounce(function(fpath) {
 
