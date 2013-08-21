@@ -50,8 +50,8 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
             watcher.on('change', function(fpath) {
 
-                //Do not refresh on preprocessable files except javascript and also exclude prepros.json file
-                if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || /\.js/i.test(fpath)) && !/prepros\.json/.test(fpath)) {
+                //Do not refresh on preprocessable files except javascript, markdown and also exclude prepros.json file
+                if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || /\.(md|markdown)/i.test(fpath) || /\.js/i.test(fpath)) && !/prepros\.json/.test(fpath)) {
 
                     liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                 }
