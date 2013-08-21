@@ -59,20 +59,22 @@
 
                 </div>
 
-                <div ng-if="path == 'optim'">
+                <div ng-controller="OptimImageCtrl">
 
-                    <div ng-controller="OptimImageCtrl">
+                    <div ng-if="path == 'optim'">
 
-                        <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
 
-                        <!-- There are no files -->
-                        <div class="no-files" ng-if="projectImages.length == 0">
 
-                            <h1 class="icomoon-images"></h1>
+                            <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
 
-                            <p>No images found.</p>
+                            <!-- There are no files -->
+                            <div class="no-files" ng-if="projectImages.length == 0">
 
-                        </div>
+                                <h1 class="icomoon-images"></h1>
+
+                                <p>No images found.</p>
+
+                            </div>
 
                     </div>
 
