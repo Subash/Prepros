@@ -22,7 +22,7 @@ prepros.factory('$exceptionHandler',function(){
     process.on('uncaughtException', function(err) {
 
         if(/watch EPERM/.test(err.message)) {
-            return;
+            return console.log('Eperm Watch Error Occurred and Ignored');
         }
 
         var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
