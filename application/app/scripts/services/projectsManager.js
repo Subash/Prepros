@@ -9,7 +9,7 @@
 /*global prepros,  _, angular*/
 
 //Storage
-prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, $rootScope, $location) {
+prepros.factory('projectsManager', function (config, storage, fileTypes, notification, utils, $rootScope, $location, $filter) {
 
     'use strict';
 
@@ -18,6 +18,38 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         _id = utils.id;
 
     var projects = storage.get();
+
+    if(config.getUserOptions().experimental.autoAddRemoveFile) {
+
+        window.setTimeout(function() {
+
+            //Remove non existing files
+            _.each(projects, function(project) {
+                _.each(project.files, function(file) {
+
+                    var fp = $filter('fullPath')(file.input, { basePath: project.path});
+
+                    if(!fs.existsSync(fp)) {
+                        $rootScope.$apply(function() {
+                            removeFile(file.pid, file.id);
+                        });
+                    }
+                });
+
+                _.each(project.imports, function(imp) {
+
+                    var fp = $filter('fullPath')(imp.path, { basePath: project.path});
+
+                    if(!fs.existsSync(fp)) {
+                        $rootScope.$apply(function() {
+                            removeImport(imp.pid, imp.id);
+                        });
+                    }
+                });
+            });
+
+        }, 1);
+    }
 
     var _broadCast = function () {
         $rootScope.$broadcast('dataChange', {projects: projects});

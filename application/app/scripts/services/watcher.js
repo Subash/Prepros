@@ -90,6 +90,13 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                     liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                 }
 
+                //Try to add to files list. if file is not supported project manager will ignore it.
+                if(config.getUserOptions().experimental.autoAddRemoveFile) {
+                    $rootScope.$apply(function() {
+                        projectsManager.addFile(project.id, fpath);
+                    });
+                }
+
                 _.each(project.files, function(file) {
 
                     var filePath = $filter('fullPath')(file.input, { basePath: project.path});
