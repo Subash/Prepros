@@ -71,8 +71,6 @@ prepros.factory('config', function () {
         saveUserOptions(userConfig);
     }
 
-    var experimentalFileWatcher = (os.platform() === 'win32');
-
     var defaultConfig = {
         cssPath: 'css',
         jsPath: 'js',
@@ -85,7 +83,7 @@ prepros.factory('config', function () {
         autoprefixerBrowsers: '',
         liveRefreshDelay: 0,
         experimental : {
-            fileWatcher: experimentalFileWatcher,
+            fileWatcher: false,
             autoAddRemoveFile: true
         },
 
