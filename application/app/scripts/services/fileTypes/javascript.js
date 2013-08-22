@@ -160,11 +160,11 @@ prepros.factory('javascript', function (config, utils) {
 
                             if (append) {
 
-                                javascript = javascript + js;
+                                javascript = javascript + '\n' + js;
 
                             } else {
 
-                                javascript = js + javascript;
+                                javascript = js + '\n' + javascript;
 
                             }
                         });
