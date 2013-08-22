@@ -5,8 +5,8 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
-/*global prepros*/
+/*jshint browser: true, node: true, loopfunc: true*/
+/*global prepros, _*/
 
 prepros.factory('coffee', function (config, utils) {
 
@@ -70,33 +70,180 @@ prepros.factory('coffee', function (config, utils) {
 
             } else {
 
-                try {
+                var run = function () {
 
-                    var javascript = coffee.compile(data.toString(), options);
+                    var javascript = data.toString();
+
+                    try {
+
+                        javascript = coffee.compile(data.toString(), options);
+
+                    } catch(e) {
+
+                        throw {message: 'Error on line ' + e.location.first_line + ' of ' + file.input};
+                    }
 
                     if (file.config.uglify) {
 
-                        javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
+                        try {
+
+                            javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
+
+                        } catch (e) {
+
+                            throw {message: 'Error on' + file.input};
+                        }
                     }
 
-                    fs.outputFile(file.output, javascript, function (err) {
+                    var importReg = {
+                        append: /\#(?:\s|)@(?:prepros|codekit)-append\s+(.*)/gi,
+                        prepend: /\#(?:\s|)@(?:prepros|codekit)-prepend\s+(.*)/gi
+                    };
 
-                        if (err) {
+                    var read = function (filePathToRead) {
 
-                            errorCall(err.message);
+                        var importedFiles = {
+                            append: [],
+                            prepend: []
+                        };
 
-                        } else {
+                        var regs = Object.keys(importReg);
 
-                            successCall(file.input);
+                        _.each(regs, function (reg) {
 
+                            var result;
+
+                            while ((result = importReg[reg].exec(fs.readFileSync(filePathToRead))) !== null) {
+
+                                var importedFile;
+
+                                result[1] = result[1].replace(/'|"/gi, '').trim();
+
+                                //Check if path is full or just relative
+                                if (result[1].indexOf(':') >= 0) {
+
+                                    importedFile = path.normalize(result[1]);
+
+                                } else {
+
+                                    importedFile = path.join(path.dirname(filePathToRead), result[1]);
+                                }
+
+                                //Check if file exists
+                                if (fs.existsSync(importedFile)) {
+
+                                    importedFiles[reg].push(importedFile);
+
+                                } else {
+
+                                    throw {message: 'Imported file "' + importedFile + '" not found \n Imported by "' + file.input + '"'};
+                                }
+                            }
+                        });
+
+                        return {
+                            append: importedFiles.append,
+                            prepend: importedFiles.prepend.reverse()
+                        };
+                    };
+
+                    var get = function (append) {
+
+                        var imps = [];
+                        imps[0] = (append) ? read(file.input).append : read(file.input).prepend;
+
+                        //Get imports of imports up to four levels
+                        for (var i = 1; i < 5; i++) {
+
+                            imps[i] = [];
+
+                            _.each(imps[i - 1], function (importedFile) {
+
+                                imps[i] = _.uniq(_.union(imps[i], (append) ? read(importedFile).append : read(importedFile).prepend));
+                            });
                         }
 
+                        return _.uniq(_.flatten(imps));
+
+                    };
+
+                    var join = function (files, append) {
+
+                        //Remove repeated imports
+                        _.each(_.uniq(_.flatten(files)), function (imp) {
+
+                            var js = fs.readFileSync(imp).toString();
+
+                            if(/\.coffee/.test(imp)) {
+
+                                try {
+
+                                    js = coffee.compile(js, options);
+
+                                } catch (e) {
+
+                                    throw {message: 'Error on line ' + (parseInt(e.location.first_line, 10) + 1) + ' of ' + imp};
+
+                                }
+                            }
+
+                            if (file.config.uglify && !/min.js$/.exec(path.basename(imp))) {
+
+                                try {
+
+                                    js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
+
+                                } catch (e) {
+
+                                    throw {message: 'Error on line ' + e.line + ' col ' + e.col + ' ' + e.message + ' of ' + imp};
+                                }
+                            }
+
+                            if (append) {
+
+                                javascript = javascript + '\n' + js;
+
+                            } else {
+
+                                javascript = js + '\n' + javascript;
+
+                            }
+                        });
+                    };
+
+                    //Join Files
+                    var appends = get(true);
+                    var prepends = get(false);
+
+                    join(appends, true);
+                    join(prepends, false);
+
+                    _.each(importReg, function (reg) {
+
+                        javascript = javascript.replace(new RegExp(reg.source + '\n', 'gi'), '');
                     });
 
+                    try {
+
+                        fs.outputFileSync(file.output, javascript);
+
+                    } catch (e) {
+
+                        throw e;
+                    }
+                };
+
+                //try to compile js
+                try {
+
+                    run();
+
+                    successCall(file.input);
 
                 } catch (e) {
 
-                    errorCall(e.message + "\n" + file.input);
+                    errorCall(e.message);
+
                 }
             }
         });

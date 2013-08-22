@@ -127,7 +127,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
 
         var ext = path.extname(filePath).slice(1);
 
-        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js'];
+        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
 
         return (_.contains(can, ext)) ? importsVisitor.getImports(filePath, projectPath) : [];
 
