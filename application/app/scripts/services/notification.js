@@ -27,9 +27,9 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             var notificationPath = 'file:///' + path.normalize(config.basePath + '/notification.html');
 
             var options = {
-                x: window.screen.availWidth - 410,
+                x: window.screen.availWidth - 360,
                 y: window.screen.availHeight - 110,
-                width: 400,
+                width: 350,
                 height: 100,
                 frame: false,
                 toolbar: false,
