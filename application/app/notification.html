@@ -11,27 +11,11 @@
 
             var nwin = require('nw.gui').Window.get();
 
-            nwin.setAlwaysOnTop(true);
-
             $scope.notification = {};
 
-           var timer = setTimeout(function(){
-            }, 10000);
+            var timer = setTimeout(function(){}, 10000);
 
-            var show = function() {
-
-                if(typeof nwin.showInactive === 'function') {
-
-                    nwin.showInactive();
-
-                } else {
-
-                    nwin.show();
-                    nwin.blur();
-                }
-            };
-
-            require('nw.gui').Window.get().on('updateNotification', function(data){
+            nwin.on('updateNotification', function(data){
 
                 $scope.$apply(function(){
 
@@ -40,7 +24,10 @@
                     window.clearTimeout(timer);
 
                     timer =  setTimeout(function(){
-                        nwin.close()
+
+                        //Just hide window without closing
+                        nwin.y = -1000;
+
                     }, parseInt(data.time, 10));
                 });
 
@@ -52,11 +39,31 @@
 
                     nwin.height = height;
 
-                    nwin.y = (window.screen.availHeight -10) - height;
+                    if(process.platform === 'win32') {
 
-                    show();
+                        nwin.y = (window.screen.availHeight - 10) - height;
+
+                    } else {
+
+                        nwin.y = 20;
+                    }
 
                 }, 75);
+            });
+
+            $(document).ready(function() {
+
+                nwin.setAlwaysOnTop(true);
+
+                if(typeof nwin.showInactive === 'function') {
+
+                    nwin.showInactive();
+
+                } else {
+
+                    nwin.show();
+                    nwin.blur();
+                }
             });
 
             $scope.openLog = function(){

@@ -16,6 +16,40 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
     var notificationWindow, log = [];
 
+    var createNotificationWindow = function() {
+
+        var notificationPath = 'file:///' + path.normalize(config.basePath + '/notification.html');
+
+        var options = {
+            x: window.screen.availWidth - 360,
+            y: -1000,
+            width: 350,
+            height: 100,
+            frame: false,
+            toolbar: false,
+            resizable: false,
+            show: false,
+            show_in_taskbar: false
+        };
+
+        notificationWindow = require('nw.gui').Window.open(notificationPath, options);
+
+        notificationWindow.on('showLog', function () {
+            $rootScope.$apply(function () {
+                $location.path('/log');
+            });
+            require('nw.gui').Window.get().show();
+        });
+
+        notificationWindow.on('closed', function () {
+            notificationWindow.removeAllListeners();
+            notificationWindow = null;
+        });
+    };
+
+    //Create initial window
+    createNotificationWindow();
+
     function openNotificationWindow(data) {
 
         if (notificationWindow) {
@@ -24,40 +58,10 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         } else {
 
-            var notificationPath = 'file:///' + path.normalize(config.basePath + '/notification.html');
+            createNotificationWindow();
 
-            var options = {
-                x: window.screen.availWidth - 360,
-                y: window.screen.availHeight - 110,
-                width: 350,
-                height: 100,
-                frame: false,
-                toolbar: false,
-                resizable: false,
-                show: false,
-                show_in_taskbar: false
-            };
-
-            if (process.platform !== 'win32') {
-                options.y = 30;
-            }
-
-            notificationWindow = require('nw.gui').Window.open(notificationPath, options);
-
-            notificationWindow.on('loaded', function () {
+            notificationWindow.on('loaded', function() {
                 notificationWindow.emit('updateNotification', data);
-            });
-
-            notificationWindow.on('showLog', function () {
-                $rootScope.$apply(function () {
-                    $location.path('/log');
-                });
-                require('nw.gui').Window.get().show();
-            });
-
-            notificationWindow.on('closed', function () {
-                notificationWindow.removeAllListeners();
-                notificationWindow = null;
             });
         }
     }
