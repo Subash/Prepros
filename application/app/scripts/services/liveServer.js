@@ -49,15 +49,30 @@ prepros.factory('liveServer', function (config) {
         res.sendfile(config.basePath + '/vendor/livereload.js');
     });
 
-    app.get('/prepros.js', function(req, res) {
+    app.get('/prepros.js', function(req, res, next) {
 
         if('pid' in req.query) {
 
             if(req.query.pid in projectsBeingServed) {
                 res.setHeader('Content-Type', 'text/javascript');
-                var snippet = '(function () { var script = document.createElement("script"); document.querySelector("body").appendChild(script); script.src = "http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '";})()';
+
+                var snippet = '' +
+                    '(function(){' +
+                    '   try {' +
+                    '       var script = document.createElement("script");' +
+                    '       script.src="http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '"\n' +
+                    '       document.querySelectorAll("body")[0].appendChild(script);\n' +
+                    '   } catch(e) {' +
+                    '       alert("This browser is not supported by Prepros");' +
+                    '   }' +
+                    '})();';
+
                 res.send(snippet);
+            } else {
+                next();
             }
+        } else {
+            next();
         }
     });
 
@@ -97,9 +112,14 @@ prepros.factory('liveServer', function (config) {
                 var body = string instanceof Buffer ? string.toString(encoding) : string;
 
                 var snippet = '<script>' +
-                    '(function(){var script = document.createElement("script");' +
-                    'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
-                    'document.body.appendChild(script);' +
+                    '(function(){' +
+                    '   try {' +
+                    '       var script = document.createElement("script");' +
+                    '       script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
+                    '       document.querySelectorAll("body")[0].appendChild(script);' +
+                    '   } catch(e) {' +
+                    '       alert("This browser is not supported by Prepros");' +
+                    '   }' +
                     '})();' +
                     '</script>';
 
@@ -194,9 +214,14 @@ prepros.factory('liveServer', function (config) {
 
                             var hasbody = false;
                             var snippet = '<script>' +
-                                '(function(){var script = document.createElement("script");' +
-                                'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
-                                'document.body.appendChild(script);' +
+                                '(function(){' +
+                                '   try {' +
+                                '       var script = document.createElement("script");' +
+                                '       script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
+                                '       document.querySelectorAll("body")[0].appendChild(script);' +
+                                '   } catch(e) {' +
+                                '       alert("This browser is not supported by Prepros");' +
+                                '   }' +
                                 '})();' +
                                 '</script>';
 
