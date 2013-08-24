@@ -1,5 +1,4 @@
 @import url("bootstrap.min.css");
-@import url("bootstrap-theme.css");
 @import url("../icomoon/style.css");
 @import url("source-sans-pro.css");
 body{font-family:'SourceSansPro'}
@@ -17,4 +16,4 @@ body{font-family:'SourceSansPro'}
 .notif-container.success{border-top-color:#078e13;}
 .notif-container.success .notif-icon{color:#078e13}
 .notif-container.success h3{color:#078e13}
-.notif-container .notif-close{display:inline-block;position:absolute;right:10px;top:10px;font-size:13px;color:#bbb}
+.notif-container .notif-close{display:inline-block;position:absolute;right:10px;top:10px;font-size:10px;color:#bbb}

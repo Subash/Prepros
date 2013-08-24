@@ -83,7 +83,7 @@ prepros.factory('config', function () {
         autoprefixerBrowsers: '',
         liveRefreshDelay: 0,
         notificationTime: 3000,
-        notificationDetails: true,
+        notificationDetails: false,
         experimental : {
             fileWatcher: false,
             autoAddRemoveFile: true
