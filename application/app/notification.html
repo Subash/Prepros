@@ -3,6 +3,7 @@
 <head>
     <title>Notification</title>
     <script src="vendor/angular.js"></script>
+    <script src="vendor/jquery.min.js"></script>
     <link href="assets/css/notification.css" rel="stylesheet">
 
     <script>
@@ -32,8 +33,6 @@
 
             require('nw.gui').Window.get().on('updateNotification', function(data){
 
-                nwin.hide();
-
                 $scope.$apply(function(){
 
                     $scope.notification = data;
@@ -47,13 +46,13 @@
 
                 setTimeout(function() {
 
-                    nwin.height = document.height;
+                    var elem = $('body');
 
-                    nwin.width = document.width;
+                    var height =  elem.height();
 
-                    nwin.x = (window.screen.availWidth -10) - document.width;
+                    nwin.height = height;
 
-                    nwin.y = (window.screen.availHeight -10) - document.height;
+                    nwin.y = (window.screen.availHeight -10) - height;
 
                     show();
 
