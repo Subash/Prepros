@@ -13,6 +13,20 @@
             }
         });
 
+        (function() {
+
+            var fs = require('fs');
+            var path = require('path');
+
+            var cssPath = path.join(process.cwd(), 'app/assets/css/style.css');
+
+            fs.watchFile(cssPath, {interval: 500}, function() {
+
+                document.querySelector('#preprosStylesheet').href="assets/css/style.css?" + Math.random();
+            })
+
+        })()
+
     </script>
 
     <style>
@@ -23,7 +37,7 @@
     </style>
 
     <!--Load App styles -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet" id="preprosStylesheet">
 
     <!-- Scripts loader -->
     <script src="vendor/LAB.min.js"></script>

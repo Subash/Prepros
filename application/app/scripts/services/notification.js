@@ -72,7 +72,18 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         if (config.getUserOptions().enableErrorNotifications) {
 
-            openNotificationWindow({name: name, message: message, type: 'error'});
+            var data = {
+                name: name,
+                message: message,
+                type: 'error',
+                time: config.getUserOptions().notificationTime
+            };
+
+            if(config.getUserOptions().notificationDetails) {
+                data.details = details;
+            }
+
+            openNotificationWindow(data);
         }
     }
 
@@ -87,7 +98,14 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         if (config.getUserOptions().enableSuccessNotifications) {
 
-            openNotificationWindow({name: name, message: message, type: 'success'});
+            var data = {
+                name: name,
+                message: message,
+                type: 'success',
+                time: config.getUserOptions().notificationTime
+            };
+
+            openNotificationWindow(data);
         }
     };
 

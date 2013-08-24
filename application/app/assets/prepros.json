@@ -19,6 +19,21 @@
         "autoprefixer": false
       },
       "type": "Scss"
+    },
+    {
+      "id": "30d2582a",
+      "pid": "9c1fc471",
+      "name": "notification.styl",
+      "type": "Stylus",
+      "input": "stylus\\notification.styl",
+      "output": "{{cssPath}}\\notification.css",
+      "config": {
+        "autoCompile": true,
+        "lineNumbers": false,
+        "nib": false,
+        "compress": true,
+        "autoprefixer": false
+      }
     }
   ],
   "imports": [

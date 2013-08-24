@@ -82,6 +82,8 @@ prepros.factory('config', function () {
         filterPatterns: 'node_modules', //Filter node modules folder by default
         autoprefixerBrowsers: '',
         liveRefreshDelay: 0,
+        notificationTime: 3000,
+        notificationDetails: true,
         experimental : {
             fileWatcher: false,
             autoAddRemoveFile: true

@@ -1,0 +1,19 @@
+@import url("bootstrap.min.css");
+@import url("bootstrap-theme.css");
+@import url("../icomoon/style.css");
+@import url("source-sans-pro.css");
+body{font-family:'SourceSansPro'}
+.notif-window{overflow:auto;background:#fff;-webkit-user-select:none;cursor:default}
+.notif-container{border-top:4px solid;position:relative;padding:5px 10px;}
+.notif-container .notif-header{display:-webkit-flex;}
+.notif-container .notif-header div{-webkit-flex:1;-webkit-flex-flow:column;}
+.notif-container .notif-header div.notif-info{-webkit-flex:5}
+.notif-container .notif-header .notif-icon{font-size:40px;padding-top:8px;padding-left:10px;height:75px;line-height:75px}
+.notif-container h3{font-size:20px;font-weight:normal;line-height:20px;padding-top:0;margin-top:15px}
+.notif-container.error{border-top-color:#c02942;}
+.notif-container.error .notif-icon{color:#c02942}
+.notif-container.error h3{color:#c02942}
+.notif-container.success{border-top-color:#078e13;}
+.notif-container.success .notif-icon{color:#078e13}
+.notif-container.success h3{color:#078e13}
+.notif-container .notif-close{display:inline-block;position:absolute;right:10px;top:10px;font-size:14px;color:#bbb}

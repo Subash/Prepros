@@ -54,15 +54,6 @@
         <div data-title="General">
 
             <h4 class="option-title">General</h4>
-
-            <label>
-                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
-                <span class="label-desc">Enable Error Notifications</span>
-            </label>
-            <label>
-                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
-                <span class="label-desc">Enable Success Notifications</span>
-            </label>
             <label>
                 <span class="label-desc label-block">HTML File Extension</span>
                 <input type="text" class="span4" ng-model="userConfig.htmlExtension">
@@ -79,6 +70,31 @@
                 <span class="label-desc label-block">Live Refresh Delay in milliseconds</span>
                 <input type="text" class="span4" ng-model="userConfig.liveRefreshDelay" placeholder="A value is required">
             </label>
+
+        </div>
+
+        <div data-title="Notifications">
+
+            <h4 class="option-title">Notifications</h4>
+
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableErrorNotifications">
+                <span class="label-desc">Enable Error Notifications</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.enableSuccessNotifications">
+                <span class="label-desc">Enable Success Notifications</span>
+            </label>
+            <label>
+                <input type="checkbox" ng-model="userConfig.notificationDetails">
+                <span class="label-desc">Show Details in Notification Popup</span>
+            </label>
+
+            <label>
+                <span class="label-desc label-block">Show Notification For ( in milliseconds )</span>
+                <input type="text" class="span4" ng-model="userConfig.notificationTime" placeholder="A value is required">
+            </label>
+
         </div>
 
         <div data-title="Folders">

@@ -2,32 +2,62 @@
 <html ng-app>
 <head>
     <title>Notification</title>
-    <script src="vendor/jquery.min.js"></script>
-    <script src="vendor/underscore.min.js"></script>
     <script src="vendor/angular.js"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/notification.css" rel="stylesheet">
+
     <script>
         function NotificationCtrl($scope){
 
-            var nwWindow = require('nw.gui').Window.get();
-            nwWindow.setAlwaysOnTop(true);
+            var nwin = require('nw.gui').Window.get();
+
+            nwin.setAlwaysOnTop(true);
 
             $scope.notification = {};
 
-            var timer = _.delay(function(){
-                nwWindow.close()
-            }, 3000);
+           var timer = setTimeout(function(){
+            }, 10000);
+
+            var show = function() {
+
+                if(typeof nwin.showInactive === 'function') {
+
+                    nwin.showInactive();
+
+                } else {
+
+                    nwin.show();
+                    nwin.blur();
+                }
+            };
 
             require('nw.gui').Window.get().on('updateNotification', function(data){
+
+                nwin.hide();
+
                 $scope.$apply(function(){
+
                     $scope.notification = data;
 
                     window.clearTimeout(timer);
 
-                    timer =  _.delay(function(){
-                        nwWindow.close()
-                    }, 3000);
-                })
+                    timer =  setTimeout(function(){
+                        nwin.close()
+                    }, parseInt(data.time, 10));
+                });
+
+                setTimeout(function() {
+
+                    nwin.height = document.height;
+
+                    nwin.width = document.width;
+
+                    nwin.x = (window.screen.availWidth -10) - document.width;
+
+                    nwin.y = (window.screen.availHeight -10) - document.height;
+
+                    show();
+
+                }, 75);
             });
 
             $scope.openLog = function(){
@@ -38,22 +68,6 @@
                 e.stopPropagation();
                 require('nw.gui').Window.get().close();
             };
-
-            $(document).ready(function(){
-
-                var nWin = require('nw.gui').Window.get();
-
-
-                if(typeof nWin.showInactive === 'function') {
-
-                    nWin.showInactive();
-
-                } else {
-
-                    nWin.show();
-                    nWin.blur();
-                }
-            });
         }
     </script>
 </head>
@@ -62,13 +76,16 @@
 <div ng-controller="NotificationCtrl" class="preprosNotification" ng-click="openLog()">
     <div class="notif-container {{notification.type}}">
         <span class="icomoon-close notif-close" ng-click="close($event)"></span>
-        <div class="notif-icon">
-            <i ng-class="{'icomoon-smiley' : notification.type == 'success', 'icomoon-sad' : notification.type == 'error'}"></i>
+        <div class="notif-header">
+            <div class="notif-icon">
+                <i ng-class="{'icomoon-smiley' : notification.type == 'success', 'icomoon-sad' : notification.type == 'error'}"></i>
+            </div>
+            <div class="notif-info">
+                <h3>{{notification.name}}</h3>
+                <p>{{notification.message}}</p>
+            </div>
         </div>
-        <div class="notif-info">
-            <h3>{{notification.name}}</h3>
-            <p>{{notification.message}}</p>
-        </div>
+        <pre ng-if="notification.type == 'error' && notification.details ">{{notification.details}}</pre>
     </div>
 </div>
 </body>
