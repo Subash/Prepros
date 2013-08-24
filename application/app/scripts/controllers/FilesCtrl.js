@@ -62,9 +62,9 @@ prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $fi
     };
 
     //Open file with default editor
-    $scope.openFile = function (file) {
+    $scope.openFile = function (projectPath, filePath) {
 
-        require('nw.gui').Shell.openExternal(file);
+        require('nw.gui').Shell.openExternal(path.join(projectPath, filePath));
 
     };
 
