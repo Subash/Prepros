@@ -20,14 +20,22 @@ prepros.factory('liveServer', function (config) {
         urls = [],
         portfinder = require('portfinder'),
         url = require('url'),
-        request = require('request');
+        request = require('request'),
+        path = require('path');
 
     var MAIN_SERVER_PORT = 5656;
 
     var projectsBeingServed = {};
 
+    //Generates live preview url
+    function getLiveUrl(project) {
+        var port = projectsBeingServed[project.id].port;
+        return 'http://localhost:' + port;
+    }
+
     //Start listening
     var httpServer = app.listen(MAIN_SERVER_PORT);
+
     httpServer.on('error', function (err) {
         window.alert('Unable to start internal server, Please close the app that is using port ' + MAIN_SERVER_PORT + '. error: ' + err.message);
         require('nw.gui').App.quit();
@@ -62,9 +70,7 @@ prepros.factory('liveServer', function (config) {
                     '       var script = document.createElement("script");' +
                     '       script.src="http://localhost:5656/livereload.js?snipver=1&host=localhost&port=' + projectsBeingServed[req.query.pid].port + '"\n' +
                     '       document.querySelectorAll("body")[0].appendChild(script);\n' +
-                    '   } catch(e) {' +
-                    '       alert("This browser is not supported by Prepros");' +
-                    '   }' +
+                    '   } catch(e) {}' +
                     '})();';
 
                 res.send(snippet);
@@ -76,19 +82,11 @@ prepros.factory('liveServer', function (config) {
         }
     });
 
-    //Generates live preview url
-    function getLiveUrl(project) {
-        var port = projectsBeingServed[project.id].port;
-        return 'http://localhost:' + port;
-    }
-
     var liveReloadMiddleWare = function (req, res, next) {
 
         var writeHead = res.writeHead;
-        var write = res.write;
         var end = res.end;
-        var path = require('path');
-        var url = require('url');
+
 
         var filepath = url.parse(req.url).pathname;
 
@@ -111,38 +109,25 @@ prepros.factory('liveServer', function (config) {
 
                 var body = string instanceof Buffer ? string.toString(encoding) : string;
 
-                var snippet = '<script>' +
-                    '(function(){' +
-                    '   try {' +
-                    '       var script = document.createElement("script");' +
-                    '       script.src="/livereload.js?snipver=1&amp;host=" + window.location.hostname + "&amp;port=" + window.location.port;' +
-                    '       document.querySelectorAll("body")[0].appendChild(script);' +
-                    '   } catch(e) {' +
-                    '       alert("This browser is not supported by Prepros");' +
-                    '   }' +
-                    '})();' +
-                    '</script>';
+                var snippet = '<script src="/prepros.js"></script>';
 
                 if(/<\/(:?\s|)body(:?\s|)>/i.test(body)) {
                     body =  body.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
-                    body += '</body>';
+                    body = body + '</body>';
                 } else {
-                    body += snippet;
+                    body = body + snippet;
                 }
 
                 res.push(body);
             }
-            return true;
         };
 
         res.end = function (string, encoding) {
+
             res.writeHead = writeHead;
             res.end = end;
-            var result = res.inject(string, encoding);
 
-            if (!result) {
-                return res.end(string, encoding);
-            }
+            var result = res.inject(string, encoding);
 
             if (res.data !== undefined && !res._header) {
                 res.setHeader('content-length', Buffer.byteLength(res.data, encoding));
@@ -151,7 +136,7 @@ prepros.factory('liveServer', function (config) {
             res.end(res.data, encoding);
         };
 
-        next();
+        return next();
     };
 
     //function to add project to server
@@ -191,6 +176,20 @@ prepros.factory('liveServer', function (config) {
                         res.sendfile(config.basePath + '/vendor/livereload.js');
                     });
 
+                    app.get('/prepros.js', function(req, res) {
+
+                        var snippet = '' +
+                            '(function(){' +
+                            '   try {' +
+                                '    var script = document.createElement("script");' +
+                                '    script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port;' +
+                                '    document.querySelectorAll("body")[0].appendChild(script);' +
+                                '} catch(e) {}' +
+                            '})();';
+                        res.setHeader('Content-type', 'application/x-javascript');
+                        res.end(snippet);
+                    });
+
                     app.use(function(req, res, next) {
 
                         if(project.config.useCustomServer) {
@@ -208,56 +207,51 @@ prepros.factory('liveServer', function (config) {
 
                             var rqs = request(options, function (err, response, body) {
                                 if(err) {
-                                    res.end('Custom Server Unreachable Check Settings.');
+                                    return res.end('Custom Server Unreachable Check Settings.');
                                 }
+
+                                return true;
                             });
 
                             var hasbody = false;
-                            var snippet = '<script>' +
-                                '(function(){' +
-                                '   try {' +
-                                '       var script = document.createElement("script");' +
-                                '       script.src="/livereload.js?snipver=1&amp;host=" + window.location.hostname + "&amp;port=" + window.location.port;' +
-                                '       document.querySelectorAll("body")[0].appendChild(script);' +
-                                '   } catch(e) {' +
-                                '       alert("This browser is not supported by Prepros");' +
-                                '   }' +
-                                '})();' +
-                                '</script>';
+
+                            var snippet = '<script src="/prepros.js"></script>';
 
                             rqs.on('response', function(r) {
 
                                 res.setHeader('Content-Type', r.headers['content-type']);
                                 res.statusCode = r.statusCode;
                                 if(r.headers.location) {
-                                    return res.redirect(r.headers.location.replace(urlRegx, ''));
-                                }
 
-                                rqs.on('data', function(d) {
+                                    res.redirect(r.headers.location.replace(urlRegx, ''));
 
-                                    if(/html/gi.test(r.headers['content-type'])) {
+                                } else {
+                                    rqs.on('data', function(d) {
 
-                                        var html = (d.toString().replace(urlRegx, ''));
+                                        if(/html/gi.test(r.headers['content-type'])) {
 
-                                        if(/<\/(:?\s|)body(:?\s|)>/i.test(html)) {
-                                            html =  html.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
-                                            html += '</body>';
-                                            hasbody = true;
+                                            var html = (d.toString().replace(urlRegx, ''));
+
+                                            if(/<\/(:?\s|)body(:?\s|)>/i.test(html)) {
+                                                html =  html.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
+                                                html += '</body>';
+                                                hasbody = true;
+                                            }
+
+                                            res.write(html);
+
+                                        } else {
+                                            res.write(d, "binary");
                                         }
+                                    });
 
-                                        res.write(html);
-
-                                    } else {
-                                        res.write(d, "binary");
-                                    }
-                                });
-
-                                rqs.on('end', function() {
-                                    if(!hasbody && /html/gi.test(r.headers['content-type'])) {
-                                        res.write(snippet);
-                                    }
-                                    res.end();
-                                });
+                                    rqs.on('end', function() {
+                                        if(!hasbody && /html/gi.test(r.headers['content-type'])) {
+                                            res.write(snippet);
+                                        }
+                                        res.end();
+                                    });
+                                }
                             });
                         } else {
                             next();
