@@ -15,22 +15,38 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
     var fs = require('fs-extra');
     var path = require('path');
-    var jpegtran = path.join(config.basePath, '../bin/jpegtran/win32/jpegtran.exe');
-    var optipng = path.join(config.basePath, '../bin/optipng/win32/optipng.exe');
-
-    if (process.platform !== 'win32') {
-
-        jpegtran = path.join(config.basePath, '../bin/jpegtran/osx/jpegtran');
-        optipng = path.join(config.basePath, '../bin/optipng/osx/optipng');
-
-    }
-
-    if (process.platform === 'win32' && process.arch === 'x64') {
-
-        jpegtran = path.join(config.basePath, '../bin/jpegtran/win64/jpegtran');
-    }
-
     var cp = require('child_process');
+
+    var platform = 'win';
+
+    if(process.platform === 'darwin') {
+        platform = 'osx';
+    }
+
+    if(process.platform === 'linux') {
+        platform = 'linux';
+    }
+
+    var arch = (process.arch === 'x64') ? 'x64' : 'x86';
+
+    var binPath =   path.join(config.basePath, '../bin');
+
+    var jpegTranPath = path.join(binPath, 'jpegtran', platform, arch, 'jpegtran');
+
+    var optipngPath = path.join(binPath, 'optipng', platform, 'optipng');
+
+    if(platform === 'win') {
+        jpegTranPath += '.exe';
+        optipngPath += '.exe';
+    }
+
+    if(platform === 'osx') {
+        jpegTranPath = path.join(binPath, 'jpegtran', platform, 'jpegtran');
+    }
+
+    if(platform === 'linux') {
+        optipngPath = path.join(binPath, 'optipng', platform, arch, 'optipng');
+    }
 
     $scope.projectImages = [];
 
@@ -86,12 +102,12 @@ prepros.controller('OptimImageCtrl', function ($scope, notification, projectsMan
 
             if (_.contains(png, ext)) {
 
-                executable = optipng;
+                executable = optipngPath;
                 cmd = [file];
 
             } else {
 
-                executable = jpegtran;
+                executable = jpegTranPath;
                 cmd = ['-outfile', file, '-optimize', file];
 
             }
