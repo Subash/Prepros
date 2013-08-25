@@ -16,7 +16,7 @@ prepros.factory('importsVisitor', function (utils) {
     var fs = require('fs-extra'),
         path = require('path');
 
-    //Function to get files list imported by another file; returns the list of imported files that exist
+
     function visitImports(filePath, projectPath) {
 
         var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
@@ -26,13 +26,12 @@ prepros.factory('importsVisitor', function (utils) {
             return [];
         }
 
-        var importedFiles = [],
-            ext = path.extname(filePath).toLowerCase(),
-            data = fs.readFileSync(filePath).toString(),
-            result,
-            basedir = path.dirname(filePath),
-            importedFilePath,
-            importReg;
+        var importedFiles = [];
+        var ext = path.extname(filePath).toLowerCase();
+        var data = fs.readFileSync(filePath).toString();
+        var result;
+        var basedir = path.dirname(filePath);
+        var importReg;
 
         //Strip Comments
         if (ext !== '.js') {
@@ -65,78 +64,83 @@ prepros.factory('importsVisitor', function (utils) {
         if (ext === '.coffee') {
             importReg = /#(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
         }
-        //Automatically add extension
+
+        //Automatically add extension for certail files
         var autoExt = ['.less', '.styl', '.jade'];
 
-        if (ext !== '.sass' && ext !== '.scss') {
+        do {
+            result = importReg.exec(data);
 
-            while ((result = importReg.exec(data)) !== null) {
+            if (result) {
 
-                result[1] = result[1].replace(/'|"/gi, '').trim();
+                var file = result[1].replace(/"|'|\n/gi, '').trim();
 
-                //Check if path is full or just relative
-                if (result[1].indexOf(':') >= 0) {
-                    importedFilePath = path.normalize(result[1]);
-                } else {
-                    importedFilePath = path.join(basedir, result[1]);
+                if(file.indexOf(',')>=0) {
+
+                    file = file.split(',').map(function(f) {
+
+                        f = f.trim();
+
+                        if (f.indexOf(":") >= 0) {
+                            f = path.normalize(f);
+                        } else {
+                            f = path.join(basedir, f);
+                        }
+
+                        return f;
+                    });
                 }
 
-                //Test if file without adding extension exists
-                if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
+                if(_.isArray(file) ) {
 
-                    importedFiles.push(importedFilePath);
+                    _.each(file, function (imp) {
 
+                        //Add extension if file doesn't have that
+                        if (path.extname(imp).toLowerCase() !== ext) {
+                            imp = imp + ext;
+                        }
+
+                        //First check for partial file
+                        var _imp = path.dirname(imp) + path.sep + '_' + path.basename(imp);
+
+                        if (fs.existsSync(_imp) && utils.isFileInsideFolder(projectPath, _imp)) {
+
+                            importedFiles.push(_imp);
+
+                        } else if (fs.existsSync(imp) && utils.isFileInsideFolder(projectPath, imp)) {
+
+                            importedFiles.push(imp);
+
+                        }
+                    });
                 } else {
 
-                    if (path.extname(importedFilePath).toLowerCase() !== ext && _.contains(autoExt, ext)) {
-                        importedFilePath = importedFilePath + ext;
-                    }
-
-                    if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
-
-                        importedFiles.push(importedFilePath);
-                    }
-
-                }
-            }
-
-        } else {
-
-            //Read imports
-            while ((result = importReg.exec(data)) !== null) {
-
-                var res = result[1].replace(/"|'/gi, '').split(',');
-
-                _.each(res, function (imp) {
-
-                    imp = imp.trim();
-
-                    if (imp && imp.indexOf(":") >= 0) {
-                        importedFilePath = path.normalize(imp);
+                    //Check if path is full or just relative
+                    if (file.indexOf(':') >= 0) {
+                        file = path.normalize(file);
                     } else {
-                        importedFilePath = path.join(basedir, imp);
+                        file = path.join(basedir, file);
                     }
 
-                    //Add extension if file doesn't have that
-                    if (path.extname(importedFilePath).toLowerCase() !== ext) {
-                        importedFilePath = importedFilePath + ext;
+                    //Test if file without adding extension exists
+                    if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
+
+                        importedFiles.push(file);
+
+                    } else {
+
+                        if (path.extname(file).toLowerCase() !== ext && _.contains(autoExt, ext)) {
+                            file = file + ext;
+                        }
+
+                        if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
+
+                            importedFiles.push(file);
+                        }
                     }
-
-                    //First check for partial file
-                    var importedWithPartial = path.normalize(path.dirname(importedFilePath) + path.sep + '_' + path.basename(importedFilePath));
-
-                    if (fs.existsSync(importedWithPartial) && utils.isFileInsideFolder(projectPath, importedWithPartial)) {
-
-                        importedFiles.push(importedWithPartial);
-
-                    } else if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
-
-                        importedFiles.push(importedFilePath);
-
-                    }
-                });
+                }
             }
-        }
+        } while (result);
 
         return importedFiles;
     }
