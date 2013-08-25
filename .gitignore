@@ -30,4 +30,4 @@ Desktop.ini
 .DS_Store
 
 #Misc
-debug.log
+*.log
