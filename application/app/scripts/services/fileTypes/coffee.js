@@ -113,32 +113,36 @@ prepros.factory('coffee', function (config, utils) {
 
                             var result;
 
-                            while ((result = importReg[reg].exec(fs.readFileSync(filePathToRead))) !== null) {
+                            do {
 
-                                var importedFile;
+                                result = importReg[reg].exec(data);
 
-                                result[1] = result[1].replace(/'|"/gi, '').trim();
+                                if(result) {
 
-                                //Check if path is full or just relative
-                                if (result[1].indexOf(':') >= 0) {
+                                    var impFile = result[1].replace(/'|"/gi, '').trim();
 
-                                    importedFile = path.normalize(result[1]);
+                                    //Check if path is full or just relative
+                                    if (impFile.indexOf(':') >= 0) {
 
-                                } else {
+                                        impFile = path.normalize(impFile);
 
-                                    importedFile = path.join(path.dirname(filePathToRead), result[1]);
+                                    } else {
+
+                                        impFile = path.join(path.dirname(filePathToRead), impFile);
+                                    }
+
+                                    //Check if file exists
+                                    if (fs.existsSync(impFile)) {
+
+                                        importedFiles[reg].push(impFile);
+
+                                    } else {
+
+                                        throw {message: 'Imported file "' + impFile + '" not found \n Imported by "' + file.input + '"'};
+                                    }
                                 }
 
-                                //Check if file exists
-                                if (fs.existsSync(importedFile)) {
-
-                                    importedFiles[reg].push(importedFile);
-
-                                } else {
-
-                                    throw {message: 'Imported file "' + importedFile + '" not found \n Imported by "' + file.input + '"'};
-                                }
-                            }
+                            } while (result);
                         });
 
                         return {
