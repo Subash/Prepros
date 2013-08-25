@@ -65,9 +65,6 @@ prepros.factory('importsVisitor', function (utils) {
             importReg = /#(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
         }
 
-        //Automatically add extension for certail files
-        var autoExt = ['.less', '.styl', '.jade'];
-
         do {
             result = importReg.exec(data);
 
@@ -129,11 +126,23 @@ prepros.factory('importsVisitor', function (utils) {
 
                     } else {
 
-                        if (path.extname(file).toLowerCase() !== ext && _.contains(autoExt, ext)) {
+                        if (path.extname(file).toLowerCase() !== ext) {
                             file = file + ext;
                         }
 
-                        if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
+                        //Add extension if file doesn't have that
+                        if (path.extname(file).toLowerCase() !== ext) {
+                            file = file + ext;
+                        }
+
+                        //First check for partial file
+                        var _imp = path.dirname(file) + path.sep + '_' + path.basename(file);
+
+                        if (fs.existsSync(_imp) && utils.isFileInsideFolder(projectPath, _imp)) {
+
+                            importedFiles.push(_imp);
+
+                        } else if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
 
                             importedFiles.push(file);
                         }
