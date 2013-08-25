@@ -148,6 +148,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
 
                                 compiler.compile(imp.pid, parentId);
+
+                                $rootScope.$apply(function() {
+                                    projectsManager.refreshFile(imp.pid, parentId);
+                                });
                             }
                         });
                     }
