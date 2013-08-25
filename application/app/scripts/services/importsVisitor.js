@@ -61,7 +61,6 @@ prepros.factory('importsVisitor', function (utils) {
         //Automatically add extension
         var autoExt = ['.less', '.styl', '.jade'];
 
-
         if (ext !== '.sass' && ext !== '.scss') {
 
             while ((result = importReg.exec(data)) !== null) {
@@ -75,18 +74,22 @@ prepros.factory('importsVisitor', function (utils) {
                     importedFilePath = path.join(basedir, result[1]);
                 }
 
-                if (_.contains(autoExt, ext)) {
-
-                    //Add extension if file doesn't have that
-                    if (path.extname(importedFilePath).toLowerCase() !== ext) {
-                        importedFilePath = importedFilePath + ext;
-                    }
-                }
-
-                //File must be inside project folder
+                //Test if file without adding extension exists
                 if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
 
                     importedFiles.push(importedFilePath);
+
+                } else {
+
+                    if (path.extname(importedFilePath).toLowerCase() !== ext && _.contains(autoExt, ext)) {
+                        importedFilePath = importedFilePath + ext;
+                    }
+
+                    if (fs.existsSync(importedFilePath) && utils.isFileInsideFolder(projectPath, importedFilePath)) {
+
+                        importedFiles.push(importedFilePath);
+                    }
+
                 }
             }
 
