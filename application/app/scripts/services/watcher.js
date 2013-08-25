@@ -19,6 +19,8 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
         var projectsBeingWatched = [];
 
+        var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls|html|htm|css|rb|php|asp|aspx)$/gi;
+
     //Function to start watching file
     function startWatching(projects) {
 
@@ -33,7 +35,21 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         _.each(projects, function(project) {
 
             var watcher = chokidar.watch(project.path, {
-                ignored: /\\\.|\/\./,
+                ignored: function(f) {
+
+                    //Ignore dot files or folders
+                    if(/\\\.|\/\./.test(f)) {
+                        return true;
+                    }
+
+                    //Do not ignore files that don't have extension because that may be a folder
+                    if(!path.extname(f)) {
+                        return false;
+                    }
+
+                    //Test against supported extensions and ignore if not supported
+                    return !f.match(supported);
+                },
                 ignorePermissionErrors: true,
                 ignoreInitial: true,
                 usePolling : !config.getUserOptions().experimental.fileWatcher
@@ -84,8 +100,12 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                     return;
                 }
 
-                //Do not refresh on preprocessable files except javascript, markdown and also exclude prepros.json file
-                if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || /\.(md|markdown)/i.test(fpath) || /\.js/i.test(fpath)) && !/prepros\.json/.test(fpath)) {
+                //Do not refresh on preprocessable files except javascript, markdown
+                var isJs = /\.js/i.test(fpath);
+
+                var isMarkdown = /\.(md|markdown)/i.test(fpath);
+
+                if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || isJs || isMarkdown)) {
 
                     liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
                 }
