@@ -19,6 +19,13 @@ prepros.factory('importsVisitor', function (utils) {
     //Function to get files list imported by another file; returns the list of imported files that exist
     function visitImports(filePath, projectPath) {
 
+        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
+
+        if(!_.contains(can, path.extname(filePath).slice(1))) {
+
+            return [];
+        }
+
         var importedFiles = [],
             ext = path.extname(filePath).toLowerCase(),
             data = fs.readFileSync(filePath).toString(),
