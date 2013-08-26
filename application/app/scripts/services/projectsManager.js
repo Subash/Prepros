@@ -205,7 +205,7 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
      */
     function addFile(pid, filePath) {
 
-        if(fs.existsSync(filePath) && fileTypes.isFileSupported(filePath)) {
+        if(fs.existsSync(filePath) && fileTypes.isFileSupported(filePath)  && !matchFileFilters(pid, filePath)) {
 
             var fileId = _id(path.relative(getProjectById(pid).path, filePath));
 
