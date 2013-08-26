@@ -64,6 +64,12 @@
                     nwin.show();
                     nwin.blur();
                 }
+
+                //Hide window on right click
+                $(window).on('contextmenu', function() {
+                    nwin.y = -1000;
+                });
+            
             });
 
             $scope.openLog = function(){
