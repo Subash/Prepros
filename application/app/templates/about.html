@@ -11,7 +11,7 @@
 
             <div data-title="About">
 
-                <p>Prepros is an open source code preprocessing tool developed using the power of html, css and
+                <p>Prepros is a code preprocessing tool developed using the power of html, css and
                     javascript and node-webkit.</p>
 
                 <p>It's designed, developed and maintained by <a ng-click="go('authorTwitter')">Subash Pathak</a> on
@@ -20,6 +20,12 @@
                 <p>
                     To learn more about Prepros, please visit <a ng-click="go('url')">{{config.online.url}}</a>.
                 </p>
+
+                <div class="alert alert-info">
+                    There is a pro version of Prepros.
+                    <a
+                        ng-click="go('url')">Buy Now</a>
+                </div>
 
                 <div ng-show="update.available" class="alert alert-info">
                     New version {{update.version}} released on {{update.date}} is available, visit <a
