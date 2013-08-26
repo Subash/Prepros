@@ -85,8 +85,7 @@ prepros.factory('config', function () {
         notificationTime: 3000,
         notificationDetails: false,
         experimental : {
-            fileWatcher: false,
-            autoAddRemoveFile: true
+            fileWatcher: false
         },
 
         customRuby: {
