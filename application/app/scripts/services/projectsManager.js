@@ -19,38 +19,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     var projects = storage.get();
 
-    if(config.getUserOptions().experimental.autoAddRemoveFile) {
-
-        window.setTimeout(function() {
-
-            //Remove non existing files
-            _.each(projects, function(project) {
-                _.each(project.files, function(file) {
-
-                    var fp = $filter('fullPath')(file.input, { basePath: project.path});
-
-                    if(!fs.existsSync(fp)) {
-                        $rootScope.$apply(function() {
-                            removeFile(file.pid, file.id);
-                        });
-                    }
-                });
-
-                _.each(project.imports, function(imp) {
-
-                    var fp = $filter('fullPath')(imp.path, { basePath: project.path});
-
-                    if(!fs.existsSync(fp)) {
-                        $rootScope.$apply(function() {
-                            removeImport(imp.pid, imp.id);
-                        });
-                    }
-                });
-            });
-
-        }, 1);
-    }
-
     var _broadCast = function () {
         $rootScope.$broadcast('dataChange', {projects: projects});
     };
@@ -66,45 +34,26 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         //If project doesn't exist
         if (!already) {
 
-            var project = {};
-
-            //Try to read prepros.json file
-            if(fs.existsSync(folder + path.sep + 'prepros.json')) {
-
-                try {
-
-                    project = JSON.parse(fs.readFileSync(folder + path.sep + 'prepros.json'));
-
-                } catch(e) {}
-            }
-
-            if(project.id) {
-
-                project.path = folder;
-
-            } else {
-
-                //Project to push
-                project = {
-                    id: project_id,
-                    name: path.basename(folder),
-                    path: folder,
-                    files: [],
-                    imports: [],
-                    config: {
-                        liveRefresh: true,
-                        liveRefreshDelay: config.getUserOptions().liveRefreshDelay,
-                        filterPatterns: '',
-                        useCustomServer: false,
-                        customServerUrl: '',
-                        cssPath: config.getUserOptions().cssPath,
-                        jsPath: config.getUserOptions().jsPath,
-                        htmlPath: config.getUserOptions().htmlPath,
-                        jsMinPath: config.getUserOptions().jsMinPath,
-                        autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers
-                    }
-                };
-            }
+             //Project to push
+            var project = {
+                id: project_id,
+                name: path.basename(folder),
+                path: folder,
+                files: [],
+                imports: [],
+                config: {
+                    liveRefresh: true,
+                    liveRefreshDelay: config.getUserOptions().liveRefreshDelay,
+                    filterPatterns: '',
+                    useCustomServer: false,
+                    customServerUrl: '',
+                    cssPath: config.getUserOptions().cssPath,
+                    jsPath: config.getUserOptions().jsPath,
+                    htmlPath: config.getUserOptions().htmlPath,
+                    jsMinPath: config.getUserOptions().jsMinPath,
+                    autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers
+                }
+            };
 
             //Push project to projects list
             projects.push(project);
@@ -525,16 +474,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         }
     }
 
-    //Function to create Project Config File
-    function createProjectConfigFile(project) {
-        try {
-            fs.outputFile(project.path + path.sep + 'prepros.json', angular.toJson(_.omit(project, 'path'), true));
-        } catch(e) {
-            //Do nothing
-        }
-
-    }
-
     return {
         projects: projects,
 
@@ -554,7 +493,6 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
         getProjectFiles: getProjectFiles,
         getProjectConfig: getProjectConfig,
         changeFileOutput: changeFileOutput,
-        matchFilters: matchFileFilters,
-        createProjectConfigFile: createProjectConfigFile
+        matchFilters: matchFileFilters
     };
 });

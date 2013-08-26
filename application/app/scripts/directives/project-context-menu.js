@@ -42,14 +42,6 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
             }));
 
             menu.append(new gui.MenuItem({
-                label: 'Create Config File',
-                click: function () {
-
-                    projectsManager.createProjectConfigFile(project);
-                }
-            }));
-
-            menu.append(new gui.MenuItem({
                 label: 'Open Project URL',
                 click: function () {
 

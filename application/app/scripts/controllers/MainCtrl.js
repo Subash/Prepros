@@ -31,19 +31,6 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
         storage.put($scope.projects);
 
-        process.nextTick(function() {
-            _.each($scope.projects, function(project) {
-
-                fs.exists(project.path + path.sep + 'prepros.json', function (exists) {
-
-                    if(exists) {
-                        projectsManager.createProjectConfigFile(project);
-                    }
-
-                });
-            });
-        });
-
     }, 2000);
 
     //An ugly hack to restart nodejs file watcher when it crashes

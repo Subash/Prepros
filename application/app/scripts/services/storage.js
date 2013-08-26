@@ -32,33 +32,6 @@ prepros.factory('storage', function () {
 
             projects = angular.fromJson(localStorage.PreprosData || '[]');
 
-            projects = projects.map(function(project) {
-
-                try {
-
-                    if(fs.existsSync(project.path + path.sep + 'prepros.json')) {
-
-                        var pPath = project.path;
-
-                        var pr = JSON.parse(fs.readFileSync(project.path + path.sep + 'prepros.json'));
-
-                        pr.path = pPath;
-
-                        return pr;
-
-                    } else {
-
-                        return project;
-
-                    }
-
-                } catch (e) {
-
-                    return project;
-                }
-
-            });
-
         } catch (e) {
 
             window.alert('Error Reading Projects ! Reverting to defaults.');
