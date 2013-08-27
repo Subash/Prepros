@@ -110,6 +110,20 @@ prepros.directive('projectContextMenu', function (projectsManager, liveServer, c
                 }
             }));
 
+            menu.append(new gui.MenuItem({
+                type: 'separator'
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Create Config File',
+                enabled: false
+            }));
+
+            menu.append(new gui.MenuItem({
+                label: 'Remote Inspect',
+                enabled: false
+            }));
+
             element.on('contextmenu', function (e) {
 
                 e.preventDefault();
