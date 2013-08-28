@@ -22,7 +22,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         var options = {
             x: window.screen.availWidth - 360,
-            y: -1000,
+            y: window.screen.availHeight + 1000,
             width: 350,
             height: 100,
             frame: false,

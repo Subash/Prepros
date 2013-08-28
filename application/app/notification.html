@@ -26,7 +26,7 @@
                     timer =  setTimeout(function(){
 
                         //Just hide window without closing
-                        nwin.y = -1000;
+                        nwin.y = window.screen.availHeight + 1000;
 
                     }, parseInt(data.time, 10));
                 });
@@ -45,7 +45,7 @@
 
                     } else {
 
-                        nwin.y = 20;
+                        nwin.y = 50;
                     }
 
                 }, 75);
@@ -67,11 +67,11 @@
 
                 //Hide window on right click
                 $(window).on('contextmenu', function() {
-                    nwin.y = -1000;
+                    nwin.y = window.screen.availHeight + 1000;
                 });
-            
-            });
 
+            });
+            
             $scope.openLog = function(){
                 require('nw.gui').Window.get().emit('showLog');
             };
