@@ -21,10 +21,6 @@ prepros.factory('$exceptionHandler',function(){
     //Save exception data to file
     process.on('uncaughtException', function(err) {
 
-        if(/watch EPERM/.test(err.message)) {
-            return console.log('Eperm Watch Error Occurred and Ignored');
-        }
-
         var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
         require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
 

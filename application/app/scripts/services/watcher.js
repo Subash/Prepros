@@ -24,85 +24,95 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
     //Function to start watching file
     function startWatching(projects) {
 
+        var ids = _.pluck(projects, 'id');
+
         _.each(projectsBeingWatched, function(project) {
 
-            project.watcher.close();
-            projectsBeingWatched =  _.reject(projectsBeingWatched, function(prj){
-                return prj.id === project.id;
-            });
+            if(!_.contains(ids, project.id)) {
+
+                project.watcher.close();
+
+                delete projectsBeingWatched[project.id];
+            }
         });
 
         _.each(projects, function(project) {
 
-            var watcher = chokidar.watch(project.path, {
-                ignored: function(f) {
+            if(!(project.id in projectsBeingWatched)) {
 
-                    //Ignore dot files or folders
-                    if(/\\\.|\/\./.test(f)) {
-                        return true;
-                    }
+                var watcher = chokidar.watch(project.path, {
+                    ignored: function(f) {
 
-                    //Do not ignore files that don't have extension because that may be a folder
-                    if(!path.extname(f)) {
-                        return false;
-                    }
-
-                    //Test against supported extensions and ignore if not supported
-                    return !f.match(supported);
-                },
-                ignorePermissionErrors: true,
-                ignoreInitial: true,
-                usePolling : !config.getUserOptions().experimental.fileWatcher
-            });
-
-            var changeDelay = config.getUserOptions().experimental.fileWatcher? 50 : 0;
-
-            var debounceChange = _.debounce(function(fpath) {
-
-                if(!fs.existsSync(fpath)) {
-                    return;
-                }
-
-                _.each(project.files, function(file) {
-
-                    var filePath = $filter('fullPath')(file.input, { basePath: project.path});
-
-                    if(path.relative(filePath, fpath)=== "") {
-
-                        if (file.config.autoCompile) {
-
-                            //Compile File
-                            compiler.compile(file.pid, file.id);
+                        //Ignore dot files or folders
+                        if(/\\\.|\/\./.test(f)) {
+                            return true;
                         }
-                    }
+
+                        //Do not ignore files that don't have extension because that may be a folder
+                        if(!path.extname(f)) {
+                            return false;
+                        }
+
+                        //Test against supported extensions and ignore if not supported
+                        return !f.match(supported);
+                    },
+                    ignorePermissionErrors: true,
+                    ignoreInitial: true,
+                    usePolling : !config.getUserOptions().experimental.fileWatcher
                 });
 
-                _.each(project.imports, function(imp) {
+                var changeDelay = config.getUserOptions().experimental.fileWatcher? 50 : 0;
 
-                    var filePath = $filter('fullPath')(imp.path, { basePath: project.path});
+                var debounceChange = _.debounce(function(fpath) {
 
-                    if(path.relative(filePath, fpath)=== "") {
+                    if(!fs.existsSync(fpath)) {
+                        return;
+                    }
 
-                        _.each(imp.parents, function (parentId) {
+                    _.each(project.files, function(file) {
 
-                            var parentFile = projectsManager.getFileById(imp.pid, parentId);
+                        var filePath = $filter('fullPath')(file.input, { basePath: project.path});
 
-                            if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
+                        if(path.relative(filePath, fpath)=== "") {
 
-                                compiler.compile(imp.pid, parentId);
+                            if (file.config.autoCompile) {
+
+                                //Compile File
+                                compiler.compile(file.pid, file.id);
                             }
-                        });
-                    }
+                        }
+                    });
+
+                    _.each(project.imports, function(imp) {
+
+                        var filePath = $filter('fullPath')(imp.path, { basePath: project.path});
+
+                        if(path.relative(filePath, fpath)=== "") {
+
+                            _.each(imp.parents, function (parentId) {
+
+                                var parentFile = projectsManager.getFileById(imp.pid, parentId);
+
+                                if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
+
+                                    compiler.compile(imp.pid, parentId);
+                                }
+                            });
+                        }
+                    });
+                }, changeDelay);
+
+                watcher.on('change', debounceChange);
+
+                watcher.on('error', function(err) {
+                    //Ignore all errors;  there are too many to notify the user
                 });
-            }, changeDelay);
 
-            watcher.on('change', debounceChange);
-
-            watcher.on('error', function(err) {
-                //Ignore all errors;  there are too many to notify the user
-            });
-
-            projectsBeingWatched.push({id: project.id, watcher: watcher});
+                projectsBeingWatched[project.id] = {
+                    id: project.id,
+                    watcher: watcher
+                };
+            }
 
         });
     }

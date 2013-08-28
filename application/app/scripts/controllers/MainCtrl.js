@@ -33,14 +33,6 @@ prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location
 
     }, 2000);
 
-    //An ugly hack to restart nodejs file watcher when it crashes
-    process.on('uncaughtException', function(err) {
-
-        if(/watch EPERM/.test(err.message)) {
-            watcher.startWatching($scope.projects);
-        }
-    });
-
     $scope.$watch('projects', function () {
 
         throttleProjectsChange();
