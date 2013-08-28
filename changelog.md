@@ -1,3 +1,28 @@
+### Version 3.0.0 -Aug 29, 2013
+
+* Shareable prepros.json config file [Pro] [Docs](http://alphapixels.com/prepros/docs/prepros-json.html)
+* Live refresh anything [Pro]
+* Live refresh custom server in any browser [Pro]
+* Multi device refresh with custom server [Pro]
+* Remotely inspect multiple devices [Pro] [Docs](http://alphapixels.com/prepros/docs/multi-device-testing.html)
+* Automatic File detection [Pro]
+* Automatic @import detection [Pro]
+* Autoprefixer Integration
+* Option to specify delay between compile and refresh
+* Coffeescript concatenation [Docs](http://alphapixels.com/prepros/docs/coffee-script.html)
+* OSX option to specify ruby path
+* Fixed ruby encoding issues
+* Fixed OSX compass errors
+* Added missing Sass global line number option
+* Improved notifications
+* Improved UI
+* Output jade as javascript templates
+* jade include detection and watching for non jade files
+* Assign different ports for each project.
+* QR code added for easy access to Prepros server
+* Tons of other bug fixes and improvements
+
+
 ### Version 2.3.2 -July 31, 2013
 
 * Fixed OSX Sass bug

@@ -1,7 +1,4 @@
 {
-    "version" : "2.3.2",
-    "releaseDate": "July 31, 2013",
-
     "repository": {
         "type": "git",
         "url": "https://github.com/sbspk/Prepros.git"
