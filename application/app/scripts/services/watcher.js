@@ -61,9 +61,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                     usePolling : !config.getUserOptions().experimental.fileWatcher
                 });
 
-                var changeDelay = config.getUserOptions().experimental.fileWatcher? 50 : 0;
-
-                var debounceChange = _.debounce(function(fpath) {
+                var changeHandler = function(fpath) {
 
                     if(!fs.existsSync(fpath)) {
                         return;
@@ -100,7 +98,20 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             });
                         }
                     });
-                }, changeDelay);
+                };
+
+                var debounceChange = function(fpath) {
+
+                    if(config.getUserOptions().experimental.fileWatcher) {
+
+                        return _.debounce(function() {
+                            changeHandler(fpath);
+                        }, 50);
+
+                    } else {
+                        return changeHandler(fpath);
+                    }
+                };
 
                 watcher.on('change', debounceChange);
 
