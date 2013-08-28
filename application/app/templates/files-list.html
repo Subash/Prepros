@@ -1,6 +1,6 @@
-<ul class="files">
+<ul class="files" ui-sortable ng-model="selectedProject.files">
 
-    <li class="file" ng-repeat="file in selectedProject.files|orderBy:'name'">
+    <li class="file" ng-repeat="file in selectedProject.files">
 
         <a ng-href="#/files/{{file.pid}}/{{file.id}}"
            ng-class="{'active' : selectedFile.id == file.id}"
