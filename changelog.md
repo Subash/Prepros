@@ -1,7 +1,7 @@
 ### Version 3.0.0 -Aug 29, 2013
 
 * Shareable prepros.json config file [Pro] [Docs](http://alphapixels.com/prepros/docs/prepros-json.html)
-* Live refresh anything [Pro]
+* Live refresh vanilla css, html, php, wordpress, jekyll blog or whatever :) [Pro]
 * Live refresh custom server in any browser [Pro]
 * Multi device refresh with custom server [Pro]
 * Remotely inspect multiple devices [Pro] [Docs](http://alphapixels.com/prepros/docs/multi-device-testing.html)
