@@ -21,6 +21,7 @@ function bootstrapPrepros() {
         'backbone.min',
         'backbone-notifier.min',
         'mousetrap.min',
+        'qrcode.min',
         'angular'
     ];
 
@@ -77,7 +78,8 @@ function bootstrapPrepros() {
         'show-modal-on-click',
         'project-context-menu',
         'file-context-menu',
-        'copy-selected-text'
+        'copy-selected-text',
+        'popover'
     ];
 
     //Libraries

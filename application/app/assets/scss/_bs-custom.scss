@@ -103,3 +103,7 @@ select {
 .modal .modal-header {
   text-transform: capitalize;
 }
+
+.modal .modal-body {
+  min-height: 220px;
+}
