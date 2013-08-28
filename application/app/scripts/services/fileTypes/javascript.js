@@ -103,12 +103,20 @@ prepros.factory('javascript', function (config, utils) {
                                         impFile = path.join(path.dirname(filePathToRead), impFile);
                                     }
 
+                                    //Underscore files
+                                    var _imp = path.dirname(impFile) + path.sep + '_' + path.basename(impFile);
+
                                     //Check if file exists
-                                    if (fs.existsSync(impFile)) {
+                                    if (fs.existsSync(_imp)) {
+
+                                        importedFiles[reg].push(_imp);
+
+                                    } else if(fs.existsSync(impFile)) {
 
                                         importedFiles[reg].push(impFile);
 
                                     } else {
+
 
                                         throw {message: 'Imported file "' + impFile + '" not found \n Imported by "' + file.input + '"'};
                                     }
