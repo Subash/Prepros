@@ -16,13 +16,15 @@ function bootstrapPrepros() {
 
     var libraries = [
         'jquery.min',
+        'jquery-ui.min',
         'underscore.min',
         'bootstrap.min',
         'backbone.min',
         'backbone-notifier.min',
         'mousetrap.min',
         'qrcode.min',
-        'angular'
+        'angular',
+        'angular-ui.min'
     ];
 
     var controllers = [

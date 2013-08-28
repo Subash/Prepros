@@ -8,6 +8,7 @@
 * Automatic File detection [Pro]
 * Automatic @import detection [Pro]
 * Autoprefixer Integration
+* Sortable projects list
 * Option to specify delay between compile and refresh
 * Coffeescript concatenation [Docs](http://alphapixels.com/prepros/docs/coffee-script.html)
 * OSX option to specify ruby path

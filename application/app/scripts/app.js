@@ -10,7 +10,7 @@
 
 'use strict';
 
-var prepros = angular.module('prepros', []).config(function ($routeProvider, $compileProvider) {
+var prepros = angular.module('prepros', ['ui']).config(function ($routeProvider, $compileProvider) {
 
     //Whitelist file urls
     $compileProvider.urlSanitizationWhitelist(/^\s*(file):/);

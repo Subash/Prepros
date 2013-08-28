@@ -1,5 +1,5 @@
 <div class="sidebar" ng-controller="SidebarCtrl">
-    <ul>
+    <ul ui:sortable ng:model="projects">
         <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)" ng-animate="'animate'" project-context-menu="project">
             <a ng-href="#/files/{{project.id}}" draggable="false"
                ng-class="{'active' : selectedProject.id == project.id}">{{project.name}}</a>
