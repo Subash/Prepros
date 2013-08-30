@@ -24,53 +24,47 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
 
         if (!_.contains(compileQueue, queueId)) {
 
-            var file = projectsManager.getFileById(pid, fid);
+            var f = projectsManager.getFileById(pid, fid);
 
-            if(_.isEmpty(file)) {
+            if(_.isEmpty(f)) {
                 return;
             }
 
             compileQueue.push(queueId);
 
-            var ext = path.extname(file.input).toLowerCase();
-
             //Replace file.output placeholders with real paths
-            var prj = projectsManager.getProjectById(pid);
+            var project = projectsManager.getProjectById(pid);
 
-            //Remove angular hash maps so that the change in file here won't affect files in project
-            var f = $.parseJSON(angular.toJson(file));
+            var file = _.extend({}, f);
 
-            //Sass compiler requires project path for config.rb file
-            if (ext === '.scss' || ext === '.sass') {
-
-                f.projectPath = prj.path;
-            }
+            //Sass/Compass compiler requires project path
+            file.projectPath = project.path;
 
             //Less, Sass, Stylus compilers require autoprefixer options from project options
-            f.config.autoprefixerBrowsers = prj.config.autoprefixerBrowsers;
+            file.config.autoprefixerBrowsers = project.config.autoprefixerBrowsers;
 
-            f.input = $filter('fullPath')(file.input, { basePath: prj.path});
+            file.input = $filter('fullPath')(file.input, { basePath: project.path});
 
             //Interpolate path to replace css/js dirs
-            f.output = $filter('interpolatePath')(file.output, {config: prj.config});
+            file.output = $filter('interpolatePath')(file.output, {config: project.config});
 
             //Get full path of a file
-            f.output = $filter('fullPath')(f.output, { basePath: prj.path});
+            file.output = $filter('fullPath')(file.output, { basePath: project.path});
 
-            if (fs.existsSync(f.input)) {
+            if (fs.existsSync(file.input)) {
 
-                fileTypes.compile(f, function (data) {
+                fileTypes.compile(file, function (data) {
 
                     compileQueue = _.without(compileQueue, queueId);
 
                     $rootScope.$apply(function () {
 
-                        notification.success('Compilation Successful', 'Successfully compiled ' + f.name, data);
+                        notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
 
                     });
 
-                    if(prj.config.liveRefresh) {
-                        liveServer.refresh(prj.id, f.output, prj.config.liveRefreshDelay);
+                    if(project.config.liveRefresh) {
+                        liveServer.refresh(project.id, file.output, project.config.liveRefreshDelay);
                     }
 
                 }, function (data) {
@@ -78,13 +72,12 @@ prepros.factory("compiler", function (projectsManager, fileTypes, notification, 
                     compileQueue = _.without(compileQueue, queueId);
 
                     $rootScope.$apply(function () {
-                        notification.error('Compilation Failed', 'Failed to compile ' + f.name, data);
+                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
                     });
 
                 });
             }
         }
-
     }
 
     return{
