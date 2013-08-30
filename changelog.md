@@ -22,6 +22,7 @@
 * jade include detection and watching for non jade files
 * Assign different ports for each project.
 * QR code added for easy access to Prepros server
+* Override Ui options from config.rb
 * Tons of other bug fixes and improvements
 
 

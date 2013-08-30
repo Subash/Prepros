@@ -79,21 +79,26 @@ prepros.factory('sass', function (config, utils) {
 
             args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
 
-            args.push("--environment", 'development');
+            if(!file.config.compassConfigRb) {
 
-            //Output Style
-            args.push('--output-style', file.config.outputStyle);
+                args.push("--environment", 'development');
 
-            //Line numbers
-            if (!file.config.lineNumbers) {
-                args.push('--no-line-comments');
+                //Output Style
+                args.push('--output-style', file.config.outputStyle);
+
+                //Line numbers
+                if (!file.config.lineNumbers) {
+                    args.push('--no-line-comments');
+                }
+
+                //Debug info
+                if (file.config.debug) {
+
+                    args.push('--debug-info');
+                }
             }
 
-            //Debug info
-            if (file.config.debug) {
 
-                args.push('--debug-info');
-            }
 
             //Debug info
             args.push('--boring');

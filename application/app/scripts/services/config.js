@@ -114,6 +114,7 @@ prepros.factory('config', function () {
             debug: false,
             compass: false,
             fullCompass: false,
+            compassConfigRb: false,
             outputStyle: 'expanded', //compressed, nested, expanded, compact
             autoprefixer: false
         },

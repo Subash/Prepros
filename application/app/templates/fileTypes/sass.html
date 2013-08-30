@@ -1,14 +1,9 @@
-<label>
+<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass && selectedFile.config.compassConfigRb">
     <input type="checkbox" ng-model="selectedFile.config.lineNumbers">
     <span class="label-desc">Line numbers</span>
 </label>
 
-<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass">
-    <input type="checkbox" ng-model="selectedFile.config.unixNewlines">
-    <span class="label-desc">Unix Newlines</span>
-</label>
-
-<label>
+<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass && selectedFile.config.compassConfigRb">
     <input type="checkbox" ng-model="selectedFile.config.debug">
     <span class="label-desc">Debug Info</span>
 </label>
@@ -23,12 +18,22 @@
     <span class="label-desc">Full Compass Support</span>
 </label>
 
-<label>
+<label ng-show="selectedFile.config.compass && selectedFile.config.fullCompass">
+    <input type="checkbox" ng-model="selectedFile.config.compassConfigRb">
+    <span class="label-desc">Use Config.rb Options</span>
+</label>
+
+<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass">
     <input type="checkbox" ng-model="selectedFile.config.autoprefixer">
     <span class="label-desc">Auto Prefix CSS</span>
 </label>
 
-<label>
+<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass">
+    <input type="checkbox" ng-model="selectedFile.config.unixNewlines">
+    <span class="label-desc">Unix Newlines</span>
+</label>
+
+<label ng-hide="selectedFile.config.compass && selectedFile.config.fullCompass && selectedFile.config.compassConfigRb">
     <span class="label-desc label-block">Output Style</span>
     <select ng-model="selectedFile.config.outputStyle">
         <option value="compressed">Compressed</option>
