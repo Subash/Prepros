@@ -26,6 +26,7 @@
         "coffee-script": "1.6.3",
         "express": "3.3.4",
         "fs-extra": "0.6.3",
+        "getmac": "1.0.4",
         "jade": "0.34.1",
         "less": "1.4.2",
         "LiveScript": "1.2.0",

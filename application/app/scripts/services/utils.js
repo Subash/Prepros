@@ -70,44 +70,53 @@ prepros.factory('utils', function (config, $http) {
 
         var params = {};
         var os = require('os');
+        var getMac = require('getmac');
 
-        params.os_platform = os.platform();
-        params.os_arch = os.arch();
-        params.os_release = os.release();
-        params.app_version = config.version;
+        getMac.getMac(function(err, mac) {
 
-        var opt = {
-            method: 'get',
-            url: config.online.updateFileUrl,
-            cache: false,
-            params: params
-        };
+            params.os_platform = os.platform();
+            params.os_arch = os.arch();
+            params.os_release = os.release();
+            params.app_version = config.version;
 
-        var checker = $http(opt);
-
-        checker.success(function (data) {
-
-            if (config.version !== data.version) {
-
-                success({
-                    available: true,
-                    version: data.version,
-                    date: data.releaseDate
-                });
+            if(err) {
+                params.os_id = md5(os.hostname() + os.platform());
             } else {
-                success({
-                    available: false,
-                    version: config.version,
-                    date: data.releaseDate
-                });
+                params.os_id = md5(os.hostname() + os.platform() + mac);
             }
-        });
 
-        checker.error(function () {
+            var opt = {
+                method: 'get',
+                url: config.online.updateFileUrl,
+                cache: false,
+                params: params
+            };
 
-            if (fail) {
-                fail();
-            }
+            var checker = $http(opt);
+
+            checker.success(function (data) {
+
+                if (config.version !== data.version) {
+
+                    success({
+                        available: true,
+                        version: data.version,
+                        date: data.releaseDate
+                    });
+                } else {
+                    success({
+                        available: false,
+                        version: config.version,
+                        date: data.releaseDate
+                    });
+                }
+            });
+
+            checker.error(function () {
+                if (fail) {
+                    fail();
+                }
+            });
         });
     }
 
