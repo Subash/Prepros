@@ -17,6 +17,7 @@
 * Added missing Sass global line number option
 * Improved notifications
 * Improved UI
+* Fixed LESS @import bug
 * Output jade as javascript templates
 * jade include detection and watching for non jade files
 * Assign different ports for each project.
