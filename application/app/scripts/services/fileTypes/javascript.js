@@ -74,6 +74,8 @@ prepros.factory('javascript', function (config, utils) {
 
                     var read = function (filePathToRead) {
 
+                        var data = fs.readFileSync(filePathToRead).toString();
+
                         var importedFiles = {
                             append: [],
                             prepend: []
