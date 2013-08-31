@@ -1,3 +1,7 @@
+### Version 3.0.1 -Aug 31, 2013
+
+* Fixes a js/coffee concatenation bug
+
 ### Version 3.0.0 -Aug 29, 2013
 
 * Shareable prepros.json config file [Pro] [Docs](http://alphapixels.com/prepros/docs/prepros-json.html)
