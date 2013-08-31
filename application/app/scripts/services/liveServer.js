@@ -112,8 +112,7 @@ prepros.factory('liveServer', function (config) {
                 var snippet = '<script src="/prepros.js"></script>';
 
                 if(/<\/(:?\s|)body(:?\s|)>/i.test(body)) {
-                    body =  body.replace(/<\/(:?\s|)body(:?\s|)>/i, snippet);
-                    body = body + '</body>';
+                    body =  body.replace(/<\/(:?\s|)body(:?\s|)>/i, (snippet + '\n</body>'));
                 } else {
                     body = body + snippet;
                 }
