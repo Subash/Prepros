@@ -41,7 +41,7 @@ prepros.factory('importsVisitor', function (utils) {
 
 
         if (ext === '.less') {
-            importReg = /@import\s+[url\('"]*(.*)["'\)]/g;
+            importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
         }
         if (ext === '.scss') {
             importReg = /@import\s['"]*([^;]+)[;"']/g;
@@ -50,7 +50,7 @@ prepros.factory('importsVisitor', function (utils) {
             importReg = /@import\s+(.*)/g;
         }
         if (ext === '.styl') {
-            importReg = /@import\s["'\(]*([^"';\n\)]+)[;\)"']/g;
+            importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
         }
         if (ext === '.jade') {
             importReg = /(?:include|extends)\s+(.*)/g;
