@@ -1,3 +1,7 @@
+### Version 3.0.2 -September 1, 2013
+
+* Fixes a less @import issue
+
 ### Version 3.0.1 -Aug 31, 2013
 
 * Fixes a js/coffee concatenation bug
