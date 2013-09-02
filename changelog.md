@@ -1,3 +1,7 @@
+### Version 3.0.3 -September 2, 2013
+
+* Fixes a file watcher bug
+
 ### Version 3.0.2 -September 1, 2013
 
 * Fixes a less @import issue
