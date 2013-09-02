@@ -48,13 +48,11 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             return true;
                         }
 
-                        //Do not ignore files that don't have extension because that may be a folder
-                        if(!path.extname(f)) {
-                            return false;
+                        if(fs.lstatSync(f).isFile()) {
+                            return !f.match(supported);
                         }
 
-                        //Test against supported extensions and ignore if not supported
-                        return !f.match(supported);
+                        return false;
                     },
                     ignorePermissionErrors: true,
                     ignoreInitial: true,
