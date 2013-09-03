@@ -1,3 +1,8 @@
+### Version 3.0.4 -September 3, 2013
+
+* Live refresh added for more file types
+* Fixed a severe file watcher bug
+
 ### Version 3.0.3 -September 2, 2013
 
 * Fixes a file watcher bug
