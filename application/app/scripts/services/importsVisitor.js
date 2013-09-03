@@ -142,7 +142,7 @@ prepros.factory('importsVisitor', function (utils) {
 
                             importedFiles.push(_imp);
 
-                        } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(_imp).isFile()) {
+                        } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
 
                             importedFiles.push(file);
                         }
