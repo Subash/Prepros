@@ -137,11 +137,11 @@ prepros.factory('coffee', function (config, utils) {
                                     var _imp = path.dirname(impFile) + path.sep + '_' + path.basename(impFile);
 
                                     //Check if file exists
-                                    if (fs.existsSync(_imp)) {
+                                    if (fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
 
                                         importedFiles[reg].push(_imp);
 
-                                    } else if(fs.existsSync(impFile)) {
+                                    } else if(fs.existsSync(impFile) && fs.statSync(impFile).isFile()) {
 
                                         importedFiles[reg].push(impFile);
 

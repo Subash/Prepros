@@ -40,7 +40,6 @@ Section "MainSection" SEC01
 
   ; Remove Old Install Files
   RMDir /R $INSTDIR
-  RMDir /R "$LOCALAPPDATA\Prepros\App"
   delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   delete "$SMPROGRAMS\${PRODUCT_NAME}.lnk"
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

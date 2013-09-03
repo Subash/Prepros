@@ -48,11 +48,9 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             return true;
                         }
 
-                        if(fs.existsSync(f)) {
+                        if(fs.existsSync(f) && fs.statSync(f).isFile()) {
 
-                            if(fs.lstatSync(f).isFile()) {
-                                return !f.match(supported);
-                            }
+                            return !f.match(supported);
                         }
 
                         return false;

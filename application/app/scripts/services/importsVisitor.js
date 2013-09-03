@@ -100,11 +100,11 @@ prepros.factory('importsVisitor', function (utils) {
                         //First check for partial file
                         var _imp = path.dirname(imp) + path.sep + '_' + path.basename(imp);
 
-                        if (fs.existsSync(_imp) && utils.isFileInsideFolder(projectPath, _imp)) {
+                        if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp)  && fs.statSync(_imp).isFile()) {
 
                             importedFiles.push(_imp);
 
-                        } else if (fs.existsSync(imp) && utils.isFileInsideFolder(projectPath, imp)) {
+                        } else if (utils.isFileInsideFolder(projectPath, imp) && fs.existsSync(imp) && fs.statSync(imp).isFile()) {
 
                             importedFiles.push(imp);
 
@@ -120,7 +120,7 @@ prepros.factory('importsVisitor', function (utils) {
                     }
 
                     //Test if file without adding extension exists
-                    if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
+                    if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
 
                         importedFiles.push(file);
 
@@ -138,11 +138,11 @@ prepros.factory('importsVisitor', function (utils) {
                         //First check for partial file
                         var _imp = path.dirname(file) + path.sep + '_' + path.basename(file);
 
-                        if (fs.existsSync(_imp) && utils.isFileInsideFolder(projectPath, _imp)) {
+                        if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
 
                             importedFiles.push(_imp);
 
-                        } else if (fs.existsSync(file) && utils.isFileInsideFolder(projectPath, file)) {
+                        } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(_imp).isFile()) {
 
                             importedFiles.push(file);
                         }
