@@ -20,6 +20,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         var projectsBeingWatched = [];
 
         var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
+        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai)$/gi;
 
     //Function to start watching file
     function startWatching(projects) {
@@ -52,12 +53,27 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             return true;
                         }
 
-                        if(fs.existsSync(f) && fs.statSync(f).isFile()) {
+                        if(f.match(supported)) {
 
-                            return !f.match(supported);
+                            return false;
+
+                        } else if(f.match(notSupported)) {
+
+                            return true;
+
+                        } else {
+
+                            try {
+
+                                if(fs.statSync(f).isDirectory()) {
+
+                                    return false;
+                                }
+
+                            } catch(e) {}
                         }
 
-                        return false;
+                        return true;
                     },
                     interval: 400,
                     ignorePermissionErrors: true,
