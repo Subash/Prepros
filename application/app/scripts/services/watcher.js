@@ -20,7 +20,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         var projectsBeingWatched = [];
 
         var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
-        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai)$/gi;
+        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp)$/gi;
 
     //Function to start watching file
     function startWatching(projects) {
