@@ -17,7 +17,7 @@
 
     "__JSON_NOTE": "All paths are relative to this json file",
 
-    "version" : "3.0.4",
+    "version" : "3.0.5",
     "releaseDate": "September 3, 2013",
 
     "dependencies": {
