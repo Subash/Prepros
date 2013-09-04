@@ -48,6 +48,10 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             return true;
                         }
 
+                        if(projectsManager.matchFilters(project.id, f)) {
+                            return true;
+                        }
+
                         if(fs.existsSync(f) && fs.statSync(f).isFile()) {
 
                             return !f.match(supported);
@@ -55,6 +59,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
 
                         return false;
                     },
+                    interval: 400,
                     ignorePermissionErrors: true,
                     ignoreInitial: true,
                     usePolling : !config.getUserOptions().experimental.fileWatcher
