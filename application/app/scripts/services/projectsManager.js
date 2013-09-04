@@ -350,11 +350,12 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
     /**
      * Function to get all files inside project folder
+     * @param pid {string} project id
      * @param folder {string} Path to folder
      * @returns {Array}
      */
 
-    function getFilesInDir(folder) {
+    function getFilesInDir(pid, folder) {
 
         var f = [];
 
@@ -366,14 +367,17 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
                 var fp = dir + path.sep + file;
 
-                if (fs.statSync(fp).isDirectory()) {
+                if(!matchFileFilters(pid, fp)) {
 
-                    get(fp);
+                    if (fs.statSync(fp).isDirectory()) {
 
-                } else {
+                        get(fp);
 
-                    if (fileTypes.isFileSupported(fp)) {
-                        f.push(fp);
+                    } else {
+
+                        if (fileTypes.isFileSupported(fp)) {
+                            f.push(fp);
+                        }
                     }
                 }
             });
@@ -413,23 +417,21 @@ prepros.factory('projectsManager', function (config, storage, fileTypes, notific
 
         if (fs.existsSync(folder)) {
 
-            var projectFiles = getFilesInDir(folder);
+            var projectFiles = getFilesInDir(pid, folder);
 
             _.each(projectFiles, function (file) {
 
-                if (!matchFileFilters(pid, file)) {
+                //Generate unique id for file
+                var file_id = _id(path.relative(getProjectById(pid).path, file));
 
-                    //Generate unique id for file
-                    var file_id = _id(path.relative(getProjectById(pid).path, file));
+                var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
 
-                    var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
-
-                    if(already) {
-                        refreshFile(pid, file_id);
-                    } else {
-                        addFile(pid, file);
-                    }
+                if(already) {
+                    refreshFile(pid, file_id);
+                } else {
+                    addFile(pid, file);
                 }
+
             });
 
             _broadCast();
