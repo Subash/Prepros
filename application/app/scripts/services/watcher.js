@@ -20,7 +20,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
         var projectsBeingWatched = [];
 
         var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
-        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp)$/gi;
+        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs)$/gi;
 
     //Function to start watching file
     function startWatching(projects) {
@@ -49,15 +49,18 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                             return true;
                         }
 
+                        var ext = path.extname(f);
+
                         if(projectsManager.matchFilters(project.id, f)) {
+
                             return true;
                         }
 
-                        if(f.match(supported)) {
+                        if(ext.match(supported)) {
 
                             return false;
 
-                        } else if(f.match(notSupported)) {
+                        } else if(ext.match(notSupported)) {
 
                             return true;
 
