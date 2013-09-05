@@ -1,3 +1,7 @@
+### Version 3.0.6 -September 5, 2013
+
+* Fixed CPU Usage Issue
+
 ### Version 3.0.5 -September 4, 2013
 
 * Fixed CPU Usage Issue
