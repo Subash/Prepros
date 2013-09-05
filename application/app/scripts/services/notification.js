@@ -32,6 +32,10 @@ prepros.factory('notification', function (config, $location, $rootScope) {
             show_in_taskbar: false
         };
 
+        if(process.platform !== 'win32') {
+            options.y = 100;
+        }
+
         notificationWindow = require('nw.gui').Window.open(notificationPath, options);
 
         notificationWindow.on('showLog', function () {

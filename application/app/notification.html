@@ -25,8 +25,15 @@
 
                     timer =  setTimeout(function(){
 
-                        //Just hide window without closing
-                        nwin.y = window.screen.availHeight + 1000;
+                        if(process.platform === "win32") {
+
+                            //Just hide window without closing
+                            nwin.y = window.screen.availHeight + 1000;
+
+                        } else {
+
+                            nwin.hide();
+                        }
 
                     }, parseInt(data.time, 10));
                 });
@@ -45,7 +52,8 @@
 
                     } else {
 
-                        nwin.y = 50;
+                        nwin.show();
+                        nwin.blur();
                     }
 
                 }, 75);
@@ -67,7 +75,15 @@
 
                 //Hide window on right click
                 $(window).on('contextmenu', function() {
-                    nwin.y = window.screen.availHeight + 1000;
+
+                    if(process.platform === 'win32') {
+
+                        nwin.y = window.screen.availHeight + 1000;
+
+                    } else {
+
+                        nwin.hide();
+                    }
                 });
 
             });
@@ -77,8 +93,17 @@
             };
 
             $scope.close= function(e){
+
                 e.stopPropagation();
-                require('nw.gui').Window.get().close();
+
+                if(process.platform === 'win32') {
+
+                    nwin.y = window.screen.availHeight + 1000;
+
+                } else {
+
+                    nwin.hide();
+                }
             };
         }
     </script>
