@@ -81,7 +81,7 @@ prepros.factory('fileTypes', function (less, sass, stylus, markdown, coffee, jav
         //Minified js files are also not supported
         var js = ['js'];
 
-        var minified = /min.js$/;
+        var minified = /\.min.js$/;
 
         var isMinified = _.contains(js, extname) && minified.exec(path.basename(filePath));
 

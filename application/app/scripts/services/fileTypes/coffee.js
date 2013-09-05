@@ -201,7 +201,7 @@ prepros.factory('coffee', function (config, utils) {
                                 }
                             }
 
-                            if (file.config.uglify && !/min.js$/.exec(path.basename(imp))) {
+                            if (file.config.uglify && !/\.min.js$/.exec(path.basename(imp))) {
 
                                 try {
 

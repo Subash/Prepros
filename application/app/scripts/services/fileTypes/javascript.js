@@ -160,7 +160,7 @@ prepros.factory('javascript', function (config, utils) {
 
                             var js = fs.readFileSync(imp).toString();
 
-                            if (file.config.uglify && !/min.js$/.exec(path.basename(imp))) {
+                            if (file.config.uglify && !/\.min.js$/.exec(path.basename(imp))) {
 
                                 try {
 
