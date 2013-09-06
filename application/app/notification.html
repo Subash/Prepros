@@ -13,7 +13,9 @@
 
             $scope.notification = {};
 
-            var timer = setTimeout(function(){}, 10000);
+            var timer = setTimeout(function(){}, 0);
+
+            var defTime = 3000;
 
             nwin.on('updateNotification', function(data){
 
@@ -23,32 +25,32 @@
 
                     window.clearTimeout(timer);
 
+                    defTime = parseInt(data.time, 10);
+
                     timer =  setTimeout(function(){
 
-                        if(process.platform === "win32") {
+                        nwin.hide();
 
-                            //Just hide window without closing
-                            nwin.y = window.screen.availHeight + 1000;
-
-                        } else {
-
-                            nwin.hide();
-                        }
-
-                    }, parseInt(data.time, 10));
+                    }, defTime);
                 });
 
                 setTimeout(function() {
 
                     var elem = $('body');
 
-                    var height =  elem.height();
+                    var height = elem.height();
 
                     nwin.height = height;
 
                     if(process.platform === 'win32') {
 
                         nwin.y = (window.screen.availHeight - 10) - height;
+                    }
+
+
+                    if(typeof nwin.showInactive === 'function') {
+
+                        nwin.showInactive();
 
                     } else {
 
@@ -63,28 +65,30 @@
 
                 nwin.setAlwaysOnTop(true);
 
-                if(typeof nwin.showInactive === 'function') {
-
-                    nwin.showInactive();
-
-                } else {
-
-                    nwin.show();
-                    nwin.blur();
-                }
+                var $win = $(window);
 
                 //Hide window on right click
-                $(window).on('contextmenu', function() {
+                $win.on('contextmenu', function() {
 
-                    if(process.platform === 'win32') {
+                    nwin.hide();
 
-                        nwin.y = window.screen.availHeight + 1000;
+                });
 
-                    } else {
+                $win.on('mouseover', function() {
+
+                    window.clearTimeout(timer);
+
+                });
+
+                $win.on('mouseout' , function() {
+
+                    timer =  setTimeout(function(){
 
                         nwin.hide();
-                    }
-                });
+
+                    }, defTime);
+
+                })
 
             });
             
@@ -95,15 +99,7 @@
             $scope.close= function(e){
 
                 e.stopPropagation();
-
-                if(process.platform === 'win32') {
-
-                    nwin.y = window.screen.availHeight + 1000;
-
-                } else {
-
-                    nwin.hide();
-                }
+                nwin.hide();
             };
         }
     </script>

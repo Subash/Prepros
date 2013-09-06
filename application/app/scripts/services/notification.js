@@ -22,7 +22,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
 
         var options = {
             x: window.screen.availWidth - 360,
-            y: window.screen.availHeight + 1000,
+            y: window.screen.availHeight - 100,
             width: 350,
             height: 100,
             frame: false,
@@ -33,7 +33,7 @@ prepros.factory('notification', function (config, $location, $rootScope) {
         };
 
         if(process.platform !== 'win32') {
-            options.y = 100;
+            options.y = 20;
         }
 
         notificationWindow = require('nw.gui').Window.open(notificationPath, options);
