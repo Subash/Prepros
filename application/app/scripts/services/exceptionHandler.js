@@ -23,13 +23,16 @@ prepros.factory('$exceptionHandler',function(){
 
         var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
         require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
+        console.error(err.stack);
+
+        if(/watch EPERM/.test(err.message)) {
+            return;
+        }
 
         //Disable actions to prevent further errors
         $('body').css({pointerEvents: 'none'});
         $('.wrapper').css({opacity: '0.5'});
         $('#title-bar-close-button').css({pointerEvents: 'auto'});
-
-        console.error(err.stack);
         window.alert('An exception occurred.\n ' + errorLogPath);
     });
 
