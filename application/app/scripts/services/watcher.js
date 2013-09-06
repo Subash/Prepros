@@ -75,7 +75,7 @@ prepros.factory("watcher", function (projectsManager, notification, config, comp
                 return;
             }
 
-            if(fileTypes.isFileSupported(fpath)) {
+            if(fileTypes.isExtSupported(fpath)) {
 
                 _.each(project.files, function(file) {
 
