@@ -15,13 +15,15 @@ prepros.factory("compiler",[
     'projectsManager',
     'fileTypes',
     'notification',
+    'liveServer',
 
     function (
         $filter,
         $rootScope,
         projectsManager,
         fileTypes,
-        notification
+        notification,
+        liveServer
     ) {
 
         "use strict";

@@ -16,10 +16,8 @@ prepros.factory("watcher", [
     'config',
     'compiler',
     'fileTypes',
-    'liveServer',
     'notification',
     'projectsManager',
-    'utils',
 
     function (
         $filter,
