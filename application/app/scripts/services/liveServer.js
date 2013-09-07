@@ -24,8 +24,7 @@ prepros.factory('liveServer', [
             urls = [],
             portfinder = require('portfinder'),
             url = require('url'),
-            path = require('path'),
-            coffeescript = require('coffee-script');
+            path = require('path');
 
         var MAIN_SERVER_PORT = 5656;
 
