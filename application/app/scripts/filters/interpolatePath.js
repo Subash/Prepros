@@ -8,35 +8,40 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.filter('interpolatePath', function ($interpolate) {
+prepros.filter('interpolatePath',[
 
-    'use strict';
+    '$interpolate',
 
-    var path = require('path');
+    function ($interpolate) {
 
-    return function (string, data) {
+        'use strict';
 
-        if(data.config.jsMinPath.indexOf(':')>=0) {
+        var path = require('path');
 
-            string = path.normalize(string.replace(/\{\{jsMinPath\}\}/gi, ''));
-            string = path.join(data.config.jsMinPath, string);
+        return function (string, data) {
 
-        } else if(data.config.cssPath.indexOf(':')>=0) {
+            if(data.config.jsMinPath.indexOf(':')>=0) {
 
-            string = path.join(data.config.cssPath, string.split('{{cssPath}}').reverse()[0]);
+                string = path.normalize(string.replace(/\{\{jsMinPath\}\}/gi, ''));
+                string = path.join(data.config.jsMinPath, string);
 
-        } else if(data.config.jsPath.indexOf(':')>=0) {
+            } else if(data.config.cssPath.indexOf(':')>=0) {
 
-            string = path.join(data.config.jsPath, string.split('{{jsPath}}').reverse()[0]);
+                string = path.join(data.config.cssPath, string.split('{{cssPath}}').reverse()[0]);
 
-        } else if(data.config.htmlPath.indexOf(':')>=0) {
+            } else if(data.config.jsPath.indexOf(':')>=0) {
 
-            string = path.join(data.config.htmlPath, string.split('{{htmlPath}}').reverse()[0]);
+                string = path.join(data.config.jsPath, string.split('{{jsPath}}').reverse()[0]);
 
-        }
+            } else if(data.config.htmlPath.indexOf(':')>=0) {
 
-        string = path.normalize($interpolate(string)(data.config));
+                string = path.join(data.config.htmlPath, string.split('{{htmlPath}}').reverse()[0]);
 
-        return string;
-    };
-});
+            }
+
+            string = path.normalize($interpolate(string)(data.config));
+
+            return string;
+        };
+    }
+]);

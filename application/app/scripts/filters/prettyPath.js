@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.filter('prettyPath', function () {
+prepros.filter('prettyPath', [ function () {
 
     'use strict';
 
@@ -17,4 +17,4 @@ prepros.filter('prettyPath', function () {
         return string.replace(/\\/g, '/');
 
     };
-});
+}]);

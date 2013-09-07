@@ -9,43 +9,46 @@
 /*global prepros, angular, _*/
 
 //Storage
-prepros.factory('storage', function () {
+prepros.factory('storage',[
 
-    'use strict';
+    function () {
 
-    var fs = require('fs-extra'),
-        path = require('path');
+        'use strict';
 
-    //Function to save project list to json
-    function put(projects) {
+        var fs = require('fs-extra'),
+            path = require('path');
 
-        localStorage.PreprosData = angular.toJson(projects, false);
+        //Function to save project list to json
+        function put(projects) {
 
-    }
-
-    //Get projects list from localStorage
-    function get() {
-
-        var projects = [];
-
-        try {
-
-            projects = angular.fromJson(localStorage.PreprosData || '[]');
-
-        } catch (e) {
-
-            window.alert('Error Reading Projects ! Reverting to defaults.');
-
-            put([]);
+            localStorage.PreprosData = angular.toJson(projects, false);
 
         }
 
-        return projects;
-    }
+        //Get projects list from localStorage
+        function get() {
 
-    //Return projects list and files list
-    return {
-        get: get,
-        put: put
-    };
-});
+            var projects = [];
+
+            try {
+
+                projects = angular.fromJson(localStorage.PreprosData || '[]');
+
+            } catch (e) {
+
+                window.alert('Error Reading Projects ! Reverting to defaults.');
+
+                put([]);
+
+            }
+
+            return projects;
+        }
+
+        //Return projects list and files list
+        return {
+            get: get,
+            put: put
+        };
+    }
+]);

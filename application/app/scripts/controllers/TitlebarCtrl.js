@@ -9,103 +9,111 @@
 /*global prepros,  _, $*/
 
 //Title Bar controls
-prepros.controller('TitlebarCtrl', function ($scope, config, utils, projectsManager) {
+prepros.controller('TitlebarCtrl', [
 
-    'use strict';
+    '$scope',
+    'config',
+    'utils',
+    'projectsManager',
 
-    var path = require('path');
+    function ($scope, config, utils, projectsManager) {
 
-    //Support Author Link
-    $scope.supportAuthor = function () {
+        'use strict';
 
-        utils.openBrowser(config.online.loveUrl);
+        var path = require('path');
 
-    };
+        //Support Author Link
+        $scope.supportAuthor = function () {
 
-    //Minimize app to tray by hiding the window
-    $scope.toTray = function () {
-        require('nw.gui').Window.get().hide();
-    };
+            utils.openBrowser(config.online.loveUrl);
 
-    //Minimize app
-    $scope.minimize = function () {
-        require('nw.gui').Window.get().minimize();
-    };
+        };
 
-    //Close App
-    $scope.close = function () {
-        require('nw.gui').App.closeAllWindows();
-    };
+        //Minimize app to tray by hiding the window
+        $scope.toTray = function () {
+            require('nw.gui').Window.get().hide();
+        };
 
-    //Update Checker
-    $scope.goWebsite = function () {
+        //Minimize app
+        $scope.minimize = function () {
+            require('nw.gui').Window.get().minimize();
+        };
 
-        utils.openBrowser(config.online.url);
+        //Close App
+        $scope.close = function () {
+            require('nw.gui').App.closeAllWindows();
+        };
 
-    };
+        //Update Checker
+        $scope.goWebsite = function () {
 
-    utils.checkUpdate(function (data) {
+            utils.openBrowser(config.online.url);
 
-        if (data.available) {
-            $scope.appUpdate = true;
-        }
+        };
 
-    });
+        utils.checkUpdate(function (data) {
 
-    $scope.addProject = function () {
-
-        //Function to add new project
-        var elm = $('<input type="file" nwdirectory>');
-
-        elm.trigger('click');
-
-        $(elm).on('change', function (e) {
-
-            var file = e.currentTarget.files[0].path;
-
-            //Must notify scope after async operation
-            $scope.$apply(function () {
-                projectsManager.addProject(file);
-            });
+            if (data.available) {
+                $scope.appUpdate = true;
+            }
 
         });
-    };
 
-    //Open Options Window
-    var optionsWindow;
-    $scope.openOptionsWindow = function () {
+        $scope.addProject = function () {
 
-        if (optionsWindow) {
+            //Function to add new project
+            var elm = $('<input type="file" nwdirectory>');
 
-            optionsWindow.show();
-            optionsWindow.focus();
+            elm.trigger('click');
 
-        } else {
+            $(elm).on('change', function (e) {
 
-            var optionsPath = 'file:///' + path.normalize(config.basePath + '/options.html');
+                var file = e.currentTarget.files[0].path;
 
-            optionsWindow = require('nw.gui').Window.open(optionsPath, {
-                position: 'center',
-                width: 600,
-                height: 470,
-                frame: true,
-                toolbar: false,
-                icon: 'app/assets/img/icons/128.png',
-                resizable: false
+                //Must notify scope after async operation
+                $scope.$apply(function () {
+                    projectsManager.addProject(file);
+                });
+
             });
+        };
 
-            optionsWindow.on('loaded', function () {
-                optionsWindow.emit('loadAppConfig', config);
-            });
+        //Open Options Window
+        var optionsWindow;
+        $scope.openOptionsWindow = function () {
 
-            optionsWindow.on('saveOptions', function (data) {
-                config.saveUserOptions(data);
-            });
+            if (optionsWindow) {
 
-            optionsWindow.on('closed', function () {
-                optionsWindow.removeAllListeners();
-                optionsWindow = null;
-            });
-        }
-    };
-});
+                optionsWindow.show();
+                optionsWindow.focus();
+
+            } else {
+
+                var optionsPath = 'file:///' + path.normalize(config.basePath + '/options.html');
+
+                optionsWindow = require('nw.gui').Window.open(optionsPath, {
+                    position: 'center',
+                    width: 600,
+                    height: 470,
+                    frame: true,
+                    toolbar: false,
+                    icon: 'app/assets/img/icons/128.png',
+                    resizable: false
+                });
+
+                optionsWindow.on('loaded', function () {
+                    optionsWindow.emit('loadAppConfig', config);
+                });
+
+                optionsWindow.on('saveOptions', function (data) {
+                    config.saveUserOptions(data);
+                });
+
+                optionsWindow.on('closed', function () {
+                    optionsWindow.removeAllListeners();
+                    optionsWindow = null;
+                });
+            }
+        };
+    }
+]);

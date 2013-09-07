@@ -9,179 +9,184 @@
 /*global prepros, _*/
 
 //Imports Visitor
-prepros.factory('importsVisitor', function (utils) {
+prepros.factory('importsVisitor',[
 
-    'use strict';
+    'utils',
 
-    var fs = require('fs-extra'),
-        path = require('path');
+    function (utils) {
 
+        'use strict';
 
-    function visitImports(filePath, projectPath) {
-
-        var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
-
-        if(!_.contains(can, path.extname(filePath).slice(1))) {
-
-            return [];
-        }
-
-        var importedFiles = [];
-        var ext = path.extname(filePath).toLowerCase();
-        var data = fs.readFileSync(filePath).toString();
-        var result;
-        var basedir = path.dirname(filePath);
-        var importReg;
-
-        //Strip Comments
-        if (ext !== '.js') {
-            data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
-            data = data.replace(/\/\/.*/g, '');
-        }
+        var fs = require('fs-extra'),
+            path = require('path');
 
 
-        if (ext === '.less') {
-            importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
-        }
-        if (ext === '.scss') {
-            importReg = /@import\s['"]*([^;]+)[;"']/g;
-        }
-        if (ext === '.sass') {
-            importReg = /@import\s+(.*)/g;
-        }
-        if (ext === '.styl') {
-            importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
-        }
-        if (ext === '.jade') {
-            importReg = /(?:include|extends)\s+(.*)/g;
-        }
-        if (ext === '.slim') {
-            importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g;
-        }
-        if (ext === '.js') {
-            importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
-        }
-        if (ext === '.coffee') {
-            importReg = /#(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
-        }
+        function visitImports(filePath, projectPath) {
 
-        do {
-            result = importReg.exec(data);
+            var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
 
-            if (result) {
+            if(!_.contains(can, path.extname(filePath).slice(1))) {
 
-                var file = result[1].replace(/"|'|\n/gi, '').trim();
+                return [];
+            }
 
-                if(file.indexOf(',')>=0) {
+            var importedFiles = [];
+            var ext = path.extname(filePath).toLowerCase();
+            var data = fs.readFileSync(filePath).toString();
+            var result;
+            var basedir = path.dirname(filePath);
+            var importReg;
 
-                    file = file.split(',').map(function(f) {
+            //Strip Comments
+            if (ext !== '.js') {
+                data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
+                data = data.replace(/\/\/.*/g, '');
+            }
 
-                        f = f.trim();
 
-                        if (f.indexOf(":") >= 0) {
-                            f = path.normalize(f);
-                        } else {
-                            f = path.join(basedir, f);
-                        }
+            if (ext === '.less') {
+                importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
+            }
+            if (ext === '.scss') {
+                importReg = /@import\s['"]*([^;]+)[;"']/g;
+            }
+            if (ext === '.sass') {
+                importReg = /@import\s+(.*)/g;
+            }
+            if (ext === '.styl') {
+                importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
+            }
+            if (ext === '.jade') {
+                importReg = /(?:include|extends)\s+(.*)/g;
+            }
+            if (ext === '.slim') {
+                importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g;
+            }
+            if (ext === '.js') {
+                importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
+            }
+            if (ext === '.coffee') {
+                importReg = /#(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
+            }
 
-                        return f;
-                    });
-                }
+            do {
+                result = importReg.exec(data);
 
-                if(_.isArray(file) ) {
+                if (result) {
 
-                    _.each(file, function (imp) {
+                    var file = result[1].replace(/"|'|\n/gi, '').trim();
 
-                        //Add extension if file doesn't have that
-                        if (path.extname(imp).toLowerCase() !== ext) {
-                            imp = imp + ext;
-                        }
+                    if(file.indexOf(',')>=0) {
 
-                        //First check for partial file
-                        var _imp = path.dirname(imp) + path.sep + '_' + path.basename(imp);
+                        file = file.split(',').map(function(f) {
 
-                        if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp)  && fs.statSync(_imp).isFile()) {
+                            f = f.trim();
 
-                            importedFiles.push(_imp);
+                            if (f.indexOf(":") >= 0) {
+                                f = path.normalize(f);
+                            } else {
+                                f = path.join(basedir, f);
+                            }
 
-                        } else if (utils.isFileInsideFolder(projectPath, imp) && fs.existsSync(imp) && fs.statSync(imp).isFile()) {
-
-                            importedFiles.push(imp);
-
-                        }
-                    });
-                } else {
-
-                    //Check if path is full or just relative
-                    if (file.indexOf(':') >= 0) {
-                        file = path.normalize(file);
-                    } else {
-                        file = path.join(basedir, file);
+                            return f;
+                        });
                     }
 
-                    //Test if file without adding extension exists
-                    if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
+                    if(_.isArray(file) ) {
 
-                        importedFiles.push(file);
+                        _.each(file, function (imp) {
 
+                            //Add extension if file doesn't have that
+                            if (path.extname(imp).toLowerCase() !== ext) {
+                                imp = imp + ext;
+                            }
+
+                            //First check for partial file
+                            var _imp = path.dirname(imp) + path.sep + '_' + path.basename(imp);
+
+                            if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp)  && fs.statSync(_imp).isFile()) {
+
+                                importedFiles.push(_imp);
+
+                            } else if (utils.isFileInsideFolder(projectPath, imp) && fs.existsSync(imp) && fs.statSync(imp).isFile()) {
+
+                                importedFiles.push(imp);
+
+                            }
+                        });
                     } else {
 
-                        if (path.extname(file).toLowerCase() !== ext) {
-                            file = file + ext;
+                        //Check if path is full or just relative
+                        if (file.indexOf(':') >= 0) {
+                            file = path.normalize(file);
+                        } else {
+                            file = path.join(basedir, file);
                         }
 
-                        //Add extension if file doesn't have that
-                        if (path.extname(file).toLowerCase() !== ext) {
-                            file = file + ext;
-                        }
-
-                        //First check for partial file
-                        var _imp = path.dirname(file) + path.sep + '_' + path.basename(file);
-
-                        if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
-
-                            importedFiles.push(_imp);
-
-                        } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
+                        //Test if file without adding extension exists
+                        if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
 
                             importedFiles.push(file);
+
+                        } else {
+
+                            if (path.extname(file).toLowerCase() !== ext) {
+                                file = file + ext;
+                            }
+
+                            //Add extension if file doesn't have that
+                            if (path.extname(file).toLowerCase() !== ext) {
+                                file = file + ext;
+                            }
+
+                            //First check for partial file
+                            var _imp = path.dirname(file) + path.sep + '_' + path.basename(file);
+
+                            if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
+
+                                importedFiles.push(_imp);
+
+                            } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
+
+                                importedFiles.push(file);
+                            }
                         }
                     }
                 }
-            }
-        } while (result);
+            } while (result);
 
-        return importedFiles;
-    }
-
-
-    //Function to visit imports with nested support
-    function getImports(filePath, projectPath) {
-
-        var fileImports = [];
-
-        fileImports[0] = visitImports(filePath, projectPath);
-
-        //Get imports of imports up to four levels
-        for (var i = 1; i < 5; i++) {
-
-            fileImports[i] = [];
-
-            _.each(fileImports[i - 1], function (importedFile) {
-
-                fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile, projectPath)));
-
-            });
+            return importedFiles;
         }
 
-        //Remove repeated imports
-        return _.uniq(_.flatten(fileImports));
+
+        //Function to visit imports with nested support
+        function getImports(filePath, projectPath) {
+
+            var fileImports = [];
+
+            fileImports[0] = visitImports(filePath, projectPath);
+
+            //Get imports of imports up to four levels
+            for (var i = 1; i < 5; i++) {
+
+                fileImports[i] = [];
+
+                _.each(fileImports[i - 1], function (importedFile) {
+
+                    fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile, projectPath)));
+
+                });
+            }
+
+            //Remove repeated imports
+            return _.uniq(_.flatten(fileImports));
+
+        }
+
+
+        return {
+            getImports: getImports
+        };
 
     }
-
-
-    return {
-        getImports: getImports
-    };
-
-});
+]);

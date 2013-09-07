@@ -9,44 +9,47 @@
 /*global prepros, _, $*/
 
 //Exception handler service
-prepros.factory('$exceptionHandler',function(){
+prepros.factory('$exceptionHandler', [
 
-    'use strict';
+    function(){
 
-    //Replace console.warn to hide warnings
-    console.warn = function() {
+        'use strict';
 
-    };
+        //Replace console.warn to hide warnings
+        console.warn = function() {
 
-    //Save exception data to file
-    process.on('uncaughtException', function(err) {
+        };
 
-        var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
-        require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
-        console.error(err.stack);
+        //Save exception data to file
+        process.on('uncaughtException', function(err) {
 
-        if(/watch EPERM/.test(err.message)) {
-            return;
-        }
+            var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
+            require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
+            console.error(err.stack);
 
-        //Disable actions to prevent further errors
-        $('body').css({pointerEvents: 'none'});
-        $('.wrapper').css({opacity: '0.5'});
-        $('#title-bar-close-button').css({pointerEvents: 'auto'});
-        window.alert('An exception occurred.\n ' + errorLogPath);
-    });
+            if(/watch EPERM/.test(err.message)) {
+                return;
+            }
 
-    return function(err){
+            //Disable actions to prevent further errors
+            $('body').css({pointerEvents: 'none'});
+            $('.wrapper').css({opacity: '0.5'});
+            $('#title-bar-close-button').css({pointerEvents: 'auto'});
+            window.alert('An exception occurred.\n ' + errorLogPath);
+        });
 
-        var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
-        require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
+        return function(err){
 
-        //Disable actions to prevent further errors
-        $('body').css({pointerEvents: 'none'});
-        $('.wrapper').css({opacity: '0.5'});
-        $('#title-bar-close-button').css({pointerEvents: 'auto'});
+            var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
+            require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
 
-        console.error(err.stack);
-        window.alert('An exception occurred.\n ' + errorLogPath);
-    };
-});
+            //Disable actions to prevent further errors
+            $('body').css({pointerEvents: 'none'});
+            $('.wrapper').css({opacity: '0.5'});
+            $('#title-bar-close-button').css({pointerEvents: 'auto'});
+
+            console.error(err.stack);
+            window.alert('An exception occurred.\n ' + errorLogPath);
+        };
+    }
+]);

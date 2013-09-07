@@ -9,196 +9,218 @@
 /*jshint browser: true, node: true*/
 /*global prepros,  _*/
 
-prepros.factory("watcher", function (projectsManager, notification, config, compiler, $filter, liveServer, fileTypes, $rootScope, utils) {
+prepros.factory("watcher", [
 
-    "use strict";
+    '$filter',
+    '$rootScope',
+    'config',
+    'compiler',
+    'fileTypes',
+    'liveServer',
+    'notification',
+    'projectsManager',
+    'utils',
 
-    var fs = require("fs"),
-        chokidar = require('chokidar'),
-        path = require('path');
+    function (
+        $filter,
+        $rootScope,
+        config,
+        compiler,
+        fileTypes,
+        notification,
+        projectsManager
+    ) {
 
-        var projectsBeingWatched = {};
+        "use strict";
+
+        var fs = require("fs"),
+            chokidar = require('chokidar'),
+            path = require('path');
+
+            var projectsBeingWatched = {};
 
         var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
         var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs)$/gi;
 
-    function _watch(project) {
 
-        var useExperimentalWatcher =  config.getUserOptions().experimental.fileWatcher;
+        function _watch(project) {
 
-        var watcher = chokidar.watch(project.path, {
-            ignored: function(f) {
+            var useExperimentalWatcher =  config.getUserOptions().experimental.fileWatcher;
 
-                //Ignore dot files or folders
-                if(/\\\.|\/\./.test(f)) {
+            var watcher = chokidar.watch(project.path, {
+                ignored: function(f) {
+
+                    //Ignore dot files or folders
+                    if(/\\\.|\/\./.test(f)) {
+                        return true;
+                    }
+
+                    var ext = path.extname(f);
+
+                    if(projectsManager.matchFilters(project.id, f)) {
+
+                        return true;
+                    }
+
+                    if(ext.match(supported)) {
+
+                        return false;
+
+                    } else if(ext.match(notSupported)) {
+
+                        return true;
+
+                    } else {
+
+                        try {
+
+                            if(fs.statSync(f).isDirectory()) {
+
+                                return false;
+                            }
+
+                        } catch(e) {}
+                    }
+
                     return true;
+                },
+                interval: 400,
+                ignorePermissionErrors: true,
+                ignoreInitial: true,
+                usePolling : !useExperimentalWatcher
+            });
+
+            var changeHandler = function(fpath) {
+
+                if(!fs.existsSync(fpath)) {
+                    return;
                 }
 
-                var ext = path.extname(f);
+                if(fileTypes.isExtSupported(fpath)) {
 
-                if(projectsManager.matchFilters(project.id, f)) {
+                    _.each(project.files, function(file) {
 
-                    return true;
+                        var filePath = $filter('fullPath')(file.input, { basePath: project.path});
+
+                        if(path.relative(filePath, fpath)=== "") {
+
+                            if (file.config.autoCompile) {
+
+                                //Compile File
+                                compiler.compile(file.pid, file.id);
+                            }
+
+                            $rootScope.$apply(function() {
+                                projectsManager.refreshFile(file.pid, file.id);
+                            });
+                        }
+                    });
+
+                    _.each(project.imports, function(imp) {
+
+                        var filePath = $filter('fullPath')(imp.path, { basePath: project.path});
+
+                        if(path.relative(filePath, fpath)=== "") {
+
+                            _.each(imp.parents, function (parentId) {
+
+                                var parentFile = projectsManager.getFileById(imp.pid, parentId);
+
+                                if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
+
+                                    compiler.compile(imp.pid, parentId);
+
+                                    $rootScope.$apply(function() {
+                                        projectsManager.refreshFile(imp.pid, parentId);
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
+            };
 
-                if(ext.match(supported)) {
+            var debounceChangeHandler = _.debounce(function(fpath) {
 
-                    return false;
+                changeHandler(fpath);
 
-                } else if(ext.match(notSupported)) {
+            }, 75);
 
-                    return true;
+            watcher.on('change', function(fpath) {
+
+                if(useExperimentalWatcher) {
+
+                    return debounceChangeHandler(fpath);
 
                 } else {
 
-                    try {
-
-                        if(fs.statSync(f).isDirectory()) {
-
-                            return false;
-                        }
-
-                    } catch(e) {}
+                    return changeHandler(fpath);
                 }
+            });
 
-                return true;
-            },
-            interval: 400,
-            ignorePermissionErrors: true,
-            ignoreInitial: true,
-            usePolling : !useExperimentalWatcher
+            watcher.on('error', function(err) {
+                //Ignore all errors;  there are too many to notify the user
+            });
+
+            projectsBeingWatched[project.id] = {
+                id: project.id,
+                watcher: watcher
+            };
+        }
+
+        var registerExceptionHandler = _.once(function(projects) {
+
+            //An ugly hack to restart nodejs file watcher when it crashes
+            process.on('uncaughtException', function(err) {
+
+                console.log(projects);
+
+                if(/watch EPERM/.test(err.message)) {
+
+                    _.each(projectsBeingWatched, function(project) {
+
+                        project.watcher.close();
+
+                        delete projectsBeingWatched[project.id];
+                    });
+
+                    _.each(projects, function(project) {
+                        _watch(project);
+                    });
+                }
+            });
+
         });
 
-        var changeHandler = function(fpath) {
+        //Function to start watching file
+        function startWatching(projects) {
 
-            if(!fs.existsSync(fpath)) {
-                return;
-            }
+            registerExceptionHandler(projects);
 
-            if(fileTypes.isExtSupported(fpath)) {
+            var ids = _.pluck(projects, 'id');
 
-                _.each(project.files, function(file) {
+            _.each(projectsBeingWatched, function(project) {
 
-                    var filePath = $filter('fullPath')(file.input, { basePath: project.path});
-
-                    if(path.relative(filePath, fpath)=== "") {
-
-                        if (file.config.autoCompile) {
-
-                            //Compile File
-                            compiler.compile(file.pid, file.id);
-                        }
-
-                        $rootScope.$apply(function() {
-                            projectsManager.refreshFile(file.pid, file.id);
-                        });
-                    }
-                });
-
-                _.each(project.imports, function(imp) {
-
-                    var filePath = $filter('fullPath')(imp.path, { basePath: project.path});
-
-                    if(path.relative(filePath, fpath)=== "") {
-
-                        _.each(imp.parents, function (parentId) {
-
-                            var parentFile = projectsManager.getFileById(imp.pid, parentId);
-
-                            if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
-
-                                compiler.compile(imp.pid, parentId);
-
-                                $rootScope.$apply(function() {
-                                    projectsManager.refreshFile(imp.pid, parentId);
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        };
-
-        var debounceChangeHandler = _.debounce(function(fpath) {
-
-            changeHandler(fpath);
-
-        }, 75);
-
-        watcher.on('change', function(fpath) {
-
-            if(useExperimentalWatcher) {
-
-                return debounceChangeHandler(fpath);
-
-            } else {
-
-                return changeHandler(fpath);
-            }
-        });
-
-        watcher.on('error', function(err) {
-            //Ignore all errors;  there are too many to notify the user
-        });
-
-        projectsBeingWatched[project.id] = {
-            id: project.id,
-            watcher: watcher
-        };
-    }
-
-    var registerExceptionHandler = _.once(function(projects) {
-
-        //An ugly hack to restart nodejs file watcher when it crashes
-        process.on('uncaughtException', function(err) {
-
-            console.log(projects);
-
-            if(/watch EPERM/.test(err.message)) {
-
-                _.each(projectsBeingWatched, function(project) {
+                if(!_.contains(ids, project.id)) {
 
                     project.watcher.close();
 
                     delete projectsBeingWatched[project.id];
-                });
+                }
+            });
 
-                _.each(projects, function(project) {
+            _.each(projects, function(project) {
+
+                if(!(project.id in projectsBeingWatched)) {
                     _watch(project);
-                });
-            }
-        });
+                }
+            });
+        }
 
-    });
+        return{
+            startWatching: startWatching
+        };
 
-    //Function to start watching file
-    function startWatching(projects) {
-
-        registerExceptionHandler(projects);
-
-        var ids = _.pluck(projects, 'id');
-
-        _.each(projectsBeingWatched, function(project) {
-
-            if(!_.contains(ids, project.id)) {
-
-                project.watcher.close();
-
-                delete projectsBeingWatched[project.id];
-            }
-        });
-
-        _.each(projects, function(project) {
-
-            if(!(project.id in projectsBeingWatched)) {
-                _watch(project);
-            }
-        });
     }
-
-    return{
-        startWatching: startWatching
-    };
-
-});
+]);
 

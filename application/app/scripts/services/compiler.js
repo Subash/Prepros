@@ -8,81 +8,96 @@
 /*jshint browser: true, node: true*/
 /*global prepros, $, angular, _*/
 
-prepros.factory("compiler", function (projectsManager, fileTypes, notification, $filter, $rootScope, liveServer) {
+prepros.factory("compiler",[
 
-    "use strict";
+    '$filter',
+    '$rootScope',
+    'projectsManager',
+    'fileTypes',
+    'notification',
 
-    var fs = require('fs-extra'),
-        path = require('path');
+    function (
+        $filter,
+        $rootScope,
+        projectsManager,
+        fileTypes,
+        notification
+    ) {
 
-    var compileQueue = [];
+        "use strict";
 
-    //function to compile
-    function compile(pid, fid) {
+        var fs = require('fs-extra'),
+            path = require('path');
 
-        var queueId =  fid+pid;
+        var compileQueue = [];
 
-        if (!_.contains(compileQueue, queueId)) {
+        //function to compile
+        function compile(pid, fid) {
 
-            var f = projectsManager.getFileById(pid, fid);
+            var queueId =  fid+pid;
 
-            if(_.isEmpty(f)) {
-                return;
-            }
+            if (!_.contains(compileQueue, queueId)) {
 
-            compileQueue.push(queueId);
+                var f = projectsManager.getFileById(pid, fid);
 
-            //Replace file.output placeholders with real paths
-            var project = projectsManager.getProjectById(pid);
+                if(_.isEmpty(f)) {
+                    return;
+                }
 
-            var file = _.extend({}, f);
+                compileQueue.push(queueId);
 
-            //Sass/Compass compiler requires project path
-            file.projectPath = project.path;
+                //Replace file.output placeholders with real paths
+                var project = projectsManager.getProjectById(pid);
 
-            //Less, Sass, Stylus compilers require autoprefixer options from project options
-            file.config.autoprefixerBrowsers = project.config.autoprefixerBrowsers;
+                var file = _.extend({}, f);
 
-            file.input = $filter('fullPath')(file.input, { basePath: project.path});
+                //Sass/Compass compiler requires project path
+                file.projectPath = project.path;
 
-            //Interpolate path to replace css/js dirs
-            file.output = $filter('interpolatePath')(file.output, {config: project.config});
+                //Less, Sass, Stylus compilers require autoprefixer options from project options
+                file.config.autoprefixerBrowsers = project.config.autoprefixerBrowsers;
 
-            //Get full path of a file
-            file.output = $filter('fullPath')(file.output, { basePath: project.path});
+                file.input = $filter('fullPath')(file.input, { basePath: project.path});
 
-            if (fs.existsSync(file.input)) {
+                //Interpolate path to replace css/js dirs
+                file.output = $filter('interpolatePath')(file.output, {config: project.config});
 
-                fileTypes.compile(file, function (data) {
+                //Get full path of a file
+                file.output = $filter('fullPath')(file.output, { basePath: project.path});
 
-                    compileQueue = _.without(compileQueue, queueId);
+                if (fs.existsSync(file.input)) {
 
-                    $rootScope.$apply(function () {
+                    fileTypes.compile(file, function (data) {
 
-                        notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
+                        compileQueue = _.without(compileQueue, queueId);
+
+                        $rootScope.$apply(function () {
+
+                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
+
+                        });
+
+                        if(project.config.liveRefresh) {
+                            liveServer.refresh(project.id, file.output, project.config.liveRefreshDelay);
+                        }
+
+                    }, function (data) {
+
+                        compileQueue = _.without(compileQueue, queueId);
+
+                        $rootScope.$apply(function () {
+                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
+                        });
 
                     });
-
-                    if(project.config.liveRefresh) {
-                        liveServer.refresh(project.id, file.output, project.config.liveRefreshDelay);
-                    }
-
-                }, function (data) {
-
-                    compileQueue = _.without(compileQueue, queueId);
-
-                    $rootScope.$apply(function () {
-                        notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
-                    });
-
-                });
+                }
             }
         }
+
+        return{
+            compile: compile
+        };
+
     }
-
-    return{
-        compile: compile
-    };
-
-});
+]);
 

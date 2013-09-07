@@ -9,97 +9,113 @@
 /*global prepros, $, _, Mousetrap*/
 
 //Tooltip directive
-prepros.directive('fileContextMenu', function (compiler, projectsManager, $rootScope, $filter, utils) {
+prepros.directive('fileContextMenu', [
 
-    'use strict';
+    '$filter',
+    '$rootScope',
+    'compiler',
+    'projectsManager',
+    'utils',
 
-    var gui = require('nw.gui');
+    function (
 
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
+        $filter,
+        $rootScope,
+        compiler,
+        projectsManager,
+        utils
+    ) {
 
-            var file = scope.$eval(attrs.fileContextMenu);
+        'use strict';
 
-            var menu = new gui.Menu();
+        var gui = require('nw.gui');
 
-            menu.append(new gui.MenuItem({
-                label: 'Open File',
-                click: function () {
-                    gui.Shell.openItem($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
-                }
-            }));
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
 
-            menu.append(new gui.MenuItem({
-                label: 'Compile File',
-                click: function () {
-                    compiler.compile(file.pid, file.id);
-                }
-            }));
+                var file = scope.$eval(attrs.fileContextMenu);
 
-            menu.append(new gui.MenuItem({
-                label: 'Toggle Auto Compile',
-                click: function () {
+                var menu = new gui.Menu();
 
-                    $rootScope.$apply(function () {
-                        var f = _.findWhere(scope.selectedProject.files, {id: file.id});
-                        f.config.autoCompile = !f.config.autoCompile;
-                    });
-                }
-            }));
+                menu.append(new gui.MenuItem({
+                    label: 'Open File',
+                    click: function () {
+                        gui.Shell.openItem($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
+                    }
+                }));
 
-            var explorer = (process.platform === 'win32') ? 'Explorer' : 'Finder';
+                menu.append(new gui.MenuItem({
+                    label: 'Compile File',
+                    click: function () {
+                        compiler.compile(file.pid, file.id);
+                    }
+                }));
 
-            menu.append(new gui.MenuItem({
-                label: 'Show in ' + explorer,
-                click: function () {
-                    gui.Shell.showItemInFolder($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
-                }
-            }));
+                menu.append(new gui.MenuItem({
+                    label: 'Toggle Auto Compile',
+                    click: function () {
 
-            menu.append(new gui.MenuItem({
-                label: 'Change Output',
-                click: function () {
-                    element.find('.output').trigger('click');
-                }
-            }));
-
-            menu.append(new gui.MenuItem({
-                label: 'Reset File Settings',
-                click: function () {
-
-                    var confirmMsg = utils.notifier.notify({
-                        message: "Are you sure you want to reset the settings of this file?",
-                        type: "warning",
-                        buttons: [
-                            {'data-role': 'ok', text: 'Yes'},
-                            {'data-role': 'cancel', text: 'No'}
-                        ],
-                        destroy: true
-                    });
-
-                    confirmMsg.on('click:ok', function(){
-
-                        this.destroy();
                         $rootScope.$apply(function () {
-                            var filePath = $filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path});
-                            projectsManager.removeFile(file.pid, file.id);
-                            projectsManager.addFile(file.pid, filePath);
+                            var f = _.findWhere(scope.selectedProject.files, {id: file.id});
+                            f.config.autoCompile = !f.config.autoCompile;
                         });
-                    });
+                    }
+                }));
 
-                    confirmMsg.on('click:cancel', 'destroy');
+                var explorer = (process.platform === 'win32') ? 'Explorer' : 'Finder';
 
-                }
-            }));
+                menu.append(new gui.MenuItem({
+                    label: 'Show in ' + explorer,
+                    click: function () {
+                        gui.Shell.showItemInFolder($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
+                    }
+                }));
 
-            element.on('contextmenu', function (e) {
+                menu.append(new gui.MenuItem({
+                    label: 'Change Output',
+                    click: function () {
+                        element.find('.output').trigger('click');
+                    }
+                }));
 
-                e.preventDefault();
+                menu.append(new gui.MenuItem({
+                    label: 'Reset File Settings',
+                    click: function () {
 
-                menu.popup(e.pageX, e.pageY);
-            });
-        }
-    };
+                        var confirmMsg = utils.notifier.notify({
+                            message: "Are you sure you want to reset the settings of this file?",
+                            type: "warning",
+                            buttons: [
+                                {'data-role': 'ok', text: 'Yes'},
+                                {'data-role': 'cancel', text: 'No'}
+                            ],
+                            destroy: true
+                        });
 
-});
+                        confirmMsg.on('click:ok', function(){
+
+                            this.destroy();
+                            $rootScope.$apply(function () {
+                                var filePath = $filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path});
+                                projectsManager.removeFile(file.pid, file.id);
+                                projectsManager.addFile(file.pid, filePath);
+                            });
+                        });
+
+                        confirmMsg.on('click:cancel', 'destroy');
+
+                    }
+                }));
+
+                element.on('contextmenu', function (e) {
+
+                    e.preventDefault();
+
+                    menu.popup(e.pageX, e.pageY);
+                });
+            }
+        };
+
+    }
+]);

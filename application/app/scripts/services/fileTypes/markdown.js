@@ -8,93 +8,101 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('markdown', function (config, utils) {
+prepros.factory('markdown', [
 
-    'use strict';
+    'config',
+    'utils',
 
-    var fs = require('fs-extra'),
-        path = require('path'),
-        _id = utils.id;
+    function (
+        config,
+        utils
+    ) {
 
-    var format = function (pid, fid, filePath, projectPath) {
+        'use strict';
 
-        //File name
-        var name = path.basename(filePath);
+        var fs = require('fs-extra'),
+            path = require('path');
 
-        // Output path
-        var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
+        var format = function (pid, fid, filePath, projectPath) {
 
-        var pathRegx = /\\md\\|\\markdown\\|\/md\/|\/markdown\//gi;
+            //File name
+            var name = path.basename(filePath);
 
-        //Find output path; save to user defined html folder if file is in md or markdown folder
-        if (filePath.match(pathRegx)) {
+            // Output path
+            var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
 
-            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
+            var pathRegx = /\\md\\|\\markdown\\|\/md\/|\/markdown\//gi;
 
-            if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                output = customOutput;
-            }
+            //Find output path; save to user defined html folder if file is in md or markdown folder
+            if (filePath.match(pathRegx)) {
 
-        }
+                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
 
-        return {
-            id: fid,
-            pid: pid,
-            name: name,
-            type: 'MD',
-            input: path.relative(projectPath, filePath),
-            output: path.relative(projectPath, output),
-            config: config.getUserOptions().markdown
-        };
-    };
-
-    var compile = function (file, successCall, errorCall) {
-
-        var marked = require('marked');
-
-        // Set markdown options
-        marked.setOptions({
-            gfm: file.config.gfm,
-            sanitize: file.config.sanitize
-        });
-
-        fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-
-            if (err) {
-
-                errorCall(err.message);
-
-            } else {
-
-                try {
-                    var html = marked(data.toString());
-
-                    fs.outputFile(file.output, html, function (err) {
-
-                        if (err) {
-
-                            errorCall(err.message);
-
-                        } else {
-
-                            successCall(file.input);
-
-                        }
-
-                    });
-
-                } catch (e) {
-
-                    errorCall(file.input);
-
+                if(utils.isFileInsideFolder(projectPath, customOutput)) {
+                    output = customOutput;
                 }
 
             }
-        });
-    };
 
-    return {
-        format: format,
-        compile: compile
-    };
-});
+            return {
+                id: fid,
+                pid: pid,
+                name: name,
+                type: 'MD',
+                input: path.relative(projectPath, filePath),
+                output: path.relative(projectPath, output),
+                config: config.getUserOptions().markdown
+            };
+        };
+
+        var compile = function (file, successCall, errorCall) {
+
+            var marked = require('marked');
+
+            // Set markdown options
+            marked.setOptions({
+                gfm: file.config.gfm,
+                sanitize: file.config.sanitize
+            });
+
+            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+
+                if (err) {
+
+                    errorCall(err.message);
+
+                } else {
+
+                    try {
+                        var html = marked(data.toString());
+
+                        fs.outputFile(file.output, html, function (err) {
+
+                            if (err) {
+
+                                errorCall(err.message);
+
+                            } else {
+
+                                successCall(file.input);
+
+                            }
+
+                        });
+
+                    } catch (e) {
+
+                        errorCall(file.input);
+
+                    }
+
+                }
+            });
+        };
+
+        return {
+            format: format,
+            compile: compile
+        };
+    }
+]);

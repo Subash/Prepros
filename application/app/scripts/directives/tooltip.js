@@ -9,21 +9,26 @@
 /*global prepros, $, _, Mousetrap */
 
 //Tooltip directive
-prepros.directive('tooltip', function ($timeout) {
+prepros.directive('tooltip', [
 
-    'use strict';
+    '$timeout',
 
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
+    function ($timeout) {
 
-            $timeout(function () {
+        'use strict';
 
-                element.tooltip({delay: 500, title: attrs.tooltip, container: '.wrapper'});
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
 
-            });
+                $timeout(function () {
 
-        }
-    };
+                    element.tooltip({delay: 500, title: attrs.tooltip, container: '.wrapper'});
 
-});
+                });
+
+            }
+        };
+
+    }
+]);

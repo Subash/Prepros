@@ -9,25 +9,29 @@
 /*global prepros, $, _, Mousetrap */
 
 //Tooltip directive
-prepros.directive('showModalOnClick', function ($timeout) {
+prepros.directive('showModalOnClick', [
 
-    'use strict';
+    '$timeout',
 
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
+    function ($timeout) {
 
-            $timeout(function () {
+        'use strict';
 
-                element.on('click', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
 
-                    $(attrs.showModalOnClick).modal('toggle');
+                $timeout(function () {
+
+                    element.on('click', function () {
+
+                        $(attrs.showModalOnClick).modal('toggle');
+
+                    });
 
                 });
 
-            });
-
-        }
-    };
-
-});
+            }
+        };
+    }
+]);

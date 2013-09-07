@@ -9,24 +9,28 @@
 /*global prepros, $, _, Mousetrap */
 
 //Popover directive
-prepros.directive('popover', function ($timeout) {
+prepros.directive('popover', [
 
-    'use strict';
+    '$timeout',
 
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
+    function ($timeout) {
 
-            $timeout(function () {
+        'use strict';
 
-                element.popover({
-                    html: true,
-                    content : attrs.popover
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+
+                $timeout(function () {
+
+                    element.popover({
+                        html: true,
+                        content : attrs.popover
+                    });
+
                 });
 
-            });
-
-        }
-    };
-
-});
+            }
+        };
+    }
+]);

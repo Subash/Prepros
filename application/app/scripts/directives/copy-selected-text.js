@@ -9,7 +9,7 @@
 /*global prepros, $, _, Mousetrap */
 
 //Tooltip directive
-prepros.directive('copySelectedText', function () {
+prepros.directive('copySelectedText', [ function () {
 
     'use strict';
 
@@ -41,4 +41,4 @@ prepros.directive('copySelectedText', function () {
         }
     };
 
-});
+}]);

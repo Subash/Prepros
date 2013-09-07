@@ -8,102 +8,110 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('livescript', function (config, utils) {
+prepros.factory('livescript', [
 
-    'use strict';
+    'config',
+    'utils',
 
-    var fs = require('fs-extra'),
-        path = require('path'),
-        _id = utils.id;
+    function (
+        config,
+        utils
+    ) {
+
+        'use strict';
+
+        var fs = require('fs-extra'),
+            path = require('path');
 
 
-    var format = function (pid, fid, filePath, projectPath) {
+        var format = function (pid, fid, filePath, projectPath) {
 
-        //File name
-        var name = path.basename(filePath);
+            //File name
+            var name = path.basename(filePath);
 
-        // Output path
-        var output = filePath.replace(/\.ls/gi, '.js');
+            // Output path
+            var output = filePath.replace(/\.ls/gi, '.js');
 
-        var pathRegx = /\\livescript\\|\/livescript\//gi;
+            var pathRegx = /\\livescript\\|\/livescript\//gi;
 
-        //Find output path; save to /js folder if file is in /livescript folder
-        if (filePath.match(pathRegx)) {
+            //Find output path; save to /js folder if file is in /livescript folder
+            if (filePath.match(pathRegx)) {
 
-            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
 
-            if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                output = customOutput;
+                if(utils.isFileInsideFolder(projectPath, customOutput)) {
+                    output = customOutput;
+                }
+
             }
 
-        }
+            return {
 
-        return {
-
-            id: fid,
-            pid: pid,
-            name: name,
-            type: 'LS',
-            input: path.relative(projectPath, filePath),
-            output: path.relative(projectPath, output),
-            config: config.getUserOptions().livescript
+                id: fid,
+                pid: pid,
+                name: name,
+                type: 'LS',
+                input: path.relative(projectPath, filePath),
+                output: path.relative(projectPath, output),
+                config: config.getUserOptions().livescript
+            };
         };
-    };
 
-    var compile = function (file, successCall, errorCall) {
+        var compile = function (file, successCall, errorCall) {
 
-        var livescript = require('LiveScript');
+            var livescript = require('LiveScript');
 
-        var ugly = require('uglify-js');
+            var ugly = require('uglify-js');
 
-        var options = {};
+            var options = {};
 
-        if (file.config.bare) {
+            if (file.config.bare) {
 
-            options.bare = true;
-        }
+                options.bare = true;
+            }
 
-        fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-            if (err) {
+            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+                if (err) {
 
-                errorCall(err.message);
+                    errorCall(err.message);
 
-            } else {
+                } else {
 
-                try {
+                    try {
 
-                    var javascript = livescript.compile(data.toString(), options);
+                        var javascript = livescript.compile(data.toString(), options);
 
-                    if (file.config.uglify) {
+                        if (file.config.uglify) {
 
-                        javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
-                    }
-
-                    fs.outputFile(file.output, javascript, function (err) {
-
-                        if (err) {
-
-                            errorCall(err.message);
-
-                        } else {
-
-                            successCall(file.input);
-
+                            javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
                         }
 
-                    });
+                        fs.outputFile(file.output, javascript, function (err) {
+
+                            if (err) {
+
+                                errorCall(err.message);
+
+                            } else {
+
+                                successCall(file.input);
+
+                            }
+
+                        });
 
 
-                } catch (e) {
+                    } catch (e) {
 
-                    errorCall(e.message + "\n" + file.input);
+                        errorCall(e.message + "\n" + file.input);
+                    }
                 }
-            }
-        });
-    };
+            });
+        };
 
-    return {
-        format: format,
-        compile: compile
-    };
-});
+        return {
+            format: format,
+            compile: compile
+        };
+    }
+]);

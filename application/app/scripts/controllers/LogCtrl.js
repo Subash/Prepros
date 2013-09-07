@@ -9,19 +9,28 @@
 /*global prepros,  _ , $*/
 
 //Log Controller
-prepros.controller('LogCtrl', function ($scope, notification) {
+prepros.controller('LogCtrl',  [
 
-    'use strict';
+    '$scope',
+    'notification',
 
-    $scope.log = notification.getLog();
+    function (
+        $scope,
+        notification
+    ) {
 
-    //Function to clear log
-    $scope.clearLog = function () {
-        notification.clearLog();
-    };
+        'use strict';
 
-    //Update log on log change event
-    $scope.$on('logUpdate', function () {
         $scope.log = notification.getLog();
-    });
-});
+
+        //Function to clear log
+        $scope.clearLog = function () {
+            notification.clearLog();
+        };
+
+        //Update log on log change event
+        $scope.$on('logUpdate', function () {
+            $scope.log = notification.getLog();
+        });
+    }
+]);

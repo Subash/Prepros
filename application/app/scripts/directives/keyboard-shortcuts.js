@@ -9,147 +9,163 @@
 /*global prepros, $, _, Mousetrap*/
 
 //Directive for keyboard shortcuts
-prepros.directive('keyboardShortcuts', function (projectsManager, liveServer, compiler, utils, $rootScope) {
+prepros.directive('keyboardShortcuts', [
 
-    'use strict';
+    '$rootScope',
+    'compiler',
+    'liveServer',
+    'projectsManager',
+    'utils',
 
-    var fs = require('fs'),
-        path = require('path');
 
-    return {
-        restrict: 'A',
-        link: function (scope) {
+    function (
+        $rootScope,
+        compiler,
+        liveServer,
+        projectsManager,
+        utils
+    ) {
 
-            //New Project
-            Mousetrap.bind(['ctrl+n', 'command+n'], function () {
+        'use strict';
 
-                var elm = $('<input type="file" nwdirectory>');
+        var fs = require('fs'),
+            path = require('path');
 
-                elm.trigger('click');
+        return {
+            restrict: 'A',
+            link: function (scope) {
 
-                $(elm).on('change', function (e) {
+                //New Project
+                Mousetrap.bind(['ctrl+n', 'command+n'], function () {
 
-                    var files = e.currentTarget.files;
+                    var elm = $('<input type="file" nwdirectory>');
 
-                    _.each(files, function (file) {
+                    elm.trigger('click');
 
-                        //Get stats
-                        var stats = fs.statSync(file.path);
+                    $(elm).on('change', function (e) {
 
-                        //Check if it is a directory and not a drive
-                        if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
+                        var files = e.currentTarget.files;
 
-                            scope.$apply(function () {
+                        _.each(files, function (file) {
 
-                                //Add to projects
-                                projectsManager.addProject(file.path);
+                            //Get stats
+                            var stats = fs.statSync(file.path);
 
-                            });
+                            //Check if it is a directory and not a drive
+                            if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
 
-                        }
+                                scope.$apply(function () {
+
+                                    //Add to projects
+                                    projectsManager.addProject(file.path);
+
+                                });
+
+                            }
+                        });
+
                     });
 
+                    return false;
                 });
 
-                return false;
-            });
+                //Refresh Project Files
+                Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function () {
+                    if (scope.selectedProject.id) {
 
-            //Refresh Project Files
-            Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function () {
-                if (scope.selectedProject.id) {
+                        scope.$apply(function () {
 
-                    scope.$apply(function () {
+                            projectsManager.refreshProjectFiles(scope.selectedProject.id);
 
-                        projectsManager.refreshProjectFiles(scope.selectedProject.id);
-
-                    });
-
-                }
-                return false;
-            });
-
-            //Open Live Url
-            Mousetrap.bind(['ctrl+l', 'command+l'], function () {
-
-                if (scope.selectedProject.id) {
-
-                    var url = (scope.selectedProject.config.useCustomServer) ? scope.selectedProject.config.customServerUrl : liveServer.getLiveUrl(scope.selectedProject);
-
-                    utils.openBrowser(url);
-
-                }
-                return false;
-            });
-
-            //Remove Project
-            Mousetrap.bind(['ctrl+d', 'command+d'], function () {
-                if (scope.selectedProject.id) {
-
-                    var confirmMsg = utils.notifier.notify({
-                        message: "Are you sure you want to remove this project?",
-                        type: "warning",
-                        buttons: [
-                            {'data-role': 'ok', text: 'Yes'},
-                            {'data-role': 'cancel', text: 'No'}
-                        ],
-                        destroy: true
-                    });
-
-                    confirmMsg.on('click:ok', function(){
-
-                        this.destroy();
-                        $rootScope.$apply(function () {
-                            projectsManager.removeProject(scope.selectedProject.id);
                         });
-                    });
 
-                    confirmMsg.on('click:cancel', 'destroy');
-                }
-                return false;
-            });
+                    }
+                    return false;
+                });
 
-            //Compile all project files
-            Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function () {
-                if (scope.selectedProject.id) {
+                //Open Live Url
+                Mousetrap.bind(['ctrl+l', 'command+l'], function () {
 
-                    var files = projectsManager.getProjectFiles(scope.selectedProject.id);
+                    if (scope.selectedProject.id) {
 
-                    _.each(files, function (file) {
+                        var url = (scope.selectedProject.config.useCustomServer) ? scope.selectedProject.config.customServerUrl : liveServer.getLiveUrl(scope.selectedProject);
 
-                        compiler.compile(file.pid, file.id);
+                        utils.openBrowser(url);
 
-                    });
-                }
-                return false;
-            });
+                    }
+                    return false;
+                });
 
-            //Compile selected project file
-            Mousetrap.bind(['ctrl+c', 'command+c'], function () {
+                //Remove Project
+                Mousetrap.bind(['ctrl+d', 'command+d'], function () {
+                    if (scope.selectedProject.id) {
 
-                if (window.getSelection().toString() !== "") {
+                        var confirmMsg = utils.notifier.notify({
+                            message: "Are you sure you want to remove this project?",
+                            type: "warning",
+                            buttons: [
+                                {'data-role': 'ok', text: 'Yes'},
+                                {'data-role': 'cancel', text: 'No'}
+                            ],
+                            destroy: true
+                        });
 
-                    require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
+                        confirmMsg.on('click:ok', function(){
 
-                } else {
+                            this.destroy();
+                            $rootScope.$apply(function () {
+                                projectsManager.removeProject(scope.selectedProject.id);
+                            });
+                        });
 
-                    if (scope.selectedFile.id) {
+                        confirmMsg.on('click:cancel', 'destroy');
+                    }
+                    return false;
+                });
 
-                        compiler.compile(scope.selectedFile.pid, scope.selectedFile.id);
+                //Compile all project files
+                Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function () {
+                    if (scope.selectedProject.id) {
+
+                        var files = projectsManager.getProjectFiles(scope.selectedProject.id);
+
+                        _.each(files, function (file) {
+
+                            compiler.compile(file.pid, file.id);
+
+                        });
+                    }
+                    return false;
+                });
+
+                //Compile selected project file
+                Mousetrap.bind(['ctrl+c', 'command+c'], function () {
+
+                    if (window.getSelection().toString() !== "") {
+
+                        require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
+
+                    } else {
+
+                        if (scope.selectedFile.id) {
+
+                            compiler.compile(scope.selectedFile.pid, scope.selectedFile.id);
+                        }
+
                     }
 
-                }
+                    return false;
+                });
 
-                return false;
-            });
+                Mousetrap.bind(['esc'], function () {
 
-            Mousetrap.bind(['esc'], function () {
+                    require('nw.gui').Window.get().hide();
 
-                require('nw.gui').Window.get().hide();
+                    return false;
+                });
 
-                return false;
-            });
+            }
+        };
 
-        }
-    };
-
-});
+    }
+]);

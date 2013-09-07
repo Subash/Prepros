@@ -9,189 +9,200 @@
 /*global prepros,  _ , $*/
 
 //Files List controls
-prepros.controller('OptimImageCtrl', function ($scope, notification, projectsManager, $route, $routeParams, $filter, config) {
+prepros.controller('OptimImageCtrl', [
 
-    'use strict';
+    '$scope',
+    'notification',
+    'projectsManager',
+    '$route',
+    '$routeParams',
+    '$filter',
+    'config',
 
-    var fs = require('fs-extra');
-    var path = require('path');
-    var cp = require('child_process');
+    function ($scope, notification, projectsManager, $route, $routeParams, $filter, config) {
 
-    var platform = 'win';
+        'use strict';
 
-    if(process.platform === 'darwin') {
-        platform = 'osx';
-    }
+        var fs = require('fs-extra');
+        var path = require('path');
+        var cp = require('child_process');
 
-    if(process.platform === 'linux') {
-        platform = 'linux';
-    }
+        var platform = 'win';
 
-    var arch = (process.arch === 'x64') ? 'x64' : 'x86';
+        if(process.platform === 'darwin') {
+            platform = 'osx';
+        }
 
-    var binPath =   path.join(config.basePath, '../bin');
+        if(process.platform === 'linux') {
+            platform = 'linux';
+        }
 
-    var jpegTranPath = path.join(binPath, 'jpegtran', platform, arch, 'jpegtran');
+        var arch = (process.arch === 'x64') ? 'x64' : 'x86';
 
-    var optipngPath = path.join(binPath, 'optipng', platform, 'optipng');
+        var binPath =   path.join(config.basePath, '../bin');
 
-    if(platform === 'win') {
-        jpegTranPath += '.exe';
-        optipngPath += '.exe';
-    }
+        var jpegTranPath = path.join(binPath, 'jpegtran', platform, arch, 'jpegtran');
 
-    if(platform === 'osx') {
-        jpegTranPath = path.join(binPath, 'jpegtran', platform, 'jpegtran');
-    }
+        var optipngPath = path.join(binPath, 'optipng', platform, 'optipng');
 
-    if(platform === 'linux') {
-        optipngPath = path.join(binPath, 'optipng', platform, arch, 'optipng');
-    }
+        if(platform === 'win') {
+            jpegTranPath += '.exe';
+            optipngPath += '.exe';
+        }
 
-    $scope.projectImages = [];
+        if(platform === 'osx') {
+            jpegTranPath = path.join(binPath, 'jpegtran', platform, 'jpegtran');
+        }
 
-    var jpg = ['jpg', 'jpeg'];
+        if(platform === 'linux') {
+            optipngPath = path.join(binPath, 'optipng', platform, arch, 'optipng');
+        }
 
-    var png = ['png', 'gif', 'tif', 'tiff'];
+        $scope.projectImages = [];
 
-    var supportedTypes = _.union(png, jpg);
+        var jpg = ['jpg', 'jpeg'];
 
-    function get(dir) {
+        var png = ['png', 'gif', 'tif', 'tiff'];
 
-        var files = fs.readdirSync(dir);
+        var supportedTypes = _.union(png, jpg);
 
-        files.forEach(function (file) {
+        function get(dir) {
 
-            var fp = dir + path.sep + file;
+            var files = fs.readdirSync(dir);
 
-            if (fs.statSync(fp).isDirectory()) {
+            files.forEach(function (file) {
 
-                get(fp);
+                var fp = dir + path.sep + file;
 
-            } else {
+                if (fs.statSync(fp).isDirectory()) {
 
-                if (_.contains(supportedTypes, path.extname(fp).slice(1)) && !projectsManager.matchFilters($scope.selectedProject.id, fp)) {
-                    $scope.projectImages.push({
-                        path: fp,
-                        type: path.extname(fp).slice(1),
-                        shortPath: $filter('interpolatePath')(fp, {config: $scope.selectedProject.config, relative: true, basePath: $scope.selectedProject.path})
-                    });
-                }
-            }
-        });
-    }
+                    get(fp);
 
-    //Prevent subsequent optimizations
-    var compileList = [];
-
-    $scope.optimize = function (e, file) {
-
-        if (!_.contains(compileList, file)) {
-
-            compileList.push(file);
-
-            var $target = $(e.currentTarget);
-
-            $target.addClass('optimizing');
-            $target.attr('disabled', 'true');
-            $target.children('span').text('');
-
-            var cmd = [];
-            var executable;
-            var ext = path.extname(file).slice(1);
-
-            if (_.contains(png, ext)) {
-
-                executable = optipngPath;
-                cmd = [file];
-
-            } else {
-
-                executable = jpegTranPath;
-                cmd = ['-outfile', file, '-optimize', file];
-
-            }
-
-            //Spawn child process to optimize image
-            var optimizeProcess = cp.spawn(executable, cmd);
-
-            var commonCall = function() {
-
-                compileList = _.without(compileList, file);
-
-                $target.delay(300)
-                    .queue(function () {
-                        $target.removeClass('optimizing');
-                        $target.removeAttr('disabled');
-                        $target.dequeue();
-                    });
-            };
-
-            var errorCall = function(){
-
-                commonCall();
-
-                $target.delay(0)
-                    .queue(function () {
-                        $target.addClass('failed');
-                        $target.children('span').text('Failed');
-                        $target.dequeue();
-                    });
-            };
-
-            var successCall= function() {
-
-                commonCall();
-
-                $target.delay(0)
-                    .queue(function () {
-                        $target.addClass('done');
-                        $target.children('span').text('Done');
-                        $target.dequeue();
-                    });
-            };
-
-            optimizeProcess.on('error', function (e) {
-                errorCall();
-            });
-
-            optimizeProcess.on('exit', function (data) {
-
-                if (data.toString() !== '0') {
-                    errorCall();
                 } else {
-                    successCall();
-                }
 
-                optimizeProcess.removeAllListeners();
-                optimizeProcess = null;
+                    if (_.contains(supportedTypes, path.extname(fp).slice(1)) && !projectsManager.matchFilters($scope.selectedProject.id, fp)) {
+                        $scope.projectImages.push({
+                            path: fp,
+                            type: path.extname(fp).slice(1),
+                            shortPath: $filter('interpolatePath')(fp, {config: $scope.selectedProject.config, relative: true, basePath: $scope.selectedProject.path})
+                        });
+                    }
+                }
             });
         }
-    };
 
-    $scope.$on('$routeChangeSuccess', function () {
+        //Prevent subsequent optimizations
+        var compileList = [];
 
-        var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
+        $scope.optimize = function (e, file) {
 
-        if ($route.current.path === 'optim' && projectExists) {
+            if (!_.contains(compileList, file)) {
 
-            try {
+                compileList.push(file);
+
+                var $target = $(e.currentTarget);
+
+                $target.addClass('optimizing');
+                $target.attr('disabled', 'true');
+                $target.children('span').text('');
+
+                var cmd = [];
+                var executable;
+                var ext = path.extname(file).slice(1);
+
+                if (_.contains(png, ext)) {
+
+                    executable = optipngPath;
+                    cmd = [file];
+
+                } else {
+
+                    executable = jpegTranPath;
+                    cmd = ['-outfile', file, '-optimize', file];
+
+                }
+
+                //Spawn child process to optimize image
+                var optimizeProcess = cp.spawn(executable, cmd);
+
+                var commonCall = function() {
+
+                    compileList = _.without(compileList, file);
+
+                    $target.delay(300)
+                        .queue(function () {
+                            $target.removeClass('optimizing');
+                            $target.removeAttr('disabled');
+                            $target.dequeue();
+                        });
+                };
+
+                var errorCall = function(){
+
+                    commonCall();
+
+                    $target.delay(0)
+                        .queue(function () {
+                            $target.addClass('failed');
+                            $target.children('span').text('Failed');
+                            $target.dequeue();
+                        });
+                };
+
+                var successCall= function() {
+
+                    commonCall();
+
+                    $target.delay(0)
+                        .queue(function () {
+                            $target.addClass('done');
+                            $target.children('span').text('Done');
+                            $target.dequeue();
+                        });
+                };
+
+                optimizeProcess.on('error', function (e) {
+                    errorCall();
+                });
+
+                optimizeProcess.on('exit', function (data) {
+
+                    if (data.toString() !== '0') {
+                        errorCall();
+                    } else {
+                        successCall();
+                    }
+
+                    optimizeProcess.removeAllListeners();
+                    optimizeProcess = null;
+                });
+            }
+        };
+
+        $scope.$on('$routeChangeSuccess', function () {
+
+            var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
+
+            if ($route.current.path === 'optim' && projectExists) {
+
+                try {
+
+                    $scope.projectImages = [];
+
+                    get(_.findWhere($scope.projects, {id: $routeParams.pid}).path);
+
+                } catch (e) {
+
+                    notification.error('Error ! ', 'An error occurred while scanning project files', e.message);
+
+                }
+            } else {
 
                 $scope.projectImages = [];
 
-                get(_.findWhere($scope.projects, {id: $routeParams.pid}).path);
-
-            } catch (e) {
-
-                notification.error('Error ! ', 'An error occurred while scanning project files', e.message);
-
             }
-        } else {
 
-            $scope.projectImages = [];
+        });
 
-        }
-
-    });
-
-});
+    }
+]);

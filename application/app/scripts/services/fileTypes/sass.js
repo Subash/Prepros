@@ -9,236 +9,244 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('sass', function (config, utils) {
+prepros.factory('sass', [
 
-    'use strict';
+    'config',
+    'utils',
 
-    var fs = require('fs-extra'),
-        path = require('path'),
-        cp = require('child_process'),
-        _id = utils.id,
-        autoprefixer = require('autoprefixer'),
-        cssmin = require('ycssmin').cssmin;
+    function (
+        config,
+        utils
+    ) {
+
+        'use strict';
+
+        var fs = require('fs-extra'),
+            path = require('path'),
+            cp = require('child_process'),
+            autoprefixer = require('autoprefixer'),
+            cssmin = require('ycssmin').cssmin;
 
 
-    var format = function (pid, fid, filePath, projectPath) {
+        var format = function (pid, fid, filePath, projectPath) {
 
-        //File name
-        var name = path.basename(filePath);
+            //File name
+            var name = path.basename(filePath);
 
-        // Output path
-        var output = filePath.replace(/\.sass|\.scss/gi, '.css');
+            // Output path
+            var output = filePath.replace(/\.sass|\.scss/gi, '.css');
 
-        var pathRegx = /\\sass\\|\\scss\\|\/sass\/|\/scss\//gi;
+            var pathRegx = /\\sass\\|\\scss\\|\/sass\/|\/scss\//gi;
 
-        //Find output path; save to user defined css folder if file is in sass or scss folder
-        if (filePath.match(pathRegx)) {
+            //Find output path; save to user defined css folder if file is in sass or scss folder
+            if (filePath.match(pathRegx)) {
 
-            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
+                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
 
-            if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                output = customOutput;
+                if(utils.isFileInsideFolder(projectPath, customOutput)) {
+                    output = customOutput;
+                }
+
             }
 
-        }
+            var file = {
+                id: fid,
+                pid: pid,
+                name: name,
+                input: path.relative(projectPath, filePath),
+                output: path.relative(projectPath, output),
+                config: config.getUserOptions().sass
+            };
 
-        var file = {
-            id: fid,
-            pid: pid,
-            name: name,
-            input: path.relative(projectPath, filePath),
-            output: path.relative(projectPath, output),
-            config: config.getUserOptions().sass
+            var ext = path.extname(filePath);
+
+            if (ext === '.scss') {
+
+                file.type = 'Scss';
+
+            } else if (ext === '.sass') {
+
+                file.type = 'Sass';
+            }
+
+            return file;
+
         };
 
-        var ext = path.extname(filePath);
 
-        if (ext === '.scss') {
+        //Compile
 
-            file.type = 'Scss';
+        var compile = function (file, successCall, errorCall) {
 
-        } else if (ext === '.sass') {
+            var args = [];
 
-            file.type = 'Sass';
-        }
+            if (file.config.fullCompass && file.config.compass) {
 
-        return file;
+                args = config.ruby.getGem('compass');
 
-    };
+                args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
+
+                if(!file.config.compassConfigRb) {
+
+                    args.push("--environment", 'development');
+
+                    //Output Style
+                    args.push('--output-style', file.config.outputStyle);
+
+                    //Line numbers
+                    if (!file.config.lineNumbers) {
+                        args.push('--no-line-comments');
+                    }
+
+                    //Debug info
+                    if (file.config.debug) {
+
+                        args.push('--debug-info');
+                    }
+                }
 
 
-    //Compile
 
-    var compile = function (file, successCall, errorCall) {
+                //Debug info
+                args.push('--boring');
 
-        var args = [];
+            } else {
 
-        if (file.config.fullCompass && file.config.compass) {
+                args = config.ruby.getGem('sass');
 
-            args = config.ruby.getGem('compass');
+                if (file.config.unixNewlines) {
 
-            args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
+                    args.push('--unix-newlines');
+                }
 
-            if(!file.config.compassConfigRb) {
+                //Input and output
+                args.push(file.input, file.output);
 
-                args.push("--environment", 'development');
+                //Load path for @imports
+                args.push('--load-path', path.dirname(file.input));
+
+                //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
+                var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
+
+                //Cache location
+                args.push('--cache-location', cacheLocation);
 
                 //Output Style
-                args.push('--output-style', file.config.outputStyle);
-
-                //Line numbers
-                if (!file.config.lineNumbers) {
-                    args.push('--no-line-comments');
-                }
+                args.push('--style', file.config.outputStyle);
 
                 //Debug info
                 if (file.config.debug) {
 
-                    args.push('--debug-info');
+                    args.push('--debug');
                 }
+
+                //Compass
+                if (file.config.compass) {
+
+                    args.push('--compass');
+                }
+
+                //Sass bourbon
+                args.push('--load-path', config.ruby.bourbon);
+
+                //Bourbon neat framework
+                args.push('--load-path', config.ruby.neat);
+
+                //Line numbers
+                if (file.config.lineNumbers) {
+                    args.push('--line-numbers');
+                }
+
+                //Make output dir if it doesn't exist
+                fs.mkdirsSync(path.dirname(file.output));
+
             }
 
+            //file.project path is exclusively provided to sass by compile provider
+            var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
 
+            rubyProcess.on('error', function (e) {
+                errorCall('Unable to execute ruby —error ' + e.message);
+            });
 
-            //Debug info
-            args.push('--boring');
+            var compileErr = false;
 
-        } else {
+            //If there is a compilation error
+            rubyProcess.stderr.on('data', function (data) {
 
-            args = config.ruby.getGem('sass');
+                //Dirty workaround to check if the message is real error or not
+                if(data.toString().length > 20) {
 
-            if (file.config.unixNewlines) {
+                    compileErr = true;
 
-                args.push('--unix-newlines');
-            }
+                    errorCall(data.toString());
+                }
 
-            //Input and output
-            args.push(file.input, file.output);
+            });
 
-            //Load path for @imports
-            args.push('--load-path', path.dirname(file.input));
+            rubyProcess.stdout.on('data', function (data) {
 
-            //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
-            var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
+                if(data.toString().toLowerCase().indexOf('error') >= 0) {
 
-            //Cache location
-            args.push('--cache-location', cacheLocation);
+                    compileErr = true;
 
-            //Output Style
-            args.push('--style', file.config.outputStyle);
+                    errorCall(data.toString());
+                }
+            });
 
-            //Debug info
-            if (file.config.debug) {
+            //Success if there is no error
+            rubyProcess.on('exit', function () {
 
-                args.push('--debug');
-            }
+                if (!compileErr) {
 
-            //Compass
-            if (file.config.compass) {
+                    if(file.config.autoprefixer && fs.existsSync(file.output)) {
 
-                args.push('--compass');
-            }
+                        try {
 
-            //Sass bourbon
-            args.push('--load-path', config.ruby.bourbon);
+                            var css = fs.readFileSync(file.output).toString();
 
-            //Bourbon neat framework
-            args.push('--load-path', config.ruby.neat);
+                            if(file.config.autoprefixerBrowsers) {
 
-            //Line numbers
-            if (file.config.lineNumbers) {
-                args.push('--line-numbers');
-            }
+                                var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                    return i.trim();
+                                });
 
-            //Make output dir if it doesn't exist
-            fs.mkdirsSync(path.dirname(file.output));
+                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
 
-        }
+                            } else {
 
-        //file.project path is exclusively provided to sass by compile provider
-        var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
+                                css =  autoprefixer().compile(css);
+                            }
 
-        rubyProcess.on('error', function (e) {
-            errorCall('Unable to execute ruby —error ' + e.message);
-        });
+                            if(file.config.outputStyle === "compressed") {
 
-        var compileErr = false;
+                                css = cssmin(css);
+                            }
 
-        //If there is a compilation error
-        rubyProcess.stderr.on('data', function (data) {
+                            fs.outputFile(file.output, css);
 
-            //Dirty workaround to check if the message is real error or not
-            if(data.toString().length > 20) {
+                        } catch (e) {
 
-                compileErr = true;
-
-                errorCall(data.toString());
-            }
-
-        });
-
-        rubyProcess.stdout.on('data', function (data) {
-
-            if(data.toString().toLowerCase().indexOf('error') >= 0) {
-
-                compileErr = true;
-
-                errorCall(data.toString());
-            }
-        });
-
-        //Success if there is no error
-        rubyProcess.on('exit', function () {
-
-            if (!compileErr) {
-
-                if(file.config.autoprefixer && fs.existsSync(file.output)) {
-
-                    try {
-
-                        var css = fs.readFileSync(file.output).toString();
-
-                        if(file.config.autoprefixerBrowsers) {
-
-                            var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                                return i.trim();
-                            });
-
-                            css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
-
-                        } else {
-
-                            css =  autoprefixer().compile(css);
+                            errorCall('Failed to compile file due to autoprefixer error '+ e.message);
+                            compileErr = true;
                         }
-
-                        if(file.config.outputStyle === "compressed") {
-
-                            css = cssmin(css);
-                        }
-
-                        fs.outputFile(file.output, css);
-
-                    } catch (e) {
-
-                        errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                        compileErr = true;
                     }
+
+                    successCall(file.input);
+
                 }
 
-                successCall(file.input);
+                rubyProcess.removeAllListeners();
 
-            }
-
-            rubyProcess.removeAllListeners();
-
-            rubyProcess = null;
-        });
+                rubyProcess = null;
+            });
 
 
-    };
+        };
 
-    return {
-        format: format,
-        compile: compile
-    };
-});
+        return {
+            format: format,
+            compile: compile
+        };
+    }
+]);

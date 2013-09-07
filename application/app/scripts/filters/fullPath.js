@@ -9,7 +9,7 @@
 /*global prepros*/
 
 
-prepros.filter('fullPath', function () {
+prepros.filter('fullPath',[ function () {
 
     'use strict';
 
@@ -23,4 +23,4 @@ prepros.filter('fullPath', function () {
 
         return string;
     };
-});
+}]);

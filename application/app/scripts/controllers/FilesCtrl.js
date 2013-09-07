@@ -9,69 +9,84 @@
 /*global prepros,  _ , $*/
 
 //Files List controls
-prepros.controller('FilesCtrl', function ($scope, compiler, projectsManager, $filter, utils) {
+prepros.controller('FilesCtrl', [
 
-    'use strict';
+    '$scope',
+    '$filter',
+    'compiler',
+    'projectsManager',
+    'utils',
 
-    var fs = require('fs'),
-        path = require('path');
+    function (
+        $scope,
+        $filter,
+        compiler,
+        projectsManager,
+        utils
+    ) {
 
-    //Change file output
-    $scope.changeFileOutput = function (event, pid, id) {
+        'use strict';
 
-        event.preventDefault();
-        event.stopPropagation();
+        var fs = require('fs'),
+            path = require('path');
 
-        var wd;
+        //Change file output
+        $scope.changeFileOutput = function (event, pid, id) {
 
-        var file = projectsManager.getFileById(pid, id),
-            project = projectsManager.getProjectById(pid);
+            event.preventDefault();
+            event.stopPropagation();
 
-        //Interpolate path to replace css/js dirs
-        var out = $filter('interpolatePath')(file.output, {config: project.config});
+            var wd;
 
-        out = $filter('fullPath')(out, { basePath: project.path});
+            var file = projectsManager.getFileById(pid, id),
+                project = projectsManager.getProjectById(pid);
 
-        if (fs.existsSync(path.dirname(out))) {
+            //Interpolate path to replace css/js dirs
+            var out = $filter('interpolatePath')(file.output, {config: project.config});
 
-            wd = path.dirname(out);
+            out = $filter('fullPath')(out, { basePath: project.path});
 
-        } else {
+            if (fs.existsSync(path.dirname(out))) {
 
-            wd = project.path;
+                wd = path.dirname(out);
 
-        }
+            } else {
 
-        var elm = $('<input type="file" nwsaveas nwworkingdir="' + wd + '">');
+                wd = project.path;
 
-        elm.trigger('click');
-
-        $(elm).on('change', function (e) {
-
-            var output = e.currentTarget.files[0].path;
-
-            if(utils.isFileInsideFolder(project.path, e.currentTarget.files[0].path)) {
-
-                output = path.relative(project.path, output);
             }
 
-            $scope.$apply(function () {
-                projectsManager.changeFileOutput(pid, id, output);
+            var elm = $('<input type="file" nwsaveas nwworkingdir="' + wd + '">');
+
+            elm.trigger('click');
+
+            $(elm).on('change', function (e) {
+
+                var output = e.currentTarget.files[0].path;
+
+                if(utils.isFileInsideFolder(project.path, e.currentTarget.files[0].path)) {
+
+                    output = path.relative(project.path, output);
+                }
+
+                $scope.$apply(function () {
+                    projectsManager.changeFileOutput(pid, id, output);
+                });
             });
-        });
-    };
+        };
 
-    //Open file with default editor
-    $scope.openFile = function (projectPath, filePath) {
+        //Open file with default editor
+        $scope.openFile = function (projectPath, filePath) {
 
-        require('nw.gui').Shell.openExternal(path.join(projectPath, filePath));
+            require('nw.gui').Shell.openExternal(path.join(projectPath, filePath));
 
-    };
+        };
 
 
-    //Compile file
-    $scope.compile = function () {
-        compiler.compile($scope.selectedFile.pid, $scope.selectedFile.id);
-    };
+        //Compile file
+        $scope.compile = function () {
+            compiler.compile($scope.selectedFile.pid, $scope.selectedFile.id);
+        };
 
-});
+    }
+]);

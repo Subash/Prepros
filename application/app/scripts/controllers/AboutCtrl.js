@@ -9,70 +9,80 @@
 /*global prepros,  _ , $*/
 
 //About Window Controller
-prepros.controller('AboutCtrl', function ($scope, config, utils) {
+prepros.controller('AboutCtrl', [
 
-    'use strict';
+    '$scope',
+    'config',
+    'utils',
 
-    $scope.config = config;
-    $scope.gems = [];
-    $scope.node_modules = [];
-    $scope.errorChecking = false;
-    $scope.upToDate = false;
-    $scope.checking = true;
+    function (
+        $scope,
+        config,
+        utils
+    ) {
 
-    $scope.update = {
-        available: false,
-        version: config.version,
-        date: ""
-    };
+        'use strict';
 
-    utils.checkUpdate(function (data) {
+        $scope.config = config;
+        $scope.gems = [];
+        $scope.node_modules = [];
+        $scope.errorChecking = false;
+        $scope.upToDate = false;
+        $scope.checking = true;
 
-        if (data.available) {
-            $scope.update = {
-                available: true,
-                version: data.version,
-                date: data.date
-            };
-        } else {
+        $scope.update = {
+            available: false,
+            version: config.version,
+            date: ""
+        };
 
-            $scope.upToDate = true;
+        utils.checkUpdate(function (data) {
+
+            if (data.available) {
+                $scope.update = {
+                    available: true,
+                    version: data.version,
+                    date: data.date
+                };
+            } else {
+
+                $scope.upToDate = true;
+            }
+
+            $scope.checking = false;
+
+        }, function () {
+
+            $scope.errorChecking = true;
+
+            $scope.checking = false;
+
+        });
+
+        for (var nm in config.node_modules) {
+
+            if (config.node_modules.hasOwnProperty(nm)) {
+
+                $scope.node_modules.push(nm + " -> " + config.node_modules[nm]);
+
+            }
+
         }
 
-        $scope.checking = false;
+        for (var gem in config.ruby_gems) {
 
-    }, function () {
+            if (config.ruby_gems.hasOwnProperty(gem)) {
 
-        $scope.errorChecking = true;
+                $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
 
-        $scope.checking = false;
-
-    });
-
-    for (var nm in config.node_modules) {
-
-        if (config.node_modules.hasOwnProperty(nm)) {
-
-            $scope.node_modules.push(nm + " -> " + config.node_modules[nm]);
+            }
 
         }
 
+        $scope.go = function (place) {
+
+            utils.openBrowser(config.online[place]);
+
+        };
     }
-
-    for (var gem in config.ruby_gems) {
-
-        if (config.ruby_gems.hasOwnProperty(gem)) {
-
-            $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
-
-        }
-
-    }
-
-    $scope.go = function (place) {
-
-        utils.openBrowser(config.online[place]);
-
-    };
-
-});
+]);

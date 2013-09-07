@@ -10,7 +10,7 @@
 
 
 //Filter to shorten the string
-prepros.filter('shorten', function () {
+prepros.filter('shorten', [ function () {
 
     'use strict';
 
@@ -38,4 +38,4 @@ prepros.filter('shorten', function () {
             return string;
         }
     };
-});
+}]);

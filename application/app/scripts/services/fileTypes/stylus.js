@@ -9,148 +9,157 @@
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.factory('stylus', function (config, utils) {
+prepros.factory('stylus', [
 
-    'use strict';
+    'config',
+    'utils',
 
-    var fs = require('fs-extra'),
-        path = require('path'),
-        _id = utils.id,
-        autoprefixer = require('autoprefixer'),
-        cssmin = require('ycssmin').cssmin;
+    function (
+        config,
+        utils
+    ) {
+
+        'use strict';
+
+        var fs = require('fs-extra'),
+            path = require('path'),
+            _id = utils.id,
+            autoprefixer = require('autoprefixer'),
+            cssmin = require('ycssmin').cssmin;
 
 
-    var format = function (pid, fid, filePath, projectPath) {
+        var format = function (pid, fid, filePath, projectPath) {
 
-        //File name
-        var name = path.basename(filePath);
+            //File name
+            var name = path.basename(filePath);
 
-        // Output path
-        var output = filePath.replace(/\.styl/gi, '.css');
+            // Output path
+            var output = filePath.replace(/\.styl/gi, '.css');
 
-        var pathRegx = /\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi;
+            var pathRegx = /\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi;
 
-        //Find output path; save to user defined css folder if file is in styl or stylus folder
-        if (filePath.match(pathRegx)) {
+            //Find output path; save to user defined css folder if file is in styl or stylus folder
+            if (filePath.match(pathRegx)) {
 
-            var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
+                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
 
-            if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                output = customOutput;
+                if(utils.isFileInsideFolder(projectPath, customOutput)) {
+                    output = customOutput;
+                }
+
             }
 
-        }
-
-        return {
-            id: fid,
-            pid: pid,
-            name: name,
-            type: 'Stylus',
-            input: path.relative(projectPath, filePath),
-            output: path.relative(projectPath, output),
-            config: config.getUserOptions().stylus
+            return {
+                id: fid,
+                pid: pid,
+                name: name,
+                type: 'Stylus',
+                input: path.relative(projectPath, filePath),
+                output: path.relative(projectPath, output),
+                config: config.getUserOptions().stylus
+            };
         };
-    };
 
 
-    //Compile
-    var compile = function (file, successCall, errorCall) {
+        //Compile
+        var compile = function (file, successCall, errorCall) {
 
-        var stylus = require('stylus');
+            var stylus = require('stylus');
 
-        var nib = require('nib');
+            var nib = require('nib');
 
-        fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
 
-            if (err) {
+                if (err) {
 
-                errorCall(err.message);
+                    errorCall(err.message);
 
-            } else {
-
-                var importPath = path.dirname(file.input);
-
-                var compiler = stylus(data.toString())
-                    .set('filename', file.input)
-                    .include(importPath);
-
-                //Stylus nib plugin
-                if (file.config.nib) {
-                    compiler.use(nib());
-                }
-
-                //Compress
-                if (file.config.compress) {
-                    compiler.set('compress', true);
                 } else {
-                    compiler.set('compress', false);
-                }
 
+                    var importPath = path.dirname(file.input);
 
-                //Line numbers
-                if (file.config.lineNumbers) {
-                    compiler.set('linenos', true);
-                } else {
-                    compiler.set('linenos', false);
-                }
+                    var compiler = stylus(data.toString())
+                        .set('filename', file.input)
+                        .include(importPath);
 
-                //Render
-                compiler.render(function (err, css) {
-                    if (err) {
+                    //Stylus nib plugin
+                    if (file.config.nib) {
+                        compiler.use(nib());
+                    }
 
-                        errorCall(err.message);
-
+                    //Compress
+                    if (file.config.compress) {
+                        compiler.set('compress', true);
                     } else {
+                        compiler.set('compress', false);
+                    }
 
-                        if(file.config.autoprefixer) {
 
-                            try {
+                    //Line numbers
+                    if (file.config.lineNumbers) {
+                        compiler.set('linenos', true);
+                    } else {
+                        compiler.set('linenos', false);
+                    }
 
-                                if(file.config.autoprefixerBrowsers) {
+                    //Render
+                    compiler.render(function (err, css) {
+                        if (err) {
 
-                                    var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                                        return i.trim();
-                                    });
+                            errorCall(err.message);
 
-                                    css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+                        } else {
+
+                            if(file.config.autoprefixer) {
+
+                                try {
+
+                                    if(file.config.autoprefixerBrowsers) {
+
+                                        var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                            return i.trim();
+                                        });
+
+                                        css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                                    } else {
+
+                                        css =  autoprefixer().compile(css);
+                                    }
+
+                                    if(file.config.compress) {
+
+                                        css = cssmin(css);
+                                    }
+
+                                } catch (e) {
+
+                                    errorCall('Failed to compile file due to autoprefixer error '+ e.message);
+                                }
+                            }
+
+                            fs.outputFile(file.output, css, function (err) {
+
+                                if (err) {
+
+                                    errorCall(err.message);
 
                                 } else {
 
-                                    css =  autoprefixer().compile(css);
+                                    successCall(file.input);
+
                                 }
 
-                                if(file.config.compress) {
-
-                                    css = cssmin(css);
-                                }
-
-                            } catch (e) {
-
-                                errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                            }
+                            });
                         }
+                    });
+                }
+            });
+        };
 
-                        fs.outputFile(file.output, css, function (err) {
-
-                            if (err) {
-
-                                errorCall(err.message);
-
-                            } else {
-
-                                successCall(file.input);
-
-                            }
-
-                        });
-                    }
-                });
-            }
-        });
-    };
-
-    return {
-        format: format,
-        compile: compile
-    };
-});
+        return {
+            format: format,
+            compile: compile
+        };
+    }
+]);

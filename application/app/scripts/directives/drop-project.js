@@ -10,55 +10,60 @@
 
 
 //Drag and drop directive
-prepros.directive('dropProject', function (projectsManager) {
+prepros.directive('dropProject', [
 
-    'use strict';
+    'projectsManager',
 
-    return {
+    function (projectsManager) {
 
-        restrict: 'A',
-        link: function (scope, element) {
+        'use strict';
 
-            var fs = require('fs'),
-                path = require('path');
+        return {
 
-            //Add project on file drop
-            element.on('drop', function (e) {
+            restrict: 'A',
+            link: function (scope, element) {
 
-                e.preventDefault();
+                var fs = require('fs'),
+                    path = require('path');
 
-                var oe = e.originalEvent;
+                //Add project on file drop
+                element.on('drop', function (e) {
 
-                //Get files or folders
-                var files = oe.dataTransfer.files;
+                    e.preventDefault();
 
-                //Iterate through each file/folder
-                _.each(files, function (file) {
+                    var oe = e.originalEvent;
 
-                    //Get stats
-                    var stats = fs.statSync(file.path);
+                    //Get files or folders
+                    var files = oe.dataTransfer.files;
 
-                    //Check if it is a directory and not a drive
-                    if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
+                    //Iterate through each file/folder
+                    _.each(files, function (file) {
 
-                        scope.$apply(function () {
-                            //Add to projects
-                            projectsManager.addProject(file.path);
-                        });
+                        //Get stats
+                        var stats = fs.statSync(file.path);
+
+                        //Check if it is a directory and not a drive
+                        if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
+
+                            scope.$apply(function () {
+                                //Add to projects
+                                projectsManager.addProject(file.path);
+                            });
 
 
-                    } else if (stats.isFile() && path.dirname(path.dirname(file.path)) !== path.dirname(file.path)) {
+                        } else if (stats.isFile() && path.dirname(path.dirname(file.path)) !== path.dirname(file.path)) {
 
-                        scope.$apply(function () {
-                            //Add to projects
-                            projectsManager.addProject(path.dirname(file.path));
-                        });
-                    }
+                            scope.$apply(function () {
+                                //Add to projects
+                                projectsManager.addProject(path.dirname(file.path));
+                            });
+                        }
+                    });
                 });
-            });
-        }
-    };
-});
+            }
+        };
+    }
+]);
 
 
 

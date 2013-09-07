@@ -10,17 +10,22 @@
 
 'use strict';
 
-var prepros = angular.module('prepros', ['ui']).config(function ($routeProvider, $compileProvider) {
+var prepros = angular.module('prepros', ['ui']).config([
 
-    //Whitelist file urls
-    $compileProvider.urlSanitizationWhitelist(/^\s*(file):/);
+    '$compileProvider',
+    '$routeProvider',
 
-    //Routers
-    $routeProvider
-        .when('/home', {path: 'home'})
-        .when('/files/:pid', {path: 'files'})
-        .when('/files/:pid/:fid', {path: 'files'})
-        .when('/log', {path: 'log'})
-        .when('/optim/:pid', {path: 'optim'})
-        .otherwise({redirectTo: '/home'});
-});
+    function ($compileProvider, $routeProvider) {
+
+        //Whitelist file urls
+        $compileProvider.urlSanitizationWhitelist(/^\s*(file):/);
+
+        //Routers
+        $routeProvider
+            .when('/home', {path: 'home'})
+            .when('/files/:pid', {path: 'files'})
+            .when('/files/:pid/:fid', {path: 'files'})
+            .when('/log', {path: 'log'})
+            .when('/optim/:pid', {path: 'optim'})
+            .otherwise({redirectTo: '/home'});
+}]);

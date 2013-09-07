@@ -9,110 +9,132 @@
 /*global prepros,  _ , $, angular*/
 
 //App controller
-prepros.controller('MainCtrl', function ($scope, $route, $routeParams, $location, storage, projectsManager, liveServer, watcher) {
+prepros.controller('MainCtrl', [
 
-    'use strict';
 
-    var fs = require('fs-extra');
-    var path = require('path');
+    '$scope',
+    '$route',
+    '$routeParams',
+    '$location',
+    'storage',
+    'projectsManager',
+    'liveServer',
+    'watcher',
 
-    //Files and projects
-    $scope.projects = projectsManager.projects;
-    $scope.selectedFile = {};
-    $scope.selectedProject = {};
+    function (
+        $scope,
+        $route,
+        $routeParams,
+        $location,
+        storage,
+        projectsManager,
+        liveServer,
+        watcher
+    ) {
 
-    //Data Change
-    var throttleProjectsChange = _.throttle(function () {
+        'use strict';
 
-        //storage.saveProjects($scope.projects);
-        liveServer.startServing($scope.projects);
+        var fs = require('fs-extra');
+        var path = require('path');
 
-        watcher.startWatching($scope.projects);
+        //Files and projects
+        $scope.projects = projectsManager.projects;
+        $scope.selectedFile = {};
+        $scope.selectedProject = {};
 
-        storage.put($scope.projects);
+        //Data Change
+        var throttleProjectsChange = _.throttle(function () {
 
-    }, 2000);
+            //storage.saveProjects($scope.projects);
+            liveServer.startServing($scope.projects);
 
-    $scope.$watch('projects', function () {
+            watcher.startWatching($scope.projects);
 
-        throttleProjectsChange();
+            storage.put($scope.projects);
 
-    }, true);
+        }, 2000);
 
-    $scope.$on('dataChange', function (event, data) {
+        $scope.$watch('projects', function () {
 
-        $scope.projects = data.projects;
+            throttleProjectsChange();
 
-        if ($scope.selectedProject.id) {
+        }, true);
 
-            var projectExists = _.findWhere($scope.projects, {id: $scope.selectedProject.id});
+        $scope.$on('dataChange', function (event, data) {
 
-            if (!projectExists) {
+            $scope.projects = data.projects;
 
-                $scope.selectedProject = {};
-                $location.path('/home');
+            if ($scope.selectedProject.id) {
 
+                var projectExists = _.findWhere($scope.projects, {id: $scope.selectedProject.id});
+
+                if (!projectExists) {
+
+                    $scope.selectedProject = {};
+                    $location.path('/home');
+
+                }
             }
-        }
 
-        if ($scope.selectedFile.id) {
+            if ($scope.selectedFile.id) {
 
-            var fileExists = _.findWhere($scope.selectedProject.files, {id: $scope.selectedFile.id});
+                var fileExists = _.findWhere($scope.selectedProject.files, {id: $scope.selectedFile.id});
 
-            if (!fileExists) {
+                if (!fileExists) {
 
-                $location.path('/files/' + $scope.selectedFile.pid);
-
-                $scope.selectedFile = {};
-            }
-        }
-    });
-
-    $scope.$on('$routeChangeSuccess', function () {
-
-        $scope.path = $route.current.path;
-
-        if ($scope.path === 'files' || $scope.path === 'optim') {
-
-            var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
-
-            //If project id in the url is in the projects list
-            if (projectExists) {
-
-                $scope.selectedProject = _.findWhere($scope.projects, {id: $routeParams.pid});
-
-                //If url contains file id
-                if ($routeParams.fid) {
-
-                    var fileExists = !_.isEmpty(_.findWhere($scope.selectedProject.files, {id: $routeParams.fid}));
-
-                    //If file id is in the file list
-                    if (fileExists) {
-
-                        $scope.selectedFile = _.findWhere($scope.selectedProject.files, {id: $routeParams.fid});
-
-
-                    } else {
-
-                        //If file is not in the file list redirect to project files list
-                        $location.path('/files/' + $scope.selectedProject.id);
-
-                    }
-                } else {
+                    $location.path('/files/' + $scope.selectedFile.pid);
 
                     $scope.selectedFile = {};
                 }
+            }
+        });
 
+        $scope.$on('$routeChangeSuccess', function () {
+
+            $scope.path = $route.current.path;
+
+            if ($scope.path === 'files' || $scope.path === 'optim') {
+
+                var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
+
+                //If project id in the url is in the projects list
+                if (projectExists) {
+
+                    $scope.selectedProject = _.findWhere($scope.projects, {id: $routeParams.pid});
+
+                    //If url contains file id
+                    if ($routeParams.fid) {
+
+                        var fileExists = !_.isEmpty(_.findWhere($scope.selectedProject.files, {id: $routeParams.fid}));
+
+                        //If file id is in the file list
+                        if (fileExists) {
+
+                            $scope.selectedFile = _.findWhere($scope.selectedProject.files, {id: $routeParams.fid});
+
+
+                        } else {
+
+                            //If file is not in the file list redirect to project files list
+                            $location.path('/files/' + $scope.selectedProject.id);
+
+                        }
+                    } else {
+
+                        $scope.selectedFile = {};
+                    }
+
+                } else {
+
+                    //If project id is not in the list redirect to home
+                    $location.path('/home');
+
+                }
             } else {
 
-                //If project id is not in the list redirect to home
-                $location.path('/home');
-
+                $scope.selectedProject = {};
             }
-        } else {
 
-            $scope.selectedProject = {};
-        }
-
-    });
-});
+        });
+    }
+]);
