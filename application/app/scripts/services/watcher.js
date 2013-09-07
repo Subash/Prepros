@@ -171,8 +171,6 @@ prepros.factory("watcher", [
             //An ugly hack to restart nodejs file watcher when it crashes
             process.on('uncaughtException', function(err) {
 
-                console.log(projects);
-
                 if(/watch EPERM/.test(err.message)) {
 
                     _.each(projectsBeingWatched, function(project) {
