@@ -75,53 +75,43 @@ prepros.factory('utils', [
 
             var params = {};
             var os = require('os');
-            var getMac = require('getmac');
 
-            getMac.getMac(function(err, mac) {
+            params.os_platform = os.platform();
+            params.os_arch = os.arch();
+            params.os_release = os.release();
+            params.app_version = config.version;
 
-                params.os_platform = os.platform();
-                params.os_arch = os.arch();
-                params.os_release = os.release();
-                params.app_version = config.version;
+            var opt = {
+                method: 'get',
+                url: config.online.updateFileUrl,
+                cache: false,
+                params: params
+            };
 
-                if(err) {
-                    params.os_id = md5(os.hostname() + os.platform());
+            var checker = $http(opt);
+
+            checker.success(function (data) {
+
+                if (config.version !== data.version) {
+
+                    success({
+                        available: true,
+                        version: data.version,
+                        date: data.releaseDate
+                    });
                 } else {
-                    params.os_id = md5(os.hostname() + os.platform() + mac);
+                    success({
+                        available: false,
+                        version: config.version,
+                        date: data.releaseDate
+                    });
                 }
+            });
 
-                var opt = {
-                    method: 'get',
-                    url: config.online.updateFileUrl,
-                    cache: false,
-                    params: params
-                };
-
-                var checker = $http(opt);
-
-                checker.success(function (data) {
-
-                    if (config.version !== data.version) {
-
-                        success({
-                            available: true,
-                            version: data.version,
-                            date: data.releaseDate
-                        });
-                    } else {
-                        success({
-                            available: false,
-                            version: config.version,
-                            date: data.releaseDate
-                        });
-                    }
-                });
-
-                checker.error(function () {
-                    if (fail) {
-                        fail();
-                    }
-                });
+            checker.error(function () {
+                if (fail) {
+                    fail();
+                }
             });
         }
 
