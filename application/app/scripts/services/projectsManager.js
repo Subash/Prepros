@@ -388,7 +388,7 @@ prepros.factory('projectsManager',[
 
                     if(!matchFileFilters(pid, fp)) {
 
-                        if (fs.statSync(fp).isDirectory()) {
+                        if (fs.statSync(fp).isDirectory() && !/\\\.|\/\./.test(fp)) {
 
                             get(fp);
 

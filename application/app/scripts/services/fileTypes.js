@@ -106,7 +106,7 @@ prepros.factory('fileTypes',[
 
             var isPartial = /^_/.test(path.basename(filePath));
 
-            var isDotFile = /\\\.|\/\./.test(path.basename(filePath));
+            var isDotFile = /\\\.|\/\./.test(filePath);
 
             //Minified js files are also not supported
             var js = ['js'];
