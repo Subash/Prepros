@@ -88,9 +88,14 @@ prepros.directive('keyboardShortcuts', [
 
                     if (scope.selectedProject.id) {
 
-                        var url = (scope.selectedProject.config.useCustomServer) ? scope.selectedProject.config.customServerUrl : liveServer.getLiveUrl(scope.selectedProject);
+                        if(scope.selectedProject.config.useCustomServer) {
 
-                        utils.openBrowser(url);
+                            utils.openBrowser(scope.selectedProject.config.customServerUrl);
+
+                        } else {
+
+                            utils.openBrowser(liveServer.getLiveUrl(scope.selectedProject));
+                        }
 
                     }
                     return false;

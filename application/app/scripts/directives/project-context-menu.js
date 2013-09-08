@@ -61,9 +61,14 @@ prepros.directive('projectContextMenu', [
                     label: 'Open Project URL',
                     click: function () {
 
-                        var url = liveServer.getLiveUrl(project);
+                        if(project.config.useCustomServer) {
 
-                        gui.Shell.openExternal(url);
+                            utils.openBrowser(project.config.customServerUrl);
+
+                        } else {
+
+                            utils.openBrowser(liveServer.getLiveUrl(project));
+                        }
                     }
                 }));
 
@@ -71,9 +76,14 @@ prepros.directive('projectContextMenu', [
                     label: 'Copy Project URL',
                     click: function () {
 
-                        var url = liveServer.getLiveUrl(project);
+                        if(project.config.useCustomServer) {
 
-                        require('nw.gui').Clipboard.get().set(url, 'text');
+                            gui.Clipboard.get().set(project.config.customServerUrl, 'text');
+
+                        } else {
+
+                            gui.Clipboard.get().set(liveServer.getLiveUrl(project), 'text');
+                        }
                     }
                 }));
 
