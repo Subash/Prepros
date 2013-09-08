@@ -104,7 +104,9 @@ prepros.factory('fileTypes',[
 
             var extname = path.extname(filePath).toLowerCase().slice(1);
 
-            var isPartial = /^_/.exec(path.basename(filePath));
+            var isPartial = /^_/.test(path.basename(filePath));
+
+            var isDotFile = /\\\.|\/\./.test(path.basename(filePath));
 
             //Minified js files are also not supported
             var js = ['js'];
@@ -113,7 +115,7 @@ prepros.factory('fileTypes',[
 
             var isMinified = _.contains(js, extname) && minified.exec(path.basename(filePath));
 
-            return isExtSupported(filePath) && !isPartial && !isMinified;
+            return isExtSupported(filePath) && !isPartial && !isMinified && isDotFile;
 
         }
 
