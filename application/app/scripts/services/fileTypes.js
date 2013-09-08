@@ -115,7 +115,7 @@ prepros.factory('fileTypes',[
 
             var isMinified = _.contains(js, extname) && minified.exec(path.basename(filePath));
 
-            return isExtSupported(filePath) && !isPartial && !isMinified && isDotFile;
+            return isExtSupported(filePath) && !isPartial && !isMinified && !isDotFile;
 
         }
 
