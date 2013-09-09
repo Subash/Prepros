@@ -79,7 +79,7 @@ prepros.controller('SidebarCtrl', [
 
             utils.openBrowser(config.online.url);
 
-        }
+        };
 
     }
 ]);
