@@ -31,27 +31,20 @@
   margin-left: -224px;
 }
 
-.project-options .js-options label {
+.project-options .side-by-side-options label {
   margin-left: 0;
   margin-bottom: 0;
 }
 
-.project-options .js-options label:last-child {
+.project-options .side-by-side-options label:last-child {
   margin-left: 20px;
 }
 
-#config-jsmin-folder {
+.project-options .side-by-side-option-second {
   margin-left: 12px;
 }
 
 .modal {
-  .tab-content {
-    max-height: 280px;
-    overflow: auto;
-  }
-}
-
-#aboutModal {
   .tab-content {
     max-height: 250px;
     overflow: auto;

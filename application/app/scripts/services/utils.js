@@ -17,7 +17,8 @@ prepros.factory('utils', [
         'use strict';
 
         var md5 = require('MD5'),
-            path = require('path');
+            path = require('path'),
+            fs = require('fs-extra');
 
         function id(string) {
 
@@ -120,6 +121,42 @@ prepros.factory('utils', [
             return file.toLowerCase().indexOf(folder.toLowerCase()) === 0;
         }
 
+        function readDirs(dir, cb) {
+
+            var f = [];
+
+            function get(dir) {
+
+                var files = fs.readdirSync(dir);
+
+                files.forEach(function (file) {
+
+                    var fp = dir + path.sep + file;
+
+                    if (fs.statSync(fp).isDirectory()) {
+
+                        get(fp);
+
+                    } else {
+
+                        f.push(fp);
+                    }
+                });
+            }
+
+            try {
+
+                get(dir);
+
+            } catch (e) {
+
+                return cb(e);
+
+            }
+
+            cb(null, f);
+        }
+
         return {
             id: id,
             showLoading: showLoading,
@@ -127,7 +164,8 @@ prepros.factory('utils', [
             openBrowser: openBrowser,
             checkUpdate: checkUpdate,
             notifier: notifier,
-            isFileInsideFolder: isFileInsideFolder
+            isFileInsideFolder: isFileInsideFolder,
+            readDirs: readDirs
         };
     }
 ]);

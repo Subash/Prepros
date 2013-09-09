@@ -2,7 +2,7 @@ input:focus, select:focus, select:active {
   box-shadow: none !important;
 }
 
-input[type='text'] {
+input[type='text'], input[type='password'] {
   border: 1px solid #BBB;
   border-radius: 0;
   padding: 3px 8px;

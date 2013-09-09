@@ -12,11 +12,12 @@
 prepros.controller('SidebarCtrl', [
 
     '$scope',
+    'config',
     'projectsManager',
     'utils',
     'liveServer',
 
-    function ($scope, projectsManager, utils, liveServer) {
+    function ($scope, config, projectsManager, utils, liveServer) {
 
         'use strict';
 
@@ -73,6 +74,12 @@ prepros.controller('SidebarCtrl', [
 
             confirmMsg.on('click:cancel', 'destroy');
         };
+
+        $scope.ftpDeploy = function() {
+
+            utils.openBrowser(config.online.url);
+
+        }
 
     }
 ]);

@@ -6,6 +6,8 @@
   box-shadow: 1px 1px 2px #d3d3d3;
   .controls {
     float: right;
+    position: relative;
+    z-index: 99999;
     * {
       -webkit-app-region: no-drag;
     }
