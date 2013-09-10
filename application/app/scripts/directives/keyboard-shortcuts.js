@@ -162,13 +162,6 @@ prepros.directive('keyboardShortcuts', [
                     return false;
                 });
 
-                Mousetrap.bind(['esc'], function () {
-
-                    require('nw.gui').Window.get().hide();
-
-                    return false;
-                });
-
             }
         };
 
