@@ -31,6 +31,7 @@
         "LiveScript": "1.2.0",
         "marked": "0.2.9",
         "MD5": "1.1.0",
+        "minimatch": "0.2.12",
         "nib": "0.9.1",
         "portfinder": "0.2.1",
         "request": "2.27.0",

@@ -33,9 +33,10 @@ prepros.factory('projectsManager',[
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path'),
-            _id = utils.id;
+        var fs = require('fs-extra');
+        var path = require('path');
+        var _id = utils.id;
+        var minimatch = require('minimatch');
 
         var projects = storage.get();
 
@@ -188,9 +189,11 @@ prepros.factory('projectsManager',[
 
             var projectFilterPatterns = '';
 
-            if (getProjectById(pid).config.filterPatterns) {
+            var project = getProjectById(pid);
 
-                projectFilterPatterns = getProjectById(pid).config.filterPatterns;
+            if (project.config.filterPatterns) {
+
+                projectFilterPatterns = project.config.filterPatterns;
             }
 
             var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
@@ -205,7 +208,7 @@ prepros.factory('projectsManager',[
 
                 pattern = pattern.trim();
 
-                if (pattern !== "" && file.indexOf(pattern) !== -1) {
+                if (pattern !== "" && ( file.indexOf(pattern) !== -1) || minimatch(path.relative(project.path, file), pattern ) ) {
 
                     matchFilter = true;
 
