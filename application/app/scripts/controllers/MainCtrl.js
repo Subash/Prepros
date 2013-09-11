@@ -42,6 +42,8 @@ prepros.controller('MainCtrl', [
         $scope.selectedFile = {};
         $scope.selectedProject = {};
 
+        $scope.window = window;
+
         //Data Change
         var throttleProjectsChange = _.throttle(function () {
 

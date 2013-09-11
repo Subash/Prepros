@@ -15,7 +15,7 @@
             </ul>
         </div>
 
-        <a class="icomoon-arrow-down-right-3" tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()"></a>
+        <a class="icomoon-arrow-down-right-3" tooltip="Minimize to Tray" data-placement="bottom" ng-click="toTray()" ng-if="window.process.platform === 'win32'"></a>
         <a class="icomoon-minus" tooltip="Minimize" data-placement="bottom" ng-click="minimize()"></a>
         <a class="icomoon-close" tooltip="Close" data-placement="left" ng-click="close()" id="title-bar-close-button"></a>
     </div>

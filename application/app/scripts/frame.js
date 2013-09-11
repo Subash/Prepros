@@ -62,50 +62,50 @@
                 e.preventDefault();
             }, false);
 
-            //Tray icon
-            var trayOptions = {
-                icon: 'app/assets/img/icons/16.png' //Relative to package.json file
-            };
-
             if (process.platform === 'win32') {
-                trayOptions.title = 'Prepros App';
-            }
 
-            var tray_icon = new nw.gui.Tray(trayOptions);
+                //Tray icon
+                var trayOptions = {
+                    icon: 'app/assets/img/icons/16.png', //Relative to package.json file
+                    title : 'Prepros App'
+                };
 
-            //Tray Icon Right Click Menu
-            var tray_menu = new nw.gui.Menu();
+                var tray_icon = new nw.gui.Tray(trayOptions);
 
-            tray_menu.append(new nw.gui.MenuItem({
-                label: 'Show Window',
-                click: function () {
+                //Tray Icon Right Click Menu
+                var tray_menu = new nw.gui.Menu();
+
+                tray_menu.append(new nw.gui.MenuItem({
+                    label: 'Show Window',
+                    click: function () {
+                        nw.window.show();
+                        nw.window.focus();
+                    }
+                }));
+
+                tray_menu.append(new nw.gui.MenuItem({
+                    label: 'Hide Window',
+                    click: function () {
+                        nw.window.hide();
+                    }
+                }));
+
+                tray_menu.append(new nw.gui.MenuItem({
+                    label: 'Exit Prepros',
+                    click: function () {
+                        nw.window.close();
+                    }
+                }));
+
+                tray_icon.menu = tray_menu;
+                tray_icon.on('click', function () {
                     nw.window.show();
                     nw.window.focus();
-                }
-            }));
+                });
 
-            tray_menu.append(new nw.gui.MenuItem({
-                label: 'Hide Window',
-                click: function () {
-                    nw.window.hide();
-                }
-            }));
-
-            tray_menu.append(new nw.gui.MenuItem({
-                label: 'Exit Prepros',
-                click: function () {
-                    nw.window.close();
-                }
-            }));
-
-            tray_icon.menu = tray_menu;
-            tray_icon.on('click', function () {
-                nw.window.show();
-                nw.window.focus();
-            });
-
-            //Push tray icon to global window to tell garbage collector that tray icon is not garbage
-            window.tray_icon = tray_icon;
+                //Push tray icon to global window to tell garbage collector that tray icon is not garbage
+                window.tray_icon = tray_icon;
+            }
 
             nw.window.on('close', function () {
 
