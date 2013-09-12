@@ -157,6 +157,14 @@ prepros.factory('utils', [
             cb(null, f);
         }
 
+        var isCrapFile = function(f) {
+
+            var crapReg = /(?:thumbs\.db|desktop\.ini)/gi;
+
+            return crapReg.test(f);
+
+        };
+
         return {
             id: id,
             showLoading: showLoading,
@@ -165,7 +173,8 @@ prepros.factory('utils', [
             checkUpdate: checkUpdate,
             notifier: notifier,
             isFileInsideFolder: isFileInsideFolder,
-            readDirs: readDirs
+            readDirs: readDirs,
+            isCrapFile: isCrapFile
         };
     }
 ]);

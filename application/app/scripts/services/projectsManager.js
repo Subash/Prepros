@@ -48,7 +48,16 @@ prepros.factory('projectsManager',[
         function addProject(folder) {
 
             //Check if folder already exists in project list
-            var already = _.isEmpty(_.findWhere(projects, {path: folder})) ? false : true;
+
+            var already = false;
+
+            _.each(projects, function(project) {
+
+                if(!path.relative(project.path, folder)) {
+                    already = true;
+                }
+
+            });
 
             var project_id = _id(new Date().toISOString() + folder);
 
