@@ -1,6 +1,7 @@
 <div class="title-bar" ng-controller="TitlebarCtrl">
     <div class="controls">
         <a ng-click="goWebsite()" class="icomoon-gift highlight" tooltip="A New Version Of Prepros is Available" data-placement="bottom" ng-show="appUpdate"></a>
+        <a ng-href="#/home" class="icomoon-home" tooltip="Go to Main Screen" data-placement="bottom"></a>
         <a class="icomoon-plus" tooltip="Add new project" ng-click="addProject()" data-placement="bottom" ></a>
         <a class="icomoon-mobile-2 " tooltip="Multi Device Live Refresh" data-placement="bottom" show-modal-on-click="#multiDevice"></a>
         <a ng-href="#/log" class="log icomoon-copy-2" tooltip="App Log" data-placement="bottom"></a>
@@ -9,6 +10,7 @@
             <i class="icomoon-menu-2" id="dd" data-toggle="dropdown"></i>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dd">
                 <li><a ng-click="openOptionsWindow()"><i class="icomoon-cog "></i> Prepros Options</a></li>
+                <li><a ng-click="goDocs()"><i class="icomoon-question"></i> Online Docs</a></li>
                 <li><a show-modal-on-click="#aboutModal"><i class="icomoon-info"></i>About Prepros</a></li>
                 <li class="divider"></li>
                 <li><a ng-click="supportAuthor()"><i class="icomoon-heart-2"></i>Buy Prepros Pro</a></li>

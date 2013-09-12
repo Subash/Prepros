@@ -51,6 +51,12 @@ prepros.controller('TitlebarCtrl', [
 
         };
 
+        $scope.goDocs = function () {
+
+            utils.openBrowser(config.online.helpUrl);
+
+        };
+
         utils.checkUpdate(function (data) {
 
             if (data.available) {

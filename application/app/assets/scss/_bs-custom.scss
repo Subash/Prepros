@@ -107,3 +107,7 @@ select {
 .modal .modal-body {
   min-height: 220px;
 }
+
+.tooltip {
+  z-index: 99999;
+}
