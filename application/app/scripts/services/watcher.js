@@ -59,7 +59,7 @@ prepros.factory("watcher", [
 
                         return true;
 
-                    } if(ext.match(supported)) {
+                    } else if(ext.match(supported)) {
 
                         return false;
 
