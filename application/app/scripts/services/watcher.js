@@ -55,16 +55,15 @@ prepros.factory("watcher", [
 
                     var ext = path.extname(f);
 
-                    if(projectsManager.matchFilters(project.id, f)) {
+                    if(ext.match(notSupported)) {
 
                         return true;
-                    }
 
-                    if(ext.match(supported)) {
+                    } if(ext.match(supported)) {
 
                         return false;
 
-                    } else if(ext.match(notSupported)) {
+                    } else if(projectsManager.matchFilters(project.id, f)) {
 
                         return true;
 

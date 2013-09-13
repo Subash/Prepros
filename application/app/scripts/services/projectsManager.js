@@ -217,10 +217,12 @@ prepros.factory('projectsManager',[
 
                 pattern = pattern.trim();
 
-                if (pattern !== "" && ( file.indexOf(pattern) !== -1) || minimatch(path.relative(project.path, file), pattern ) ) {
+                if(pattern) {
 
-                    matchFilter = true;
+                    if (file.indexOf(pattern) !== -1 || minimatch( path.relative(project.path, file), pattern ) ) {
 
+                        matchFilter = true;
+                    }
                 }
 
             });
