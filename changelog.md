@@ -1,3 +1,17 @@
+### Version 3.0.1 -September 14, 2013
+
+* 1-Click FTP Deploymennt [Pro] [Docs](http://alphapixels.com/prepros/docs/projects.html)
+* Regular expressions are supported for filters
+* Improved Live Urls
+* OSX Version is back
+* Event based file watcher actually works now
+* Detailed notifications
+* Hover notification to keep them open
+* Fixed Many File Watcher bugs
+* Improved UI
+* Some Performance Improvements.
+
+
 ### Version 3.0.6 -September 5, 2013
 
 * Fixed CPU Usage Issue
@@ -25,7 +39,7 @@
 
 ### Version 3.0.0 -Aug 29, 2013
 
-* Shareable prepros.json config file [Pro] [Docs](http://alphapixels.com/prepros/docs/prepros-json.html)
+* Shareable prepros.json config file [Pro] [Docs](http://alphapixels.com/prepros/docs/projects.html)
 * Live refresh vanilla css, html, php, wordpress, jekyll blog or whatever :) [Pro]
 * Live refresh custom server in any browser [Pro]
 * Multi device refresh with custom server [Pro]
