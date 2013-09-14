@@ -35,6 +35,7 @@ __About icons (in the order of image above)__
 * [Optimize Images](image-optimization.html)
 * Open [project live url](live-refresh.html)
 * Remove project
+* Upload With FTP
 
 <div class="alert alert-info">You must refresh project after adding new file to project folder or importing one file from another file</div>
 
@@ -58,3 +59,23 @@ You can exclude certain files from project by adding filter patterns in comma se
 
 
 <div class="alert alert-info">You can double click project name to open project folder in explorer.</div>
+
+<h3 id="json">Team Collaboration With Prepros.json</h1>
+
+`pepros.json` is a file that stores the settings and file/project information. The file is stored on the root of the project folder. When you remove and re-add the project to Prepros the settings on the `prepros.json` file are read and the settings on file are applied to the files on project. This file can be easily shared to share same settings across teams.
+
+
+#### Creating Prepro.json File
+
+To create `prepros.json` config file just right click on the project and click on `Create Config File` option.
+
+![Creating Prepros.json File](img/projects/json.jpg)
+
+This will create a new `prepros.json` config file and Prepros will update this file whenever the settings are changed from UI.
+
+
+<h3 id="ftp">FTP Deployment</h1>
+
+You can easily deploy your project with ftp. Go to FTP tab project options and enter ftp details. Prepros ignores preprocessor files by default. All files can be uploaded or only the edited or new files can be uploaded.
+
+![](img/projects/ftp.jpg)

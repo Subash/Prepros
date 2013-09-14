@@ -20,5 +20,3 @@ If you are using custom setup like apache or any other server you have to change
 Open projects options panel by clicking the gears icon in the project toolbar and go to general tab. Check the use custom server checkbox and enter your custom url you want to refresh. Note: Don't forget the `http` or `https` protocol before the url.
 
 ![Custom Server](img/live-refresh/live-url.gif)
-
-<div class="alert alert-info">Please enable `allow access to file url` option for Prepros chrome extension from chrome extensions page.</div>
