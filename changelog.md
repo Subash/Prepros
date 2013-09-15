@@ -1,4 +1,4 @@
-### Version 3.0.1 -September 14, 2013
+### Version 3.1.0 -September 14, 2013
 
 * 1-Click FTP Deploymennt [Pro] [Docs](http://alphapixels.com/prepros/docs/projects.html)
 * Regular expressions are supported for filters
