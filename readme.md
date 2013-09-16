@@ -22,5 +22,3 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 ##TODO
 * Frameworks
 * JsHint and JsLint
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sbspk/prepros/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
