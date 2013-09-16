@@ -3,8 +3,6 @@
 
 Compile less, sass, scss, compass, coffeescript, stylus, jade, slim, markdown, haml and livescript files with live browser refresh.
 
-[![Flattr Prepros](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1417937/sbspkPrepros-on-GitHub)
-
 To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.com/prepros).
 
 ![Prepros App](http://alphapixels.com/prepros/img/prepros.jpg)
@@ -24,3 +22,5 @@ To Download and learn more visit [alphapixels.com/prepros](http://alphapixels.co
 ##TODO
 * Frameworks
 * JsHint and JsLint
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sbspk/prepros/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
