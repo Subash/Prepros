@@ -62,7 +62,7 @@ prepros.controller('OptimImageCtrl', [
 
         var jpg = ['jpg', 'jpeg'];
 
-        var png = ['png', 'gif', 'tif', 'tiff'];
+        var png = ['png', 'tif', 'tiff'];
 
         var supportedTypes = _.union(png, jpg);
 
@@ -80,7 +80,7 @@ prepros.controller('OptimImageCtrl', [
 
                 } else {
 
-                    if (_.contains(supportedTypes, path.extname(fp).slice(1)) && !projectsManager.matchFilters($scope.selectedProject.id, fp)) {
+                    if (_.contains(supportedTypes, path.extname(fp).slice(1).toLowerCase()) && !projectsManager.matchFilters($scope.selectedProject.id, fp)) {
                         $scope.projectImages.push({
                             path: fp,
                             type: path.extname(fp).slice(1),
