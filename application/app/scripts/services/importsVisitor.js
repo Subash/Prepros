@@ -32,7 +32,16 @@ prepros.factory('importsVisitor',[
 
             var importedFiles = [];
             var ext = path.extname(filePath).toLowerCase();
-            var data = fs.readFileSync(filePath).toString();
+            var data;
+            try {
+
+                data = fs.readFileSync(filePath).toString();
+
+            } catch(e) {
+
+                return [];
+            }
+
             var result;
             var basedir = path.dirname(filePath);
             var importReg;
