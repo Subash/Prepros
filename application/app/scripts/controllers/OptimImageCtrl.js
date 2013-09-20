@@ -84,7 +84,7 @@ prepros.controller('OptimImageCtrl', [
                         $scope.projectImages.push({
                             path: fp,
                             type: path.extname(fp).slice(1),
-                            shortPath: $filter('interpolatePath')(fp, {config: $scope.selectedProject.config, relative: true, basePath: $scope.selectedProject.path})
+                            shortPath: path.relative($scope.selectedProject.path, fp).replace('\\', '/')
                         });
                     }
                 }
