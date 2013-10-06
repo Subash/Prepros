@@ -100,7 +100,7 @@ prepros.factory('javascript', [
 
                                     if(result) {
 
-                                        var impFile = result[1].replace(/'|"/gi, '').trim();
+                                        var impFile = result[1].replace(/'|"|;/gi, '').trim();
 
                                         //Check if path is full or just relative
                                         if (impFile.indexOf(':') >= 0) {
