@@ -1,7 +1,0 @@
-{
-	"__COMMENT__": "Change _baseUrl to baseUrl before building",
-	"_baseUrl": "http://alphapixels.com/prepros/docs",
-	"locals": {
-		"title": "Documentation"
-	}
-}
