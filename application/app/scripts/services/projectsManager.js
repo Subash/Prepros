@@ -246,7 +246,15 @@ prepros.factory('projectsManager',[
                 //Check if file already exists in files list
                 var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: fileId})) ? false : true;
 
-                var inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
+                var inImports = false;
+
+                var fileExt = path.extname(filePath).toLowerCase();
+
+                var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+
+                if(!isSass) {
+                    inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
+                }
 
                 if (!already && !inImports) {
                     getProjectById(pid).files.push(fileTypes.format(pid, fileId, filePath, getProjectById(pid).path));
@@ -363,8 +371,15 @@ prepros.factory('projectsManager',[
 
             }
 
+            
+            var fileExt = path.extname(importedPath).toLowerCase();
+
+            var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+
             //Remove any file that is in files list and is imported by this file
-            removeFile(pid, impid);
+            if(!isSass) {
+                removeFile(pid, impid);
+            }
 
         }
 
