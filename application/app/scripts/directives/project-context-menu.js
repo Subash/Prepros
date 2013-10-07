@@ -58,6 +58,16 @@ prepros.directive('projectContextMenu', [
                 }));
 
                 menu.append(new gui.MenuItem({
+                    label: 'Toggle File Watcher',
+                    click: function () {
+
+                        scope.$apply(function () {
+                            project.config.watch = !project.config.watch;
+                        });
+                    }
+                }));
+
+                menu.append(new gui.MenuItem({
                     label: 'Open Project URL',
                     click: function () {
 

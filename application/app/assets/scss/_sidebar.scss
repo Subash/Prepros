@@ -11,6 +11,31 @@
     padding: 0;
     height: 450px;
     list-style: none;
+
+
+    li {
+
+      position: relative;
+      display: block;
+
+      &::after {
+
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background: #afafaf;
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: 15px;
+      }
+
+      &.project-being-watched::after {
+        background: lighten(green, 5%);
+      }
+    }
+
     li a {
       display: block;
       padding-left: 15px;

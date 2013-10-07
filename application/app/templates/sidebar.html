@@ -1,6 +1,6 @@
 <div class="sidebar" ng-controller="SidebarCtrl">
     <ul ui-sortable ng-model="projects">
-        <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)" ng-animate="'animate'" project-context-menu="project">
+        <li ng-repeat="project in projects" ng-dblclick="openProjectFolder(project.path)" ng-animate="'animate'" project-context-menu="project" ng-class="{'project-being-watched': project.config.watch !== false}">
             <a ng-href="#/files/{{project.id}}" draggable="false"
                ng-class="{'active' : selectedProject.id == project.id}" draggable="false">{{project.name}}</a>
         </li>

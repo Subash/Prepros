@@ -71,6 +71,7 @@ prepros.factory('projectsManager',[
                     files: [],
                     imports: [],
                     config: {
+                        watch: true,
                         liveRefresh: true,
                         liveRefreshDelay: config.getUserOptions().liveRefreshDelay,
                         filterPatterns: '',

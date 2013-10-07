@@ -206,8 +206,16 @@ prepros.factory("watcher", [
 
             _.each(projects, function(project) {
 
-                if(!(project.id in projectsBeingWatched)) {
+                if((project.id in projectsBeingWatched) && project.config.watch === false) {
+
+                    projectsBeingWatched[project.id].watcher.close();
+
+                    delete projectsBeingWatched[project.id];
+
+                } else if(!(project.id in projectsBeingWatched) && project.config.watch !== false) {
+
                     _watch(project);
+
                 }
             });
         }
