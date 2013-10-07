@@ -65,7 +65,7 @@
 
             <div class="content clearfix show-options">
 
-                <div ng-if="path == 'home'" class="home">
+                <div ng-if="currentRoutePath == 'home'" class="home">
 
                     <h1 class="icomoon-arrow-down-2"></h1>
 
@@ -75,9 +75,7 @@
 
                 <div ng-controller="OptimImageCtrl">
 
-                    <div ng-if="path == 'optim'">
-
-
+                    <div ng-if="currentRoutePath == 'optim'">
 
                             <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
 
@@ -94,7 +92,7 @@
 
                 </div>
 
-                <div ng-if="path == 'files'">
+                <div ng-if="currentRoutePath == 'files'">
 
                     <!-- Files list -->
                     <div ng-include src="'templates/files-list.html'" ng-if="selectedProject.files.length != 0"></div>
@@ -130,7 +128,7 @@
 
                 <div ng-controller="LogCtrl">
 
-                    <div ng-include src="'templates/log.html'" ng-if="path == 'log'" ></div>
+                    <div ng-include src="'templates/log.html'" ng-if="currentRoutePath == 'log'" ></div>
 
                 </div>
             </div>

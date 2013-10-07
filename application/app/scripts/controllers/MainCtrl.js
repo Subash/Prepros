@@ -93,9 +93,9 @@ prepros.controller('MainCtrl', [
 
         $scope.$on('$routeChangeSuccess', function () {
 
-            $scope.path = $route.current.path;
+            $scope.currentRoutePath = $route.current.path;
 
-            if ($scope.path === 'files' || $scope.path === 'optim') {
+            if ($scope.currentRoutePath === 'files' || $scope.currentRoutePath === 'optim') {
 
                 var projectExists = !_.isEmpty(_.findWhere($scope.projects, {id: $routeParams.pid}));
 
