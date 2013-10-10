@@ -59,7 +59,7 @@ prepros.factory('coffee', [
 
         var compile = function (file, successCall, errorCall) {
 
-            var coffee = require('coffee-script');
+            var coffee = require('iced-coffee-script');
 
             var ugly = require('uglify-js');
 
