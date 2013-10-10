@@ -165,14 +165,14 @@ prepros.factory('sass', [
             //file.project path is exclusively provided to sass by compile provider
             var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
 
-            rubyProcess.on('error', function (e) {
+            rubyProcess.once('error', function (e) {
                 errorCall('Unable to execute ruby —error ' + e.message);
             });
 
             var compileErr = false;
 
             //If there is a compilation error
-            rubyProcess.stderr.on('data', function (data) {
+            rubyProcess.stderr.once('data', function (data) {
 
                 //Dirty workaround to check if the message is real error or not
                 if(data.toString().length > 20) {
@@ -184,7 +184,7 @@ prepros.factory('sass', [
 
             });
 
-            rubyProcess.stdout.on('data', function (data) {
+            rubyProcess.stdout.once('data', function (data) {
 
                 if(data.toString().toLowerCase().indexOf('error') >= 0) {
 
@@ -195,7 +195,7 @@ prepros.factory('sass', [
             });
 
             //Success if there is no error
-            rubyProcess.on('exit', function () {
+            rubyProcess.once('exit', function () {
 
                 if (!compileErr) {
 
@@ -235,8 +235,6 @@ prepros.factory('sass', [
                     successCall(file.input);
 
                 }
-
-                rubyProcess.removeAllListeners();
 
                 rubyProcess = null;
             });

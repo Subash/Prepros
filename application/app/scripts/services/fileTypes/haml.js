@@ -83,14 +83,14 @@ prepros.factory('haml',[
             //Start a child process to compile the file
             var rubyProcess = cp.spawn(config.ruby.getExec('haml'), args);
 
-            rubyProcess.on('error', function (e) {
+            rubyProcess.once('error', function (e) {
                 errorCall('Unable to execute ruby —error ' + e.message);
             });
 
             var compileErr = false;
 
             //If there is a compilation error
-            rubyProcess.stderr.on('data', function (data) {
+            rubyProcess.stderr.once('data', function (data) {
 
                 compileErr = true;
 
@@ -99,12 +99,10 @@ prepros.factory('haml',[
             });
 
             //Success if there is no error
-            rubyProcess.on('exit', function () {
+            rubyProcess.once('exit', function () {
                 if (!compileErr) {
 
                     successCall(file.input);
-
-                    rubyProcess.removeAllListeners();
 
                     rubyProcess = null;
 
