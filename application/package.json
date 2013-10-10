@@ -24,7 +24,7 @@
 
         "autoprefixer": "0.8.20130911",
         "chokidar": "0.6.3",
-        "coffee-script": "1.6.3",
+        "iced-coffee-script": "1.6.3-f",
         "express": "3.4.0",
         "fs-extra": "0.6.3",
         "jade": "0.35.0",
