@@ -25,9 +25,9 @@ prepros.factory('$exceptionHandler', [
 
             var errorLogPath = require('path').join(require('nw.gui').App.dataPath[0], 'prepros-error-log.txt');
             require('fs-extra').appendFile(errorLogPath, '\n[ ' + new Date().toDateString() + ' ]\n' + err.stack.toString() + '\n');
-            console.error(err.stack);
+            console.error(err, err.stack);
 
-            if(/watch EPERM/.test(err.message)) {
+            if(/watch EPERM/.test(err.message) || err.code === 'ECONNRESET') {
                 return;
             }
 
