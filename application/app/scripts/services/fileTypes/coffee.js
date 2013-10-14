@@ -87,7 +87,7 @@ prepros.factory('coffee', [
 
                         } catch(e) {
 
-                            throw {message: 'Error on line ' + e.location.first_line + ' of ' + file.input};
+                            throw {message: 'Error on line ' + e.location.first_line + ' of ' + file.input + '\nERROR: ' + e.message};
                         }
 
                         if (file.config.uglify) {
