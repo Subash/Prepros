@@ -63,6 +63,19 @@
         border-bottom: 6px solid white;
         border-left: 6px solid transparent;
         content: '';
+        pointer-events: none;
+      }
+      &::before {
+        position: absolute;
+        top: -7px;
+        right: 9px;
+        display: inline-block;
+        width: 0;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid rgba(0, 0, 0, 0.4);
+        border-left: 7px solid transparent;
+        content: '';
+        pointer-events: none;
       }
     }
   }
