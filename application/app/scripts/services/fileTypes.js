@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, curly: false*/
 /*global prepros, _*/
 
-prepros.factory('fileTypes',[
+prepros.factory('fileTypes', [
 
     'config',
     'coffee',
@@ -23,20 +23,7 @@ prepros.factory('fileTypes',[
     'slim',
     'stylus',
 
-    function (
-        config,
-        coffee,
-        haml,
-        importsVisitor,
-        jade,
-        javascript,
-        less,
-        livescript,
-        markdown,
-        sass,
-        slim,
-        stylus
-    ) {
+    function (config, coffee, haml, importsVisitor, jade, javascript, less, livescript, markdown, sass, slim, stylus) {
 
         'use strict';
 
@@ -91,15 +78,15 @@ prepros.factory('fileTypes',[
             };
 
             //Some type Exceptions
-            if(extname === 'markdown') file.type = 'MD';
-            if(extname === 'styl') file.type = 'Stylus';
+            if (extname === 'markdown') file.type = 'MD';
+            if (extname === 'styl') file.type = 'Stylus';
 
             //Use full compass if config.rb file is present
-            if(extname === 'sass' || extname === 'scss') {
+            if (extname === 'sass' || extname === 'scss') {
 
-                fs.exists(path.join(projectPath, 'config.rb'), function(exists){
+                fs.exists(path.join(projectPath, 'config.rb'), function (exists) {
 
-                    if(exists) {
+                    if (exists) {
 
                         file.config.compass = true;
                         file.config.fullCompass = true;
@@ -114,7 +101,7 @@ prepros.factory('fileTypes',[
 
             } else {
 
-                setTimeout(function() {
+                setTimeout(function () {
                     callback(null, file);
                 }, 0);
 
@@ -151,12 +138,16 @@ prepros.factory('fileTypes',[
 
             var internalType = getInternalType(filePath);
 
-            switch(internalType) {
+            switch (internalType) {
 
-                case "JS": return '.js';
-                case "CSS": return '.css';
-                case "HTML": return '.html';
-                default: return '';
+                case "JS":
+                    return '.js';
+                case "CSS":
+                    return '.css';
+                case "HTML":
+                    return '.html';
+                default:
+                    return '';
             }
         }
 
@@ -167,14 +158,14 @@ prepros.factory('fileTypes',[
 
             var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
 
-            if(_.contains(can, ext)) {
+            if (_.contains(can, ext)) {
 
                 importsVisitor.getImports(filePath, callback);
 
             } else {
 
-                setTimeout(function(){
-                        callback(null, []);
+                setTimeout(function () {
+                    callback(null, []);
                 }, 0);
             }
 

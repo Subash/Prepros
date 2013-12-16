@@ -21,7 +21,7 @@ prepros.directive('keyboardShortcuts', [
             restrict: 'A',
             link: function (scope) {
 
-                var keysDisabled = function() {
+                var keysDisabled = function () {
 
                     return scope.DISABLE_KEYBOARD_SHORTCUTS;
                 };
@@ -30,15 +30,15 @@ prepros.directive('keyboardShortcuts', [
                 //Select All
                 Mousetrap.bind(['ctrl+a', 'command+a'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     scope.clearMultiSelect();
 
-                    if(scope.routePath === 'IMAGE_OPTIMIZATION') {
+                    if (scope.routePath === 'IMAGE_OPTIMIZATION') {
 
-                        scope.$apply(function() {
+                        scope.$apply(function () {
 
-                            _.each(scope.selectedProjectImages, function(img) {
+                            _.each(scope.selectedProjectImages, function (img) {
 
                                 scope.addMultiSelectImage(img.pid, img.id);
 
@@ -47,11 +47,11 @@ prepros.directive('keyboardShortcuts', [
                         });
 
 
-                    } else if(scope.routePath === 'FILES') {
+                    } else if (scope.routePath === 'FILES') {
 
-                        scope.$apply(function() {
+                        scope.$apply(function () {
 
-                            _.each(scope.selectedProjectFiles, function(f) {
+                            _.each(scope.selectedProjectFiles, function (f) {
 
                                 scope.addMultiSelectFile(f.pid, f.id);
 
@@ -67,7 +67,7 @@ prepros.directive('keyboardShortcuts', [
                 //New Project
                 Mousetrap.bind(['ctrl+n', 'command+n'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     scope.addProject();
 
@@ -77,7 +77,7 @@ prepros.directive('keyboardShortcuts', [
                 //Refresh Project Files
                 Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
@@ -94,7 +94,7 @@ prepros.directive('keyboardShortcuts', [
                 //Open Live Url
                 Mousetrap.bind(['ctrl+l', 'command+l'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
@@ -107,7 +107,7 @@ prepros.directive('keyboardShortcuts', [
                 //Copy Live Preview Url
                 Mousetrap.bind(['ctrl+shift+l', 'command+shift+l'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
@@ -120,7 +120,7 @@ prepros.directive('keyboardShortcuts', [
                 //Remote inspect url
                 Mousetrap.bind(['ctrl+i', 'command+i'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     scope.openRemoteInspect();
 
@@ -130,11 +130,11 @@ prepros.directive('keyboardShortcuts', [
                 //Remove Project
                 Mousetrap.bind(['ctrl+d', 'command+d'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
-                        scope.$apply(function() {
+                        scope.$apply(function () {
                             scope.removeProject(scope.selectedProject.id);
                         });
 
@@ -145,7 +145,7 @@ prepros.directive('keyboardShortcuts', [
                 //Push to remote
                 Mousetrap.bind(['ctrl+u', 'command+u'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
@@ -158,11 +158,11 @@ prepros.directive('keyboardShortcuts', [
                 //Compile file
                 Mousetrap.bind(['ctrl+s', 'command+s'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
-                    if(_.isEmpty(scope.multiSelect.files)) {
+                    if (_.isEmpty(scope.multiSelect.files)) {
 
-                        if(scope.selectedFile.id) {
+                        if (scope.selectedFile.id) {
 
                             scope.compile(scope.selectedFile.pid, scope.selectedFile.id);
 
@@ -180,7 +180,7 @@ prepros.directive('keyboardShortcuts', [
                 //Compile all project files
                 Mousetrap.bind(['ctrl+shift+s', 'command+shift+s'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
@@ -193,11 +193,11 @@ prepros.directive('keyboardShortcuts', [
                 //Optmize Selected Image
                 Mousetrap.bind(['ctrl+o', 'command+o'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
-                    if(_.isEmpty(scope.multiSelect.images)) {
+                    if (_.isEmpty(scope.multiSelect.images)) {
 
-                        if(scope.selectedImage.id) {
+                        if (scope.selectedImage.id) {
 
                             scope.optimizeImage(scope.selectedImage.pid, scope.selectedImage.id)
 
@@ -205,7 +205,7 @@ prepros.directive('keyboardShortcuts', [
 
                     } else {
 
-                        if(!Prepros.IS_PRO) return pro.showMessage();
+                        if (!Prepros.IS_PRO) return pro.showMessage();
 
                     }
 
@@ -215,11 +215,11 @@ prepros.directive('keyboardShortcuts', [
                 //Optimize All Images
                 Mousetrap.bind(['ctrl+shift+o', 'command+shift+o'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (scope.selectedProject.id) {
 
-                        scope.$apply(function() {
+                        scope.$apply(function () {
 
                             scope.optimizeAllImages(scope.selectedProject.id);
 
@@ -231,7 +231,7 @@ prepros.directive('keyboardShortcuts', [
                 //Copy
                 Mousetrap.bind(['ctrl+c', 'command+c'], function () {
 
-                    if(keysDisabled()) return false;
+                    if (keysDisabled()) return false;
 
                     if (window.getSelection().toString() !== "") {
 
@@ -246,7 +246,7 @@ prepros.directive('keyboardShortcuts', [
 
                     var sure = window.confirm('Are you sure you want to clear Prepros data and restart it ?');
 
-                    if(sure) {
+                    if (sure) {
 
                         localStorage.clear();
                         Prepros.gui.App.quit(); //Restarting is not really possible yet

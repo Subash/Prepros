@@ -22,7 +22,7 @@ prepros.factory('notification', [
 
         var notificationWindow;
 
-        var _createWindow = function() {
+        var _createWindow = function () {
 
             var notificationPath = 'file:///' + path.normalize(config.basePath + '/notif.html');
 
@@ -38,7 +38,7 @@ prepros.factory('notification', [
                 show_in_taskbar: false
             };
 
-            if(Prepros.PLATFORM_WINDOWS) {
+            if (Prepros.PLATFORM_WINDOWS) {
                 options.y = 10;
             }
 
@@ -73,7 +73,7 @@ prepros.factory('notification', [
 
                 _createWindow();
 
-                notificationWindow.on('loaded', function() {
+                notificationWindow.on('loaded', function () {
                     notificationWindow.emit('updateNotification', data);
                 });
             }
@@ -91,7 +91,7 @@ prepros.factory('notification', [
                     time: config.getUserOptions().notificationTime
                 };
 
-                if(config.getUserOptions().notificationDetails) data.details = details;
+                if (config.getUserOptions().notificationDetails) data.details = details;
 
                 _showNotification(data);
             }
@@ -109,7 +109,7 @@ prepros.factory('notification', [
                     time: config.getUserOptions().notificationTime
                 };
 
-                if(config.getUserOptions().notificationDetails) data.details = details;
+                if (config.getUserOptions().notificationDetails) data.details = details;
 
                 _showNotification(data);
             }

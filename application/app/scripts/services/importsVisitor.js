@@ -9,7 +9,7 @@
 /*global prepros, _*/
 
 //Imports Visitor
-prepros.factory('importsVisitor',[
+prepros.factory('importsVisitor', [
 
     function () {
 
@@ -30,20 +30,20 @@ prepros.factory('importsVisitor',[
                 styl: /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g,
                 jade: /(?:include|extends)\s+(.*)/g,
                 slim: /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g,
-                js:  /\/\/(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi,
-                coffee:  /#(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi
+                js: /\/\/(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi,
+                coffee: /#(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi
             };
 
             var ext = path.extname(filePath).toLowerCase().slice(1);
 
-            if(!ext || !regx[ext]) return callback(null, []);
+            if (!ext || !regx[ext]) return callback(null, []);
 
             var importReg = regx[ext];
             var basedir = path.dirname(filePath);
 
-            fs.readFile(filePath, 'utf8', function(err, data) {
+            fs.readFile(filePath, 'utf8', function (err, data) {
 
-                if(err) {
+                if (err) {
                     return callback(err);
                 }
 
@@ -57,7 +57,7 @@ prepros.factory('importsVisitor',[
 
                         var imps = result[1].replace(/"|'|\n|;/gi, '').split(',');
 
-                        imps = imps.map(function(imp) {
+                        imps = imps.map(function (imp) {
 
                             imp = imp.trim().replace();
 
@@ -80,9 +80,9 @@ prepros.factory('importsVisitor',[
                     }
 
                     //Check the path without adding extension
-                    fs.stat(file, function(err, stat) {
+                    fs.stat(file, function (err, stat) {
 
-                        if(err || stat.isDirectory()) {
+                        if (err || stat.isDirectory()) {
 
                             //Add Extension if doesn't exist
                             if (path.extname(file).toLowerCase() !== ext) {
@@ -90,16 +90,16 @@ prepros.factory('importsVisitor',[
                             }
 
                             //Chcek for non partial file
-                            fs.stat(file, function(err, stat) {
+                            fs.stat(file, function (err, stat) {
 
-                                if(err) {
+                                if (err) {
 
                                     //Check for the partial file
                                     file = path.dirname(file) + path.sep + '_' + path.basename(file);
 
-                                    getImports(file, function(err, res) {
+                                    getImports(file, function (err, res) {
 
-                                        if(!err) {
+                                        if (!err) {
 
                                             imports.push(file);
                                             imports = imports.concat(res);
@@ -109,9 +109,9 @@ prepros.factory('importsVisitor',[
 
                                 } else {
 
-                                    getImports(file, function(err, res) {
+                                    getImports(file, function (err, res) {
 
-                                        if(!err) {
+                                        if (!err) {
 
                                             imports.push(file);
                                             imports = imports.concat(res);
@@ -123,9 +123,9 @@ prepros.factory('importsVisitor',[
 
                         } else {
 
-                            getImports(file, function(err, res) {
+                            getImports(file, function (err, res) {
 
-                                if(!err) {
+                                if (!err) {
 
                                     imports.push(file);
                                     imports = imports.concat(res);

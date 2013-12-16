@@ -11,7 +11,7 @@
 //Exception handler service
 prepros.factory('$exceptionHandler', [
 
-    function(){
+    function () {
 
         'use strict';
 
@@ -20,9 +20,10 @@ prepros.factory('$exceptionHandler', [
         var os = require('os');
 
         //Replace console.warn to hide warnings
-        console.warn = function() {};
+        console.warn = function () {
+        };
 
-        var handle = function(err) {
+        var handle = function (err) {
 
             var errorLogPath = require('path').join(process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE, 'Prepros-Error-Log.html');
 
@@ -30,7 +31,7 @@ prepros.factory('$exceptionHandler', [
 
             console.error(err, err.stack);
 
-            if(err.message.indexOf('watch ') >= 0 || err.code === 'ECONNRESET') {
+            if (err.message.indexOf('watch ') >= 0 || err.code === 'ECONNRESET') {
                 return;
             }
 

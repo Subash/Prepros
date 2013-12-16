@@ -11,101 +11,101 @@ prepros.factory('utils', [
 
     'config',
 
-	function (config) {
+    function (config) {
 
-		'use strict';
+        'use strict';
 
-		var md5 = require('MD5'),
-			path = require('path'),
-			fs = require('fs-extra');
+        var md5 = require('MD5'),
+            path = require('path'),
+            fs = require('fs-extra');
 
-		function id(string) {
+        function id(string) {
 
-			return md5(string.toLowerCase().replace(/\\/gi, '/')).substr(8, 8);
-		}
-		
-		//Instantiate Backbone Notifier
-		var notifier = new Backbone.Notifier({
-			theme: 'clean',
-			types: ['warning', 'error', 'info', 'success'],
-			modal: true,
-			ms: false,
-			offsetY: 100,
-			position: 'top',
-			zIndex: 10000,
-			screenOpacity: 0.5
-		});
+            return md5(string.toLowerCase().replace(/\\/gi, '/')).substr(8, 8);
+        }
 
-		//Shows loading overlay
-		function showLoading() {
+        //Instantiate Backbone Notifier
+        var notifier = new Backbone.Notifier({
+            theme: 'clean',
+            types: ['warning', 'error', 'info', 'success'],
+            modal: true,
+            ms: false,
+            offsetY: 100,
+            position: 'top',
+            zIndex: 10000,
+            screenOpacity: 0.5
+        });
 
-			notifier.info({
-				message: "Loading..... :) ",
-				destroy: true,
-				loader: true
-			});
-		}
+        //Shows loading overlay
+        function showLoading() {
 
-		//Hide loading animation
-		function hideLoading() {
-			notifier.destroyAll();
-		}
+            notifier.info({
+                message: "Loading..... :) ",
+                destroy: true,
+                loader: true
+            });
+        }
+
+        //Hide loading animation
+        function hideLoading() {
+            notifier.destroyAll();
+        }
 
 
-		function isFileInsideFolder(folder, file) {
+        function isFileInsideFolder(folder, file) {
 
-			return path.normalize(file.toLowerCase()).indexOf(path.normalize(folder.toLowerCase())) === 0;
-		}
+            return path.normalize(file.toLowerCase()).indexOf(path.normalize(folder.toLowerCase())) === 0;
+        }
 
-		function readDirs(dir, done) {
+        function readDirs(dir, done) {
 
-			var results = [];
+            var results = [];
 
-			fs.readdir(dir, function(err, list) {
-				
-				if (err) {
-					return done(err);
-				}
+            fs.readdir(dir, function (err, list) {
 
-				var i = 0;
+                if (err) {
+                    return done(err);
+                }
 
-				(function next() {
+                var i = 0;
 
-					var file = list[i++];
+                (function next() {
 
-					if (!file) {
+                    var file = list[i++];
 
-						return done(null, results);
-					}
+                    if (!file) {
 
-					file = dir + path.sep + file;
+                        return done(null, results);
+                    }
 
-					fs.stat(file, function(err, stat) {
+                    file = dir + path.sep + file;
 
-						if (stat && stat.isDirectory()) {
+                    fs.stat(file, function (err, stat) {
 
-							readDirs(file, function(err, res) {
+                        if (stat && stat.isDirectory()) {
 
-								results = results.concat(res);
-								next();
-							});
-						} else {
+                            readDirs(file, function (err, res) {
 
-							results.push(file);
-							next();
-						}
-					});
-				})();
-			});
-		}
+                                results = results.concat(res);
+                                next();
+                            });
+                        } else {
 
-		function isCrapFile(f) {
+                            results.push(file);
+                            next();
+                        }
+                    });
+                })();
+            });
+        }
 
-			var crapReg = /(?:thumbs\.db|desktop\.ini)/gi;
+        function isCrapFile(f) {
 
-			return crapReg.test(f);
+            var crapReg = /(?:thumbs\.db|desktop\.ini)/gi;
 
-		}
+            return crapReg.test(f);
+
+        }
 
 
         //Convert a project
@@ -113,7 +113,7 @@ prepros.factory('utils', [
 
 
             var pr = {
-                id: project.id ,
+                id: project.id,
                 cfgVersion: 1,
                 name: project.name,
                 path: project.path,
@@ -156,35 +156,35 @@ prepros.factory('utils', [
             };
 
 
-            if(project.config.cssPath.indexOf(':') < 0) {
+            if (project.config.cssPath.indexOf(':') < 0) {
 
                 pr.config.cssPathType = 'REPLACE_TYPE';
                 pr.config.cssPath = project.config.cssPath;
 
             }
 
-            if(project.config.jsPath.indexOf(':') < 0) {
+            if (project.config.jsPath.indexOf(':') < 0) {
 
                 pr.config.jsPathType = 'REPLACE_TYPE';
                 pr.config.jsPath = project.config.jsPath;
 
             }
 
-            if(project.config.htmlPath.indexOf(':') < 0) {
+            if (project.config.htmlPath.indexOf(':') < 0) {
 
                 pr.config.htmlPathType = 'REPLACE_TYPE';
                 pr.config.htmlPath = project.config.htmlPath;
 
             }
 
-            if(project.config.jsMinPath && project.config.jsMinPath.indexOf(':') < 0) {
+            if (project.config.jsMinPath && project.config.jsMinPath.indexOf(':') < 0) {
 
                 pr.config.minJsPathType = 'RELATIVE_FILEDIR';
                 pr.config.minJsPath = project.config.jsMinPath;
 
             }
 
-            _.each(project.files, function(file) {
+            _.each(project.files, function (file) {
 
                 var _file = {};
 
@@ -198,16 +198,16 @@ prepros.factory('utils', [
 
                 file.customOutput = false;
 
-                if(file.output && file.output.indexOf(':') >= 0) {
+                if (file.output && file.output.indexOf(':') >= 0) {
 
                     _file.customOutput = file.output;
                 }
 
-				if(file.customOutput) {
+                if (file.customOutput) {
 
-					_file.customOutput = file.customOutput;
+                    _file.customOutput = file.customOutput;
 
-				}
+                }
 
                 _file.config = $.extend(_file.config, file.config);
 
@@ -215,21 +215,21 @@ prepros.factory('utils', [
             });
 
 
-            _.each(project.imports, function(imp) {
+            _.each(project.imports, function (imp) {
 
                 pr.imports[imp.id] = imp;
 
             });
 
-			if(!_.isEmpty(project.images)) {
+            if (!_.isEmpty(project.images)) {
 
-				_.each(project.images, function(image) {
+                _.each(project.images, function (image) {
 
-					pr.images[image.id] = image;
+                    pr.images[image.id] = image;
 
-				})
+                })
 
-			}
+            }
 
             return JSON.parse(JSON.stringify(pr));
         }
@@ -240,7 +240,7 @@ prepros.factory('utils', [
 
             var _pr = {};
 
-            _.each(projects, function(project) {
+            _.each(projects, function (project) {
 
                 _pr[project.id] = convertProject(project);
 
@@ -251,16 +251,16 @@ prepros.factory('utils', [
 
         }
 
-		return {
-			id: id,
-			showLoading: showLoading,
-			hideLoading: hideLoading,
-			notifier: notifier,
-			isFileInsideFolder: isFileInsideFolder,
-			readDirs: readDirs,
-			isCrapFile: isCrapFile,
+        return {
+            id: id,
+            showLoading: showLoading,
+            hideLoading: hideLoading,
+            notifier: notifier,
+            isFileInsideFolder: isFileInsideFolder,
+            readDirs: readDirs,
+            isCrapFile: isCrapFile,
             convertProject: convertProject,
             convertProjects: convertProjects
-		};
-	}
+        };
+    }
 ]);

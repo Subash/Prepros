@@ -24,24 +24,24 @@ prepros.factory('coffee', [
         var appendRegx = /#(?:\s|)@(?:\s|)(?:prepros|codekit)-append\s+(.*)/gi;
         var prependRegx = /#(?:\s|)@(?:\s|)(?:prepros|codekit)-prepend\s+(.*)/gi;
 
-        var compile = function(file, project, callback) {
+        var compile = function (file, project, callback) {
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-            var coffee = (file.config.iced)? require('iced-coffee-script'): require('coffee-script');
+            var coffee = (file.config.iced) ? require('iced-coffee-script') : require('coffee-script');
 
             concat.getConcatList(input, {
 
-                appendRegx : appendRegx,
-                prependRegx : prependRegx
+                appendRegx: appendRegx,
+                prependRegx: prependRegx
 
-            }, function(err, list) {
+            }, function (err, list) {
 
-                if(err) return callback(new Error('Unable read the concatenation list \n' + err.message) );
+                if (err) return callback(new Error('Unable read the concatenation list \n' + err.message));
 
-                if(list.length > 1) {
+                if (list.length > 1) {
 
                     var total = list.length;
 
@@ -50,28 +50,28 @@ prepros.factory('coffee', [
                     //Make slots for data
                     dataArray.length = list.length;
 
-                    var _complete = function() {
+                    var _complete = function () {
 
-                        if(!total) {
+                        if (!total) {
 
-                            fs.outputFile(output, dataArray.join("\n"), function(err) {
+                            fs.outputFile(output, dataArray.join("\n"), function (err) {
 
-                                if(err) return callback(new Error('Unable to write output file ' + err.message));
+                                if (err) return callback(new Error('Unable to write output file ' + err.message));
 
                                 callback(null, input);
                             });
                         }
                     };
 
-                    _.each(list, function(filePath, i) {
+                    _.each(list, function (filePath, i) {
 
-                        fs.readFile(filePath, 'utf8', function(err, js) {
+                        fs.readFile(filePath, 'utf8', function (err, js) {
 
-                            if(err) return callback(new Error('Failed to read file \n' + err.message));
+                            if (err) return callback(new Error('Failed to read file \n' + err.message));
 
-                            js = js.split("\n").map(function(line) {
+                            js = js.split("\n").map(function (line) {
 
-                                if(!line.match(appendRegx) && !line.match(prependRegx)) return line;
+                                if (!line.match(appendRegx) && !line.match(prependRegx)) return line;
 
                             });
 
@@ -117,9 +117,9 @@ prepros.factory('coffee', [
                 }
 
                 //If concatination is not used proceed to sourcemaps and single file compilation
-                fs.readFile(input, 'utf8', function(err, data) {
+                fs.readFile(input, 'utf8', function (err, data) {
 
-                    if(err) return callback(new Error('Unable to read source file\n' + err.message));
+                    if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
 
                     var options = {
@@ -129,11 +129,11 @@ prepros.factory('coffee', [
 
                     var js;
 
-                    if(file.config.sourcemaps) {
+                    if (file.config.sourcemaps) {
 
                         var sourceFiles;
 
-                        if(input.substr(0, 1) === output.substr(0, 1)) {
+                        if (input.substr(0, 1) === output.substr(0, 1)) {
 
                             sourceFiles = path.relative(path.dirname(output), input).replace(/\\/g, '/');
 
@@ -144,7 +144,7 @@ prepros.factory('coffee', [
                         }
 
                         options.sourceMap = true;
-                        options.sourceFiles= [sourceFiles];
+                        options.sourceFiles = [sourceFiles];
 
                         var compiled;
 
@@ -164,9 +164,9 @@ prepros.factory('coffee', [
 
                         }
 
-                        fs.outputFile(outmapName, compiled.v3SourceMap, function(err) {
+                        fs.outputFile(outmapName, compiled.v3SourceMap, function (err) {
 
-                            if(err) return callback(new Error('Unable to write sourcemap ' + err.message));
+                            if (err) return callback(new Error('Unable to write sourcemap ' + err.message));
 
                             if (file.config.uglify) {
 
@@ -183,8 +183,8 @@ prepros.factory('coffee', [
 
                                     js += '\n //# sourceMappingURL=' + path.basename(outmapName);
 
-                                    fs.outputFile(outmapName, compiled.map, function(err) {
-                                        if(err) callback(new Error('Unable to write sourcemap ' + err.message));
+                                    fs.outputFile(outmapName, compiled.map, function (err) {
+                                        if (err) callback(new Error('Unable to write sourcemap ' + err.message));
                                     });
 
                                 } catch (e) {
@@ -193,9 +193,9 @@ prepros.factory('coffee', [
                                 }
                             }
 
-                            fs.outputFile(output, js, function(err) {
+                            fs.outputFile(output, js, function (err) {
 
-                                if(err) return callback(new Error('Unable to write output file ' + err.message));
+                                if (err) return callback(new Error('Unable to write output file ' + err.message));
 
                                 callback(null, input);
                             });
@@ -226,9 +226,9 @@ prepros.factory('coffee', [
                             }
                         }
 
-                        fs.outputFile(output, js, function(err) {
+                        fs.outputFile(output, js, function (err) {
 
-                            if(err) return callback(new Error('Unable to write output file ' + err.message));
+                            if (err) return callback(new Error('Unable to write output file ' + err.message));
 
                             callback(null, input);
                         });

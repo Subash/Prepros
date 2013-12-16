@@ -11,24 +11,24 @@
 //Tooltip directive
 prepros.directive('linkExternal', [
 
-	'$timeout',
+    '$timeout',
 
-	function ($timeout) {
+    function ($timeout) {
 
-		'use strict';
+        'use strict';
 
-		return {
-			restrict: 'A',
-			link: function (scope, element, attrs) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
 
-				$timeout(function() {
-					element.on('click', function(e) {
-						e.preventDefault();
-						Prepros.gui.Shell.openExternal(attrs.href);
-					});
-				},0);
-			}
-		};
+                $timeout(function () {
+                    element.on('click', function (e) {
+                        e.preventDefault();
+                        Prepros.gui.Shell.openExternal(attrs.href);
+                    });
+                }, 0);
+            }
+        };
 
-	}
+    }
 ]);

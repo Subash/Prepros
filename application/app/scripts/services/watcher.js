@@ -20,16 +20,7 @@ prepros.factory("watcher", [
     'projectsManager',
     'utils',
 
-    function (
-        $rootScope,
-        config,
-        compiler,
-        fileTypes,
-        liveServer,
-        notification,
-        projectsManager,
-        utils
-    ) {
+    function ($rootScope, config, compiler, fileTypes, liveServer, notification, projectsManager, utils) {
 
         "use strict";
 
@@ -37,20 +28,20 @@ prepros.factory("watcher", [
             chokidar = require('chokidar'),
             path = require('path');
 
-            var projectsBeingWatched = {};
+        var projectsBeingWatched = {};
 
-            var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
-            var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|json|map|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|tpl)$/gi;
+        var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
+        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|json|map|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|tpl)$/gi;
 
 
         function _watch(project) {
 
-            var useExperimentalWatcher =  config.getUserOptions().experimental.fileWatcher;
+            var useExperimentalWatcher = config.getUserOptions().experimental.fileWatcher;
 
             //Utility Function to compile file
-            var _compileFile = function(file_id) {
+            var _compileFile = function (file_id) {
 
-                if(project.files[file_id]) {
+                if (project.files[file_id]) {
 
                     var file = project.files[file_id];
 
@@ -60,31 +51,31 @@ prepros.factory("watcher", [
                         compiler.compile(file.pid, file.id);
                     }
 
-                    projectsManager.refreshFile(file.pid, file.id, function() {
+                    projectsManager.refreshFile(file.pid, file.id, function () {
                         $rootScope.$apply();
                     });
                 }
             };
 
             var watcher = chokidar.watch(project.path, {
-                ignored: function(f) {
+                ignored: function (f) {
 
                     //Ignore dot files or folders
-                    if(/\\\.|\/\./.test(f)) {
+                    if (/\\\.|\/\./.test(f)) {
                         return true;
                     }
 
                     var ext = path.extname(f);
 
-                    if(ext.match(notSupported)) {
+                    if (ext.match(notSupported)) {
 
                         return true;
 
-                    } else if(ext.match(supported)) {
+                    } else if (ext.match(supported)) {
 
                         return false;
 
-                    } else if(projectsManager.matchFilters(project.id, f)) {
+                    } else if (projectsManager.matchFilters(project.id, f)) {
 
                         return true;
 
@@ -92,12 +83,13 @@ prepros.factory("watcher", [
 
                         try {
 
-                            if(fs.statSync(f).isDirectory()) {
+                            if (fs.statSync(f).isDirectory()) {
 
                                 return false;
                             }
 
-                        } catch(e) {}
+                        } catch (e) {
+                        }
                     }
 
                     return true;
@@ -105,18 +97,18 @@ prepros.factory("watcher", [
                 interval: 400,
                 ignorePermissionErrors: true,
                 ignoreInitial: true,
-                usePolling : !useExperimentalWatcher
+                usePolling: !useExperimentalWatcher
             });
 
-            var timeOutAdd = function(fpath) {
+            var timeOutAdd = function (fpath) {
 
-                window.setTimeout(function() {
+                window.setTimeout(function () {
 
-                    fs.exists(fpath, function(exists) {
+                    fs.exists(fpath, function (exists) {
 
-                        if(exists && config.getUserOptions().experimental.autoAddRemoveFile) {
+                        if (exists && config.getUserOptions().experimental.autoAddRemoveFile) {
 
-                            projectsManager.addFile(project.id, fpath, function() {
+                            projectsManager.addFile(project.id, fpath, function () {
                                 $rootScope.$apply();
                             });
                         }
@@ -127,15 +119,15 @@ prepros.factory("watcher", [
 
             watcher.on('add', timeOutAdd);
 
-            var timeOutUnlink = function(fpath) {
+            var timeOutUnlink = function (fpath) {
 
-                window.setTimeout(function() {
+                window.setTimeout(function () {
 
-                    fs.exists(fpath, function(exists) {
+                    fs.exists(fpath, function (exists) {
 
-                        if(exists && config.getUserOptions().experimental.autoAddRemoveFile) {
+                        if (exists && config.getUserOptions().experimental.autoAddRemoveFile) {
 
-                            $rootScope.$apply(function() {
+                            $rootScope.$apply(function () {
                                 projectsManager.removeFile(project.id, utils.id(path.relative(project.path, fpath)));
                             });
                         }
@@ -146,44 +138,44 @@ prepros.factory("watcher", [
 
             watcher.on('unlink', timeOutUnlink);
 
-            var changeHandler = function(fpath) {
+            var changeHandler = function (fpath) {
 
-                if(!fs.existsSync(fpath)) return;
+                if (!fs.existsSync(fpath)) return;
 
                 //Try to add to files list. if file is not supported project manager will ignore it.
-                if(config.getUserOptions().experimental.autoAddRemoveFile) {
+                if (config.getUserOptions().experimental.autoAddRemoveFile) {
 
-                    projectsManager.addFile(project.id, fpath, function() {
+                    projectsManager.addFile(project.id, fpath, function () {
                         $rootScope.$apply();
                     });
                 }
 
-                if(fileTypes.isExtSupported(fpath)) {
+                if (fileTypes.isExtSupported(fpath)) {
 
                     var id = utils.id(path.relative(project.path, fpath));
 
                     _compileFile(id);
 
-                    if(project.imports[id]) {
+                    if (project.imports[id]) {
 
                         var imp = project.imports[id];
 
-                        _.each(imp.parents, function(parent) {
+                        _.each(imp.parents, function (parent) {
                             _compileFile(parent);
                         });
                     }
                 }
             };
 
-            var debounceChangeHandler = _.debounce(function(fpath) {
+            var debounceChangeHandler = _.debounce(function (fpath) {
 
                 changeHandler(fpath);
 
             }, 75);
 
-            watcher.on('change', function(fpath) {
+            watcher.on('change', function (fpath) {
 
-                if(useExperimentalWatcher) {
+                if (useExperimentalWatcher) {
 
                     return debounceChangeHandler(fpath);
 
@@ -193,7 +185,7 @@ prepros.factory("watcher", [
                 }
             });
 
-            watcher.on('error', function(err) {
+            watcher.on('error', function (err) {
                 console.log(err);
             });
 
@@ -203,21 +195,21 @@ prepros.factory("watcher", [
             };
         }
 
-        var registerExceptionHandler = _.once(function(projects) {
+        var registerExceptionHandler = _.once(function (projects) {
 
             //An ugly hack to restart nodejs file watcher whenever it crashes
-            process.on('uncaughtException', function(err) {
+            process.on('uncaughtException', function (err) {
 
-                if(err.message.indexOf('watch ') >= 0) {
+                if (err.message.indexOf('watch ') >= 0) {
 
-                    _.each(projectsBeingWatched, function(project) {
+                    _.each(projectsBeingWatched, function (project) {
 
                         project.watcher.close();
 
                         delete projectsBeingWatched[project.id];
                     });
 
-                    _.each(projects, function(project) {
+                    _.each(projects, function (project) {
                         _watch(project);
                     });
                 }
@@ -232,9 +224,9 @@ prepros.factory("watcher", [
 
             var ids = _.pluck(projects, 'id');
 
-            _.each(projectsBeingWatched, function(project) {
+            _.each(projectsBeingWatched, function (project) {
 
-                if(!_.contains(ids, project.id)) {
+                if (!_.contains(ids, project.id)) {
 
                     project.watcher.close();
 
@@ -242,15 +234,15 @@ prepros.factory("watcher", [
                 }
             });
 
-            _.each(projects, function(project) {
+            _.each(projects, function (project) {
 
-                if((project.id in projectsBeingWatched) && project.config.watch === false) {
+                if ((project.id in projectsBeingWatched) && project.config.watch === false) {
 
                     projectsBeingWatched[project.id].watcher.close();
 
                     delete projectsBeingWatched[project.id];
 
-                } else if(!(project.id in projectsBeingWatched) && project.config.watch !== false) {
+                } else if (!(project.id in projectsBeingWatched) && project.config.watch !== false) {
 
                     _watch(project);
 

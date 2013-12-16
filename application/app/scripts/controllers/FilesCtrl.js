@@ -19,15 +19,7 @@ prepros.controller('FilesCtrl', [
     'pro',
     'imageOptimization',
 
-    function (
-        $scope,
-        $filter,
-        compiler,
-        projectsManager,
-        utils,
-        pro,
-        imageOptimization
-    ) {
+    function ($scope, $filter, compiler, projectsManager, utils, pro, imageOptimization) {
 
         'use strict';
 
@@ -57,7 +49,7 @@ prepros.controller('FilesCtrl', [
         };
 
         //Toggle Auto Compile
-        $scope.toggleAutoCompile = function(pid, fid) {
+        $scope.toggleAutoCompile = function (pid, fid) {
 
             var file = projectsManager.getFileById(pid, fid);
 
@@ -65,7 +57,7 @@ prepros.controller('FilesCtrl', [
 
         };
 
-        $scope.showInFolder = function(pid, fid) {
+        $scope.showInFolder = function (pid, fid) {
 
             var project = projectsManager.getProjectById(pid);
 
@@ -75,7 +67,7 @@ prepros.controller('FilesCtrl', [
 
         };
 
-        $scope.showImageInFolder = function(pid, imageId) {
+        $scope.showImageInFolder = function (pid, imageId) {
 
             var project = projectsManager.getProjectById(pid);
 
@@ -90,29 +82,29 @@ prepros.controller('FilesCtrl', [
             compiler.compile(pid, fid);
         };
 
-        $scope.optimizeImage = function(pid, imageId) {
+        $scope.optimizeImage = function (pid, imageId) {
 
             var image = projectsManager.getImageById(pid, imageId);
             var project = projectsManager.getProjectById(pid);
 
-            imageOptimization.optimize(image, project, function() {
+            imageOptimization.optimize(image, project, function () {
                 $scope.$apply();
             });
 
         };
 
         //Reset File Options
-        $scope.resetFileSettings = function(pid, fid, no_prompt) {
+        $scope.resetFileSettings = function (pid, fid, no_prompt) {
 
             var file = projectsManager.getFileById(pid, fid);
             var project = projectsManager.getProjectById(pid);
 
             var fpath = path.join(project.path, file.input);
 
-            if(no_prompt) {
+            if (no_prompt) {
 
                 projectsManager.removeFile(pid, fid);
-                projectsManager.addFile(pid, fpath, function() {
+                projectsManager.addFile(pid, fpath, function () {
                     $scope.$apply();
                 });
                 return;
@@ -121,18 +113,18 @@ prepros.controller('FilesCtrl', [
             var confirmMsg = utils.notifier.notify({
                 message: "Are you sure you want to reset the settings of this file?",
                 type: "warning",
-                    buttons: [
-                        {'data-role': 'ok', text: 'Yes'},
-                        {'data-role': 'cancel', text: 'Cancel'}
-                    ],
+                buttons: [
+                    {'data-role': 'ok', text: 'Yes'},
+                    {'data-role': 'cancel', text: 'Cancel'}
+                ],
                 destroy: true
             });
 
-            confirmMsg.on('click:ok', function(){
+            confirmMsg.on('click:ok', function () {
 
                 this.destroy();
                 projectsManager.removeFile(pid, fid);
-                projectsManager.addFile(pid, fpath, function() {
+                projectsManager.addFile(pid, fpath, function () {
                     $scope.$apply();
                 });
             });
@@ -143,7 +135,7 @@ prepros.controller('FilesCtrl', [
         //Change file output
         $scope.changeFileOutput = function (pid, id, event) {
 
-            if(event) {
+            if (event) {
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -154,7 +146,7 @@ prepros.controller('FilesCtrl', [
                 project = projectsManager.getProjectById(pid);
 
 
-            if(file.config.compass && file.config.fullCompass) {
+            if (file.config.compass && file.config.fullCompass) {
 
                 var confirmMsg = utils.notifier.notify({
                     message: "Output path can't be changed from UI if file has full compass support enabled. Use Compass config.rb file to change output path",
@@ -173,7 +165,7 @@ prepros.controller('FilesCtrl', [
             var out = '';
 
             //Interpolate path to replace css/js dirs
-            if(file.customOutput) {
+            if (file.customOutput) {
 
                 out = path.resolve(project.path, file.customOutput);
 
@@ -183,9 +175,9 @@ prepros.controller('FilesCtrl', [
 
             }
 
-            fs.exists(path.dirname(out), function(exists) {
+            fs.exists(path.dirname(out), function (exists) {
 
-                if(exists) {
+                if (exists) {
                     wd = path.dirname(out);
                 } else {
                     wd = project.path;
@@ -199,7 +191,7 @@ prepros.controller('FilesCtrl', [
 
                     var output = e.currentTarget.files[0].path;
 
-                    if(utils.isFileInsideFolder(project.path, output)) {
+                    if (utils.isFileInsideFolder(project.path, output)) {
 
                         output = path.relative(project.path, output);
                     }

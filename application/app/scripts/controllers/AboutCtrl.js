@@ -14,10 +14,7 @@ prepros.controller('AboutCtrl', [
     '$scope',
     'config',
 
-    function (
-        $scope,
-        config
-    ) {
+    function ($scope, config) {
 
         'use strict';
 

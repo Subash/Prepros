@@ -31,13 +31,13 @@ prepros.directive('imageContextMenu', [
                     label: 'Open',
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.images)) {
+                        if (_.isEmpty(scope.multiSelect.images)) {
 
                             scope.openImage(image.pid, image.id);
 
                         } else {
 
-                            if(!Prepros.IS_PRO) return pro.showMessage();
+                            if (!Prepros.IS_PRO) return pro.showMessage();
 
                         }
                     }
@@ -48,19 +48,19 @@ prepros.directive('imageContextMenu', [
                     click: function () {
 
 
-                        if(_.isEmpty(scope.multiSelect.images)) {
+                        if (_.isEmpty(scope.multiSelect.images)) {
 
-                            scope.$apply(function() {
+                            scope.$apply(function () {
                                 scope.optimizeImage(image.pid, image.id);
                             });
 
                         } else {
 
-                            if(!Prepros.IS_PRO) return pro.showMessage();
+                            if (!Prepros.IS_PRO) return pro.showMessage();
 
-                            _.each(scope.multiSelect.images, function(i) {
+                            _.each(scope.multiSelect.images, function (i) {
 
-                                scope.$apply(function() {
+                                scope.$apply(function () {
                                     scope.optimizeImage(i.pid, i.id);
                                 });
 
@@ -76,15 +76,15 @@ prepros.directive('imageContextMenu', [
                     label: 'Show in ' + explorer,
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.images)) {
+                        if (_.isEmpty(scope.multiSelect.images)) {
 
                             scope.showImageInFolder(image.pid, image.id);
 
                         } else {
 
-                            if(!Prepros.IS_PRO) return pro.showMessage();
+                            if (!Prepros.IS_PRO) return pro.showMessage();
 
-                            _.each(scope.multiSelect.images, function(i) {
+                            _.each(scope.multiSelect.images, function (i) {
 
                                 scope.showImageInFolder(i.pid, i.id);
                             })

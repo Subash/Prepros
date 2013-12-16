@@ -17,7 +17,7 @@ prepros.factory('concat', [
         var fs = require('fs');
         var path = require('path');
 
-        var getConcatList = function(filePath, options, callback) {
+        var getConcatList = function (filePath, options, callback) {
 
             var appendRegx = options.appendRegx;
             var prependRegx = options.prependRegx;
@@ -28,7 +28,7 @@ prepros.factory('concat', [
 
             fs.readFile(filePath, { encoding: 'utf8' }, function (err, data) {
 
-                if(err) return callback(err);
+                if (err) return callback(err);
 
                 //Add file itself to the list so the file comes in the middle of appends and prepends
                 var list = [filePath];
@@ -45,7 +45,7 @@ prepros.factory('concat', [
 
                         var appends = result[1].replace(/"|'|\n|;/gi, '').split(',');
 
-                        appends = appends.map(function(imp) {
+                        appends = appends.map(function (imp) {
 
                             imp = imp.trim().replace();
 
@@ -66,7 +66,7 @@ prepros.factory('concat', [
 
                         var prepends = result[1].replace(/"|'|\n|;/gi, '').split(',');
 
-                        prepends = prepends.map(function(imp) {
+                        prepends = prepends.map(function (imp) {
 
                             imp = imp.trim().replace();
 
@@ -91,15 +91,15 @@ prepros.factory('concat', [
                     }
 
                     //Do not read the file itself but just add to imports list
-                    if(filePath === file) {
+                    if (filePath === file) {
 
                         imports.push(file);
                         return next();
                     }
 
                     //Read child file for imports
-                    getConcatList(file, options, function(err, res) {
-                        if(err) return callback(err);
+                    getConcatList(file, options, function (err, res) {
+                        if (err) return callback(err);
                         imports = imports.concat(res);
                         next();
                     });
@@ -110,7 +110,7 @@ prepros.factory('concat', [
 
 
         return {
-            getConcatList : getConcatList
+            getConcatList: getConcatList
         };
     }
 ]);

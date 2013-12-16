@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, curly: false*/
 /*global prepros, $, angular, _*/
 
-prepros.factory("log",[
+prepros.factory("log", [
 
     function () {
 
@@ -16,16 +16,16 @@ prepros.factory("log",[
 
         var log = [];
 
-        var add = function(details) {
+        var add = function (details) {
 
             log.unshift(details);
 
-            if(log.length>30) {
+            if (log.length > 30) {
                 log.length = 30;
             }
         };
 
-        var clear = function() {
+        var clear = function () {
             log.length = 0;
         };
 

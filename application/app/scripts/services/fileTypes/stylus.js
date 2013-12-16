@@ -24,15 +24,15 @@ prepros.factory('stylus', [
         var stylus = require('stylus');
         var nib = require('nib');
 
-        var compile = function(file, project, callback) {
+        var compile = function (file, project, callback) {
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-            fs.readFile(input, 'utf8', function(err, data) {
+            fs.readFile(input, 'utf8', function (err, data) {
 
-                if(err) return callback(new Error('Unable to read source file\n' + err.message));
+                if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
                 var importPath = path.dirname(input);
 
@@ -50,26 +50,26 @@ prepros.factory('stylus', [
                 //Render
                 compiler.render(function (err, css) {
 
-                    if(err) return callback(new Error(err.message));
+                    if (err) return callback(new Error(err.message));
 
-                    if(file.config.autoprefixer) {
+                    if (file.config.autoprefixer) {
 
                         try {
 
-                            if(project.config.autoprefixerBrowsers) {
+                            if (project.config.autoprefixerBrowsers) {
 
-                                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function (i) {
                                     return i.trim();
                                 });
 
-                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+                                css = autoprefixer.apply(null, autoprefixerOptions).compile(css);
 
                             } else {
 
-                                css =  autoprefixer().compile(css);
+                                css = autoprefixer().compile(css);
                             }
 
-                            if(file.config.compress) {
+                            if (file.config.compress) {
 
                                 css = new CleanCss({processImport: false}).minify(css);
                             }
@@ -81,9 +81,9 @@ prepros.factory('stylus', [
                         }
                     }
 
-                    fs.outputFile(output, css, function(err) {
+                    fs.outputFile(output, css, function (err) {
 
-                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
+                        if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
 
                         callback(null, input);
 
@@ -92,7 +92,6 @@ prepros.factory('stylus', [
                 });
             });
         };
-
 
 
         return {

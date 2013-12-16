@@ -9,7 +9,7 @@
 /*global prepros,  _ , $, Prepros*/
 
 //Controller for multiple device
-prepros.controller('MultiDeviceCtrl',[
+prepros.controller('MultiDeviceCtrl', [
 
     '$scope',
     'liveServer',
@@ -23,7 +23,7 @@ prepros.controller('MultiDeviceCtrl',[
 
         $scope.addresses = [];
 
-        $scope.refreshIpList = function() {
+        $scope.refreshIpList = function () {
 
             $scope.addresses = [];
 
@@ -53,7 +53,7 @@ prepros.controller('MultiDeviceCtrl',[
 
         $scope.refreshIpList();
 
-        $scope.openRemoteInspect = function() {
+        $scope.openRemoteInspect = function () {
 
             pro.showMessage();
         };

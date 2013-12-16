@@ -29,7 +29,7 @@ prepros.factory('pro', [
                 destroy: true
             });
 
-            confirmMsg.on('click:ok', function(){
+            confirmMsg.on('click:ok', function () {
 
                 this.destroy();
 

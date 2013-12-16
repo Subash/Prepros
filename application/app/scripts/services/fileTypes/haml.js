@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
-prepros.factory('haml',[
+prepros.factory('haml', [
 
     'config',
     '$filter',
@@ -26,7 +26,7 @@ prepros.factory('haml',[
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
             var args = config.ruby.getGem('haml');
 
@@ -47,15 +47,15 @@ prepros.factory('haml',[
                 args.push('--double-quote-attributes');
             }
 
-            fs.mkdirs(path.dirname(output), function(err) {
+            fs.mkdirs(path.dirname(output), function (err) {
 
-                if(err) return callback(err);
+                if (err) return callback(err);
 
                 //Start a child process to compile the file
                 var rubyProcess = cp.spawn(config.ruby.getExec('haml'), args);
 
                 rubyProcess.once('error', function (e) {
-                    callback(new Error( 'Unable to execute ruby —error ' + e.message));
+                    callback(new Error('Unable to execute ruby —error ' + e.message));
                 });
 
                 var compileErr = false;

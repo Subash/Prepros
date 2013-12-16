@@ -11,26 +11,26 @@
 //Control+Click Directive
 prepros.directive('ctrlClick', [
 
-	'$timeout',
+    '$timeout',
 
-	function ($timeout) {
+    function ($timeout) {
 
-		'use strict';
+        'use strict';
 
-		return {
-			restrict: 'A',
-			link: function (scope, element, attrs) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
 
-                element.on('click', function(e) {
+                element.on('click', function (e) {
 
-                    if(e.ctrlKey) {
-                        scope.$apply(function() {
+                    if (e.ctrlKey) {
+                        scope.$apply(function () {
                             scope.$eval(attrs.ctrlClick);
                         })
                     }
                 });
-			}
-		};
+            }
+        };
 
-	}
+    }
 ]);

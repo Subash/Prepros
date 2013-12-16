@@ -9,7 +9,7 @@
 /*global angular, QRCode, QRErrorCorrectLevel*/
 
 
-window.getQR = function(text) {
+window.getQR = function (text) {
 
     'use strict';
 
@@ -19,7 +19,7 @@ window.getQR = function(text) {
     var white = "rgb(255,255,255)";
     var QRCodeVersion = 15; // 1-40 see http://www.denso-wave.com/qrcode/qrgene2-e.html
 
-    var canvas=document.createElement('canvas');
+    var canvas = document.createElement('canvas');
     var qrCanvasContext = canvas.getContext('2d');
     try {
         // QR Code Error Correction Capability
@@ -31,10 +31,10 @@ window.getQR = function(text) {
         qr.make();
 
         var qrsize = qr.getModuleCount();
-        canvas.setAttribute('height',(qrsize * dotsize) + padding);
-        canvas.setAttribute('width',(qrsize * dotsize) + padding);
-        var shiftForPadding = padding/2;
-        if (canvas.getContext){
+        canvas.setAttribute('height', (qrsize * dotsize) + padding);
+        canvas.setAttribute('width', (qrsize * dotsize) + padding);
+        var shiftForPadding = padding / 2;
+        if (canvas.getContext) {
             for (var r = 0; r < qrsize; r++) {
                 for (var c = 0; c < qrsize; c++) {
                     if (qr.isDark(r, c)) {
@@ -42,13 +42,13 @@ window.getQR = function(text) {
                     } else {
                         qrCanvasContext.fillStyle = white;
                     }
-                    qrCanvasContext.fillRect ((c*dotsize) +shiftForPadding,(r*dotsize) + shiftForPadding,dotsize,dotsize);   // x, y, w, h
+                    qrCanvasContext.fillRect((c * dotsize) + shiftForPadding, (r * dotsize) + shiftForPadding, dotsize, dotsize);   // x, y, w, h
                 }
             }
         }
         return canvas.toDataURL("image/png");
     }
-    catch(err) {
+    catch (err) {
 
         console.log('Unable to generate QR', text, err);
 

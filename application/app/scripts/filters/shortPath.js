@@ -14,15 +14,15 @@ prepros.filter('shortPath', [
 
     function (utils) {
 
-    'use strict';
+        'use strict';
 
-    var path = require('path');
+        var path = require('path');
 
-    return function (string, basePath) {
+        return function (string, basePath) {
 
-        if(utils.isFileInsideFolder(basePath, string)) return path.relative(basePath, string);
+            if (utils.isFileInsideFolder(basePath, string)) return path.relative(basePath, string);
 
-        return string;
+            return string;
 
-    };
-}]);
+        };
+    }]);

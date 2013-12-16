@@ -9,12 +9,12 @@
 /*global prepros, _*/
 
 //Imports Visitor
-prepros.factory('imageOptimization',[
+prepros.factory('imageOptimization', [
 
     'config',
     '$rootScope',
 
-    function(config, $rootScope) {
+    function (config, $rootScope) {
 
         'use strict';
 
@@ -24,26 +24,26 @@ prepros.factory('imageOptimization',[
 
         var platform = 'win';
 
-        if(process.platform === 'darwin') platform = 'osx';
+        if (process.platform === 'darwin') platform = 'osx';
 
-        if(process.platform === 'linux') platform = 'linux';
+        if (process.platform === 'linux') platform = 'linux';
 
         var arch = (process.arch === 'x64') ? 'x64' : 'x86';
 
-        var binPath =   path.join(config.basePath, '../bin');
+        var binPath = path.join(config.basePath, '../bin');
 
         var jpegTranPath = path.join(binPath, 'jpegtran', platform, arch, 'jpegtran');
 
         var optipngPath = path.join(binPath, 'optipng', platform, 'optipng');
 
-        if(platform === 'win') {
+        if (platform === 'win') {
             jpegTranPath += '.exe';
             optipngPath += '.exe';
         }
 
-        if(platform === 'osx') jpegTranPath = path.join(binPath, 'jpegtran', platform, 'jpegtran');
+        if (platform === 'osx') jpegTranPath = path.join(binPath, 'jpegtran', platform, 'jpegtran');
 
-        if(platform === 'linux') optipngPath = path.join(binPath, 'optipng', platform, arch, 'optipng');
+        if (platform === 'linux') optipngPath = path.join(binPath, 'optipng', platform, arch, 'optipng');
 
         var jpg = ['jpg', 'jpeg'];
 
@@ -51,7 +51,7 @@ prepros.factory('imageOptimization',[
 
 
         //Function to optimize Images
-        var _optimize = function(image, callback) {
+        var _optimize = function (image, callback) {
 
             var ext = path.extname(image).slice(1);
 
@@ -70,7 +70,7 @@ prepros.factory('imageOptimization',[
 
                 if (data.toString() !== '0') {
 
-                    callback( new Error('Failed To Optimize Image'));
+                    callback(new Error('Failed To Optimize Image'));
 
                 } else {
 
@@ -83,13 +83,13 @@ prepros.factory('imageOptimization',[
 
         var optimizationQueue = [];
 
-        var optimize = function(image, project, callback) {
+        var optimize = function (image, project, callback) {
 
-            if(_.contains(optimizationQueue, project.id+image.id)) return;
+            if (_.contains(optimizationQueue, project.id + image.id)) return;
 
-            if(!$rootScope.$$phase) {
+            if (!$rootScope.$$phase) {
 
-                $rootScope.$apply(function() {
+                $rootScope.$apply(function () {
                     image.status = 'OPTIMIZING';
                 });
             } else {
@@ -97,37 +97,43 @@ prepros.factory('imageOptimization',[
                 image.status = 'OPTIMIZING';
             }
 
-            optimizationQueue.push(project.id+image.id);
+            optimizationQueue.push(project.id + image.id);
 
-            setTimeout(function() {
+            setTimeout(function () {
 
                 var imagePath = path.join(project.path, image.path);
 
-                _optimize(imagePath, function(err) {
+                _optimize(imagePath, function (err) {
 
-                    if(err) {
+                    if (err) {
 
-                        optimizationQueue = _.without(optimizationQueue, project.id+image.id);
+                        optimizationQueue = _.without(optimizationQueue, project.id + image.id);
                         image.status = 'FAILED';
 
-                        setTimeout(function() {callback(true, false);}, 400);
+                        setTimeout(function () {
+                            callback(true, false);
+                        }, 400);
 
 
                     } else {
 
-                        fs.stat(imagePath, function(err, stat) {
+                        fs.stat(imagePath, function (err, stat) {
 
-                            optimizationQueue = _.without(optimizationQueue, project.id+image.id);
+                            optimizationQueue = _.without(optimizationQueue, project.id + image.id);
 
-                            if(err) {
+                            if (err) {
 
                                 image.status = 'FAILED';
-                                return setTimeout(function() {callback(true, false);}, 400);
+                                return setTimeout(function () {
+                                    callback(true, false);
+                                }, 400);
                             }
 
                             image.status = 'OPTIMIZED';
                             image.size = stat.size;
-                            setTimeout(function() {callback(null, true);}, 400);
+                            setTimeout(function () {
+                                callback(null, true);
+                            }, 400);
 
                         });
                     }
@@ -136,7 +142,7 @@ prepros.factory('imageOptimization',[
         };
 
         return {
-            optimize : optimize
+            optimize: optimize
         };
 
     }

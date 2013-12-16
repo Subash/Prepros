@@ -14,7 +14,7 @@ prepros.factory('sass', [
     'config',
     '$filter',
 
-    function ( config, $filter) {
+    function (config, $filter) {
 
         'use strict';
 
@@ -24,11 +24,11 @@ prepros.factory('sass', [
         var autoprefixer = require('autoprefixer');
         var CleanCss = require('clean-css');
 
-        var compile = function(file, project, callback) {
+        var compile = function (file, project, callback) {
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
             var args = [];
 
@@ -52,7 +52,7 @@ prepros.factory('sass', [
                 }
 
                 //Output and input must be in same drive for sourcemaps to work
-                if(project.path.substr(0, 1) === output.substr(0, 1)) {
+                if (project.path.substr(0, 1) === output.substr(0, 1)) {
 
                     //Input and output
                     args.push(path.basename(input), path.relative(path.dirname(input), output));
@@ -80,12 +80,12 @@ prepros.factory('sass', [
                     args.push('--compass');
                 }
 
-                if(file.config.sourcemaps && Prepros.PLATFORM_WINDOWS) {
+                if (file.config.sourcemaps && Prepros.PLATFORM_WINDOWS) {
 
                     args.push('--sourcemap');
                 }
 
-                if(file.config.debug) {
+                if (file.config.debug) {
 
                     args.push('--debug-info');
                 }
@@ -107,7 +107,7 @@ prepros.factory('sass', [
                 fs.mkdirsSync(path.dirname(output));
             }
 
-            var cwd = (file.config.compass && file.config.fullCompass)? project.path: path.dirname(input);
+            var cwd = (file.config.compass && file.config.fullCompass) ? project.path : path.dirname(input);
 
             var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: cwd});
 
@@ -126,7 +126,7 @@ prepros.factory('sass', [
                 var string = data.toString().toLowerCase();
 
                 //Dirty workaround to check if the message is real error or not
-                if(string.length > 20 && string.indexOf('deprecation warning') < 0) {
+                if (string.length > 20 && string.indexOf('deprecation warning') < 0) {
 
                     compileErr = true;
 
@@ -139,7 +139,7 @@ prepros.factory('sass', [
 
                 var string = data.toString().toLowerCase();
 
-                if(string.indexOf('error') >= 0 && string.indexOf('deprecation warning') < 0) {
+                if (string.indexOf('error') >= 0 && string.indexOf('deprecation warning') < 0) {
 
                     compileErr = true;
 
@@ -152,39 +152,39 @@ prepros.factory('sass', [
 
                 rubyProcess.removeAllListeners();
 
-                if(file.config.fullCompass && file.config.compass && !compileErr) return callback(null, input);
+                if (file.config.fullCompass && file.config.compass && !compileErr) return callback(null, input);
 
-                if(!compileErr) {
+                if (!compileErr) {
 
-                    if(file.config.autoprefixer && !file.config.sourcemaps) {
+                    if (file.config.autoprefixer && !file.config.sourcemaps) {
 
-                        fs.readFile(output, 'utf8', function(err, css){
+                        fs.readFile(output, 'utf8', function (err, css) {
 
-                            if(err) return callback(new Error('Autoprefixer: Failed to read file to autoprefix. ' + err.message));
+                            if (err) return callback(new Error('Autoprefixer: Failed to read file to autoprefix. ' + err.message));
 
                             try {
 
-                                if(project.config.autoprefixerBrowsers) {
+                                if (project.config.autoprefixerBrowsers) {
 
-                                    var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                    var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function (i) {
                                         return i.trim();
                                     });
 
-                                    css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+                                    css = autoprefixer.apply(null, autoprefixerOptions).compile(css);
 
                                 } else {
 
-                                    css =  autoprefixer().compile(css);
+                                    css = autoprefixer().compile(css);
                                 }
 
-                                if(file.config.outputStyle === "compressed") {
+                                if (file.config.outputStyle === "compressed") {
 
                                     css = new CleanCss({processImport: false}).minify(css);
                                 }
 
-                                fs.outputFile(output, css, function(err) {
+                                fs.outputFile(output, css, function (err) {
 
-                                    if(err) {
+                                    if (err) {
 
                                         callback('Autoprefixer: Failed to write file ' + output + '\n' + err.message);
 

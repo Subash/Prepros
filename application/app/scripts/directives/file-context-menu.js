@@ -32,7 +32,7 @@ prepros.directive('fileContextMenu', [
                     label: 'Open',
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.files)) {
+                        if (_.isEmpty(scope.multiSelect.files)) {
 
                             scope.openFile(file.pid, file.id);
 
@@ -47,7 +47,7 @@ prepros.directive('fileContextMenu', [
                     label: 'Compile',
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.files)) {
+                        if (_.isEmpty(scope.multiSelect.files)) {
 
                             scope.compile(file.pid, file.id);
 
@@ -78,7 +78,7 @@ prepros.directive('fileContextMenu', [
                     label: 'Show in ' + explorer,
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.files)) {
+                        if (_.isEmpty(scope.multiSelect.files)) {
 
                             scope.showInFolder(file.pid, file.id);
 
@@ -95,13 +95,13 @@ prepros.directive('fileContextMenu', [
                     click: function () {
 
 
-                        if(_.isEmpty(scope.multiSelect.files)) {
+                        if (_.isEmpty(scope.multiSelect.files)) {
 
                             scope.changeFileOutput(file.pid, file.id);
 
                         } else {
 
-                            if(!Prepros.IS_PRO) return pro.showMessage();
+                            if (!Prepros.IS_PRO) return pro.showMessage();
 
                         }
                     }
@@ -113,13 +113,13 @@ prepros.directive('fileContextMenu', [
                     label: 'Reset File Settings',
                     click: function () {
 
-                        if(_.isEmpty(scope.multiSelect.files)) {
+                        if (_.isEmpty(scope.multiSelect.files)) {
 
                             scope.resetFileSettings(file.pid, file.id, false);
 
                         } else {
 
-                            if(!Prepros.IS_PRO) return pro.showMessage();
+                            if (!Prepros.IS_PRO) return pro.showMessage();
                         }
                     }
                 }));
@@ -130,23 +130,23 @@ prepros.directive('fileContextMenu', [
 
                     menu.remove(autoCompileItem);
 
-                    var label = ( (file.config.autoCompile)? 'Disable': 'Enable' ) + ' Auto Compile';
+                    var label = ( (file.config.autoCompile) ? 'Disable' : 'Enable' ) + ' Auto Compile';
 
-                    if(!_.isEmpty(scope.multiSelect.files)) label = 'Toggle Auto Compile';
+                    if (!_.isEmpty(scope.multiSelect.files)) label = 'Toggle Auto Compile';
 
                     autoCompileItem = new Prepros.gui.MenuItem({
                         label: label,
                         click: function () {
 
-                            if(_.isEmpty(scope.multiSelect.files)) {
+                            if (_.isEmpty(scope.multiSelect.files)) {
 
-                                scope.$apply(function(){
+                                scope.$apply(function () {
                                     scope.toggleAutoCompile(file.pid, file.id);
                                 });
 
                             } else {
 
-                                if(!Prepros.IS_PRO) return pro.showMessage();
+                                if (!Prepros.IS_PRO) return pro.showMessage();
                             }
                         }
                     });

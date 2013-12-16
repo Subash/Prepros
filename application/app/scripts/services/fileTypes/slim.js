@@ -26,7 +26,7 @@ prepros.factory('slim', [
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
             var args = config.ruby.getGem('slim');
 
@@ -46,15 +46,15 @@ prepros.factory('slim', [
             //Pretty
             if (file.config.pretty) args.push('--pretty');
 
-            fs.mkdirs(path.dirname(output), function(err) {
+            fs.mkdirs(path.dirname(output), function (err) {
 
-                if(err) return callback(err);
+                if (err) return callback(err);
 
                 //Start a child process to compile the file
                 var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(input)});
 
                 rubyProcess.once('error', function (e) {
-                    callback(new Error( 'Unable to execute ruby —error ' + e.message));
+                    callback(new Error('Unable to execute ruby —error ' + e.message));
                 });
 
                 var compileErr = false;

@@ -23,7 +23,7 @@ prepros.directive('modalOnClick', [
 
                 $timeout(function () {
 
-                    element.on('click', function(e) {
+                    element.on('click', function (e) {
 
                         e.preventDefault();
                         $(attrs.modalOnClick).modal();

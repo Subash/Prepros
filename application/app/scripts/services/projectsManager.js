@@ -9,55 +9,47 @@
 /*global prepros,  _, angular*/
 
 //Storage
-prepros.factory('projectsManager',[
+prepros.factory('projectsManager', [
 
-	'$location',
-	'$rootScope',
-	'config',
-	'fileTypes',
-	'notification',
-	'storage',
-	'utils',
+    '$location',
+    '$rootScope',
+    'config',
+    'fileTypes',
+    'notification',
+    'storage',
+    'utils',
 
-	function (
-		$location,
-		$rootScope,
-		config,
-		fileTypes,
-		notification,
-		storage,
-		utils
-	) {
+    function ($location, $rootScope, config, fileTypes, notification, storage, utils) {
 
-		'use strict';
+        'use strict';
 
-		var fs = require('fs-extra');
-		var path = require('path');
-		var _id = utils.id;
-		var minimatch = require('minimatch');
+        var fs = require('fs-extra');
+        var path = require('path');
+        var _id = utils.id;
+        var minimatch = require('minimatch');
 
-		var projects = storage.get();
+        var projects = storage.get();
 
-		//Function to add new project
-		function addProject(folder) {
+        //Function to add new project
+        function addProject(folder) {
 
-			//Check if folder already exists in project list
-			var already = false;
+            //Check if folder already exists in project list
+            var already = false;
 
-			_.each(projects, function(project) {
+            _.each(projects, function (project) {
 
-				if(!path.relative(project.path, folder)) {
-					already = true;
-				}
+                if (!path.relative(project.path, folder)) {
+                    already = true;
+                }
 
-			});
+            });
 
-			var project_id = _id(new Date().toISOString() + folder);
+            var project_id = _id(new Date().toISOString() + folder);
 
-			//If project doesn't exist
-			if (!already) {
+            //If project doesn't exist
+            if (!already) {
 
-			    //Project to push
+                //Project to push
                 var project = {
                     id: project_id,
                     cfgVersion: 1, //It's internal configuration version, only change when something is drastically changed in configs
@@ -109,170 +101,170 @@ prepros.factory('projectsManager',[
 
             //Redirect to newly added project
             $location.path('/files/' + project.id);
-		}
+        }
 
-		//Function to get project by it's id
-		function getProjectById(id) {
+        //Function to get project by it's id
+        function getProjectById(id) {
 
-			if( !_.isEmpty(projects[id]) ) {
+            if (!_.isEmpty(projects[id])) {
 
-				return projects[id];
-			}
+                return projects[id];
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		//function to get all project files
-		function getProjectFiles(pid) {
+        //function to get all project files
+        function getProjectFiles(pid) {
 
-			var project = getProjectById(pid);
+            var project = getProjectById(pid);
 
-			if(!_.isEmpty(project)) {
+            if (!_.isEmpty(project)) {
 
-				return project.files;
-			}
+                return project.files;
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		//function to get all project imports
-		function getProjectImports(pid) {
+        //function to get all project imports
+        function getProjectImports(pid) {
 
-			var project = getProjectById(pid);
+            var project = getProjectById(pid);
 
-			if(!_.isEmpty(project)) {
+            if (!_.isEmpty(project)) {
 
-				return project.imports;
-			}
+                return project.imports;
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		/**
-		 * Function to get import By Id
-		 * @param pid {string} Project Id
-		 * @param id  {string} Import Id
-		 */
+        /**
+         * Function to get import By Id
+         * @param pid {string} Project Id
+         * @param id  {string} Import Id
+         */
 
-		function getImportById(pid, id) {
+        function getImportById(pid, id) {
 
-			var imps = getProjectImports(pid);
+            var imps = getProjectImports(pid);
 
-			if(!_.isEmpty(imps[id])) {
+            if (!_.isEmpty(imps[id])) {
 
-				return imps[id];
-			}
+                return imps[id];
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		/**
-		 * Function to get file By Id
-		 * @param pid {string} Project Id
-		 * @param fid  {string} File Id
-		 */
+        /**
+         * Function to get file By Id
+         * @param pid {string} Project Id
+         * @param fid  {string} File Id
+         */
 
-		function getFileById(pid, fid) {
+        function getFileById(pid, fid) {
 
-			var files = getProjectFiles(pid);
+            var files = getProjectFiles(pid);
 
-			if(!_.isEmpty(files[fid])) {
+            if (!_.isEmpty(files[fid])) {
 
-				return files[fid];
-			}
+                return files[fid];
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		//Function to get current Project config
-		function getProjectConfig(pid) {
+        //Function to get current Project config
+        function getProjectConfig(pid) {
 
-			var project = getProjectById(pid);
+            var project = getProjectById(pid);
 
-			if(!_.isEmpty(project)) {
+            if (!_.isEmpty(project)) {
 
-				return project.config;
-			}
+                return project.config;
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		//Function to get file imports in imports list
-		function getFileImports(pid, fid) {
+        //Function to get file imports in imports list
+        function getFileImports(pid, fid) {
 
-			var allImports = getProjectImports(pid);
+            var allImports = getProjectImports(pid);
 
-			if(!_.isEmpty(allImports)) {
+            if (!_.isEmpty(allImports)) {
 
-				var fileImports = {};
+                var fileImports = {};
 
-				_.each(allImports, function(imp) {
+                _.each(allImports, function (imp) {
 
-					if( _.contains(imp.parents, fid) ) {
+                    if (_.contains(imp.parents, fid)) {
 
-						fileImports[imp.id] = imp;
+                        fileImports[imp.id] = imp;
 
-					}
+                    }
 
-				});
+                });
 
-				return fileImports;
-			}
+                return fileImports;
+            }
 
-			return {};
-		}
+            return {};
+        }
 
-		//Function to match files against global and project specific filters
-		function matchFileFilters(pid, file) {
+        //Function to match files against global and project specific filters
+        function matchFileFilters(pid, file) {
 
-			var projectFilterPatterns = '';
+            var projectFilterPatterns = '';
 
-			var project = getProjectById(pid);
+            var project = getProjectById(pid);
 
-			if(_.isEmpty(project)) return true;
+            if (_.isEmpty(project)) return true;
 
-			if (project.config.filterPatterns) {
+            if (project.config.filterPatterns) {
 
-				projectFilterPatterns = project.config.filterPatterns;
-			}
+                projectFilterPatterns = project.config.filterPatterns;
+            }
 
-			var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
+            var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
 
-			projectFilterPatterns = projectFilterPatterns.split(',');
+            projectFilterPatterns = projectFilterPatterns.split(',');
 
-			var filterPatterns = _.unique(_.union(globalFilterPatterns, projectFilterPatterns));
+            var filterPatterns = _.unique(_.union(globalFilterPatterns, projectFilterPatterns));
 
-			var matchFilter = false;
+            var matchFilter = false;
 
-			_.each(filterPatterns, function (pattern) {
+            _.each(filterPatterns, function (pattern) {
 
-				pattern = pattern.trim();
+                pattern = pattern.trim();
 
-				if(pattern) {
+                if (pattern) {
 
-					if (file.indexOf(pattern) !== -1 || minimatch( path.relative(project.path, file), pattern ) || minimatch( path.basename(file), pattern ) ) {
+                    if (file.indexOf(pattern) !== -1 || minimatch(path.relative(project.path, file), pattern) || minimatch(path.basename(file), pattern)) {
 
-						matchFilter = true;
-					}
-				}
+                        matchFilter = true;
+                    }
+                }
 
-			});
+            });
 
-			return matchFilter;
+            return matchFilter;
 
-		}
+        }
 
-		/**
-		 * Function to add a new file to project
-		 * @param pid {string}  Project id
-		 * @param filePath {string}  Path to  file
+        /**
+         * Function to add a new file to project
+         * @param pid {string}  Project id
+         * @param filePath {string}  Path to  file
          * @param callback {function} Optional calback function to run after file addition is complete or fail.
-		 */
-		function addFile(pid, filePath, callback) {
+         */
+        function addFile(pid, filePath, callback) {
 
-            fs.exists(filePath, function(exists) {
+            fs.exists(filePath, function (exists) {
 
-                if(exists && fileTypes.isFileSupported(filePath) && fileTypes.getInternalType(filePath) !== "IMAGE" && !matchFileFilters(pid, filePath)) {
+                if (exists && fileTypes.isFileSupported(filePath) && fileTypes.getInternalType(filePath) !== "IMAGE" && !matchFileFilters(pid, filePath)) {
 
                     var fileId = _id(path.relative(getProjectById(pid).path, filePath));
 
@@ -283,17 +275,17 @@ prepros.factory('projectsManager',[
 
                     var fileExt = path.extname(filePath).toLowerCase();
 
-                    var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+                    var isSass = ( fileExt === '.scss' || fileExt === '.sass');
 
-                    if(!isSass) {
+                    if (!isSass) {
                         inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
                     }
 
                     if (!already && !inImports) {
 
-                        fileTypes.format(pid, fileId, filePath, getProjectById(pid).path, function(err, formattedFile) {
+                        fileTypes.format(pid, fileId, filePath, getProjectById(pid).path, function (err, formattedFile) {
 
-                            if(err) return callback(false, filePath);
+                            if (err) return callback(false, filePath);
 
                             getProjectById(pid).files[fileId] = formattedFile;
                             refreshFile(pid, fileId, callback);
@@ -302,18 +294,18 @@ prepros.factory('projectsManager',[
 
                     } else {
 
-                        if(callback) {
+                        if (callback) {
                             callback(false, filePath);
                         }
                     }
                 } else {
 
-                    if(callback) {
+                    if (callback) {
                         callback(false, filePath);
                     }
                 }
             });
-		}
+        }
 
         /**
          * @param pid {String} Project ID
@@ -321,21 +313,21 @@ prepros.factory('projectsManager',[
          * @param callback {Function} Optional callback to run after refresh is complete
          */
 
-		function refreshFile(pid, fileId, callback) {
+        function refreshFile(pid, fileId, callback) {
 
-			if(!_.isEmpty(getFileById(pid, fileId))) {
+            if (!_.isEmpty(getFileById(pid, fileId))) {
 
-				var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
+                var fPath = path.join(getProjectById(pid).path, getFileById(pid, fileId).input);
 
-                fileTypes.getImports(fPath, function(err, fileImports) {
+                fileTypes.getImports(fPath, function (err, fileImports) {
 
-                    if(err) {
+                    if (err) {
                         fileImports = [];
                     }
 
                     var oldImports = getFileImports(pid, fileId);
 
-                    _.each(fileImports, function(imp) {
+                    _.each(fileImports, function (imp) {
 
                         addImport(pid, fileId, imp);
 
@@ -343,7 +335,7 @@ prepros.factory('projectsManager',[
 
                     _.each(oldImports, function (imp) {
 
-                        var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
+                        var fullImpPath = path.join(getProjectById(pid).path, imp.path);
 
                         if (!_.contains(fileImports, fullImpPath)) {
 
@@ -353,141 +345,141 @@ prepros.factory('projectsManager',[
                         }
                     });
 
-                    if(callback) {
+                    if (callback) {
                         callback(true, fPath);
                     }
 
                 });
 
-			} else {
+            } else {
 
-                if(callback) {
+                if (callback) {
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         callback(false, fPath);
                     }, 0);
                 }
             }
-		}
+        }
 
-		/**
-		 * Resets the settings of a file to defaults
-		 * @param pid {string} Project id
-		 * @param id {string} File id
-		 */
+        /**
+         * Resets the settings of a file to defaults
+         * @param pid {string} Project id
+         * @param id {string} File id
+         */
 
-		//Function to remove a file
-		function removeFile(pid, id) {
+            //Function to remove a file
+        function removeFile(pid, id) {
 
-			if (!_.isEmpty(getProjectById(pid))) {
+            if (!_.isEmpty(getProjectById(pid))) {
 
-				delete getProjectFiles(pid)[id];
+                delete getProjectFiles(pid)[id];
 
-				//Remove file from imports parent list
-				removeParentFromAllImports(pid, id);
-			}
+                //Remove file from imports parent list
+                removeParentFromAllImports(pid, id);
+            }
 
-		}
+        }
 
-		//Function to remove file from import parent
-		function removeParentFromAllImports(pid, fid) {
+        //Function to remove file from import parent
+        function removeParentFromAllImports(pid, fid) {
 
-			_.each(getProjectImports(pid), function (imp) {
+            _.each(getProjectImports(pid), function (imp) {
 
-				removeImportParent(pid, imp.id, fid);
+                removeImportParent(pid, imp.id, fid);
 
-			});
+            });
 
-		}
+        }
 
-		//Remove parent from certain import
-		function removeImportParent(pid, impid, fid) {
+        //Remove parent from certain import
+        function removeImportParent(pid, impid, fid) {
 
-			var project = getProjectById(pid);
+            var project = getProjectById(pid);
 
-			var projectImports = project.imports;
+            var projectImports = project.imports;
 
-			var importedFile = _.findWhere(projectImports, {id: impid});
+            var importedFile = _.findWhere(projectImports, {id: impid});
 
-			importedFile.parents = _.without(importedFile.parents, fid);
+            importedFile.parents = _.without(importedFile.parents, fid);
 
-			//Remove import if parent list is empty
-			if(_.isEmpty(importedFile.parents)) {
-				removeImport(pid, impid);
-			}
-		}
+            //Remove import if parent list is empty
+            if (_.isEmpty(importedFile.parents)) {
+                removeImport(pid, impid);
+            }
+        }
 
-		//function to add imported file to import list
-		function addImport(pid, fid, importedPath) {
+        //function to add imported file to import list
+        function addImport(pid, fid, importedPath) {
 
-			//If @imported file is not in imports list create new entry otherwise add the file as parent
-			var projectImports = getProjectImports(pid);
+            //If @imported file is not in imports list create new entry otherwise add the file as parent
+            var projectImports = getProjectImports(pid);
 
-			var impid = _id(path.relative(getProjectById(pid).path, importedPath));
+            var impid = _id(path.relative(getProjectById(pid).path, importedPath));
 
-			if (impid in projectImports ) {
+            if (impid in projectImports) {
 
-				if (!_.contains(projectImports[impid].parents, fid)) {
+                if (!_.contains(projectImports[impid].parents, fid)) {
 
-					projectImports[impid].parents.push(fid);
-				}
+                    projectImports[impid].parents.push(fid);
+                }
 
-			} else {
+            } else {
 
-				getProjectById(pid).imports[impid] = {
-					id: impid,
-					pid: pid,
-					path: path.relative(getProjectById(pid).path, importedPath),
-					parents: [fid]
-				};
-			}
+                getProjectById(pid).imports[impid] = {
+                    id: impid,
+                    pid: pid,
+                    path: path.relative(getProjectById(pid).path, importedPath),
+                    parents: [fid]
+                };
+            }
 
-			var fileExt = path.extname(importedPath).toLowerCase();
+            var fileExt = path.extname(importedPath).toLowerCase();
 
-			var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+            var isSass = ( fileExt === '.scss' || fileExt === '.sass');
 
-			//Remove any file that is in files list and is imported by this file
-			if(!isSass) {
-				removeFile(pid, impid);
-			}
-		}
+            //Remove any file that is in files list and is imported by this file
+            if (!isSass) {
+                removeFile(pid, impid);
+            }
+        }
 
-		/**
-		 * Function to remove Import
-		 * @param pid {string} Project Id
-		 * @param impid {string} Import Id
-		 */
-		function removeImport(pid, impid) {
+        /**
+         * Function to remove Import
+         * @param pid {string} Project Id
+         * @param impid {string} Import Id
+         */
+        function removeImport(pid, impid) {
 
-			delete getProjectImports(pid)[impid];
-		}
+            delete getProjectImports(pid)[impid];
+        }
 
-		//Function that refreshes files in a project folder
-		function refreshProjectFiles(pid) {
+        //Function that refreshes files in a project folder
+        function refreshProjectFiles(pid) {
 
-			utils.showLoading();
+            utils.showLoading();
 
             var folder = getProjectById(pid).path;
 
-            fs.exists(folder, function(exists) {
+            fs.exists(folder, function (exists) {
 
-                if(exists) {
+                if (exists) {
 
                     var filesImportsImages = [];
 
-                    _.each(getProjectFiles(pid), function(file) {
+                    _.each(getProjectFiles(pid), function (file) {
 
                         filesImportsImages.push(file);
 
                     });
 
-                    _.each(getProjectImages(pid), function(file) {
+                    _.each(getProjectImages(pid), function (file) {
 
                         filesImportsImages.push(file);
 
                     });
 
-                    _.each(getProjectImports(pid), function(file) {
+                    _.each(getProjectImports(pid), function (file) {
 
                         filesImportsImages.push(file);
 
@@ -498,28 +490,27 @@ prepros.factory('projectsManager',[
 
                         var filePath;
 
-                        if(file.input) filePath = path.join(folder, file.input);
-                        if(file.path) filePath = path.join(folder, file.path);
+                        if (file.input) filePath = path.join(folder, file.input);
+                        if (file.path) filePath = path.join(folder, file.path);
 
                         //Remove if matches filter patterns or doesn't exist
                         if (matchFileFilters(pid, filePath)) {
 
-                            if(file.input) removeFile(pid, file.id);
-                            if(_.isArray(file.parents)) removeImport(pid, file.id);
+                            if (file.input) removeFile(pid, file.id);
+                            if (_.isArray(file.parents)) removeImport(pid, file.id);
                             else removeImage(pid, file.id);
-
 
 
                         } else {
 
-                            fs.exists(filePath, function(exists) {
+                            fs.exists(filePath, function (exists) {
 
-                                if(!exists) {
+                                if (!exists) {
 
-                                    $rootScope.$apply(function() {
+                                    $rootScope.$apply(function () {
 
-                                        if(file.input) removeFile(pid, file.id);
-                                        if(_.isArray(file.parents)) removeImport(pid, file.id);
+                                        if (file.input) removeFile(pid, file.id);
+                                        if (_.isArray(file.parents)) removeImport(pid, file.id);
                                         else removeImage(pid, file.id);
                                     });
                                 }
@@ -527,9 +518,9 @@ prepros.factory('projectsManager',[
                         }
                     });
 
-                    utils.readDirs(folder, function(err, files) {
+                    utils.readDirs(folder, function (err, files) {
 
-                        if(err) {
+                        if (err) {
 
                             notification.error('Error ! ', 'An error occurred while scanning files', err.message);
                             utils.hideLoading();
@@ -539,17 +530,17 @@ prepros.factory('projectsManager',[
                             var total = files.length;
 
                             //Hide loader if there are no files
-                            if(!total) {
+                            if (!total) {
                                 return utils.hideLoading();
                             }
 
 
-                            var hideIfFinished = function() {
+                            var hideIfFinished = function () {
 
                                 //Hide Loader if there are no files
-                                if(!total) {
-                                    setTimeout(function() {
-                                        $rootScope.$apply(function() {
+                                if (!total) {
+                                    setTimeout(function () {
+                                        $rootScope.$apply(function () {
                                             utils.hideLoading();
                                         });
                                     }, 200);
@@ -557,22 +548,22 @@ prepros.factory('projectsManager',[
 
                             };
 
-                            _.each(files, function(file) {
+                            _.each(files, function (file) {
 
-                                if(fileTypes.isFileSupported(file) && !matchFileFilters(pid, file)) {
+                                if (fileTypes.isFileSupported(file) && !matchFileFilters(pid, file)) {
 
                                     //Generate unique id for file
                                     var file_id = _id(path.relative(getProjectById(pid).path, file));
 
                                     var already = false;
 
-                                    if(fileTypes.getInternalType(file) === 'IMAGE') {
+                                    if (fileTypes.getInternalType(file) === 'IMAGE') {
 
                                         already = !_.isEmpty(getImageById(pid, file_id));
 
-                                        if(already) {
+                                        if (already) {
 
-                                            refreshImage(pid, file_id, function() {
+                                            refreshImage(pid, file_id, function () {
 
                                                 --total;
 
@@ -581,7 +572,7 @@ prepros.factory('projectsManager',[
 
                                         } else {
 
-                                            addImage(pid, file, function() {
+                                            addImage(pid, file, function () {
 
                                                 --total;
 
@@ -593,20 +584,20 @@ prepros.factory('projectsManager',[
 
                                     already = !_.isEmpty(getFileById(pid, file_id));
 
-                                    if(already) {
+                                    if (already) {
 
-                                        refreshFile(pid, file_id, function(complete, fp) {
+                                        refreshFile(pid, file_id, function (complete, fp) {
 
-                                            if(fp === file) --total;
+                                            if (fp === file) --total;
 
                                             hideIfFinished();
                                         });
 
                                     } else {
 
-                                        addFile(pid, file, function(complete, fp) {
+                                        addFile(pid, file, function (complete, fp) {
 
-                                            if(fp === file) --total;
+                                            if (fp === file) --total;
 
                                             hideIfFinished();
                                         });
@@ -623,36 +614,36 @@ prepros.factory('projectsManager',[
 
                 } else {
 
-                    $rootScope.$apply(function() {
+                    $rootScope.$apply(function () {
                         removeProject(pid);
                     });
 
                     utils.hideLoading();
                 }
             });
-		}
+        }
 
-		//Function to remove project
-		function removeProject(pid) {
+        //Function to remove project
+        function removeProject(pid) {
 
-			delete projects[pid];
-		}
+            delete projects[pid];
+        }
 
-		//Function to change file output path
-		function changeFileOutput(pid, id, newPath) {
+        //Function to change file output path
+        function changeFileOutput(pid, id, newPath) {
 
-			var file = getFileById(pid, id);
+            var file = getFileById(pid, id);
 
-			if(!_.isEmpty(file)) {
+            if (!_.isEmpty(file)) {
 
-				if (path.extname(path.basename(newPath)) === '') {
+                if (path.extname(path.basename(newPath)) === '') {
 
-					newPath = newPath + fileTypes.getCompiledExtension(file.input);
-				}
+                    newPath = newPath + fileTypes.getCompiledExtension(file.input);
+                }
 
-				file.customOutput = newPath;
-			}
-		}
+                file.customOutput = newPath;
+            }
+        }
 
 
         //function to get all project files
@@ -660,7 +651,7 @@ prepros.factory('projectsManager',[
 
             var project = getProjectById(pid);
 
-            if(!_.isEmpty(project)) {
+            if (!_.isEmpty(project)) {
 
                 return project.images;
             }
@@ -675,13 +666,15 @@ prepros.factory('projectsManager',[
 
             var id = _id(path.relative(project.path, filePath));
 
-            if(fileTypes.getInternalType(filePath !== 'IMAGE') || getProjectImages(pid)[id]) return setTimeout(function(){callback(false, filePath);}, 0);
+            if (fileTypes.getInternalType(filePath !== 'IMAGE') || getProjectImages(pid)[id]) return setTimeout(function () {
+                callback(false, filePath);
+            }, 0);
 
             var ext = path.extname(filePath).slice(1);
 
-            fs.stat(filePath, function(err, stat) {
+            fs.stat(filePath, function (err, stat) {
 
-                if(err) return callback(false, filePath);
+                if (err) return callback(false, filePath);
 
                 project.images[id] = {
 
@@ -706,22 +699,24 @@ prepros.factory('projectsManager',[
 
             var project = getProjectById(pid);
 
-            if(!project.images[imageId]) return setTimeout(function(){callback(false);}, 0);
+            if (!project.images[imageId]) return setTimeout(function () {
+                callback(false);
+            }, 0);
 
             var image = project.images[imageId];
 
             var imagePath = path.join(project.path, image.path);
 
-            fs.stat(imagePath, function(err, stat) {
+            fs.stat(imagePath, function (err, stat) {
 
-                if(err) {
+                if (err) {
 
                     removeImage(pid, imageId);
                     return callback(false, imagePath);
 
                 }
 
-                if(stat.size.toString() !== image.size.toString()) {
+                if (stat.size.toString() !== image.size.toString()) {
 
                     image.status = 'NOT_OPTIMIZED';
 
@@ -737,7 +732,7 @@ prepros.factory('projectsManager',[
 
             var images = getProjectImages(pid);
 
-            if(!_.isEmpty(images[fid])) {
+            if (!_.isEmpty(images[fid])) {
 
                 return images[fid];
             }
@@ -755,29 +750,29 @@ prepros.factory('projectsManager',[
 
         }
 
-		return {
-			projects: projects,
+        return {
+            projects: projects,
 
-			getProjectById: getProjectById,
-			getFileById: getFileById,
-			getImportById: getImportById,
+            getProjectById: getProjectById,
+            getFileById: getFileById,
+            getImportById: getImportById,
             getImageById: getImageById,
 
-			addProject: addProject,
-			addFile: addFile,
+            addProject: addProject,
+            addFile: addFile,
             addImage: addImage,
             refreshImage: refreshImage,
-			refreshFile: refreshFile,
+            refreshFile: refreshFile,
 
-			removeFile: removeFile,
-			removeProject: removeProject,
-			removeImport: removeImport,
+            removeFile: removeFile,
+            removeProject: removeProject,
+            removeImport: removeImport,
 
-			refreshProjectFiles: refreshProjectFiles,
-			getProjectFiles: getProjectFiles,
-			getProjectConfig: getProjectConfig,
-			changeFileOutput: changeFileOutput,
-			matchFilters: matchFileFilters
-		};
-	}
+            refreshProjectFiles: refreshProjectFiles,
+            getProjectFiles: getProjectFiles,
+            getProjectConfig: getProjectConfig,
+            changeFileOutput: changeFileOutput,
+            matchFilters: matchFileFilters
+        };
+    }
 ]);

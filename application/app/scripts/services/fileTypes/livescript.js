@@ -21,19 +21,19 @@ prepros.factory('livescript', [
         var livescript = require('LiveScript');
         var ugly = require('uglify-js');
 
-        var compile = function(file, project, callback) {
+        var compile = function (file, project, callback) {
 
             var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
             var options = {
                 bare: file.config.bare
             };
 
-            fs.readFile(input, 'utf8', function(err, data) {
+            fs.readFile(input, 'utf8', function (err, data) {
 
-                if(err) return callback(new Error('Unable to read source file\n' + err.message));
+                if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
                 try {
 
@@ -44,9 +44,9 @@ prepros.factory('livescript', [
                         javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
                     }
 
-                    fs.outputFile(output, javascript, function(err) {
+                    fs.outputFile(output, javascript, function (err) {
 
-                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
+                        if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
 
                         callback(null, input);
 
@@ -55,7 +55,7 @@ prepros.factory('livescript', [
 
                 } catch (e) {
 
-                    if(err) return callback(new Error(err.message + '\n' + input));
+                    if (err) return callback(new Error(err.message + '\n' + input));
                 }
             });
 

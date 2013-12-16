@@ -20,9 +20,9 @@ prepros.controller('AppOptionsCtrl', [
 
         $scope.config = config.getUserOptions();
 
-        $scope.$watch('config', function() {
+        $scope.$watch('config', function () {
 
-            if(!_.isEmpty($scope.config)) {
+            if (!_.isEmpty($scope.config)) {
 
                 config.saveUserOptions($scope.config);
 

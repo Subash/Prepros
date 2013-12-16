@@ -25,7 +25,7 @@ prepros.directive('popover', [
 
                     element.popover({
                         html: true,
-                        content : attrs.popover
+                        content: attrs.popover
                     });
 
                 });

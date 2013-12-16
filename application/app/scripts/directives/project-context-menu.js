@@ -14,13 +14,10 @@ prepros.directive('projectContextMenu', [
     '$rootScope',
     '$location',
 
-    function (
-        $rootScope,
-        $location
-    ) {
+    function ($rootScope, $location) {
 
         'use strict';
-        
+
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -48,8 +45,8 @@ prepros.directive('projectContextMenu', [
 
                 var watcherItem = new Prepros.gui.MenuItem({
                     label: 'Enable/Disable File Watcher',
-                    click: function() {
-                        scope.$apply(function() {
+                    click: function () {
+                        scope.$apply(function () {
                             scope.toggleFileWatcher(pid);
                         });
                     }
@@ -151,7 +148,7 @@ prepros.directive('projectContextMenu', [
 
                     menu.remove(watcherItem);
 
-                    var watcherLabel = ( (scope.projects[pid].config.watch)? 'Disable': 'Enable' ) + ' File Watcher';
+                    var watcherLabel = ( (scope.projects[pid].config.watch) ? 'Disable' : 'Enable' ) + ' File Watcher';
 
                     watcherItem = new Prepros.gui.MenuItem({
                         label: watcherLabel,

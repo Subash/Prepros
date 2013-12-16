@@ -11,35 +11,35 @@
 //Title Bar controls
 prepros.controller('TitlebarCtrl', [
 
-	'$scope',
+    '$scope',
 
-	function ($scope) {
+    function ($scope) {
 
-		'use strict';
+        'use strict';
 
-		//Minimize to tray by hiding the window
-		$scope.minimizeToTray = function() {
-			require('nw.gui').Window.get().hide();
-		};
+        //Minimize to tray by hiding the window
+        $scope.minimizeToTray = function () {
+            require('nw.gui').Window.get().hide();
+        };
 
-		//Minimize app
-		$scope.minimize = function () {
-			require('nw.gui').Window.get().minimize();
-		};
+        //Minimize app
+        $scope.minimize = function () {
+            require('nw.gui').Window.get().minimize();
+        };
 
-		//Close App
-		$scope.close = function () {
-			require('nw.gui').App.closeAllWindows();
-		};
+        //Close App
+        $scope.close = function () {
+            require('nw.gui').App.closeAllWindows();
+        };
 
-		$scope.maximizeUnmaximize = function() {
+        $scope.maximizeUnmaximize = function () {
 
-            if(Prepros.Window.x <= 0 && Prepros.Window.height >= window.screen.availHeight) {
-                    Prepros.Window.unmaximize();
+            if (Prepros.Window.x <= 0 && Prepros.Window.height >= window.screen.availHeight) {
+                Prepros.Window.unmaximize();
             } else {
                 Prepros.Window.maximize();
             }
-		};
-	}
+        };
+    }
 
 ]);

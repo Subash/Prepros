@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true, curly: false*/
 /*global prepros, $, angular, _*/
 
-prepros.factory("compiler",[
+prepros.factory("compiler", [
 
     '$filter',
     '$rootScope',
@@ -18,15 +18,7 @@ prepros.factory("compiler",[
     'log',
     'liveServer',
 
-    function (
-        $filter,
-        $rootScope,
-        projectsManager,
-        fileTypes,
-        notification,
-        log,
-        liveServer
-    ) {
+    function ($filter, $rootScope, projectsManager, fileTypes, notification, log, liveServer) {
 
         "use strict";
 
@@ -38,13 +30,13 @@ prepros.factory("compiler",[
         //function to compile
         function compile(pid, fid) {
 
-            var queueId =  fid+pid;
+            var queueId = fid + pid;
 
             if (!_.contains(compileQueue, queueId)) {
 
                 var file = projectsManager.getFileById(pid, fid);
 
-                if(_.isEmpty(file)) {
+                if (_.isEmpty(file)) {
                     return;
                 }
 
@@ -52,13 +44,13 @@ prepros.factory("compiler",[
 
                 var project = projectsManager.getProjectById(pid);
 
-                fileTypes.compile(file, project, function(err) {
+                fileTypes.compile(file, project, function (err) {
 
                     compileQueue = _.without(compileQueue, queueId);
 
-                    if(err) {
+                    if (err) {
 
-                        $rootScope.$apply(function() {
+                        $rootScope.$apply(function () {
 
                             log.add({
                                 type: 'error',
@@ -72,7 +64,7 @@ prepros.factory("compiler",[
                         return notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
                     }
 
-                    $rootScope.$apply(function() {
+                    $rootScope.$apply(function () {
 
                         log.add({
                             type: 'success',
@@ -85,11 +77,11 @@ prepros.factory("compiler",[
 
                     notification.success('Compilation Successful', 'Successfully Compiled ' + file.name);
 
-                    if(project.config.liveRefresh) {
+                    if (project.config.liveRefresh) {
 
-                        var fullPath = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+                        var fullPath = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-                        liveServer.refresh(project.id,fullPath , project.config.liveRefreshDelay);
+                        liveServer.refresh(project.id, fullPath, project.config.liveRefreshDelay);
                     }
 
                 });

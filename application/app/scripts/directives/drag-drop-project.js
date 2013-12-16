@@ -39,9 +39,9 @@ prepros.directive('dragDropProject', [
                     //Iterate through each file/folder
                     _.each(files, function (file) {
 
-                        fs.stat(file.path, function(err, stats) {
+                        fs.stat(file.path, function (err, stats) {
 
-                            if(err) return;
+                            if (err) return;
 
                             //Check if it is a directory and not a drive
                             if (stats.isDirectory() && path.dirname(file.path) !== file.path) {

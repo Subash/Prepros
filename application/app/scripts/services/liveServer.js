@@ -36,7 +36,7 @@ prepros.factory('liveServer', [
         /**
          * Prepros middleware; this injects prepros.js to the end of every html page
          */
-        var _preprosMiddleware = function() {
+        var _preprosMiddleware = function () {
 
             return function (req, res, next) {
 
@@ -67,8 +67,8 @@ prepros.factory('liveServer', [
 
                         var snippet = '<script src="/prepros.js"></script>';
 
-                        if(/<\/(:?\s|)body(:?\s|)>/i.test(body)) {
-                            body =  body.replace(/<\/(:?\s|)body(:?\s|)>/i, (snippet + '\n</body>'));
+                        if (/<\/(:?\s|)body(:?\s|)>/i.test(body)) {
+                            body = body.replace(/<\/(:?\s|)body(:?\s|)>/i, (snippet + '\n</body>'));
                         } else {
                             body = body + snippet;
                         }
@@ -104,16 +104,16 @@ prepros.factory('liveServer', [
          * @private
          */
 
-        var _preprosProxyMiddleware = function(project) {
+        var _preprosProxyMiddleware = function (project) {
 
-            return function(req, res, next) {
+            return function (req, res, next) {
 
-                if(!Prepros.IS_PRO && project.config.useCustomServer) {
+                if (!Prepros.IS_PRO && project.config.useCustomServer) {
 
                     res.setHeader('Content-type', 'text/html');
                     res.end('<h4 style="margin: auto">Testing and refreshing custom server from network device and refreshing other browsers except Google Chrome is a Prepros Pro feature. If you are seeing this page on non network device please open your custom server url directly in Google Chrome. </h3>');
 
-                } else  {
+                } else {
 
                     next();
                 }
@@ -121,11 +121,11 @@ prepros.factory('liveServer', [
         };
 
         /*
-        Serves project specific prepros.js file
+         Serves project specific prepros.js file
          */
-        var _preprosJsMiddleware = function(project) {
+        var _preprosJsMiddleware = function (project) {
 
-            return function(req, res, next) {
+            return function (req, res, next) {
 
 
                 var src = 'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port + "";';
@@ -139,9 +139,9 @@ prepros.factory('liveServer', [
                     '} catch(e) {}' +
                     '})();';
 
-                if(!project && 'pid' in req.query) {
+                if (!project && 'pid' in req.query) {
 
-                    if(req.query.pid in projectsBeingServed) {
+                    if (req.query.pid in projectsBeingServed) {
 
 
                         var port = projectsBeingServed[req.query.pid].port;
@@ -162,11 +162,11 @@ prepros.factory('liveServer', [
         };
 
         /*
-        Livereload.js middleware
+         Livereload.js middleware
          */
-        var _liveReloadMiddleware = function() {
+        var _liveReloadMiddleware = function () {
 
-            return function(req, res, next) {
+            return function (req, res, next) {
 
                 res.sendfile(config.basePath + '/vendor/livereload/livereload.js');
 
@@ -176,7 +176,7 @@ prepros.factory('liveServer', [
 
 
         /*
-        Main Server
+         Main Server
          */
         (function startMainServer() {
 
@@ -227,10 +227,8 @@ prepros.factory('liveServer', [
         })();
 
 
-
-
         /*
-        Start serving projects
+         Start serving projects
          */
         function startServing(projects) {
 
@@ -238,12 +236,12 @@ prepros.factory('liveServer', [
 
             _.each(projects, function (project) {
 
-                if(!(project.id in projectsBeingServed)) {
+                if (!(project.id in projectsBeingServed)) {
 
                     portfinder.getPort(function (err, port) {
 
                         var app = express();
-                        var server = app.listen(port, function() {
+                        var server = app.listen(port, function () {
 
                             var port = server.address().port;
 
@@ -288,7 +286,7 @@ prepros.factory('liveServer', [
                     projectsBeingServed[project.id].name = project.name;
                 }
 
-                if(project.config.useCustomServer) {
+                if (project.config.useCustomServer) {
 
                     var parsed = url.parse(project.config.customServerUrl);
 
@@ -296,7 +294,7 @@ prepros.factory('liveServer', [
                 }
             });
 
-            if('broadcast' in wsServer) {
+            if ('broadcast' in wsServer) {
 
                 //Send data to browser extensions
                 wsServer.broadcast(angular.toJson({urls: urls}));
@@ -305,7 +303,7 @@ prepros.factory('liveServer', [
 
 
         /*
-        Function to refresh
+         Function to refresh
          */
         function refresh(pid, file, delay) {
 
@@ -317,9 +315,9 @@ prepros.factory('liveServer', [
                 }
             ]);
 
-            if(parseInt(delay, 10)) {
+            if (parseInt(delay, 10)) {
 
-                setTimeout(function() {
+                setTimeout(function () {
 
                     projectsBeingServed[pid].lServer.broadcast(data);
 
@@ -333,11 +331,11 @@ prepros.factory('liveServer', [
 
 
         /*
-        Get live preview url
+         Get live preview url
          */
         function getLiveUrl(pid) {
 
-            if(pid in projectsBeingServed) {
+            if (pid in projectsBeingServed) {
 
                 var port = projectsBeingServed[pid].port;
 
