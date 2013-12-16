@@ -6,7 +6,7 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros*/
+/*global prepros, Prepros*/
 
 prepros.factory('pro', [
 

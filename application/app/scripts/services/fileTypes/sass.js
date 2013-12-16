@@ -7,7 +7,7 @@
 
 
 /*jshint browser: true, node: true, curly: false*/
-/*global prepros*/
+/*global prepros, Prepros*/
 
 prepros.factory('sass', [
 

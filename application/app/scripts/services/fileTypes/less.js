@@ -77,9 +77,11 @@ prepros.factory('less', [
 
                     if (err) return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
 
+                    var css;
+
                     try {
 
-                        var css = tree.toCSS(options); //Fuck you, can't you just gimme callback from parser
+                        css = tree.toCSS(options); //Fuck you, can't you just gimme callback from parser
 
                     } catch (err) {
 
