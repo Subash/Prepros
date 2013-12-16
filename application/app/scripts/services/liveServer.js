@@ -23,7 +23,6 @@ prepros.factory('liveServer', [
         var urls = [];
         var portfinder = require('portfinder');
         var url = require('url');
-        var request = require('request');
         var path = require('path');
         var coffeescript = require('coffee-script');
         var wsServer = {}; //Global main websocket server object
