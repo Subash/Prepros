@@ -107,7 +107,7 @@
 
             var scripts = [];
 
-            if (Prepros.IS_PRO && !Prepros.DEBUG) {
+            if (!Prepros.DEBUG) {
 
                 scripts.push('scripts/prepros.min.js');
 
