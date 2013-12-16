@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>Notification</title>
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <script>
+        function NotificationCtrl($scope) {
+
+            var nwin = require('nw.gui').Window.get();
+
+            $scope.notification = {};
+
+            var timer = setTimeout(function () {
+            }, 0);
+
+            var defTime = 3000;
+
+            nwin.on('updateNotification', function (data) {
+
+                nwin.hide();
+
+                $scope.$apply(function () {
+
+                    $scope.notification = data;
+
+                    window.clearTimeout(timer);
+
+                    defTime = parseInt(data.time, 10);
+
+                    timer = setTimeout(function () {
+                        nwin.hide();
+                    }, defTime);
+                });
+
+                setTimeout(function () {
+
+                    var elem = $('.notif-container');
+
+                    var height = elem.height() + 10;
+
+                    nwin.height = height;
+
+                    if (process.platform === 'win32') {
+                        nwin.y = (window.screen.availHeight - 5) - height;
+                    }
+
+                    if (typeof nwin.showInactive === 'function') {
+                        nwin.showInactive();
+                    } else {
+                        nwin.show();
+                        nwin.blur();
+                    }
+
+                }, 75);
+            });
+
+            $(document).ready(function () {
+
+                nwin.setAlwaysOnTop(true);
+
+                var $win = $(window);
+
+                //Hide window on right click
+                $win.on('contextmenu', function () {
+                    nwin.hide();
+                });
+
+                $win.on('mouseover', function () {
+                    window.clearTimeout(timer);
+                });
+
+                $win.on('mouseout', function () {
+                    timer = setTimeout(function () {
+                        nwin.hide();
+                    }, defTime);
+                })
+
+            });
+
+            $scope.openLog = function () {
+                nwin.emit('showLog');
+                nwin.hide();
+            };
+
+            $scope.close = function (e) {
+                e.stopPropagation();
+                nwin.hide();
+            };
+        }
+    </script>
+</head>
+<body class="notif-window">
+
+    <div ng-controller="NotificationCtrl" ng-click="openLog()">
+
+        <div class="notif-container {{notification.type}}">
+
+            <span class="icon-close notif-close" ng-click="close($event)"></span>
+
+            <div class="notif-header">
+
+                <div class="notif-icon">
+                    <i ng-class="{'icon-smiley' : notification.type == 'success', 'icon-sad' : notification.type == 'error'}"></i>
+                </div>
+
+                <div class="notif-info">
+                    <h3>{{notification.name}}</h3>
+
+                    <p>{{notification.message}}</p>
+                </div>
+
+            </div>
+
+            <pre ng-if="notification.type == 'error' && notification.details ">{{notification.details}}</pre>
+
+        </div>
+    </div>
+</body>
+</html>

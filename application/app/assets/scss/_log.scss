@@ -1,41 +1,71 @@
-.logs {
-  margin-right: 10px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 490px;
-  .log {
-    padding: 15px;
-    margin-bottom: 10px;
-    -webkit-user-select: text;
+.app-log {
 
-    .name {
-      display: block;
-      margin-bottom: 15px;
-    }
+	position: relative;
+	
+	.app-log__clear-button {
+		position: fixed;
+		right: 35px;
+		top: 60px;
 
-    pre {
-      color: #888;
-    }
+	}
 
-    &.error {
-      background: rgba(red, .15);
-      .name {
-        color: rgba(red, .4);
-      }
-    }
-    &.success {
-      background: rgba(green, .15);
-      .name {
-        color: rgba(green, .4);
-      }
-    }
-    &:last-child {
-      margin: 0 5px 0 0;
-      padding: 15px 15px ;
-    }
-  }
+	.app-log__no-logs {
+		.app-log__no-logs__icon {
 
-  .clear-log {
-    margin: 10px 10px 0 0;
-  }
+			font-size: 12vw;
+			display: block;
+			margin: auto;
+			text-align: center;
+			margin-top: 25vh;
+			margin-bottom: 20px;
+			transition: all .5s;
+
+		}
+
+		.app-log__no-logs__message{
+			font-size: 2.2vw;
+			font-weight: 200;
+			text-align: center;
+			transition: all .5s;
+
+		}
+	}
+
+	.app-log__entry {
+		margin-bottom: 10px;
+		padding: 10px;
+
+		.app-log__entry__title {
+			margin-bottom: 10px;
+		}
+
+		.app-log__entry__message {
+			margin-bottom: 10px;
+		}
+
+		.app-log__entry__details {
+			pre {
+				border-radius: 0;
+				border: none;
+				user-select: all;
+				background: #FFF;
+				color: #888;
+			}
+			margin-bottom: 10px;
+		}
+
+		&.app-log__entry--error {
+			background: rgba(red, .15);
+			.name {
+				color: rgba(red, .4);
+			}
+		}
+		&.app-log__entry--success {
+			background: rgba(green, .15);
+			.name {
+				color: rgba(green, .4);
+			}
+		}
+	}
+
 }

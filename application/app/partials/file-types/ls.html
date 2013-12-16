@@ -1,0 +1,14 @@
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.bare">
+    <span>Bare</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.uglify">
+    <span>Uglify</span>
+</label>
+
+<label ng-if="selectedFile.config.uglify">
+    <input type="checkbox" ng-model="selectedFile.config.mangle">
+    <span>Mangle Variable Names</span>
+</label>

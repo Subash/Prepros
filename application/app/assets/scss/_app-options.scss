@@ -1,0 +1,120 @@
+.app-options {
+	position: relative;
+	height: 100%;
+    margin-left: 10px; //Spacing
+
+	.app-options___title {
+
+		display: block;
+		height: 50px;
+		margin-bottom: 25px;
+		background: #fff;
+		width: 100%;
+		position: relative;
+
+		h2 {
+			//This is the fucking worst piece of CSS I have ever written
+			font-weight: 200;
+			position: fixed;
+			height: 60px;
+			top: 30px;
+			padding-top: 20px;
+			width: calc(100% - 275px);
+			background: #fff;
+		}
+
+
+	}
+
+	.app-options__inner {
+		display: flex;
+	}
+
+	
+	.app-options__nav {
+		min-width: 200px;
+		width: 25%;
+        position: relative;
+
+        .app-options__nav__inner {
+            position: fixed;
+        }
+
+		.app-options__nav__link {
+			display: block;
+			height: 25px;
+			line-height: 25px;
+			margin-bottom: 8px;
+			font-size: 100%;
+			padding-left: 15px;
+
+			&.app-options__nav__link--active {
+				border-left: 5px solid #777;
+				padding-left: 10px;
+			}
+		}
+	}
+
+	.app-option__pannel {
+		flex: 1;
+
+		.app-option__pannel__title {
+			font-weight: 200;
+			margin-top: 0;
+			padding-top: 0;
+			padding-bottom: 5px;
+			margin-bottom: 20px;
+			border-bottom: 1px solid rgba(#cfcfcf, .5);
+			max-width: 400px;
+
+          	&.app-option__pannel__title--small {
+			  font-size: 130%;
+			  font-weight: 200;
+        	}
+		}
+
+        .app-option__pannel__title--small {
+            font-size: 130%;
+            font-weight: 200;
+        }
+
+		.app-option__pannel__label {
+
+			display: block;
+			font-weight: inherit;
+			margin-bottom: 15px;
+
+			.app-option__pannel__label__text--block {
+				display: block;
+				margin-bottom: 3px;
+			}
+
+			.app-option__pannel__input {
+				color: #888;
+			}
+
+			.app-option__pannel__input[type="text"], .app-option__pannel__input[type="password"] {
+				display: block;
+				width: 100%;
+				max-width: 300px;
+			}
+
+            select.app-option__pannel__input {
+                display: block;
+                width: 100%;
+                max-width: 300px;
+                padding: 5px 10px;
+            }
+
+            textarea.app-option__pannel__input {
+                display: block;
+                width: 100%;
+                max-width: 300px;
+                padding: 5px 10px;
+            }
+
+			.app-option__pannel__input[type="checkbox"] {
+			}
+		}
+	}
+}

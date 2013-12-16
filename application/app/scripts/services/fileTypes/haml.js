@@ -5,18 +5,15 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('haml',[
 
     'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function (config, $filter) {
 
         'use strict';
 
@@ -24,48 +21,20 @@ prepros.factory('haml',[
             path = require('path'),
             cp = require('child_process');
 
-        var format = function (pid, fid, filePath, projectPath) {
 
-            //File name
-            var name = path.basename(filePath);
+        var compile = function (file, project, callback) {
 
-            // Output path
-            var output = filePath.replace(/\.haml/gi, config.getUserOptions().htmlExtension);
+            var input = path.resolve(project.path, file.input);
 
-            var pathRegx = /\\haml\\|\/haml\//gi;
-
-            //Find output path; save to /html folder if file is in /haml folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Haml',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().haml
-            };
-        };
-
-
-        var compile = function (file, successCall, errorCall) {
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
             var args = config.ruby.getGem('haml');
 
             //Input and output
-            args.push(file.input, file.output);
+            args.push(input, output);
 
             //Load path for @imports
-            args.push('--load-path', path.dirname(file.input));
+            args.push('--load-path', path.dirname(input));
 
             //Output format
             args.push('--format', file.config.format);
@@ -78,40 +47,42 @@ prepros.factory('haml',[
                 args.push('--double-quote-attributes');
             }
 
-            fs.mkdirsSync(path.dirname(file.output));
+            fs.mkdirs(path.dirname(output), function(err) {
 
-            //Start a child process to compile the file
-            var rubyProcess = cp.spawn(config.ruby.getExec('haml'), args);
+                if(err) return callback(err);
 
-            rubyProcess.once('error', function (e) {
-                errorCall('Unable to execute ruby —error ' + e.message);
-            });
+                //Start a child process to compile the file
+                var rubyProcess = cp.spawn(config.ruby.getExec('haml'), args);
 
-            var compileErr = false;
+                rubyProcess.once('error', function (e) {
+                    callback(new Error( 'Unable to execute ruby —error ' + e.message));
+                });
 
-            //If there is a compilation error
-            rubyProcess.stderr.once('data', function (data) {
+                var compileErr = false;
 
-                compileErr = true;
+                //If there is a compilation error
+                rubyProcess.stderr.on('data', function (data) {
 
-                errorCall(data.toString() + "\n" + file.input);
+                    compileErr = true;
 
-            });
+                    callback(new Error(data.toString() + "\n" + input));
 
-            //Success if there is no error
-            rubyProcess.once('exit', function () {
-                if (!compileErr) {
+                });
 
-                    successCall(file.input);
+                //Success if there is no error
+                rubyProcess.once('exit', function () {
+
+                    rubyProcess.removeAllListeners();
+
+                    if (!compileErr) callback(null, input);
 
                     rubyProcess = null;
+                });
 
-                }
             });
         };
 
         return {
-            format: format,
             compile: compile
         };
     }

@@ -1,0 +1,70 @@
+<div class="files-list images-list">
+
+	<div class="files__no-files" ng-if="selectedProjectImages.length == 0">
+
+		<i class="files__no-files__icon icon-images"></i>
+		<h1 class="files__no-files__message">No images. Hit F5 to refresh.</h1>
+
+	</div>
+
+	<a ng-repeat="image in selectedProjectImages"
+	   ng-href="#/images/{{image.pid}}/{{image.id}}"
+	   class="image-item"
+	   ng-class="{'image-item--active' : image.id == selectedImage.id || multiSelect.images[image.id]}"
+	   ng-dblclick="openImage(image.pid, image.id)"
+	   image-context-menu="image"
+	   ctrl-click="addMultiSelectImage(image.pid, image.id)"
+	   draggable="false" >
+
+		<div class="image-item__thumbnail">
+			<span>{{image.type}}</span>
+		</div>
+
+		<div>{{image.path | prettyPath}}</div>
+
+		<span class="image-item__indicator" ng-class="">
+			<i class="icon-checkmark success" ng-if="image.status == 'OPTIMIZED'"  tooltip="Successfully Optimized"></i>
+			<i class="icon-close error" ng-if="image.status == 'FAILED'" tooltip="Failed To Optimize Image"></i>
+			<i class="icon-spinner loading" ng-if="image.status == 'OPTIMIZING'" tooltip="Optimizing Image"></i>
+		</span>
+
+	</a>
+
+</div>
+
+
+<div class="file-options image-options" ng-if="selectedImage.id">
+
+	<h3 class="file-options__type">{{selectedImage.type}}</h3>
+
+	<div class="file-options__name">{{selectedImage.name}}</div>
+
+	<div class="image-options__thumbnail" ng-click="openImage(selectedImage.pid, selectedImage.id)">
+
+		<img ng-src="{{selectedProject.path + '/' + selectedImage.path}}" width="auto" height="auto">
+
+	</div>
+
+	<div class="image-detail">
+		<span class="image-detail__title">Original Size</span>
+		<span class="image-detail__info"> {{selectedImage.initialSize | size}}</span>
+	</div>
+
+	<div class="image-detail">
+		<span class="image-detail__title">New size : </span>
+		<span class="image-detail__info">{{selectedImage.size | size}}</span>
+	</div>
+
+	<div class="image-detail">
+		<span class="image-detail__title">Saving</span>
+		<span class="image-detail__info">{{ (selectedImage.initialSize - selectedImage.size) | size }}</span>
+	</div>
+
+	<div class="image-detail">
+		<span class="image-detail__title">Percentage</span>
+		<span class="image-detail__info">{{( ( (selectedImage.initialSize - selectedImage.size)/selectedImage.initialSize) * 100 ).toFixed(2)}}%</span>
+	</div>
+
+	<button class="btn btn-primary file-options__compile-button" ng-click="optimizeImage(selectedImage.pid, selectedImage.id)">Optimize</button>
+
+</div>

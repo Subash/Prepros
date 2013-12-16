@@ -5,71 +5,67 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros,  _, angular*/
 
 //Storage
 prepros.factory('projectsManager',[
 
-    '$filter',
-    '$location',
-    '$rootScope',
-    'config',
-    'fileTypes',
-    'notification',
-    'storage',
-    'utils',
+	'$location',
+	'$rootScope',
+	'config',
+	'fileTypes',
+	'notification',
+	'storage',
+	'utils',
 
-    function (
-        $filter,
-        $location,
-        $rootScope,
-        config,
-        fileTypes,
-        notification,
-        storage,
-        utils
-    ) {
+	function (
+		$location,
+		$rootScope,
+		config,
+		fileTypes,
+		notification,
+		storage,
+		utils
+	) {
 
-        'use strict';
+		'use strict';
 
-        var fs = require('fs-extra');
-        var path = require('path');
-        var _id = utils.id;
-        var minimatch = require('minimatch');
+		var fs = require('fs-extra');
+		var path = require('path');
+		var _id = utils.id;
+		var minimatch = require('minimatch');
 
-        var projects = storage.get();
+		var projects = storage.get();
 
-        var _broadCast = function () {
-            $rootScope.$broadcast('dataChange', {projects: projects});
-        };
+		//Function to add new project
+		function addProject(folder) {
 
-        //Function to add new project
-        function addProject(folder) {
+			//Check if folder already exists in project list
+			var already = false;
 
-            //Check if folder already exists in project list
+			_.each(projects, function(project) {
 
-            var already = false;
+				if(!path.relative(project.path, folder)) {
+					already = true;
+				}
 
-            _.each(projects, function(project) {
+			});
 
-                if(!path.relative(project.path, folder)) {
-                    already = true;
-                }
+			var project_id = _id(new Date().toISOString() + folder);
 
-            });
+			//If project doesn't exist
+			if (!already) {
 
-            var project_id = _id(new Date().toISOString() + folder);
-
-            //If project doesn't exist
-            if (!already) {
-
+			    //Project to push
                 var project = {
                     id: project_id,
+                    cfgVersion: 1, //It's internal configuration version, only change when something is drastically changed in configs
                     name: path.basename(folder),
                     path: folder,
-                    files: [],
-                    imports: [],
+                    files: {},
+                    imports: {},
+                    images: {},
                     config: {
                         watch: true,
                         liveRefresh: true,
@@ -80,471 +76,708 @@ prepros.factory('projectsManager',[
                         cssPath: config.getUserOptions().cssPath,
                         jsPath: config.getUserOptions().jsPath,
                         htmlPath: config.getUserOptions().htmlPath,
-                        jsMinPath: config.getUserOptions().jsMinPath,
-                        autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers
+                        minJsPath: config.getUserOptions().minJsPath,
+                        htmlExtension: config.getUserOptions().htmlExtension,
+                        cssPathType: config.getUserOptions().cssPathType,
+                        htmlPathType: config.getUserOptions().htmlPathType,
+                        jsPathType: config.getUserOptions().jsPathType,
+                        minJsPathType: config.getUserOptions().minJsPathType,
+                        htmlTypes: config.getUserOptions().htmlTypes,
+                        cssTypes: config.getUserOptions().cssTypes,
+                        jsTypes: config.getUserOptions().jsTypes,
+                        cssPreprocessorPath: config.getUserOptions().cssPreprocessorPath,
+                        htmlPreprocessorPath: config.getUserOptions().htmlPreprocessorPath,
+                        jsPreprocessorPath: config.getUserOptions().jsPreprocessorPath,
+                        minJsPreprocessorPath: config.getUserOptions().minJsPreprocessorPath,
+                        autoprefixerBrowsers: config.getUserOptions().autoprefixerBrowsers,
+                        ftpHost: '',
+                        ftpPort: '21',
+                        ftpRemotePath: '',
+                        ftpUsername: '',
+                        ftpPassword: '',
+                        ftpIgnorePreprocessorFiles: true,
+                        ftpType: 'FTP', //FTP, SFTP
+                        ftpExcludePatterns: ''
                     }
                 };
-
-                //Push project to projects list
-                projects.push(project);
-
-                refreshProjectFiles(project.id);
-
-                //Redirect to newly added project
-                $location.path('/files/' + project.id);
-
-                _broadCast();
-            }
-        }
-
-        //Function to get project by it's id
-        function getProjectById(id) {
-
-            var project = _.findWhere(projects, {id: id});
-
-            if(!_.isEmpty(project)) {
-                return project;
             }
 
-            return {};
-        }
+            //Push project to projects list
+            projects[project.id] = project;
 
-        //function to get all project files
-        function getProjectFiles(pid) {
+            refreshProjectFiles(project.id);
 
-            var project = getProjectById(pid);
+            //Redirect to newly added project
+            $location.path('/files/' + project.id);
+		}
 
-            if(!_.isEmpty(project)) {
-                return project.files;
-            }
+		//Function to get project by it's id
+		function getProjectById(id) {
 
-            return [];
-        }
+			if( !_.isEmpty(projects[id]) ) {
 
-        //function to get all project imports
-        function getProjectImports(pid) {
+				return projects[id];
+			}
 
-            var project = getProjectById(pid);
+			return {};
+		}
 
-            if(!_.isEmpty(project)) {
-                return project.imports;
-            }
+		//function to get all project files
+		function getProjectFiles(pid) {
 
-            return [];
-        }
+			var project = getProjectById(pid);
 
-        /**
-         * Function to get import By Id
-         * @param pid {string} Project Id
-         * @param id  {string} Import Id
-         */
+			if(!_.isEmpty(project)) {
 
-        function getImportById(pid, id) {
+				return project.files;
+			}
 
-            var imp = _.findWhere(getProjectImports(pid), {id: id});
+			return {};
+		}
 
-            if(!_.isEmpty(imp)) {
-                return imp;
-            }
+		//function to get all project imports
+		function getProjectImports(pid) {
 
-            return {};
-        }
+			var project = getProjectById(pid);
 
-        /**
-         * Function to get file By Id
-         * @param pid {string} Project Id
-         * @param fid  {string} File Id
-         */
+			if(!_.isEmpty(project)) {
 
-        function getFileById(pid, fid) {
+				return project.imports;
+			}
 
-            var imp = _.findWhere(getProjectFiles(pid), {id: fid});
+			return {};
+		}
 
-            if(!_.isEmpty(imp)) {
-                return imp;
-            }
+		/**
+		 * Function to get import By Id
+		 * @param pid {string} Project Id
+		 * @param id  {string} Import Id
+		 */
 
-            return {};
-        }
+		function getImportById(pid, id) {
 
-        //Function to get current Project config
-        function getProjectConfig(pid) {
+			var imps = getProjectImports(pid);
 
-            var project = getProjectById(pid);
+			if(!_.isEmpty(imps[id])) {
 
-            if(_.isEmpty(project)) {
-                return project.config;
-            }
+				return imps[id];
+			}
 
-            return {};
-        }
+			return {};
+		}
 
-        //Function to get file imports in imports list
-        function getFileImports(pid, fid) {
+		/**
+		 * Function to get file By Id
+		 * @param pid {string} Project Id
+		 * @param fid  {string} File Id
+		 */
 
-            var imports = getProjectImports(pid);
+		function getFileById(pid, fid) {
 
-            if(!_.isEmpty(imports)) {
+			var files = getProjectFiles(pid);
 
-                return _.filter(imports, function (im) {
-                    return _.contains(im.parents, fid);
-                });
-            }
+			if(!_.isEmpty(files[fid])) {
 
-            return [];
-        }
+				return files[fid];
+			}
 
-        //Function to match files against global and project specific filters
-        function matchFileFilters(pid, file) {
+			return {};
+		}
 
-            var projectFilterPatterns = '';
+		//Function to get current Project config
+		function getProjectConfig(pid) {
 
-            var project = getProjectById(pid);
+			var project = getProjectById(pid);
 
-            if (project.config.filterPatterns) {
+			if(!_.isEmpty(project)) {
 
-                projectFilterPatterns = project.config.filterPatterns;
-            }
+				return project.config;
+			}
 
-            var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
+			return {};
+		}
 
-            projectFilterPatterns = projectFilterPatterns.split(',');
+		//Function to get file imports in imports list
+		function getFileImports(pid, fid) {
 
-            var filterPatterns = _.unique(_.union(globalFilterPatterns, projectFilterPatterns));
+			var allImports = getProjectImports(pid);
 
-            var matchFilter = false;
+			if(!_.isEmpty(allImports)) {
 
-            _.each(filterPatterns, function (pattern) {
+				var fileImports = {};
 
-                pattern = pattern.trim();
+				_.each(allImports, function(imp) {
 
-                if(pattern) {
+					if( _.contains(imp.parents, fid) ) {
 
-                    if (file.indexOf(pattern) !== -1 || minimatch( path.relative(project.path, file), pattern ) ) {
+						fileImports[imp.id] = imp;
 
-                        matchFilter = true;
+					}
+
+				});
+
+				return fileImports;
+			}
+
+			return {};
+		}
+
+		//Function to match files against global and project specific filters
+		function matchFileFilters(pid, file) {
+
+			var projectFilterPatterns = '';
+
+			var project = getProjectById(pid);
+
+			if(_.isEmpty(project)) return true;
+
+			if (project.config.filterPatterns) {
+
+				projectFilterPatterns = project.config.filterPatterns;
+			}
+
+			var globalFilterPatterns = config.getUserOptions().filterPatterns.split(',');
+
+			projectFilterPatterns = projectFilterPatterns.split(',');
+
+			var filterPatterns = _.unique(_.union(globalFilterPatterns, projectFilterPatterns));
+
+			var matchFilter = false;
+
+			_.each(filterPatterns, function (pattern) {
+
+				pattern = pattern.trim();
+
+				if(pattern) {
+
+					if (file.indexOf(pattern) !== -1 || minimatch( path.relative(project.path, file), pattern ) || minimatch( path.basename(file), pattern ) ) {
+
+						matchFilter = true;
+					}
+				}
+
+			});
+
+			return matchFilter;
+
+		}
+
+		/**
+		 * Function to add a new file to project
+		 * @param pid {string}  Project id
+		 * @param filePath {string}  Path to  file
+         * @param callback {function} Optional calback function to run after file addition is complete or fail.
+		 */
+		function addFile(pid, filePath, callback) {
+
+            fs.exists(filePath, function(exists) {
+
+                if(exists && fileTypes.isFileSupported(filePath) && fileTypes.getInternalType(filePath) !== "IMAGE" && !matchFileFilters(pid, filePath)) {
+
+                    var fileId = _id(path.relative(getProjectById(pid).path, filePath));
+
+                    //Check if file already exists in files list
+                    var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: fileId})) ? false : true;
+
+                    var inImports = false;
+
+                    var fileExt = path.extname(filePath).toLowerCase();
+
+                    var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+
+                    if(!isSass) {
+                        inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
                     }
-                }
 
-            });
+                    if (!already && !inImports) {
 
-            return matchFilter;
+                        fileTypes.format(pid, fileId, filePath, getProjectById(pid).path, function(err, formattedFile) {
 
-        }
+                            if(err) return callback(false, filePath);
 
-        /**
-         * Function to add a new file to project
-         * @param {string} pid  Project id
-         * @param {string} filePath  Path to  file
-         */
-        function addFile(pid, filePath) {
+                            getProjectById(pid).files[fileId] = formattedFile;
+                            refreshFile(pid, fileId, callback);
 
-            if(fs.existsSync(filePath) && fileTypes.isFileSupported(filePath) && !matchFileFilters(pid, filePath)) {
+                        });
 
-                var fileId = _id(path.relative(getProjectById(pid).path, filePath));
+                    } else {
 
-                //Check if file already exists in files list
-                var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: fileId})) ? false : true;
-
-                var inImports = false;
-
-                var fileExt = path.extname(filePath).toLowerCase();
-
-                var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
-
-                if(!isSass) {
-                    inImports = _.isEmpty(_.findWhere(getProjectImports(pid), {id: fileId})) ? false : true;
-                }
-
-                if (!already && !inImports) {
-                    getProjectById(pid).files.push(fileTypes.format(pid, fileId, filePath, getProjectById(pid).path));
-                    refreshFile(pid, fileId);
-                }
-            }
-        }
-
-        function refreshFile(pid, fileId) {
-
-            if(!_.isEmpty(getFileById(pid, fileId))) {
-
-                var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
-
-                var fileImports = fileTypes.getImports(fPath, getProjectById(pid).path);
-
-                var oldImports = getFileImports(pid, fileId);
-
-                _.each(fileImports, function(imp) {
-                    addImport(pid, fileId, imp);
-                });
-
-                _.each(oldImports, function (imp) {
-
-                    var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
-
-                    if (!_.contains(fileImports, fullImpPath)) {
-
-                        removeImportParent(imp.pid, imp.id, fileId);
-
-                        addFile(pid, fullImpPath);
-                    }
-                });
-
-                _broadCast();
-            }
-        }
-
-        /**
-         * Resets the settings of a file to defaults
-         * @param pid {string} Project id
-         * @param id {string} File id
-         */
-
-        //Function to remove a file
-        function removeFile(pid, id) {
-
-            if (!_.isEmpty(getProjectById(pid))) {
-
-                getProjectById(pid).files = _.reject(getProjectById(pid).files, function (file) {
-                    return file.id === id;
-                });
-
-                //Remove file from imports parent list
-                removeParentFromAllImports(pid, id);
-
-                _broadCast();
-            }
-
-        }
-
-        //Function to remove file from import parent
-        function removeParentFromAllImports(pid, fid) {
-
-            _.each(getProjectImports(pid), function (imp) {
-
-                removeImportParent(pid, imp.id, fid);
-
-            });
-
-        }
-
-        //Remove parent from certain import
-        function removeImportParent(pid, impid, fid) {
-
-            var project = getProjectById(pid);
-
-            var projectImports = project.imports;
-
-            var importedFile = _.findWhere(projectImports, {id: impid});
-
-            importedFile.parents = _.without(importedFile.parents, fid);
-
-            //Remove import if parent list is empty
-            if(_.isEmpty(importedFile.parents)) {
-                removeImport(pid, impid);
-            }
-
-            _broadCast();
-        }
-
-        //function to add imported file to import list
-        function addImport(pid, fid, importedPath) {
-
-            //If @imported file is not in imports list create new entry otherwise add the file as parent
-            var projectImports = getProjectById(pid).imports;
-
-            var impid = _id(path.relative(getProjectById(pid).path, importedPath));
-
-            if (_.isEmpty(_.findWhere(projectImports, {id: impid}))) {
-
-                getProjectById(pid).imports.push({
-                    id: impid,
-                    pid: pid,
-                    path: path.relative(getProjectById(pid).path, importedPath),
-                    parents: [fid]
-                });
-
-            } else {
-
-                if (!_.contains(_.findWhere(getProjectById(pid).imports, {id: impid}).parents, fid)) {
-                    _.findWhere(getProjectById(pid).imports, {id: impid}).parents.push(fid);
-                }
-
-            }
-
-            
-            var fileExt = path.extname(importedPath).toLowerCase();
-
-            var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
-
-            //Remove any file that is in files list and is imported by this file
-            if(!isSass) {
-                removeFile(pid, impid);
-            }
-
-        }
-
-        /**
-         * Function to remove Import
-         * @param pid {string} Project Id
-         * @param impid {string} Import Id
-         */
-        function removeImport(pid, impid) {
-
-            //Reject projects from list
-            getProjectById(pid).imports = _.reject(getProjectById(pid).imports, function (imp) {
-                return imp.id === impid;
-            });
-            _broadCast();
-        }
-
-        /**
-         * Function to get all files inside project folder
-         * @param pid {string} project id
-         * @param folder {string} Path to folder
-         * @returns {Array}
-         */
-
-        function getFilesInDir(pid, folder) {
-
-            var f = [];
-
-            function get(dir) {
-
-                var files = fs.readdirSync(dir);
-
-                files.forEach(function (file) {
-
-                    var fp = dir + path.sep + file;
-
-                    if(!matchFileFilters(pid, fp) && !/\\\.|\/\./.test(fp)) {
-
-                        if (fs.statSync(fp).isDirectory()) {
-
-                            get(fp);
-
-                        } else {
-
-                            if (fileTypes.isFileSupported(fp)) {
-                                f.push(fp);
-                            }
+                        if(callback) {
+                            callback(false, filePath);
                         }
                     }
+                } else {
+
+                    if(callback) {
+                        callback(false, filePath);
+                    }
+                }
+            });
+		}
+
+        /**
+         * @param pid {String} Project ID
+         * @param fileId {String} File Id
+         * @param callback {Function} Optional callback to run after refresh is complete
+         */
+
+		function refreshFile(pid, fileId, callback) {
+
+			if(!_.isEmpty(getFileById(pid, fileId))) {
+
+				var fPath = path.join(getProjectById(pid).path,getFileById(pid, fileId).input);
+
+                fileTypes.getImports(fPath, function(err, fileImports) {
+
+                    if(err) {
+                        fileImports = [];
+                    }
+
+                    var oldImports = getFileImports(pid, fileId);
+
+                    _.each(fileImports, function(imp) {
+
+                        addImport(pid, fileId, imp);
+
+                    });
+
+                    _.each(oldImports, function (imp) {
+
+                        var fullImpPath  = path.join(getProjectById(pid).path, imp.path);
+
+                        if (!_.contains(fileImports, fullImpPath)) {
+
+                            removeImportParent(imp.pid, imp.id, fileId);
+
+                            addFile(pid, fullImpPath, callback);
+                        }
+                    });
+
+                    if(callback) {
+                        callback(true, fPath);
+                    }
+
                 });
+
+			} else {
+
+                if(callback) {
+
+                    setTimeout(function() {
+                        callback(false, fPath);
+                    }, 0);
+                }
             }
+		}
 
-            try {
+		/**
+		 * Resets the settings of a file to defaults
+		 * @param pid {string} Project id
+		 * @param id {string} File id
+		 */
 
-                get(folder);
+		//Function to remove a file
+		function removeFile(pid, id) {
 
-            } catch (e) {
+			if (!_.isEmpty(getProjectById(pid))) {
 
-                notification.error('Error ! ', 'An error occurred while scanning files', e.message);
+				delete getProjectFiles(pid)[id];
 
-            }
+				//Remove file from imports parent list
+				removeParentFromAllImports(pid, id);
+			}
 
-            return f;
-        }
+		}
 
-        //Function that refreshes files in a project folder
-        function refreshProjectFiles(pid) {
+		//Function to remove file from import parent
+		function removeParentFromAllImports(pid, fid) {
 
-            utils.showLoading();
+			_.each(getProjectImports(pid), function (imp) {
+
+				removeImportParent(pid, imp.id, fid);
+
+			});
+
+		}
+
+		//Remove parent from certain import
+		function removeImportParent(pid, impid, fid) {
+
+			var project = getProjectById(pid);
+
+			var projectImports = project.imports;
+
+			var importedFile = _.findWhere(projectImports, {id: impid});
+
+			importedFile.parents = _.without(importedFile.parents, fid);
+
+			//Remove import if parent list is empty
+			if(_.isEmpty(importedFile.parents)) {
+				removeImport(pid, impid);
+			}
+		}
+
+		//function to add imported file to import list
+		function addImport(pid, fid, importedPath) {
+
+			//If @imported file is not in imports list create new entry otherwise add the file as parent
+			var projectImports = getProjectImports(pid);
+
+			var impid = _id(path.relative(getProjectById(pid).path, importedPath));
+
+			if (impid in projectImports ) {
+
+				if (!_.contains(projectImports[impid].parents, fid)) {
+
+					projectImports[impid].parents.push(fid);
+				}
+
+			} else {
+
+				getProjectById(pid).imports[impid] = {
+					id: impid,
+					pid: pid,
+					path: path.relative(getProjectById(pid).path, importedPath),
+					parents: [fid]
+				};
+			}
+
+			var fileExt = path.extname(importedPath).toLowerCase();
+
+			var isSass = ( fileExt  === '.scss' || fileExt === '.sass');
+
+			//Remove any file that is in files list and is imported by this file
+			if(!isSass) {
+				removeFile(pid, impid);
+			}
+		}
+
+		/**
+		 * Function to remove Import
+		 * @param pid {string} Project Id
+		 * @param impid {string} Import Id
+		 */
+		function removeImport(pid, impid) {
+
+			delete getProjectImports(pid)[impid];
+		}
+
+		//Function that refreshes files in a project folder
+		function refreshProjectFiles(pid) {
+
+			utils.showLoading();
 
             var folder = getProjectById(pid).path;
 
-            //Remove file that doesn't exist or matches the filter pattern
-            _.each(getProjectFiles(pid), function (file) {
+            fs.exists(folder, function(exists) {
 
-                //Remove if matches filter patterns or doesn't exist
-                if (matchFileFilters(pid, path.join(folder, file.input)) || !fs.existsSync(path.join(folder, file.input))) {
+                if(exists) {
 
-                    removeFile(pid, file.id);
+                    var filesImportsImages = [];
 
+                    _.each(getProjectFiles(pid), function(file) {
+
+                        filesImportsImages.push(file);
+
+                    });
+
+                    _.each(getProjectImages(pid), function(file) {
+
+                        filesImportsImages.push(file);
+
+                    });
+
+                    _.each(getProjectImports(pid), function(file) {
+
+                        filesImportsImages.push(file);
+
+                    });
+
+                    //Remove file that doesn't exist or matches the filter pattern
+                    _.each(filesImportsImages, function (file) {
+
+                        var filePath;
+
+                        if(file.input) filePath = path.join(folder, file.input);
+                        if(file.path) filePath = path.join(folder, file.path);
+
+                        //Remove if matches filter patterns or doesn't exist
+                        if (matchFileFilters(pid, filePath)) {
+
+                            if(file.input) removeFile(pid, file.id);
+                            if(_.isArray(file.parents)) removeImport(pid, file.id);
+                            else removeImage(pid, file.id);
+
+
+
+                        } else {
+
+                            fs.exists(filePath, function(exists) {
+
+                                if(!exists) {
+
+                                    $rootScope.$apply(function() {
+
+                                        if(file.input) removeFile(pid, file.id);
+                                        if(_.isArray(file.parents)) removeImport(pid, file.id);
+                                        else removeImage(pid, file.id);
+                                    });
+                                }
+                            });
+                        }
+                    });
+
+                    utils.readDirs(folder, function(err, files) {
+
+                        if(err) {
+
+                            notification.error('Error ! ', 'An error occurred while scanning files', err.message);
+                            utils.hideLoading();
+
+                        } else {
+
+                            var total = files.length;
+
+                            //Hide loader if there are no files
+                            if(!total) {
+                                return utils.hideLoading();
+                            }
+
+
+                            var hideIfFinished = function() {
+
+                                //Hide Loader if there are no files
+                                if(!total) {
+                                    setTimeout(function() {
+                                        $rootScope.$apply(function() {
+                                            utils.hideLoading();
+                                        });
+                                    }, 200);
+                                }
+
+                            };
+
+                            _.each(files, function(file) {
+
+                                if(fileTypes.isFileSupported(file) && !matchFileFilters(pid, file)) {
+
+                                    //Generate unique id for file
+                                    var file_id = _id(path.relative(getProjectById(pid).path, file));
+
+                                    var already = false;
+
+                                    if(fileTypes.getInternalType(file) === 'IMAGE') {
+
+                                        already = !_.isEmpty(getImageById(pid, file_id));
+
+                                        if(already) {
+
+                                            refreshImage(pid, file_id, function() {
+
+                                                --total;
+
+                                                hideIfFinished();
+                                            });
+
+                                        } else {
+
+                                            addImage(pid, file, function() {
+
+                                                --total;
+
+                                                hideIfFinished();
+                                            });
+                                        }
+
+                                    }
+
+                                    already = !_.isEmpty(getFileById(pid, file_id));
+
+                                    if(already) {
+
+                                        refreshFile(pid, file_id, function(complete, fp) {
+
+                                            if(fp === file) --total;
+
+                                            hideIfFinished();
+                                        });
+
+                                    } else {
+
+                                        addFile(pid, file, function(complete, fp) {
+
+                                            if(fp === file) --total;
+
+                                            hideIfFinished();
+                                        });
+                                    }
+                                } else {
+
+                                    --total;
+
+                                    hideIfFinished();
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+
+                    $rootScope.$apply(function() {
+                        removeProject(pid);
+                    });
+
+                    utils.hideLoading();
                 }
+            });
+		}
+
+		//Function to remove project
+		function removeProject(pid) {
+
+			delete projects[pid];
+		}
+
+		//Function to change file output path
+		function changeFileOutput(pid, id, newPath) {
+
+			var file = getFileById(pid, id);
+
+			if(!_.isEmpty(file)) {
+
+				if (path.extname(path.basename(newPath)) === '') {
+
+					newPath = newPath + fileTypes.getCompiledExtension(file.input);
+				}
+
+				file.customOutput = newPath;
+			}
+		}
+
+
+        //function to get all project files
+        function getProjectImages(pid) {
+
+            var project = getProjectById(pid);
+
+            if(!_.isEmpty(project)) {
+
+                return project.images;
+            }
+
+            return [];
+        }
+
+        //Function to add image to project
+        function addImage(pid, filePath, callback) {
+
+            var project = getProjectById(pid);
+
+            var id = _id(path.relative(project.path, filePath));
+
+            if(fileTypes.getInternalType(filePath !== 'IMAGE') || getProjectImages(pid)[id]) return setTimeout(function(){callback(false, filePath);}, 0);
+
+            var ext = path.extname(filePath).slice(1);
+
+            fs.stat(filePath, function(err, stat) {
+
+                if(err) return callback(false, filePath);
+
+                project.images[id] = {
+
+                    id: id,
+                    pid: pid,
+                    path: path.relative(project.path, filePath),
+                    size: stat.size,
+                    name: path.basename(filePath),
+                    type: ext.charAt(0).toUpperCase() + ext.slice(1),
+                    initialSize: stat.size,
+                    status: 'NOT_OPTIMIZED' //NOT_OPTIMIZED, OPTIMIZED, OPTIMIZING, FAILED
+                };
+
+                callback(true, filePath);
 
             });
 
-            if (fs.existsSync(folder)) {
-
-                var projectFiles = getFilesInDir(pid, folder);
-
-                _.each(projectFiles, function (file) {
-
-                    //Generate unique id for file
-                    var file_id = _id(path.relative(getProjectById(pid).path, file));
-
-                    var already = _.isEmpty(_.findWhere(getProjectFiles(pid), {id: file_id})) ? false : true;
-
-                    if(already) {
-                        refreshFile(pid, file_id);
-                    } else {
-                        addFile(pid, file);
-                    }
-
-                });
-
-                _broadCast();
-
-                utils.hideLoading();
-
-            } else {
-
-                removeProject(pid);
-
-                utils.hideLoading();
-            }
         }
 
-        //Function to remove project
-        function removeProject(pid) {
+        //Function to refresh Image
+        function refreshImage(pid, imageId, callback) {
 
-            if (!_.isEmpty(_.findWhere(projects, {id: pid}))) {
+            var project = getProjectById(pid);
 
-                //Reject projects from list
-                projects = _.reject(projects, function (project) {
-                    return project.id === pid;
-                });
-            }
+            if(!project.images[imageId]) return setTimeout(function(){callback(false);}, 0);
 
-            _broadCast();
-        }
+            var image = project.images[imageId];
 
-        //Function to change file output path
-        function changeFileOutput(pid, id, newPath) {
+            var imagePath = path.join(project.path, image.path);
 
-            var file = getFileById(pid, id);
+            fs.stat(imagePath, function(err, stat) {
 
-            if(!_.isEmpty(file)) {
+                if(err) {
 
-                if (path.extname(path.basename(newPath)) === '') {
+                    removeImage(pid, imageId);
+                    return callback(false, imagePath);
 
-                    newPath = newPath + fileTypes.getCompiledExtension(file.input);
                 }
 
-                file.output = newPath;
-            }
+                if(stat.size.toString() !== image.size.toString()) {
+
+                    image.status = 'NOT_OPTIMIZED';
+
+                }
+
+                callback(true, imagePath);
+
+            });
         }
 
-        return {
-            projects: projects,
+        //Get image by id
+        function getImageById(pid, fid) {
 
-            getProjectById: getProjectById,
-            getFileById: getFileById,
-            getImportById: getImportById,
+            var images = getProjectImages(pid);
 
-            addProject: addProject,
-            addFile: addFile,
-            refreshFile: refreshFile,
+            if(!_.isEmpty(images[fid])) {
 
-            removeFile: removeFile,
-            removeProject: removeProject,
-            removeImport: removeImport,
+                return images[fid];
+            }
 
-            refreshProjectFiles: refreshProjectFiles,
-            getProjectFiles: getProjectFiles,
-            getProjectConfig: getProjectConfig,
-            changeFileOutput: changeFileOutput,
-            matchFilters: matchFileFilters
-        };
-    }
+            return {};
+        }
+
+        //Funtion to remove Image
+        function removeImage(pid, imageId) {
+
+            if (!_.isEmpty(getProjectById(pid))) {
+
+                delete getProjectImages(pid)[imageId];
+            }
+
+        }
+
+		return {
+			projects: projects,
+
+			getProjectById: getProjectById,
+			getFileById: getFileById,
+			getImportById: getImportById,
+            getImageById: getImageById,
+
+			addProject: addProject,
+			addFile: addFile,
+            addImage: addImage,
+            refreshImage: refreshImage,
+			refreshFile: refreshFile,
+
+			removeFile: removeFile,
+			removeProject: removeProject,
+			removeImport: removeImport,
+
+			refreshProjectFiles: refreshProjectFiles,
+			getProjectFiles: getProjectFiles,
+			getProjectConfig: getProjectConfig,
+			changeFileOutput: changeFileOutput,
+			matchFilters: matchFileFilters
+		};
+	}
 ]);

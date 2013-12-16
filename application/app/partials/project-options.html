@@ -1,0 +1,202 @@
+<div class="app-options___title"><h2>{{selectedProject.name}} &mdash;Options</h2></div>
+
+<div class="app-options__inner">
+
+    <div class="app-options__nav">
+
+        <div class="app-options__nav__inner">
+
+            <a ng-href="#/project-options/{{selectedProject.id}}/general" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'general'}">General</a>
+            <a ng-href="#/project-options/{{selectedProject.id}}/cssoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'cssoutput'}">CSS Options</a>
+            <a ng-href="#/project-options/{{selectedProject.id}}/htmloutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'htmloutput'}">HTML Options</a>
+            <a ng-href="#/project-options/{{selectedProject.id}}/jsoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'jsoutput'}">JS Options</a>
+            <a ng-click="PREPROS.IS_PRO || showProMessage($event); " ng-href="#/project-options/{{selectedProject.id}}/ftp" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'ftp'}">FTP Options</a>
+            <a ng-href="#/project-options/{{selectedProject.id}}/filters" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'filters'}">Project Filters</a>
+            <a ng-href="#/project-options/{{selectedProject.id}}/more" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'more'}">More Options</a>
+
+        </div>
+
+    </div>
+
+    <div class="app-option__pannel">
+
+        <div ng-if="appOptionSubPath == 'general' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title">General Options</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Project Name</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.name">
+            </label>
+
+            <label class="app-option__pannel__label">
+                <input class="app-option__pannel__input" type="checkbox" ng-model="selectedProject.config.liveRefresh">
+                <span class="app-option__pannel__label__text">Live Browser Refresh</span>
+            </label>
+
+            <label class="app-option__pannel__label" ng-if="selectedProject.config.liveRefresh">
+                <input class="app-option__pannel__input" type="checkbox" ng-model="selectedProject.config.useCustomServer">
+                <span class="app-option__pannel__label__text">Live Refresh a custom server</span>
+            </label>
+
+            <label class="app-option__pannel__label" ng-if="selectedProject.config.useCustomServer && selectedProject.config.liveRefresh">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter Custom Server URL</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.customServerUrl">
+            </label>
+
+        </div>
+
+        <div ng-if="appOptionSubPath == 'cssoutput' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title app-option__pannel__title">CSS Options</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+                <select ng-model="selectedProject.config.cssPathType" class="app-option__pannel__input">
+                    <option value="REPLACE_TYPE">Replace File Type In Path With CSS Path</option>
+                    <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+                    <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+                    <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+                </select>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.cssPathType == 'RELATIVE_FILESDIR' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to less/sass/stylus files directory<br>(seperate multiple paths with comma)</span>
+                <textarea class="app-option__pannel__input" ng-model="selectedProject.config.cssPreprocessorPath"></textarea>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.cssPathType == 'REPLACE_TYPE' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For CSS File Types</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.cssTypes">
+            </label>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">CSS Path</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.cssPath">
+            </label>
+
+
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Autoprefixer Browser List</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.autoprefixerBrowsers" placeholder="Use Default List">
+            </label>
+
+            <p class="alert alert-info" style="max-width: 300px">Css options do not work with compass projects with full compass support. Use config.rb file to manage compass options.</p>
+
+        </div>
+
+        <div ng-if="appOptionSubPath == 'htmloutput' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title app-option__pannel__title">HTML Options</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+                <select ng-model="selectedProject.config.htmlPathType" class="app-option__pannel__input">
+                    <option value="REPLACE_TYPE">Replace File Type In Path With HTML Path</option>
+                    <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+                    <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+                    <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+                </select>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.htmlPathType == 'RELATIVE_FILESDIR' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to jade/haml/slim/markdown files directory<br>(seperate multiple paths with comma)</span>
+                <textarea class="app-option__pannel__input" ng-model="selectedProject.config.htmlPreprocessorPath"></textarea>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.htmlPathType == 'REPLACE_TYPE' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For HTML File Types</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.htmlTypes">
+            </label>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html Path</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.htmlPath">
+            </label>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html File Extension</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.htmlExtension">
+            </label>
+
+
+
+        </div>
+
+        <div ng-if="appOptionSubPath == 'jsoutput' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title app-option__pannel__title">Javascript Options</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+                <select ng-model="selectedProject.config.jsPathType" class="app-option__pannel__input">
+                    <option value="REPLACE_TYPE">Replace File Type In Path With JS Path</option>
+                    <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+                    <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+                    <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+                </select>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.jsPathType == 'RELATIVE_FILESDIR' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to coffeescript/livescript files directory<br>(seperate multiple paths with comma)</span>
+                <textarea class="app-option__pannel__input" ng-model="selectedProject.config.jsPreprocessorPath"></textarea>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.jsPathType == 'REPLACE_TYPE' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For Javascript File Types</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.jsTypes">
+            </label>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">JS Path</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.jsPath">
+            </label>
+
+
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Concatenated &amp; Minified Javascript Output Path Type</span>
+                <select ng-model="selectedProject.config.minJsPathType" class="app-option__pannel__input">
+					<option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+					<option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+					<option value="SIDE_BY_FILE">Same Folder As Source File</option>
+                </select>
+            </label>
+
+            <label class="app-option__pannel__label" ng-show="selectedProject.config.minJsPathType == 'RELATIVE_FILESDIR' ">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to javascript files directory<br>(seperate multiple paths with comma)</span>
+                <textarea class="app-option__pannel__input" ng-model="selectedProject.config.minJsPreprocessorPath"></textarea>
+            </label>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block"> Concatenated &amp; JMinified S Path</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.minJsPath">
+            </label>
+
+        </div>
+
+        <div ng-if="appOptionSubPath == 'filters' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title">Project Filters</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Filters To Exclude</span>
+                <textarea class="app-option__pannel__input" ng-model="selectedProject.config.filterPatterns" rows="10"></textarea>
+            </label>
+        </div>
+
+        <div ng-if="appOptionSubPath == 'more' " class="app-options__pannel__pane">
+
+            <h3 class="app-option__pannel__title">More Options</h3>
+
+            <label class="app-option__pannel__label">
+                <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Live Refresh Delay in Milliseconds</span>
+                <input class="app-option__pannel__input" type="text" ng-model="selectedProject.config.liveRefreshDelay">
+            </label>
+        </div>
+
+
+    </div>
+
+</div>

@@ -6,169 +6,129 @@
  */
 
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('less', [
 
-    'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path'),
-            autoprefixer = require('autoprefixer'),
-            cssmin = require('ycssmin').cssmin;
+        var less = require('less');
+        var path = require('path');
+        var autoprefixer = require('autoprefixer');
+        var fs = require('fs-extra');
+        var CleanCss = require('clean-css');
 
+        var compile = function(file, project, callback) {
 
-        var format = function (pid, fid, filePath, projectPath) {
+            var input = path.resolve(project.path, file.input);
 
-            //File name
-            var name = path.basename(filePath);
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
-            // Output path
-            var output = filePath.replace(/\.less/gi, '.css');
+            var options = {
+                compress: file.config.compress,
+                cleancss: file.config.cleancss && !file.config.sourcemaps, //Do not run if sourcemaps are enabled
+                sourceMap: file.config.sourcemaps,
+                sourceMapFilename: path.basename(output) + '.map',
+                sourceMapRootpath: '',
+                writeSourceMap: function(map) {
 
-            var pathRegx = /\\less\\|\/less\//gi;
+                    try {
 
-            //Find output path; save to user defined css folder if file is in less folder
-            if (filePath.match(pathRegx)) {
+                        //Small fix to make sourcemaps relative
+                        var data = JSON.parse(map);
 
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
+                        for(var i = 0; i<data.sources.length; i++) {
 
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
+                            if(input.substr(0, 1) === data.sources[i].substr(0, 1)) {
+
+                                data.sources[i] = path.relative(path.dirname(output), data.sources[i]).replace(/\\/g, '/');
+
+                            }
+                        }
+
+                        fs.outputFile( output + '.map', JSON.stringify(data), function(err) {
+
+                            if(err) callback(err);
+
+                        });
+
+                    } catch(e) {}
                 }
 
-            }
-
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Less',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().less
             };
 
-        };
-
-
-        //Compile Less
-        var compile = function (file, successCall, errorCall) {
-
-            var less = require('less');
-
-            var options = {};
-
-            var importPath = path.dirname(file.input);
-
-            if (file.config.compress) {
-
-                options.yuicompress = file.config.compress;
-
-            }
-
-            options.strictMath = file.config.strictMath;
-            options.strictUnits = file.config.strictUnits;
-
-            var parser = new (less.Parser)({
-                paths: [importPath],
-                filename: file.input,
-                dumpLineNumbers: (file.config.lineNumbers) ? 'comments' : false
+            var parser = new(less.Parser)({
+                paths: [path.dirname(input)],
+                filename: input
             });
 
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-                if (err) {
 
-                    errorCall(err.message);
+            fs.readFile(input, 'utf8', function(err, data) {
 
-                } else {
+                if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                    //Must be in try catch block because less sometimes just throws errors rather than giving callbacks
+                parser.parse(data, function (err, tree) {
+
+                    if(err) return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
+
                     try {
-                        parser.parse(data.toString(), function (e, tree) {
-                            if (e) {
 
-                                errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
+                        var css = tree.toCSS(options); //Fuck you, can't you just gimme callback from parser
 
-                            }
-                            if (!e) {
+                    } catch(err) {
 
-                                try {
-
-                                    var css = tree.toCSS(options);
-
-                                    if(file.config.autoprefixer) {
-
-                                        try {
-
-                                            if(file.config.autoprefixerBrowsers) {
-
-                                                var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                                                    return i.trim();
-                                                });
-
-                                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
-
-                                            } else {
-
-                                                css =  autoprefixer().compile(css);
-                                            }
-
-                                            if(file.config.compress) {
-
-                                                css = cssmin(css);
-                                            }
-
-                                        } catch (e) {
-
-                                            errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                                        }
-                                    }
-
-                                    fs.outputFile(file.output, css, function (err) {
-
-                                        if (err) {
-
-                                            errorCall(err.message);
-
-
-                                        } else {
-
-                                            successCall(file.input);
-
-                                        }
-
-                                    });
-
-                                } catch (e) {
-
-                                    errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
-
-                                }
-
-
-                            }
-                        });
-                    } catch (e) {
-
-                        errorCall(e.message + "\n" + e.filename + ' line ' + e.line);
+                        return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
                     }
 
-                }
+
+
+                    if(!file.config.sourcemaps && file.config.autoprefixer) {
+
+                        try {
+
+                            if(project.config.autoprefixerBrowsers) {
+
+                                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                    return i.trim();
+                                });
+
+                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                            } else {
+
+                                css =  autoprefixer().compile(css);
+                            }
+
+                            if(file.config.compress || file.config.cleancss) {
+
+                                css = new CleanCss({processImport: false}).minify(css);
+                            }
+
+                        } catch (err) {
+
+                            return callback(new Error('Failed to autoprefix css' + err.message));
+
+                        }
+                    }
+
+                    fs.outputFile(output, css, function(err) {
+
+                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
+
+                        callback(null, input);
+
+                    });
+
+                });
             });
         };
 
         return {
-            format: format,
             compile: compile
         };
 

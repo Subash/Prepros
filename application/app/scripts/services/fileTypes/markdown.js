@@ -5,103 +5,60 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('markdown', [
 
-    'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path');
+        var fs = require('fs-extra');
+        var path = require('path');
+        var marked = require('marked');
 
-        var format = function (pid, fid, filePath, projectPath) {
+        var compile = function(file, project, callback) {
 
-            //File name
-            var name = path.basename(filePath);
+            var input = path.resolve(project.path, file.input);
 
-            // Output path
-            var output = filePath.replace(/\.markdown|\.md/gi, config.getUserOptions().htmlExtension);
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
-            var pathRegx = /\\md\\|\\markdown\\|\/md\/|\/markdown\//gi;
-
-            //Find output path; save to user defined html folder if file is in md or markdown folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'MD',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().markdown
-            };
-        };
-
-        var compile = function (file, successCall, errorCall) {
-
-            var marked = require('marked');
-
-            // Set markdown options
             marked.setOptions({
                 gfm: file.config.gfm,
                 sanitize: file.config.sanitize
             });
 
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+            fs.readFile(input, 'utf8', function(err, data) {
 
-                if (err) {
+                if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                    errorCall(err.message);
+                try {
 
-                } else {
+                    var html = marked(data.toString());
 
-                    try {
-                        var html = marked(data.toString());
+                    fs.outputFile(output, html, function(err) {
 
-                        fs.outputFile(file.output, html, function (err) {
+                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
 
-                            if (err) {
+                        callback(null, input);
 
-                                errorCall(err.message);
+                    });
 
-                            } else {
+                } catch (err) {
 
-                                successCall(file.input);
-
-                            }
-
-                        });
-
-                    } catch (e) {
-
-                        errorCall(file.input);
-
-                    }
+                    if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
 
                 }
             });
         };
 
+
+
+
         return {
-            format: format,
             compile: compile
         };
     }

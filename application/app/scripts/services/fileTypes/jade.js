@@ -5,127 +5,64 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('jade', [
 
-    'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path');
+        var fs = require('fs-extra');
+        var path = require('path');
+        var jade = require('jade');
 
-        var format = function (pid, fid, filePath, projectPath) {
+        var compile = function(file, project, callback) {
 
-            //File name
-            var name = path.basename(filePath);
+            var input = path.resolve(project.path, file.input);
 
-            // Output path
-            var output = filePath.replace(/\.jade/gi, config.getUserOptions().htmlExtension);
-
-            var pathRegx = /\\jade\\|\/jade\//gi;
-
-            //Find output path; save to /html folder if file is in /jade folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Jade',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().jade
-            };
-        };
-
-        var compile = function (file, successCall, errorCall) {
-
-            var jadeCompiler = require('jade');
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
             var options = {
-                filename: file.input,
+                filename: input,
                 pretty: file.config.pretty
             };
 
-            var isJSOutput = (path.extname(file.output) === "js");
-            var templateName = file.output.split(path.sep).pop().split(".");
-            templateName.pop();
-            templateName = templateName.join("_");
+            fs.readFile(input, 'utf8', function(err, data) {
 
-            if (isJSOutput) {
-                options.client = true;
-                options.compileDebug = false;
-            }
+                if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
+                try {
 
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-                if (err) {
-
-                    errorCall(err.message);
-
-                } else {
-
-                    try {
-
-                        var fn = jadeCompiler.compile(data.toString(), options);
-
-                        var html;
-                        if (isJSOutput) {
-                            html = fn.toString();
-                            html = "var Templates = Templates || {}\n" + html;
-                            html = html.replace(/function anonymous/,"Templates." + templateName + " = function");
-                        } else {
-                            html = fn({
-                                prepros: {
-                                    filePath : file.input,
-                                    fileOutputPath: file.output,
-                                    projectPath: file.projectPath
-                                }
-                            });
+                    var html = jade.compile(data, options)({
+                        prepros: {
+                            input : input,
+                            output: output,
+                            project: project.path
                         }
+                    });
 
-                        fs.outputFile(file.output, html, function (err) {
+                    fs.outputFile(output, html, function(err) {
 
-                            if (err) {
+                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
 
-                                errorCall(err.message);
+                        callback(null, input);
 
-                            } else {
+                    });
 
-                                successCall(file.input);
+                } catch (err) {
 
-                            }
-                        });
-
-                    } catch (e) {
-
-                        errorCall(e.message + '\n' + file.input);
-                    }
+                    callback(new Error(err.message + '\n' + input));
                 }
             });
         };
 
 
         return {
-            compile: compile,
-            format: format
+            compile: compile
         };
 
     }

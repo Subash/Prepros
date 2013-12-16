@@ -13,51 +13,16 @@ prepros.controller('AboutCtrl', [
 
     '$scope',
     'config',
-    'utils',
 
     function (
         $scope,
-        config,
-        utils
+        config
     ) {
 
         'use strict';
 
-        $scope.config = config;
         $scope.gems = [];
         $scope.node_modules = [];
-        $scope.errorChecking = false;
-        $scope.upToDate = false;
-        $scope.checking = true;
-
-        $scope.update = {
-            available: false,
-            version: config.version,
-            date: ""
-        };
-
-        utils.checkUpdate(function (data) {
-
-            if (data.available) {
-                $scope.update = {
-                    available: true,
-                    version: data.version,
-                    date: data.date
-                };
-            } else {
-
-                $scope.upToDate = true;
-            }
-
-            $scope.checking = false;
-
-        }, function () {
-
-            $scope.errorChecking = true;
-
-            $scope.checking = false;
-
-        });
 
         for (var nm in config.node_modules) {
 
@@ -78,11 +43,5 @@ prepros.controller('AboutCtrl', [
             }
 
         }
-
-        $scope.go = function (place) {
-
-            utils.openBrowser(config.online[place]);
-
-        };
     }
 ]);

@@ -1,0 +1,38 @@
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.sourcemaps">
+    <span>SourceMaps</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.strictMath">
+    <span>Strict Maths</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.strictUnits">
+    <span>Strict Units</span>
+</label>
+
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.compress">
+    <span>Compress CSS</span>
+</label>
+
+<label>
+
+    <input type="checkbox" ng-model="selectedFile.config.cleancss" ng-hide="selectedFile.config.sourcemaps">
+    <span ng-hide="selectedFile.config.sourcemaps">Run Clean-CSS</span>
+
+    <input type="checkbox" disabled ng-show="selectedFile.config.sourcemaps">
+    <span tooltip="Clean-CSS is not compatible with sourcemaps."  ng-show="selectedFile.config.sourcemaps">Run Clean-CSS</span>
+</label>
+
+<label>
+
+    <input type="checkbox" ng-model="selectedFile.config.autoprefixer" ng-hide="selectedFile.config.sourcemaps">
+    <span ng-hide="selectedFile.config.sourcemaps">Auto Prefix CSS</span>
+
+    <input type="checkbox" disabled ng-show="selectedFile.config.sourcemaps">
+    <span tooltip="Autoprefixer is not compatible with sourcemaps."  ng-show="selectedFile.config.sourcemaps">Auto Prefix CSS</span>
+
+</label>

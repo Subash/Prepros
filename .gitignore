@@ -6,11 +6,13 @@ application/node_modules/*
 application/gems/gems/*
 !application/gems/gems/.gitkeep
 
+application/macgems/
+
 application/gems/specifications/*
 !application/gems/specifications/.gitkeep
 
-application/ruby/*
-!application/ruby/.gitkeep
+application/bin/ruby/*
+!application/bin/ruby/.gitkeep
 
 .idea
 ffmpegsumo.dll

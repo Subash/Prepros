@@ -5,8 +5,8 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
-/*global prepros*/
+/*jshint browser: true, node: true, curly: false*/
+/*global prepros, Prepros*/
 
 prepros.factory('notification', [
 
@@ -14,26 +14,22 @@ prepros.factory('notification', [
     '$rootScope',
     'config',
 
-    function (
-        $location,
-        $rootScope,
-        config
-    ) {
+    function ($location, $rootScope, config) {
 
         'use strict';
 
         var path = require('path');
 
-        var notificationWindow, log = [];
+        var notificationWindow;
 
-        var createNotificationWindow = function() {
+        var _createWindow = function() {
 
-            var notificationPath = 'file:///' + path.normalize(config.basePath + '/notification.html');
+            var notificationPath = 'file:///' + path.normalize(config.basePath + '/notif.html');
 
             var options = {
-                x: window.screen.availWidth - 360,
+                x: window.screen.availWidth - 325,
                 y: window.screen.availHeight - 100,
-                width: 350,
+                width: 320,
                 height: 100,
                 frame: false,
                 toolbar: false,
@@ -42,29 +38,32 @@ prepros.factory('notification', [
                 show_in_taskbar: false
             };
 
-            if(process.platform !== 'win32') {
-                options.y = 20;
+            if(Prepros.PLATFORM_WINDOWS) {
+                options.y = 10;
             }
 
-            notificationWindow = require('nw.gui').Window.open(notificationPath, options);
+            notificationWindow = Prepros.gui.Window.open(notificationPath, options);
 
             notificationWindow.on('showLog', function () {
+
                 $rootScope.$apply(function () {
                     $location.path('/log');
                 });
-                require('nw.gui').Window.get().show();
+
+                Prepros.Window.show();
+                Prepros.Window.focus();
             });
 
-            notificationWindow.on('closed', function () {
+            notificationWindow.once('closed', function () {
                 notificationWindow.removeAllListeners();
                 notificationWindow = null;
             });
         };
 
         //Create initial window
-        createNotificationWindow();
+        _createWindow();
 
-        function openNotificationWindow(data) {
+        function _showNotification(data) {
 
             if (notificationWindow) {
 
@@ -72,7 +71,7 @@ prepros.factory('notification', [
 
             } else {
 
-                createNotificationWindow();
+                _createWindow();
 
                 notificationWindow.on('loaded', function() {
                     notificationWindow.emit('updateNotification', data);
@@ -80,13 +79,8 @@ prepros.factory('notification', [
             }
         }
 
+        //Function to show error notification
         function error(name, message, details) {
-
-            log.unshift({name: name, message: message, details: details, type: 'error', date: new Date().toISOString()});
-
-            log = (log.length >= 20) ? log.slice(0, 19) : log;
-
-            $rootScope.$broadcast('logUpdate');
 
             if (config.getUserOptions().enableErrorNotifications) {
 
@@ -97,22 +91,14 @@ prepros.factory('notification', [
                     time: config.getUserOptions().notificationTime
                 };
 
-                if(config.getUserOptions().notificationDetails) {
-                    data.details = details;
-                }
+                if(config.getUserOptions().notificationDetails) data.details = details;
 
-                openNotificationWindow(data);
+                _showNotification(data);
             }
         }
 
-        //Function to success notification
+        //Function to show success notification
         var success = function (name, message, details) {
-
-            log.unshift({name: name, message: message, details: details, type: 'success', date: new Date().toISOString()});
-
-            log = (log.length >= 20) ? log.slice(0, 19) : log;
-
-            $rootScope.$broadcast('logUpdate');
 
             if (config.getUserOptions().enableSuccessNotifications) {
 
@@ -123,24 +109,15 @@ prepros.factory('notification', [
                     time: config.getUserOptions().notificationTime
                 };
 
-                openNotificationWindow(data);
+                if(config.getUserOptions().notificationDetails) data.details = details;
+
+                _showNotification(data);
             }
-        };
-
-        var clearLog = function() {
-            log = [];
-            $rootScope.$broadcast('logUpdate');
-        };
-
-        var getLog = function() {
-            return log;
         };
 
         return {
             error: error,
-            success: success,
-            getLog: getLog,
-            clearLog: clearLog
+            success: success
         };
     }
 ]);

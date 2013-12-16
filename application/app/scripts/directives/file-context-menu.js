@@ -6,25 +6,15 @@
  */
 
 /*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap*/
+/*global prepros, $, _, Mousetrap, Prepros*/
 
 //Tooltip directive
 prepros.directive('fileContextMenu', [
 
-    '$filter',
-    '$rootScope',
-    'compiler',
-    'projectsManager',
+    'pro',
     'utils',
 
-    function (
-
-        $filter,
-        $rootScope,
-        compiler,
-        projectsManager,
-        utils
-    ) {
+    function (pro, utils) {
 
         'use strict';
 
@@ -36,81 +26,132 @@ prepros.directive('fileContextMenu', [
 
                 var file = scope.$eval(attrs.fileContextMenu);
 
-                var menu = new gui.Menu();
+                var menu = new Prepros.gui.Menu();
 
-                menu.append(new gui.MenuItem({
-                    label: 'Open File',
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Open',
                     click: function () {
-                        gui.Shell.openItem($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
+
+                        if(_.isEmpty(scope.multiSelect.files)) {
+
+                            scope.openFile(file.pid, file.id);
+
+                        } else {
+
+                            pro.showMessage();
+                        }
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    label: 'Compile File',
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Compile',
                     click: function () {
-                        compiler.compile(file.pid, file.id);
+
+                        if(_.isEmpty(scope.multiSelect.files)) {
+
+                            scope.compile(file.pid, file.id);
+
+                        } else {
+
+                            scope.compileMultiSelectFiles();
+
+                        }
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                var autoCompileItem = new Prepros.gui.MenuItem({
                     label: 'Toggle Auto Compile',
                     click: function () {
-
-                        $rootScope.$apply(function () {
-                            var f = _.findWhere(scope.selectedProject.files, {id: file.id});
-                            f.config.autoCompile = !f.config.autoCompile;
-                        });
+                        //This is just a placeholder for later use
                     }
-                }));
+                });
 
-                var explorer = (process.platform === 'win32') ? 'Explorer' : 'Finder';
+                menu.append(autoCompileItem);
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                var explorer = (Prepros.PLATFORM_WINDOWS) ? 'Explorer' : 'Finder';
+
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Show in ' + explorer,
                     click: function () {
-                        gui.Shell.showItemInFolder($filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path}));
+
+                        if(_.isEmpty(scope.multiSelect.files)) {
+
+                            scope.showInFolder(file.pid, file.id);
+
+                        } else {
+
+                            pro.showMessage();
+
+                        }
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Change Output',
                     click: function () {
-                        element.find('.output').trigger('click');
+
+
+                        if(_.isEmpty(scope.multiSelect.files)) {
+
+                            scope.changeFileOutput(file.pid, file.id);
+
+                        } else {
+
+                            if(!Prepros.IS_PRO) return pro.showMessage();
+
+                        }
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Reset File Settings',
                     click: function () {
 
-                        var confirmMsg = utils.notifier.notify({
-                            message: "Are you sure you want to reset the settings of this file?",
-                            type: "warning",
-                            buttons: [
-                                {'data-role': 'ok', text: 'Yes'},
-                                {'data-role': 'cancel', text: 'No'}
-                            ],
-                            destroy: true
-                        });
+                        if(_.isEmpty(scope.multiSelect.files)) {
 
-                        confirmMsg.on('click:ok', function(){
+                            scope.resetFileSettings(file.pid, file.id, false);
 
-                            this.destroy();
-                            $rootScope.$apply(function () {
-                                var filePath = $filter('fullPath')(file.input, { basePath: projectsManager.getProjectById(file.pid).path});
-                                projectsManager.removeFile(file.pid, file.id);
-                                projectsManager.addFile(file.pid, filePath);
-                            });
-                        });
+                        } else {
 
-                        confirmMsg.on('click:cancel', 'destroy');
-
+                            if(!Prepros.IS_PRO) return pro.showMessage();
+                        }
                     }
                 }));
 
                 element.on('contextmenu', function (e) {
 
                     e.preventDefault();
+
+                    menu.remove(autoCompileItem);
+
+                    var label = ( (file.config.autoCompile)? 'Disable': 'Enable' ) + ' Auto Compile';
+
+                    if(!_.isEmpty(scope.multiSelect.files)) label = 'Toggle Auto Compile';
+
+                    autoCompileItem = new Prepros.gui.MenuItem({
+                        label: label,
+                        click: function () {
+
+                            if(_.isEmpty(scope.multiSelect.files)) {
+
+                                scope.$apply(function(){
+                                    scope.toggleAutoCompile(file.pid, file.id);
+                                });
+
+                            } else {
+
+                                if(!Prepros.IS_PRO) return pro.showMessage();
+                            }
+                        }
+                    });
+
+                    menu.insert(autoCompileItem, 3);
 
                     menu.popup(e.pageX, e.pageY);
                 });

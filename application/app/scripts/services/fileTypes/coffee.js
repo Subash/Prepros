@@ -5,273 +5,240 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true, loopfunc: true*/
+/*jshint browser: true, node: true, loopfunc: true, curly: false*/
 /*global prepros, _*/
 
 prepros.factory('coffee', [
 
-    'config',
-    'utils',
+    '$filter',
+    'concat',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter, concat) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path');
+        var path = require('path');
+        var fs = require('fs-extra');
+        var ugly = require('uglify-js');
 
+        var appendRegx = /#(?:\s|)@(?:\s|)(?:prepros|codekit)-append\s+(.*)/gi;
+        var prependRegx = /#(?:\s|)@(?:\s|)(?:prepros|codekit)-prepend\s+(.*)/gi;
 
-        var format = function (pid, fid, filePath, projectPath) {
+        var compile = function(file, project, callback) {
 
-            //File name
-            var name = path.basename(filePath);
+            var input = path.resolve(project.path, file.input);
 
-            // Output path
-            var output = filePath.replace(/\.coffee/gi, '.js');
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
-            var pathRegx = /\\coffee\\|\/coffee\//gi;
+            var coffee = (file.config.iced)? require('iced-coffee-script'): require('coffee-script');
 
-            //Find output path; save to /js folder if file is in /coffee folder
-            if (filePath.match(pathRegx)) {
+            concat.getConcatList(input, {
 
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
+                appendRegx : appendRegx,
+                prependRegx : prependRegx
 
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
+            }, function(err, list) {
+
+                if(err) return callback(new Error('Unable read the concatenation list \n' + err.message) );
+
+                if(list.length > 1) {
+
+                    var total = list.length;
+
+                    var dataArray = [];
+
+                    //Make slots for data
+                    dataArray.length = list.length;
+
+                    var _complete = function() {
+
+                        if(!total) {
+
+                            fs.outputFile(output, dataArray.join("\n"), function(err) {
+
+                                if(err) return callback(new Error('Unable to write output file ' + err.message));
+
+                                callback(null, input);
+                            });
+                        }
+                    };
+
+                    _.each(list, function(filePath, i) {
+
+                        fs.readFile(filePath, 'utf8', function(err, js) {
+
+                            if(err) return callback(new Error('Failed to read file \n' + err.message));
+
+                            js = js.split("\n").map(function(line) {
+
+                                if(!line.match(appendRegx) && !line.match(prependRegx)) return line;
+
+                            });
+
+                            js = js.join("\n");
+
+                            var options = {
+                                bare: file.config.bare,
+                                input: js
+                            };
+
+                            try {
+
+                                js = coffee.compile(js, options);
+
+                            } catch (e) {
+
+                                return callback(new Error('Error on line ' + (parseInt(e.location.first_line, 10) + 1) + ' of ' + input));
+
+                            }
+
+                            if (file.config.uglify) {
+
+                                try {
+
+                                    js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
+
+                                } catch (e) {
+
+                                    return callback(new Error('Unable to uglify \n ' + e.message + ' \n ' + filePath));
+                                }
+                            }
+
+                            --total;
+
+                            dataArray[i] = js;
+
+                            _complete();
+                        });
+
+                    });
+
+                    return;
                 }
 
-            }
+                //If concatination is not used proceed to sourcemaps and single file compilation
+                fs.readFile(input, 'utf8', function(err, data) {
 
-            return {
+                    if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Coffee',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().coffee
-            };
-        };
 
-        var compile = function (file, successCall, errorCall) {
+                    var options = {
+                        bare: file.config.bare,
+                        input: data
+                    };
 
-            var coffee = require('iced-coffee-script');
+                    var js;
 
-            var ugly = require('uglify-js');
+                    if(file.config.sourcemaps) {
 
-            var options = {};
+                        var sourceFiles;
 
-            if (file.config.bare) {
+                        if(input.substr(0, 1) === output.substr(0, 1)) {
 
-                options.bare = true;
-            }
+                            sourceFiles = path.relative(path.dirname(output), input).replace(/\\/g, '/');
 
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-                if (err) {
+                        } else {
 
-                    errorCall(err.message);
+                            sourceFiles = input;
 
-                } else {
+                        }
 
-                    var run = function () {
+                        options.sourceMap = true;
+                        options.sourceFiles= [sourceFiles];
 
-                        var javascript = data.toString();
+                        var compiled;
+
+                        var outmapName = output + '.map';
 
                         try {
 
-                            javascript = coffee.compile(data.toString(), options);
+                            compiled = coffee.compile(data, options);
 
-                        } catch(e) {
+                            js = compiled.js;
 
-                            throw {message: 'Error on line ' + e.location.first_line + ' of ' + file.input + '\nERROR: ' + e.message};
+                            js += '\n //# sourceMappingURL=' + path.basename(outmapName);
+
+                        } catch (e) {
+
+                            return callback(new Error('Error on line ' + (parseInt(e.location.first_line, 10) + 1) + ' of ' + input));
+
+                        }
+
+                        fs.outputFile(outmapName, compiled.v3SourceMap, function(err) {
+
+                            if(err) return callback(new Error('Unable to write sourcemap ' + err.message));
+
+                            if (file.config.uglify) {
+
+                                try {
+
+                                    var compiled = ugly.minify(js, {
+                                        fromString: true,
+                                        inSourceMap: outmapName,
+                                        outSourceMap: path.basename(outmapName),
+                                        mangle: file.config.mangle
+                                    });
+
+                                    js = compiled.code;
+
+                                    js += '\n //# sourceMappingURL=' + path.basename(outmapName);
+
+                                    fs.outputFile(outmapName, compiled.map, function(err) {
+                                        if(err) callback(new Error('Unable to write sourcemap ' + err.message));
+                                    });
+
+                                } catch (e) {
+
+                                    return callback(new Error('Error on line ' + e.line + ' col ' + e.col + ' ' + e.message + ' of ' + input));
+                                }
+                            }
+
+                            fs.outputFile(output, js, function(err) {
+
+                                if(err) return callback(new Error('Unable to write output file ' + err.message));
+
+                                callback(null, input);
+                            });
+
+                        });
+
+                    } else {
+
+                        try {
+
+                            js = coffee.compile(data, options);
+
+                        } catch (e) {
+
+                            return callback(new Error('Error on line ' + (parseInt(e.location.first_line, 10) + 1) + ' of ' + input));
+
                         }
 
                         if (file.config.uglify) {
 
                             try {
 
-                                javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
+                                js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
 
                             } catch (e) {
 
-                                throw {message: 'Error on' + file.input};
+                                return callback(new Error('Unable to uglify \n' + e.message + '\n' + input));
                             }
                         }
 
-                        var importReg = {
-                            append: /\#(?:\s|)@(?:prepros|codekit)-append\s+(.*)/gi,
-                            prepend: /\#(?:\s|)@(?:prepros|codekit)-prepend\s+(.*)/gi
-                        };
+                        fs.outputFile(output, js, function(err) {
 
-                        var read = function (filePathToRead) {
+                            if(err) return callback(new Error('Unable to write output file ' + err.message));
 
-                            var data = fs.readFileSync(filePathToRead).toString();
-
-                            var importedFiles = {
-                                append: [],
-                                prepend: []
-                            };
-
-                            var regs = Object.keys(importReg);
-
-                            _.each(regs, function (reg) {
-
-                                var result;
-
-                                do {
-
-                                    result = importReg[reg].exec(data);
-
-                                    if(result) {
-
-                                        var impFile = result[1].replace(/'|"|;/gi, '').trim();
-
-                                        //Check if path is full or just relative
-                                        if (impFile.indexOf(':') >= 0) {
-
-                                            impFile = path.normalize(impFile);
-
-                                        } else {
-
-                                            impFile = path.join(path.dirname(filePathToRead), impFile);
-                                        }
-
-                                        //Underscore files
-                                        var _imp = path.dirname(impFile) + path.sep + '_' + path.basename(impFile);
-
-                                        //Check if file exists
-                                        if (fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
-
-                                            importedFiles[reg].push(_imp);
-
-                                        } else if(fs.existsSync(impFile) && fs.statSync(impFile).isFile()) {
-
-                                            importedFiles[reg].push(impFile);
-
-                                        } else {
-
-
-                                            throw {message: 'Imported file "' + impFile + '" not found \n Imported by "' + file.input + '"'};
-                                        }
-                                    }
-
-                                } while (result);
-                            });
-
-                            return {
-                                append: importedFiles.append,
-                                prepend: importedFiles.prepend.reverse()
-                            };
-                        };
-
-                        var get = function (append) {
-
-                            var imps = [];
-                            imps[0] = (append) ? read(file.input).append : read(file.input).prepend;
-
-                            //Get imports of imports up to four levels
-                            for (var i = 1; i < 5; i++) {
-
-                                imps[i] = [];
-
-                                _.each(imps[i - 1], function (importedFile) {
-
-                                    imps[i] = _.uniq(_.union(imps[i], (append) ? read(importedFile).append : read(importedFile).prepend));
-                                });
-                            }
-
-                            return _.uniq(_.flatten(imps));
-
-                        };
-
-                        var join = function (files, append) {
-
-                            //Remove repeated imports
-                            _.each(_.uniq(_.flatten(files)), function (imp) {
-
-                                var js = fs.readFileSync(imp).toString();
-
-                                if(/\.coffee/.test(imp)) {
-
-                                    try {
-
-                                        js = coffee.compile(js, options);
-
-                                    } catch (e) {
-
-                                        throw {message: 'Error on line ' + (parseInt(e.location.first_line, 10) + 1) + ' of ' + imp};
-
-                                    }
-                                }
-
-                                if (file.config.uglify && !/\.min.js$/.exec(path.basename(imp))) {
-
-                                    try {
-
-                                        js = ugly.minify(js, {fromString: true, mangle: file.config.mangle}).code;
-
-                                    } catch (e) {
-
-                                        throw {message: 'Error on line ' + e.line + ' col ' + e.col + ' ' + e.message + ' of ' + imp};
-                                    }
-                                }
-
-                                if (append) {
-
-                                    javascript = javascript + '\n' + js;
-
-                                } else {
-
-                                    javascript = js + '\n' + javascript;
-
-                                }
-                            });
-                        };
-
-                        //Join Files
-                        var appends = get(true);
-                        var prepends = get(false);
-
-                        join(appends, true);
-                        join(prepends, false);
-
-                        _.each(importReg, function (reg) {
-
-                            javascript = javascript.replace(new RegExp(reg.source + '\n', 'gi'), '');
+                            callback(null, input);
                         });
-
-                        try {
-
-                            fs.outputFileSync(file.output, javascript);
-
-                        } catch (e) {
-
-                            throw e;
-                        }
-                    };
-
-                    //try to compile js
-                    try {
-
-                        run();
-
-                        successCall(file.input);
-
-                    } catch (e) {
-
-                        errorCall(e.message);
-
                     }
-                }
+
+                });
             });
         };
 
         return {
-            format: format,
             compile: compile
         };
     }

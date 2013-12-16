@@ -5,164 +5,165 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap, angular */
+/*jshint browser: true, node: true, curly: false*/
+/*global prepros, $, _, Mousetrap, angular, Prepros */
 
 //Tooltip directive
 prepros.directive('projectContextMenu', [
 
     '$rootScope',
     '$location',
-    'compiler',
-    'liveServer',
-    'projectsManager',
-    'utils',
 
     function (
         $rootScope,
-        $location,
-        compiler,
-        liveServer,
-        projectsManager,
-        utils
+        $location
     ) {
 
         'use strict';
-
-        var gui = require('nw.gui');
-        var fs = require('fs-extra');
-
+        
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
 
-                var project = scope.$eval(attrs.projectContextMenu);
+                var pid = scope.$eval(attrs.projectContextMenu);
 
-                var menu = new gui.Menu();
+                var menu = new Prepros.gui.Menu();
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Open Project Folder',
                     click: function () {
-                        gui.Shell.openItem(project.path);
+                        scope.openProjectFolder(pid);
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Refresh Project',
                     click: function () {
 
                         scope.$apply(function () {
-                            projectsManager.refreshProjectFiles(project.id);
+                            scope.refreshProject(pid);
                         });
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    label: 'Toggle File Watcher',
-                    click: function () {
-
-                        scope.$apply(function () {
-                            project.config.watch = !project.config.watch;
+                var watcherItem = new Prepros.gui.MenuItem({
+                    label: 'Enable/Disable File Watcher',
+                    click: function() {
+                        scope.$apply(function() {
+                            scope.toggleFileWatcher(pid);
                         });
                     }
-                }));
+                });
 
-                menu.append(new gui.MenuItem({
-                    label: 'Open Project URL',
+                menu.append(watcherItem);
+
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Open Live Preview',
                     click: function () {
-
-                        if(project.config.useCustomServer) {
-
-                            utils.openBrowser(project.config.customServerUrl);
-
-                        } else {
-
-                            utils.openBrowser(liveServer.getLiveUrl(project));
-                        }
+                        scope.openProjectPreview(pid);
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    label: 'Copy Project URL',
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Copy Live Preview URL',
                     click: function () {
-
-                        if(project.config.useCustomServer) {
-
-                            gui.Clipboard.get().set(project.config.customServerUrl, 'text');
-
-                        } else {
-
-                            gui.Clipboard.get().set(liveServer.getLiveUrl(project), 'text');
-                        }
+                        scope.copyProjectPreviewUrl(pid);
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Open Remote Inspector',
+                    click: function () {
+                        scope.openRemoteInspect();
+                    }
+                }));
+
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Compile All Files',
                     click: function () {
-
-                        var files = projectsManager.getProjectFiles(project.id);
-                        _.each(files, function (file) {
-
-                            compiler.compile(project.id, file.id);
-
-                        });
+                        scope.compileAllFiles(pid);
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Optimize Images',
                     click: function () {
 
                         $rootScope.$apply(function () {
-                            $location.path('/optim/' + project.id);
+                            $location.path('/images/' + pid);
                         });
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    label: 'Remove Project',
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Optimize All Images',
                     click: function () {
 
-                        var confirmMsg = utils.notifier.notify({
-                            message: "Are you sure you want to remove this project?",
-                            type: "warning",
-                            buttons: [
-                                {'data-role': 'ok', text: 'Yes'},
-                                {'data-role': 'cancel', text: 'No'}
-                            ],
-                            destroy: true
+                        $rootScope.$apply(function () {
+                            scope.optimizeAllImages(pid);
                         });
-
-                        confirmMsg.on('click:ok', function(){
-
-                            this.destroy();
-                            $rootScope.$apply(function () {
-                                projectsManager.removeProject(project.id);
-                            });
-                        });
-
-                        confirmMsg.on('click:cancel', 'destroy');
                     }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    type: 'separator'
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Push To Remote',
+                    click: function () {
+
+                        scope.pushProjectToRemote(pid);
+                    }
                 }));
 
-                menu.append(new gui.MenuItem({
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Project Options',
+                    click: function () {
+
+                        $rootScope.$apply(function () {
+                            $location.path('/project-options/' + pid + '/general');
+                        });
+                    }
+                }));
+
+                menu.append(new Prepros.gui.MenuItem({
                     label: 'Create Config File',
-                    enabled: false
+                    click: function () {
+                        scope.createProjectConfigFile(pid);
+                    }
                 }));
 
-                menu.append(new gui.MenuItem({
-                    label: 'Remote Inspect',
-                    enabled: false
+                menu.append(new Prepros.gui.MenuItem({ type: 'separator' }));
+
+                menu.append(new Prepros.gui.MenuItem({
+                    label: 'Remove Project',
+                    click: function () {
+                        scope.removeProject(pid);
+                    }
                 }));
 
                 element.on('contextmenu', function (e) {
 
                     e.preventDefault();
+
+                    menu.remove(watcherItem);
+
+                    var watcherLabel = ( (scope.projects[pid].config.watch)? 'Disable': 'Enable' ) + ' File Watcher';
+
+                    watcherItem = new Prepros.gui.MenuItem({
+                        label: watcherLabel,
+                        click: function () {
+
+                            scope.$apply(function () {
+                                scope.toggleFileWatcher(pid);
+                            });
+                        }
+                    });
+
+                    menu.insert(watcherItem, 2);
 
                     menu.popup(e.pageX, e.pageY);
                 });

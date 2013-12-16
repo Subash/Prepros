@@ -5,7 +5,7 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros, $, angular, _*/
 
 prepros.factory("compiler",[
@@ -15,6 +15,7 @@ prepros.factory("compiler",[
     'projectsManager',
     'fileTypes',
     'notification',
+    'log',
     'liveServer',
 
     function (
@@ -23,6 +24,7 @@ prepros.factory("compiler",[
         projectsManager,
         fileTypes,
         notification,
+        log,
         liveServer
     ) {
 
@@ -40,59 +42,57 @@ prepros.factory("compiler",[
 
             if (!_.contains(compileQueue, queueId)) {
 
-                var f = projectsManager.getFileById(pid, fid);
+                var file = projectsManager.getFileById(pid, fid);
 
-                if(_.isEmpty(f)) {
+                if(_.isEmpty(file)) {
                     return;
                 }
 
                 compileQueue.push(queueId);
 
-                //Replace file.output placeholders with real paths
                 var project = projectsManager.getProjectById(pid);
 
-                var file = _.extend({}, f);
+                fileTypes.compile(file, project, function(err) {
 
-                //Sass/Compass compiler requires project path
-                file.projectPath = project.path;
+                    compileQueue = _.without(compileQueue, queueId);
 
-                //Less, Sass, Stylus compilers require autoprefixer options from project options
-                file.config.autoprefixerBrowsers = project.config.autoprefixerBrowsers;
+                    if(err) {
 
-                file.input = $filter('fullPath')(file.input, { basePath: project.path});
+                        $rootScope.$apply(function() {
 
-                //Interpolate path to replace css/js dirs
-                file.output = $filter('interpolatePath')(file.output, {config: project.config});
-
-                //Get full path of a file
-                file.output = $filter('fullPath')(file.output, { basePath: project.path});
-
-                if (fs.existsSync(file.input)) {
-
-                    fileTypes.compile(file, function (data) {
-
-                        compileQueue = _.without(compileQueue, queueId);
-
-                        $rootScope.$apply(function () {
-
-                            notification.success('Compilation Successful', 'Successfully compiled ' + file.name, data);
-
+                            log.add({
+                                type: 'error',
+                                title: 'Compilation Failed',
+                                message: 'Failed to compile ' + file.name,
+                                details: err.message + '\n' + path.join(project.path, file.input),
+                                time: new Date().toISOString()
+                            });
                         });
 
-                        if(project.config.liveRefresh) {
-                            liveServer.refresh(project.id, file.output, project.config.liveRefreshDelay);
-                        }
+                        return notification.error('Compilation Failed', 'Failed to compile ' + file.name, err.message);
+                    }
 
-                    }, function (data) {
+                    $rootScope.$apply(function() {
 
-                        compileQueue = _.without(compileQueue, queueId);
-
-                        $rootScope.$apply(function () {
-                            notification.error('Compilation Failed', 'Failed to compile ' + file.name, data);
+                        log.add({
+                            type: 'success',
+                            title: 'Compilation Successful',
+                            message: 'Successfully compiled ' + file.name,
+                            details: path.join(project.path, file.input),
+                            time: new Date().toISOString()
                         });
-
                     });
-                }
+
+                    notification.success('Compilation Successful', 'Successfully Compiled ' + file.name);
+
+                    if(project.config.liveRefresh) {
+
+                        var fullPath = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
+
+                        liveServer.refresh(project.id,fullPath , project.config.liveRefreshDelay);
+                    }
+
+                });
             }
         }
 

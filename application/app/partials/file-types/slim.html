@@ -1,0 +1,21 @@
+<label>
+    <input type="checkbox" ng-model="selectedFile.config.pretty">
+    <span>Pretty Output</span>
+</label>
+<label>
+    <span>Indent</span>
+    <select ng-model="selectedFile.config.indent">
+        <option value="default">Default ( 2 spaces )</option>
+        <option value="four">Four Spaces</option>
+        <option value="tab">Tab</option>
+    </select>
+</label>
+<label>
+    <span>Output Format</span>
+    <select ng-model="selectedFile.config.format">
+        <option value=":xhtml">XHTML</option>
+        <option value=":html5">HTML5</option>
+        <option value=":html">HTML</option>
+        <option value=":html4">HTML4</option>
+    </select>
+</label>

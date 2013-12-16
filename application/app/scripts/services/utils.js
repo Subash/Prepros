@@ -9,172 +9,258 @@
 /*global prepros, $, _, Backbone */
 prepros.factory('utils', [
 
-    '$http',
     'config',
 
-    function ($http,config) {
+	function (config) {
 
-        'use strict';
+		'use strict';
 
-        var md5 = require('MD5'),
-            path = require('path'),
-            fs = require('fs-extra');
+		var md5 = require('MD5'),
+			path = require('path'),
+			fs = require('fs-extra');
 
-        function id(string) {
+		function id(string) {
 
-            return md5(string.toLowerCase().replace(/\\/gi, '/')).substr(8, 8);
-        }
+			return md5(string.toLowerCase().replace(/\\/gi, '/')).substr(8, 8);
+		}
+		
+		//Instantiate Backbone Notifier
+		var notifier = new Backbone.Notifier({
+			theme: 'clean',
+			types: ['warning', 'error', 'info', 'success'],
+			modal: true,
+			ms: false,
+			offsetY: 100,
+			position: 'top',
+			zIndex: 10000,
+			screenOpacity: 0.5
+		});
 
-        //Backbone Notifier
-        //Instantiate Backbone Notifier
-        var notifier = new Backbone.Notifier({	// defaults
-            el: '.wrapper', // container for notification (default: 'body')
-            baseCls: 'notifier',// css classes prefix, should match css file. Change to solve conflicts.
-            theme: 'clean',// default theme for notifications (available: 'plastic'/'clean').
-            types: ['warning', 'error', 'info', 'success'],// available notification styles
-            type: null,// default notification type (null/'warning'/'error'/'info'/'success')
-            dialog: false,	// whether display the notification with a title bar and a dialog style.
-            modal: true,	// whether to dark and block the UI behind the notification (default: false)
-            closeBtn: false, // whether to display an enabled close button on notification
-            ms: false,	// milliseconds before hiding (null || false => no timeout) (default: 10000)
-            hideOnClick: true,// whether to hide the notifications on mouse click (default: true)
-            loader: false,	// whether to display loader animation in notifications (default: false)
-            destroy: false,// notification or selector of notifications to hide on show (default: false)
-            opacity: 1,	// notification's opacity (default: 1)
-            offsetY: 100,	// distance between the notifications and the top/bottom edge (default: 0)
-            fadeInMs: 500,	// duration (milliseconds) of notification's fade-in effect (default: 500)
-            fadeOutMs: 500,	// duration (milliseconds) of notification's fade-out effect (default: 500)
-            position: 'top',// default notifications position ('top' / 'center' / 'bottom')
-            zIndex: 10000,	// minimal z-index for notifications
-            screenOpacity: 0.5,// opacity of dark screen background that goes behind for modals (0 to 1)
-            width: undefined // notification's width ('auto' if not set)
-        });
+		//Shows loading overlay
+		function showLoading() {
 
-        //Shows loading overlay
-        function showLoading() {
-            notifier.info({
-                message: "Loading...",
-                destroy: true,
-                loader: true
-            });
-        }
+			notifier.info({
+				message: "Loading..... :) ",
+				destroy: true,
+				loader: true
+			});
+		}
 
-        //Hide loading animation
-        function hideLoading() {
-            notifier.destroyAll();
-        }
+		//Hide loading animation
+		function hideLoading() {
+			notifier.destroyAll();
+		}
 
-        //Open Browser
-        function openBrowser(url) {
 
-            require('nw.gui').Shell.openExternal(url);
+		function isFileInsideFolder(folder, file) {
 
-        }
+			return path.normalize(file.toLowerCase()).indexOf(path.normalize(folder.toLowerCase())) === 0;
+		}
 
-        //Check update
-        function checkUpdate(success, fail) {
+		function readDirs(dir, done) {
 
-            var params = {};
-            var os = require('os');
+			var results = [];
 
-            params.os_platform = os.platform();
-            params.os_arch = os.arch();
-            params.os_release = os.release();
-            params.app_version = config.version;
+			fs.readdir(dir, function(err, list) {
+				
+				if (err) {
+					return done(err);
+				}
 
-            var opt = {
-                method: 'get',
-                url: config.online.updateFileUrl,
-                cache: false,
-                params: params
+				var i = 0;
+
+				(function next() {
+
+					var file = list[i++];
+
+					if (!file) {
+
+						return done(null, results);
+					}
+
+					file = dir + path.sep + file;
+
+					fs.stat(file, function(err, stat) {
+
+						if (stat && stat.isDirectory()) {
+
+							readDirs(file, function(err, res) {
+
+								results = results.concat(res);
+								next();
+							});
+						} else {
+
+							results.push(file);
+							next();
+						}
+					});
+				})();
+			});
+		}
+
+		function isCrapFile(f) {
+
+			var crapReg = /(?:thumbs\.db|desktop\.ini)/gi;
+
+			return crapReg.test(f);
+
+		}
+
+
+        //Convert a project
+        function convertProject(project) {
+
+
+            var pr = {
+                id: project.id ,
+                cfgVersion: 1,
+                name: project.name,
+                path: project.path,
+                files: {},
+                imports: {},
+                images: {},
+                config: {
+                    watch: true,
+                    liveRefresh: project.config.liveRefresh,
+                    liveRefreshDelay: project.config.liveRefreshDelay,
+                    filterPatterns: project.config.filterPatterns,
+                    useCustomServer: project.config.useCustomServer,
+                    customServerUrl: project.config.customServerUrl,
+                    cssPath: config.getUserOptions().cssPath,
+                    jsPath: config.getUserOptions().jsPath,
+                    htmlPath: config.getUserOptions().htmlPath,
+                    minJsPath: config.getUserOptions().minJsPath,
+                    htmlExtension: config.getUserOptions().htmlExtension,
+                    cssPathType: config.getUserOptions().cssPathType,
+                    htmlPathType: config.getUserOptions().htmlPathType,
+                    jsPathType: config.getUserOptions().jsPathType,
+                    minJsPathType: config.getUserOptions().minJsPathType,
+                    htmlTypes: config.getUserOptions().htmlTypes,
+                    cssTypes: config.getUserOptions().cssTypes,
+                    jsTypes: config.getUserOptions().jsTypes,
+                    cssPreprocessorPath: config.getUserOptions().cssPreprocessorPath,
+                    htmlPreprocessorPath: config.getUserOptions().htmlPreprocessorPath,
+                    jsPreprocessorPath: config.getUserOptions().jsPreprocessorPath,
+                    minJsPreprocessorPath: config.getUserOptions().minJsPreprocessorPath,
+                    autoprefixerBrowsers: project.config.autoprefixerBrowsers,
+                    ftpHost: project.config.ftpHost,
+                    ftpPort: project.config.ftpPort,
+                    ftpRemotePath: project.config.ftpRemotePath,
+                    ftpUsername: project.config.ftpUsername,
+                    ftpPassword: project.config.ftpPassword,
+                    ftpIgnorePreprocessorFiles: project.config.ftpIgnorePreprocessorFiles,
+                    ftpType: 'FTP', //FTP, SFTP
+                    ftpExcludePatterns: project.config.ftpExcludePatterns
+                }
             };
 
-            var checker = $http(opt);
 
-            checker.success(function (data) {
+            if(project.config.cssPath.indexOf(':') < 0) {
 
-                if (config.version !== data.version) {
-
-                    success({
-                        available: true,
-                        version: data.version,
-                        date: data.releaseDate
-                    });
-                } else {
-                    success({
-                        available: false,
-                        version: config.version,
-                        date: data.releaseDate
-                    });
-                }
-            });
-
-            checker.error(function () {
-                if (fail) {
-                    fail();
-                }
-            });
-        }
-
-        function isFileInsideFolder(folder, file) {
-
-            return file.toLowerCase().indexOf(folder.toLowerCase()) === 0;
-        }
-
-        function readDirs(dir, cb) {
-
-            var f = [];
-
-            function get(dir) {
-
-                var files = fs.readdirSync(dir);
-
-                files.forEach(function (file) {
-
-                    var fp = dir + path.sep + file;
-
-                    if (fs.statSync(fp).isDirectory()) {
-
-                        get(fp);
-
-                    } else {
-
-                        f.push(fp);
-                    }
-                });
-            }
-
-            try {
-
-                get(dir);
-
-            } catch (e) {
-
-                return cb(e);
+                pr.config.cssPathType = 'REPLACE_TYPE';
+                pr.config.cssPath = project.config.cssPath;
 
             }
 
-            cb(null, f);
+            if(project.config.jsPath.indexOf(':') < 0) {
+
+                pr.config.jsPathType = 'REPLACE_TYPE';
+                pr.config.jsPath = project.config.jsPath;
+
+            }
+
+            if(project.config.htmlPath.indexOf(':') < 0) {
+
+                pr.config.htmlPathType = 'REPLACE_TYPE';
+                pr.config.htmlPath = project.config.htmlPath;
+
+            }
+
+            if(project.config.jsMinPath && project.config.jsMinPath.indexOf(':') < 0) {
+
+                pr.config.minJsPathType = 'RELATIVE_FILEDIR';
+                pr.config.minJsPath = project.config.jsMinPath;
+
+            }
+
+            _.each(project.files, function(file) {
+
+                var _file = {};
+
+                _file.config = {};
+                _file.id = file.id;
+                _file.pid = file.pid;
+                _file.name = file.name;
+                _file.type = file.type;
+
+                _file.input = file.input;
+
+                file.customOutput = false;
+
+                if(file.output && file.output.indexOf(':') >= 0) {
+
+                    _file.customOutput = file.output;
+                }
+
+				if(file.customOutput) {
+
+					_file.customOutput = file.customOutput;
+
+				}
+
+                _file.config = $.extend(_file.config, file.config);
+
+                pr.files[file.id] = _file;
+            });
+
+
+            _.each(project.imports, function(imp) {
+
+                pr.imports[imp.id] = imp;
+
+            });
+
+			if(!_.isEmpty(project.images)) {
+
+				_.each(project.images, function(image) {
+
+					pr.images[image.id] = image;
+
+				})
+
+			}
+
+            return JSON.parse(JSON.stringify(pr));
         }
 
-        var isCrapFile = function(f) {
 
-            var crapReg = /(?:thumbs\.db|desktop\.ini)/gi;
+        //Convert old projects to new projects
+        function convertProjects(projects) {
 
-            return crapReg.test(f);
+            var _pr = {};
 
-        };
+            _.each(projects, function(project) {
 
-        return {
-            id: id,
-            showLoading: showLoading,
-            hideLoading: hideLoading,
-            openBrowser: openBrowser,
-            checkUpdate: checkUpdate,
-            notifier: notifier,
-            isFileInsideFolder: isFileInsideFolder,
-            readDirs: readDirs,
-            isCrapFile: isCrapFile
-        };
-    }
+                _pr[project.id] = convertProject(project);
+
+            });
+
+
+            return JSON.parse(JSON.stringify(_pr));
+
+        }
+
+		return {
+			id: id,
+			showLoading: showLoading,
+			hideLoading: hideLoading,
+			notifier: notifier,
+			isFileInsideFolder: isFileInsideFolder,
+			readDirs: readDirs,
+			isCrapFile: isCrapFile,
+            convertProject: convertProject,
+            convertProjects: convertProjects
+		};
+	}
 ]);

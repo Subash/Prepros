@@ -5,77 +5,85 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
-/*global prepros, $, _, Mousetrap*/
+/*jshint browser: true, node: true, curly: false*/
+/*global prepros, $, _, Mousetrap, Prepros*/
 
 //Directive for keyboard shortcuts
 prepros.directive('keyboardShortcuts', [
 
-    '$rootScope',
-    'compiler',
-    'liveServer',
-    'projectsManager',
-    'utils',
+    'pro',
 
-
-    function (
-        $rootScope,
-        compiler,
-        liveServer,
-        projectsManager,
-        utils
-    ) {
+    function (pro) {
 
         'use strict';
-
-        var fs = require('fs'),
-            path = require('path');
 
         return {
             restrict: 'A',
             link: function (scope) {
 
+                var keysDisabled = function() {
+
+                    return scope.DISABLE_KEYBOARD_SHORTCUTS;
+                };
+
+
+                //Select All
+                Mousetrap.bind(['ctrl+a', 'command+a'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    scope.clearMultiSelect();
+
+                    if(scope.routePath === 'IMAGE_OPTIMIZATION') {
+
+                        scope.$apply(function() {
+
+                            _.each(scope.selectedProjectImages, function(img) {
+
+                                scope.addMultiSelectImage(img.pid, img.id);
+
+                            });
+
+                        });
+
+
+                    } else if(scope.routePath === 'FILES') {
+
+                        scope.$apply(function() {
+
+                            _.each(scope.selectedProjectFiles, function(f) {
+
+                                scope.addMultiSelectFile(f.pid, f.id);
+
+                            });
+
+                        });
+
+                    }
+
+                    return false;
+                });
+
                 //New Project
                 Mousetrap.bind(['ctrl+n', 'command+n'], function () {
 
-                    var elm = $('<input type="file" nwdirectory>');
+                    if(keysDisabled()) return false;
 
-                    elm.trigger('click');
-
-                    $(elm).on('change', function (e) {
-
-                        var files = e.currentTarget.files;
-
-                        _.each(files, function (file) {
-
-                            //Get stats
-                            var stats = fs.statSync(file.path);
-
-                            //Check if it is a directory and not a drive
-                            if (stats.isDirectory() && path.dirname(file.path) !== file.path) {
-
-                                scope.$apply(function () {
-
-                                    //Add to projects
-                                    projectsManager.addProject(file.path);
-
-                                });
-
-                            }
-                        });
-
-                    });
+                    scope.addProject();
 
                     return false;
                 });
 
                 //Refresh Project Files
                 Mousetrap.bind(['ctrl+r', 'f5', 'command+r'], function () {
+
+                    if(keysDisabled()) return false;
+
                     if (scope.selectedProject.id) {
 
                         scope.$apply(function () {
 
-                            projectsManager.refreshProjectFiles(scope.selectedProject.id);
+                            scope.refreshProject(scope.selectedProject.id);
 
                         });
 
@@ -86,84 +94,168 @@ prepros.directive('keyboardShortcuts', [
                 //Open Live Url
                 Mousetrap.bind(['ctrl+l', 'command+l'], function () {
 
+                    if(keysDisabled()) return false;
+
                     if (scope.selectedProject.id) {
 
-                        if(scope.selectedProject.config.useCustomServer) {
-
-                            utils.openBrowser(scope.selectedProject.config.customServerUrl);
-
-                        } else {
-
-                            utils.openBrowser(liveServer.getLiveUrl(scope.selectedProject));
-                        }
-
+                        scope.openProjectPreview(scope.selectedProject.id);
                     }
+
+                    return false;
+                });
+
+                //Copy Live Preview Url
+                Mousetrap.bind(['ctrl+shift+l', 'command+shift+l'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    if (scope.selectedProject.id) {
+
+                        scope.copyProjectPreviewUrl(scope.selectedProject.id);
+                    }
+
+                    return false;
+                });
+
+                //Remote inspect url
+                Mousetrap.bind(['ctrl+i', 'command+i'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    scope.openRemoteInspect();
+
                     return false;
                 });
 
                 //Remove Project
                 Mousetrap.bind(['ctrl+d', 'command+d'], function () {
+
+                    if(keysDisabled()) return false;
+
                     if (scope.selectedProject.id) {
 
-                        var confirmMsg = utils.notifier.notify({
-                            message: "Are you sure you want to remove this project?",
-                            type: "warning",
-                            buttons: [
-                                {'data-role': 'ok', text: 'Yes'},
-                                {'data-role': 'cancel', text: 'No'}
-                            ],
-                            destroy: true
+                        scope.$apply(function() {
+                            scope.removeProject(scope.selectedProject.id);
                         });
 
-                        confirmMsg.on('click:ok', function(){
-
-                            this.destroy();
-                            $rootScope.$apply(function () {
-                                projectsManager.removeProject(scope.selectedProject.id);
-                            });
-                        });
-
-                        confirmMsg.on('click:cancel', 'destroy');
                     }
+                    return false;
+                });
+
+                //Push to remote
+                Mousetrap.bind(['ctrl+u', 'command+u'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    if (scope.selectedProject.id) {
+
+                        scope.pushProjectToRemote(scope.selectedProject.id);
+
+                    }
+                    return false;
+                });
+
+                //Compile file
+                Mousetrap.bind(['ctrl+s', 'command+s'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    if(_.isEmpty(scope.multiSelect.files)) {
+
+                        if(scope.selectedFile.id) {
+
+                            scope.compile(scope.selectedFile.pid, scope.selectedFile.id);
+
+                        }
+
+                    } else {
+
+                        scope.compileMultiSelectFiles();
+
+                    }
+
                     return false;
                 });
 
                 //Compile all project files
-                Mousetrap.bind(['ctrl+shift+c', 'command+shift+c'], function () {
+                Mousetrap.bind(['ctrl+shift+s', 'command+shift+s'], function () {
+
+                    if(keysDisabled()) return false;
+
                     if (scope.selectedProject.id) {
 
-                        var files = projectsManager.getProjectFiles(scope.selectedProject.id);
+                        scope.compileAllFiles(scope.selectedProject.id);
+                    }
+                    return false;
+                });
 
-                        _.each(files, function (file) {
 
-                            compiler.compile(file.pid, file.id);
+                //Optmize Selected Image
+                Mousetrap.bind(['ctrl+o', 'command+o'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    if(_.isEmpty(scope.multiSelect.images)) {
+
+                        if(scope.selectedImage.id) {
+
+                            scope.optimizeImage(scope.selectedImage.pid, scope.selectedImage.id)
+
+                        }
+
+                    } else {
+
+                        if(!Prepros.IS_PRO) return pro.showMessage();
+
+                    }
+
+                    return false;
+                });
+
+                //Optimize All Images
+                Mousetrap.bind(['ctrl+shift+o', 'command+shift+o'], function () {
+
+                    if(keysDisabled()) return false;
+
+                    if (scope.selectedProject.id) {
+
+                        scope.$apply(function() {
+
+                            scope.optimizeAllImages(scope.selectedProject.id);
 
                         });
                     }
                     return false;
                 });
 
-                //Compile selected project file
+                //Copy
                 Mousetrap.bind(['ctrl+c', 'command+c'], function () {
+
+                    if(keysDisabled()) return false;
 
                     if (window.getSelection().toString() !== "") {
 
-                        require('nw.gui').Clipboard.get().set(window.getSelection().toString(), 'text');
+                        Prepros.gui.Clipboard.get().set(window.getSelection().toString(), 'text');
 
-                    } else {
+                    }
+                    return false;
+                });
 
-                        if (scope.selectedFile.id) {
 
-                            compiler.compile(scope.selectedFile.pid, scope.selectedFile.id);
-                        }
+                Mousetrap.bind(['ctrl+shift+x', 'command+shift+x'], function () {
+
+                    var sure = window.confirm('Are you sure you want to clear Prepros data and restart it ?');
+
+                    if(sure) {
+
+                        localStorage.clear();
+                        Prepros.gui.App.quit(); //Restarting is not really possible yet
 
                     }
 
                     return false;
                 });
-
             }
         };
-
     }
 ]);

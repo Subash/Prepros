@@ -5,112 +5,65 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('livescript', [
 
-    'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path');
+        var fs = require('fs-extra');
+        var path = require('path');
+        var livescript = require('LiveScript');
+        var ugly = require('uglify-js');
 
+        var compile = function(file, project, callback) {
 
-        var format = function (pid, fid, filePath, projectPath) {
+            var input = path.resolve(project.path, file.input);
 
-            //File name
-            var name = path.basename(filePath);
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
-            // Output path
-            var output = filePath.replace(/\.ls/gi, '.js');
-
-            var pathRegx = /\\livescript\\|\/livescript\//gi;
-
-            //Find output path; save to /js folder if file is in /livescript folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{jsPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            return {
-
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'LS',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().livescript
+            var options = {
+                bare: file.config.bare
             };
-        };
 
-        var compile = function (file, successCall, errorCall) {
+            fs.readFile(input, 'utf8', function(err, data) {
 
-            var livescript = require('LiveScript');
+                if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
-            var ugly = require('uglify-js');
+                try {
 
-            var options = {};
+                    var javascript = livescript.compile(data, options);
 
-            if (file.config.bare) {
+                    if (file.config.uglify) {
 
-                options.bare = true;
-            }
-
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
-                if (err) {
-
-                    errorCall(err.message);
-
-                } else {
-
-                    try {
-
-                        var javascript = livescript.compile(data.toString(), options);
-
-                        if (file.config.uglify) {
-
-                            javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
-                        }
-
-                        fs.outputFile(file.output, javascript, function (err) {
-
-                            if (err) {
-
-                                errorCall(err.message);
-
-                            } else {
-
-                                successCall(file.input);
-
-                            }
-
-                        });
-
-
-                    } catch (e) {
-
-                        errorCall(e.message + "\n" + file.input);
+                        javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
                     }
+
+                    fs.outputFile(output, javascript, function(err) {
+
+                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
+
+                        callback(null, input);
+
+                    });
+
+
+                } catch (e) {
+
+                    if(err) return callback(new Error(err.message + '\n' + input));
                 }
             });
+
+
         };
 
+
         return {
-            format: format,
             compile: compile
         };
     }

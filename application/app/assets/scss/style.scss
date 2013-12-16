@@ -1,52 +1,27 @@
-@import 'third-party';
-@import 'custom-scrollbars';
+//Import third party styles at first
+
+$vendor: '../../vendor';
+
+@import url('#{$vendor}/bootstrap/bootstrap.min.css');
+@import url('#{$vendor}/icomoon/style.css');
+@import url('#{$vendor}/sourcesanspro/font.css');
+@import url('#{$vendor}/backbone-notifier/backbone-notifier.css');
+
+
+@import 'bourbon';
+
+@import 'variables';
 @import 'base';
-@import 'bs-custom';
+@import 'scrollbars';
+@import 'bootstrap_custom';
+@import 'title-bar';
+@import 'layout';
 @import 'sidebar';
-@import 'titlebar';
-@import 'content';
-@import 'notifications';
+@import 'footer';
 @import 'files';
+@import 'app-options';
+@import 'home-screen';
+@import 'notification';
 @import 'log';
-@import 'multi-device';
-@import 'optim-image';
-@import 'options-window';
-
-
-.wrapper {
-  overflow: hidden;
-  width: 952;
-  height: 552px;
-  border: 1px solid #3e3e3e;
-  &:after {
-        content: "";
-        visibility: hidden;
-        display: block;
-        clear: both;
-    }
-}
-
-.modal.project-options.fade.in {
-  width: 435px;
-  margin-left: -224px;
-}
-
-.project-options .side-by-side-options label {
-  margin-left: 0;
-  margin-bottom: 0;
-}
-
-.project-options .side-by-side-options label:last-child {
-  margin-left: 20px;
-}
-
-.project-options .side-by-side-option-second {
-  margin-left: 12px;
-}
-
-.modal {
-  .tab-content {
-    max-height: 250px;
-    overflow: auto;
-  }
-}
+@import 'multi-device-testing';
+@import 'images';

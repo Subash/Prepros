@@ -5,15 +5,13 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true, loopfunc: true*/
+/*jshint browser: true, node: true, loopfunc: true, curly: false*/
 /*global prepros, _*/
 
 //Imports Visitor
 prepros.factory('importsVisitor',[
 
-    'utils',
-
-    function (utils) {
+    function () {
 
         'use strict';
 
@@ -21,177 +19,126 @@ prepros.factory('importsVisitor',[
             path = require('path');
 
 
-        function visitImports(filePath, projectPath) {
+        function getImports(filePath, callback) {
 
-            var can = ['less', 'sass', 'scss', 'jade', 'styl', 'slim', 'js', 'coffee'];
+            var imports = [];
 
-            if(!_.contains(can, path.extname(filePath).slice(1))) {
+            var regx = {
+                less: /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g,
+                sass: /@import\s+(.*)/g,
+                scss: /@import\s['"]*([^;]+)[;"']/g,
+                styl: /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g,
+                jade: /(?:include|extends)\s+(.*)/g,
+                slim: /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g,
+                js:  /\/\/(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi,
+                coffee:  /#(?:\s|)@(?:\s|)(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi
+            };
 
-                return [];
-            }
+            var ext = path.extname(filePath).toLowerCase().slice(1);
 
-            var importedFiles = [];
-            var ext = path.extname(filePath).toLowerCase();
-            var data;
-            try {
+            if(!ext || !regx[ext]) return callback(null, []);
 
-                data = fs.readFileSync(filePath).toString();
-
-            } catch(e) {
-
-                return [];
-            }
-
-            var result;
+            var importReg = regx[ext];
             var basedir = path.dirname(filePath);
-            var importReg;
 
-            //Strip Comments
-            if (ext !== '.js') {
-                data = data.replace(/\/\*.+?\*\/|\/\/.*(?=[\n\r])/g, '');
-                data = data.replace(/\/\/.*/g, '');
-            }
+            fs.readFile(filePath, 'utf8', function(err, data) {
 
-
-            if (ext === '.less') {
-                importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
-            }
-            if (ext === '.scss') {
-                importReg = /@import\s['"]*([^;]+)[;"']/g;
-            }
-            if (ext === '.sass') {
-                importReg = /@import\s+(.*)/g;
-            }
-            if (ext === '.styl') {
-                importReg = /@import\s(?:url\(|\(|)['"]*([^\n"';\)]*)/g;
-            }
-            if (ext === '.jade') {
-                importReg = /(?:include|extends)\s+(.*)/g;
-            }
-            if (ext === '.slim') {
-                importReg = /\==\sSlim::Template.new\(['"]*([^\n"']+)['"]\).render/g;
-            }
-            if (ext === '.js') {
-                importReg = /\/\/(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
-            }
-            if (ext === '.coffee') {
-                importReg = /#(?:\s|)@(?:prepros|codekit)-(?:append|prepend)\s+(.*)/gi;
-            }
-
-            do {
-                result = importReg.exec(data);
-
-                if (result) {
-
-                    var file = result[1].replace(/"|'|\n/gi, '').trim();
-
-                    if(file.indexOf(',')>=0) {
-
-                        file = file.split(',').map(function(f) {
-
-                            f = f.trim();
-
-                            if (f.indexOf(":") >= 0) {
-                                f = path.normalize(f);
-                            } else {
-                                f = path.join(basedir, f);
-                            }
-
-                            return f;
-                        });
-                    }
-
-                    if(_.isArray(file) ) {
-
-                        _.each(file, function (imp) {
-
-                            //Add extension if file doesn't have that
-                            if (path.extname(imp).toLowerCase() !== ext) {
-                                imp = imp + ext;
-                            }
-
-                            //First check for partial file
-                            var _imp = path.dirname(imp) + path.sep + '_' + path.basename(imp);
-
-                            if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp)  && fs.statSync(_imp).isFile()) {
-
-                                importedFiles.push(_imp);
-
-                            } else if (utils.isFileInsideFolder(projectPath, imp) && fs.existsSync(imp) && fs.statSync(imp).isFile()) {
-
-                                importedFiles.push(imp);
-
-                            }
-                        });
-                    } else {
-
-                        //Check if path is full or just relative
-                        if (file.indexOf(':') >= 0) {
-                            file = path.normalize(file);
-                        } else {
-                            file = path.join(basedir, file);
-                        }
-
-                        //Test if file without adding extension exists
-                        if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
-
-                            importedFiles.push(file);
-
-                        } else {
-
-                            if (path.extname(file).toLowerCase() !== ext) {
-                                file = file + ext;
-                            }
-
-                            //Add extension if file doesn't have that
-                            if (path.extname(file).toLowerCase() !== ext) {
-                                file = file + ext;
-                            }
-
-                            //First check for partial file
-                            var _imp = path.dirname(file) + path.sep + '_' + path.basename(file);
-
-                            if (utils.isFileInsideFolder(projectPath, _imp) && fs.existsSync(_imp) && fs.statSync(_imp).isFile()) {
-
-                                importedFiles.push(_imp);
-
-                            } else if (utils.isFileInsideFolder(projectPath, file) && fs.existsSync(file) && fs.statSync(file).isFile()) {
-
-                                importedFiles.push(file);
-                            }
-                        }
-                    }
+                if(err) {
+                    return callback(err);
                 }
-            } while (result);
 
-            return importedFiles;
+                var list = [];
+                var result;
+
+                do {
+
+                    result = importReg.exec(data);
+                    if (result) {
+
+                        var imps = result[1].replace(/"|'|\n|;/gi, '').split(',');
+
+                        imps = imps.map(function(imp) {
+
+                            imp = imp.trim().replace();
+
+                            return path.resolve(basedir, imp);
+                        });
+
+                        list = list.concat(imps);
+                    }
+
+                } while (result);
+
+                var i = 0;
+                (function next() {
+
+                    var file = list[i++];
+
+                    if (!file) {
+
+                        return callback(null, _.uniq(imports));
+                    }
+
+                    //Check the path without adding extension
+                    fs.stat(file, function(err, stat) {
+
+                        if(err || stat.isDirectory()) {
+
+                            //Add Extension if doesn't exist
+                            if (path.extname(file).toLowerCase() !== ext) {
+                                file = file + '.' + ext;
+                            }
+
+                            //Chcek for non partial file
+                            fs.stat(file, function(err, stat) {
+
+                                if(err) {
+
+                                    //Check for the partial file
+                                    file = path.dirname(file) + path.sep + '_' + path.basename(file);
+
+                                    getImports(file, function(err, res) {
+
+                                        if(!err) {
+
+                                            imports.push(file);
+                                            imports = imports.concat(res);
+                                        }
+                                        next();
+                                    });
+
+                                } else {
+
+                                    getImports(file, function(err, res) {
+
+                                        if(!err) {
+
+                                            imports.push(file);
+                                            imports = imports.concat(res);
+                                        }
+                                        next();
+                                    });
+                                }
+                            });
+
+                        } else {
+
+                            getImports(file, function(err, res) {
+
+                                if(!err) {
+
+                                    imports.push(file);
+                                    imports = imports.concat(res);
+                                }
+                                next();
+                            });
+                        }
+                    });
+
+                })();
+
+            });
         }
-
-
-        //Function to visit imports with nested support
-        function getImports(filePath, projectPath) {
-
-            var fileImports = [];
-
-            fileImports[0] = visitImports(filePath, projectPath);
-
-            //Get imports of imports up to four levels
-            for (var i = 1; i < 5; i++) {
-
-                fileImports[i] = [];
-
-                _.each(fileImports[i - 1], function (importedFile) {
-
-                    fileImports[i] = _.uniq(_.union(fileImports[i], visitImports(importedFile, projectPath)));
-
-                });
-            }
-
-            //Remove repeated imports
-            return _.uniq(_.flatten(fileImports));
-
-        }
-
 
         return {
             getImports: getImports

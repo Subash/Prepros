@@ -1,0 +1,47 @@
+html
+	head
+		title Prepros Projects
+		meta(name='viewport')(content='width=device-width, initial-scale=1')
+		link(rel='icon',href='favicon.ico',type='image/x-icon')
+		:stylus
+
+			@import url('http://fonts.googleapis.com/css?family=Bitter:700')
+
+			body
+				max-width 400px
+				margin auto
+				background #fff;
+				font 14px/1.5
+				font-family sans-serif
+				color #666
+			h1
+				margin 20px
+				font-family 'Bitter'
+				font-weight 700
+				text-align center
+
+			.project a
+				display block
+				text-decoration none
+				color #FFF
+				margin 10px
+				padding 10px
+				background #00A0B0
+				text-transform capitalize
+				-webkit-transition padding .4s
+				-moz-transition padding .4s
+				transition padding .4s
+
+				&:hover
+					background lighten(#00A0B0, 5%)
+					-webkit-transition padding .4s
+					-moz-transition padding .4s
+					transition padding .4s
+			p
+				text-align center
+
+	body
+		h1 Prepros Projects
+		- each project in projects
+			div.project
+				a(href="javascript:return false")(onClick="window.location.port =" + project.port) #{project.name}

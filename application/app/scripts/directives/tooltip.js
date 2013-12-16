@@ -23,7 +23,7 @@ prepros.directive('tooltip', [
 
                 $timeout(function () {
 
-                    element.tooltip({delay: 500, title: attrs.tooltip, container: '.wrapper'});
+                    element.tooltip({delay: 500, title: attrs.tooltip, container: 'body'});
 
                 });
 

@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 gem 'sass'
 gem 'compass'
 gem 'haml'
@@ -6,3 +6,7 @@ gem 'kramdown'
 gem 'slim'
 gem 'bourbon'
 gem 'neat'
+gem 'susy'
+gem 'bitters'
+gem "autoprefixer-rails"
+gem "csso-rails"

@@ -10,22 +10,22 @@
 
 'use strict';
 
-var prepros = angular.module('prepros', ['ui']).config([
+var prepros = angular.module('prepros', []).config([
 
-    '$compileProvider',
-    '$routeProvider',
+	'$compileProvider',
+	'$routeProvider',
 
-    function ($compileProvider, $routeProvider) {
+	function ($compileProvider, $routeProvider) {
 
-        //Whitelist file urls
-        $compileProvider.urlSanitizationWhitelist(/^\s*(file):/);
-
-        //Routers
-        $routeProvider
-            .when('/home', {path: 'home'})
-            .when('/files/:pid', {path: 'files'})
-            .when('/files/:pid/:fid', {path: 'files'})
-            .when('/log', {path: 'log'})
-            .when('/optim/:pid', {path: 'optim'})
-            .otherwise({redirectTo: '/home'});
+		//Routers
+		$routeProvider
+			.when('/home', {path: 'HOME'})
+			.when('/files/:pid', {path: 'FILES'})
+			.when('/files/:pid/:fid', {path: 'FILES'})
+			.when('/project-options/:pid/:section', {path: 'PROJECT_OPTIONS'})
+			.when('/log', {path: 'LOG'})
+			.when('/images/:pid', {path: 'IMAGE_OPTIMIZATION'})
+            .when('/images/:pid/:imgid', {path: 'IMAGE_OPTIMIZATION'})
+			.when('/app-options/:section', {path: 'APP_OPTIONS'})
+			.otherwise({redirectTo: '/home'});
 }]);

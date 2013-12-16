@@ -5,118 +5,83 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('slim', [
 
     'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function (config, $filter) {
 
         'use strict';
 
         var fs = require('fs-extra'),
             path = require('path'),
-            cp = require('child_process'),
-            _id = utils.id;
-
-        var format = function (pid, fid, filePath, projectPath) {
-
-            //File name
-            var name = path.basename(filePath);
-
-            // Output path
-            var output = filePath.replace(/\.slim/gi, config.getUserOptions().htmlExtension);
-
-            var pathRegx = /\\slim\\|\/slim\//gi;
-
-            //Find output path; save to /html folder if file is in /slim folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{htmlPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Slim',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().slim
-            };
-        };
+            cp = require('child_process');
 
 
-        var compile = function (file, successCall, errorCall) {
+        var compile = function (file, project, callback) {
+
+            var input = path.resolve(project.path, file.input);
+
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
             var args = config.ruby.getGem('slim');
 
             args.push('-oformat=' + file.config.format);
 
             if (file.config.indent === 'four') {
-
                 args.push('-oindent="    "');
 
             } else if (file.config.indent === 'tab') {
 
                 args.push('-oindent="\t"');
-
             }
 
             //Input and output
-            args.push(file.input, file.output);
+            args.push(input, output);
 
             //Pretty
-            if (file.config.pretty) {
+            if (file.config.pretty) args.push('--pretty');
 
-                args.push('--pretty');
-            }
+            fs.mkdirs(path.dirname(output), function(err) {
 
-            fs.mkdirsSync(path.dirname(file.output));
+                if(err) return callback(err);
 
-            //Start a child process to compile the file
-            var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(file.input)});
+                //Start a child process to compile the file
+                var rubyProcess = cp.spawn(config.ruby.getExec('slim'), args, {cwd: path.dirname(input)});
 
-            rubyProcess.once('error', function (e) {
-                errorCall('Unable to execute ruby —error ' + e.message);
-            });
+                rubyProcess.once('error', function (e) {
+                    callback(new Error( 'Unable to execute ruby —error ' + e.message));
+                });
 
-            var compileErr = false;
+                var compileErr = false;
 
-            //If there is a compilation error
-            rubyProcess.stderr.once('data', function (data) {
+                //If there is a compilation error
+                rubyProcess.stderr.on('data', function (data) {
 
-                compileErr = true;
+                    compileErr = true;
 
-                errorCall(data.toString() + "\n" + file.input);
+                    callback(new Error(data.toString() + "\n" + input));
 
-            });
+                });
 
-            //Success if there is no error
-            rubyProcess.once('exit', function () {
-                if (!compileErr) {
+                //Success if there is no error
+                rubyProcess.once('exit', function () {
 
-                    successCall(file.input);
+                    rubyProcess.removeAllListeners();
 
-                }
+                    if (!compileErr)  callback(null, input);
 
-                rubyProcess = null;
+                    rubyProcess = null;
+                });
+
             });
         };
 
         return {
-            format: format,
             compile: compile
         };
     }

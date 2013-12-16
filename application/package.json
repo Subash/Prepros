@@ -9,60 +9,56 @@
         "toolbar": false,
         "frame": false,
         "position": "center",
-        "resizable": false,
-        "width": 902,
-        "height": 552,
+        "resizable": true,
+        "width": 1100,
+        "min_width": 675,
+        "height": 680,
+        "min_height": 650,
         "show": false
     },
 
     "__JSON_NOTE": "All paths are relative to this json file",
 
-    "version" : "3.1.0",
-    "releaseDate": "September 14, 2013",
-
     "dependencies": {
-
-        "autoprefixer": "0.8.20130911",
-        "chokidar": "0.6.3",
+        "autoprefixer": "0.8.20131104",
+        "chokidar": "0.7.1",
+        "clean-css": "2.0.2",
         "coffee-script": "1.6.3",
-        "iced-coffee-script": "1.6.3-f",
-        "express": "3.4.0",
-        "fs-extra": "0.6.3",
+        "express": "3.4.4",
+        "fs-extra": "0.8.1",
+        "iced-coffee-script": "1.6.3-g",
         "jade": "0.35.0",
-        "less": "1.4.2",
+        "less": "1.5.1",
         "LiveScript": "1.2.0",
-        "marked": "0.2.9",
+        "marked": "0.2.10",
         "MD5": "1.1.0",
         "minimatch": "0.2.12",
-        "nib": "0.9.1",
+        "nib": "1.0.1",
         "portfinder": "0.2.1",
-        "request": "2.27.0",
-        "stylus": "0.37.0",
-        "uglify-js": "2.4.0",
-        "websocket": "1.0.8",
-        "ycssmin": "1.0.1"
-    },
-
-    "scripts": {
-        "install" : "patch node_modules/less/lib/less/parser.js < less.patch"
+        "stylus": "0.40.3",
+        "uglify-js": "2.4.3",
+        "websocket": "1.0.8"
     },
 
     "ruby": {
 
-        "path": "ruby/bin/ruby",
+        "path": "bin/ruby/bin/ruby",
         "version": "2.0.0",
         "gemPath": "gems/",
 
         "bourbon": "gems/gems/bourbon-3.1.8/app/assets/stylesheets/",
-        "neat": "gems/gems/neat-1.4.0/app/assets/stylesheets/",
+        "neat": "gems/gems/neat-1.5.0/app/assets/stylesheets/",
+        "bitters": "gems/gems/bitters-0.9.1/app/assets/stylesheets",
 
         "gems": {
-            "sass": "3.2.10",
-            "compass": "0.12.2",
-            "haml": "4.0.3",
-            "slim": "2.0.1",
+            "sass": "3.3.0.rc.2",
+            "compass": "1.0.0.alpha.13",
+            "haml": "4.0.4",
+            "slim": "2.0.2",
             "bourbon": "3.1.8",
-            "neat": "1.4.0"
+            "neat": "1.5.0",
+            "susy": "1.0.9",
+            "bitters": "0.9.1"
         }
     }
 }

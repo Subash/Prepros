@@ -6,159 +6,96 @@
  */
 
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('stylus', [
 
-    'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ($filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path'),
-            _id = utils.id,
-            autoprefixer = require('autoprefixer'),
-            cssmin = require('ycssmin').cssmin;
+        var path = require('path');
+        var autoprefixer = require('autoprefixer');
+        var fs = require('fs-extra');
+        var CleanCss = require('clean-css');
+        var stylus = require('stylus');
+        var nib = require('nib');
 
+        var compile = function(file, project, callback) {
 
-        var format = function (pid, fid, filePath, projectPath) {
+            var input = path.resolve(project.path, file.input);
 
-            //File name
-            var name = path.basename(filePath);
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
-            // Output path
-            var output = filePath.replace(/\.styl/gi, '.css');
+            fs.readFile(input, 'utf8', function(err, data) {
 
-            var pathRegx = /\\styl\\|\\stylus\\|\/styl\/|\/stylus\//gi;
+                if(err) return callback(new Error('Unable to read source file\n' + err.message));
 
-            //Find output path; save to user defined css folder if file is in styl or stylus folder
-            if (filePath.match(pathRegx)) {
+                var importPath = path.dirname(input);
 
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
+                var compiler = stylus(data).set('filename', file.input).include(importPath);
 
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
+                //Stylus nib plugin
+                if (file.config.nib) compiler.use(nib());
 
-            }
+                //Compress
+                compiler.set('compress', file.config.compress);
 
-            return {
-                id: fid,
-                pid: pid,
-                name: name,
-                type: 'Stylus',
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().stylus
-            };
-        };
+                //Line numbers
+                compiler.set('linenos', file.config.lineNumbers);
 
+                //Render
+                compiler.render(function (err, css) {
 
-        //Compile
-        var compile = function (file, successCall, errorCall) {
+                    if(err) return callback(new Error(err.message));
 
-            var stylus = require('stylus');
+                    if(file.config.autoprefixer) {
 
-            var nib = require('nib');
+                        try {
 
-            fs.readFile(file.input, { encoding: 'utf8' }, function (err, data) {
+                            if(project.config.autoprefixerBrowsers) {
 
-                if (err) {
+                                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                    return i.trim();
+                                });
 
-                    errorCall(err.message);
+                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
 
-                } else {
+                            } else {
 
-                    var importPath = path.dirname(file.input);
-
-                    var compiler = stylus(data.toString())
-                        .set('filename', file.input)
-                        .include(importPath);
-
-                    //Stylus nib plugin
-                    if (file.config.nib) {
-                        compiler.use(nib());
-                    }
-
-                    //Compress
-                    if (file.config.compress) {
-                        compiler.set('compress', true);
-                    } else {
-                        compiler.set('compress', false);
-                    }
-
-
-                    //Line numbers
-                    if (file.config.lineNumbers) {
-                        compiler.set('linenos', true);
-                    } else {
-                        compiler.set('linenos', false);
-                    }
-
-                    //Render
-                    compiler.render(function (err, css) {
-                        if (err) {
-
-                            errorCall(err.message);
-
-                        } else {
-
-                            if(file.config.autoprefixer) {
-
-                                try {
-
-                                    if(file.config.autoprefixerBrowsers) {
-
-                                        var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                                            return i.trim();
-                                        });
-
-                                        css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
-
-                                    } else {
-
-                                        css =  autoprefixer().compile(css);
-                                    }
-
-                                    if(file.config.compress) {
-
-                                        css = cssmin(css);
-                                    }
-
-                                } catch (e) {
-
-                                    errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                                }
+                                css =  autoprefixer().compile(css);
                             }
 
-                            fs.outputFile(file.output, css, function (err) {
+                            if(file.config.compress) {
 
-                                if (err) {
+                                css = new CleanCss({processImport: false}).minify(css);
+                            }
 
-                                    errorCall(err.message);
+                        } catch (err) {
 
-                                } else {
+                            callback(new Error('Failed to autoprefix css' + err.message));
 
-                                    successCall(file.input);
-
-                                }
-
-                            });
                         }
+                    }
+
+                    fs.outputFile(output, css, function(err) {
+
+                        if(err) return callback(new Error('Unable to write compiled data. '+ err.message));
+
+                        callback(null, input);
+
                     });
-                }
+
+                });
             });
         };
 
+
+
         return {
-            format: format,
             compile: compile
         };
     }

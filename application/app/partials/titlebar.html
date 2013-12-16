@@ -1,0 +1,45 @@
+<div class="title-bar-sidebar-overlay"></div>
+
+<div class="title-bar-controls">
+
+	<div class="title-bar__control title-bar__control--highlighted" ng-if="UPDATE_AVAILABLE">
+		<a ng-href="{{UPDATE_DATA.updateUrl}}" link-external tooltip="An Update is Available." data-placement="bottom">
+			<i class="title-bar__control__icon icon-gift"></i>
+		</a>
+	</div>
+
+	<div class="title-bar__control">
+		<a ng-href="#/home" tooltip="Go to Prepros Home Screen" data-placement="bottom">
+			<i class="title-bar__control__icon icon-home"></i>
+		</a>
+	</div>
+
+	<div class="title-bar__control">
+		<a tooltip="Multi Device Testing" data-placement="bottom" modal-on-click="#MultiDeviceModal">
+			<i class="title-bar__control__icon icon-mobile-2"></i>
+		</a>
+	</div>
+
+	<div class="title-bar__control">
+		<a ng-href="#/log" tooltip="App Log" data-placement="bottom">
+			<i class="title-bar__control__icon icon-copy-2"></i>
+		</a>
+	</div>
+
+	<div class="title-bar__control title-bar__control--dropdown dropdown">
+		<i class="title-bar__control__icon icon-menu-2" data-toggle="dropdown" tooltip="Navigation" data-placement="left"></i>
+		<ul class="dropdown-menu pull-right">
+			<li><a ng-href="#/app-options/general"><i class="icon-cog"></i> Prepros Options</a></li>
+			<li><a ng-href="{{PREPROS.urls.docs}}" link-external><i class="icon-question"></i> Online Docs</a></li>
+			<li><a ng-href="{{PREPROS.urls.twitter}}" link-external><i class="icon-twitter"></i> Prepros on Twitter</a></li>
+			<li ng-if="!PREPROS.IS_PRO"><a ng-href="{{PREPROS.urls.love}}" link-external><i class="icon-heart"></i> Buy Prepros Pro</a></li>
+			<li><a modal-on-click="#AboutModal"><i class="icon-info"></i> About Prepros</a></li>
+		</ul>
+	</div>
+
+	<div class="title-bar__control" ng-if="PREPROS.PLATFORM_WINDOWS" ng-click="minimizeToTray()" tooltip="Minimize To Tray" data-placement="bottom"><i class="title-bar__control__icon icon-arrow-down-right-2"></i></div>
+	<div class="title-bar__control" ng-click="minimize()"><i class="title-bar__control__icon icon-minus" tooltip="Minimize" data-placement="bottom"></i></div>
+	<div class="title-bar__control" ng-if="PREPROS.PLATFORM_WINDOWS"  ng-click="maximizeUnmaximize()"><i class="title-bar__control__icon icon-expand-2" tooltip="Maximize/Restore" data-placement="bottom"></i></div>
+	<div class="title-bar__control" ng-click="close()"><i class="title-bar__control__icon icon-close" tooltip="Close" data-placement="left"></i></div>
+
+</div>

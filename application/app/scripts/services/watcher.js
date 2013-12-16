@@ -6,27 +6,29 @@
  */
 
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros,  _*/
 
 prepros.factory("watcher", [
 
-    '$filter',
     '$rootScope',
     'config',
     'compiler',
     'fileTypes',
+    'liveServer',
     'notification',
     'projectsManager',
+    'utils',
 
     function (
-        $filter,
         $rootScope,
         config,
         compiler,
         fileTypes,
+        liveServer,
         notification,
-        projectsManager
+        projectsManager,
+        utils
     ) {
 
         "use strict";
@@ -37,13 +39,32 @@ prepros.factory("watcher", [
 
             var projectsBeingWatched = {};
 
-        var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
-        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|json)$/gi;
+            var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
+            var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|json|map|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|tpl)$/gi;
 
 
         function _watch(project) {
 
             var useExperimentalWatcher =  config.getUserOptions().experimental.fileWatcher;
+
+            //Utility Function to compile file
+            var _compileFile = function(file_id) {
+
+                if(project.files[file_id]) {
+
+                    var file = project.files[file_id];
+
+                    if (file.config.autoCompile) {
+
+                        //Compile File
+                        compiler.compile(file.pid, file.id);
+                    }
+
+                    projectsManager.refreshFile(file.pid, file.id, function() {
+                        $rootScope.$apply();
+                    });
+                }
+            };
 
             var watcher = chokidar.watch(project.path, {
                 ignored: function(f) {
@@ -87,53 +108,70 @@ prepros.factory("watcher", [
                 usePolling : !useExperimentalWatcher
             });
 
+            var timeOutAdd = function(fpath) {
+
+                window.setTimeout(function() {
+
+                    fs.exists(fpath, function(exists) {
+
+                        if(exists && config.getUserOptions().experimental.autoAddRemoveFile) {
+
+                            projectsManager.addFile(project.id, fpath, function() {
+                                $rootScope.$apply();
+                            });
+                        }
+                    });
+
+                }, 200);
+            };
+
+            watcher.on('add', timeOutAdd);
+
+            var timeOutUnlink = function(fpath) {
+
+                window.setTimeout(function() {
+
+                    fs.exists(fpath, function(exists) {
+
+                        if(exists && config.getUserOptions().experimental.autoAddRemoveFile) {
+
+                            $rootScope.$apply(function() {
+                                projectsManager.removeFile(project.id, utils.id(path.relative(project.path, fpath)));
+                            });
+                        }
+                    });
+
+                }, 200);
+            };
+
+            watcher.on('unlink', timeOutUnlink);
+
             var changeHandler = function(fpath) {
 
-                if(!fs.existsSync(fpath)) {
-                    return;
+                if(!fs.existsSync(fpath)) return;
+
+                //Try to add to files list. if file is not supported project manager will ignore it.
+                if(config.getUserOptions().experimental.autoAddRemoveFile) {
+
+                    projectsManager.addFile(project.id, fpath, function() {
+                        $rootScope.$apply();
+                    });
                 }
 
                 if(fileTypes.isExtSupported(fpath)) {
 
-                    _.each(project.files, function(file) {
+                    var id = utils.id(path.relative(project.path, fpath));
 
-                        var filePath = $filter('fullPath')(file.input, { basePath: project.path});
+                    _compileFile(id);
 
-                        if(path.relative(filePath, fpath)=== "") {
+                    if(project.imports[id]) {
 
-                            if (file.config.autoCompile) {
+                        var imp = project.imports[id];
 
-                                //Compile File
-                                compiler.compile(file.pid, file.id);
-                            }
-
-                            $rootScope.$apply(function() {
-                                projectsManager.refreshFile(file.pid, file.id);
-                            });
-                        }
-                    });
-
-                    _.each(project.imports, function(imp) {
-
-                        var filePath = $filter('fullPath')(imp.path, { basePath: project.path});
-
-                        if(path.relative(filePath, fpath)=== "") {
-
-                            _.each(imp.parents, function (parentId) {
-
-                                var parentFile = projectsManager.getFileById(imp.pid, parentId);
-
-                                if (!_.isEmpty(parentFile) && parentFile.config.autoCompile) {
-
-                                    compiler.compile(imp.pid, parentId);
-
-                                    $rootScope.$apply(function() {
-                                        projectsManager.refreshFile(imp.pid, parentId);
-                                    });
-                                }
-                            });
-                        }
-                    });
+                        _.each(imp.parents, function(parent) {
+                            _compileFile(parent);
+                        });
+                    }
                 }
             };
 
@@ -156,7 +194,7 @@ prepros.factory("watcher", [
             });
 
             watcher.on('error', function(err) {
-                //Ignore all errors;  there are too many to notify the user
+                console.log(err);
             });
 
             projectsBeingWatched[project.id] = {
@@ -167,10 +205,10 @@ prepros.factory("watcher", [
 
         var registerExceptionHandler = _.once(function(projects) {
 
-            //An ugly hack to restart nodejs file watcher when it crashes
+            //An ugly hack to restart nodejs file watcher whenever it crashes
             process.on('uncaughtException', function(err) {
 
-                if(/watch EPERM/.test(err.message)) {
+                if(err.message.indexOf('watch ') >= 0) {
 
                     _.each(projectsBeingWatched, function(project) {
 

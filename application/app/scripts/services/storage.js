@@ -5,50 +5,78 @@
  * License: MIT
  */
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros, angular, _*/
 
 //Storage
 prepros.factory('storage',[
 
-    function () {
+    'utils',
 
-        'use strict';
+	function (utils) {
 
-        var fs = require('fs-extra'),
-            path = require('path');
+		'use strict';
 
-        //Function to save project list to json
-        function put(projects) {
+		var fs = require('fs-extra'),
+			path = require('path');
 
-            localStorage.PreprosData = angular.toJson(projects, false);
+        var _put = function(projects) {
 
-        }
+            var prs  = {};
 
-        //Get projects list from localStorage
-        function get() {
+            angular.copy(projects, prs);
 
-            var projects = [];
+            _.each(prs, function(pr) {
 
-            try {
+                _.each(pr.images, function(img) {
+                    if(img.status === 'OPTIMIZING') {
+                        img.status = 'NOT_OPTIMIZED';
+                    }
+                });
+            });
 
-                projects = angular.fromJson(localStorage.PreprosData || '[]');
+            localStorage.PreprosData = angular.toJson(prs, false);
 
-            } catch (e) {
-
-                window.alert('Error Reading Projects ! Reverting to defaults.');
-
-                put([]);
-
-            }
-
-            return projects;
-        }
-
-        //Return projects list and files list
-        return {
-            get: get,
-            put: put
         };
-    }
+
+		//Function to save project list to json
+		function put(projects) {
+
+            _put(projects);
+
+		}
+
+		//Get projects list from localStorage
+		function get() {
+
+			var projects = {};
+
+			try {
+
+				projects = angular.fromJson(localStorage.PreprosData || '{}');
+
+                if(_.isArray(projects)) projects = utils.convertProjects(projects);
+
+				_.each(projects, function(project) {
+
+					if(!project.cfgVersion) project = utils.convertProject(project);
+
+                    projects[project.id] = project;
+				});
+
+			} catch (e) {
+
+				window.alert('Error Reading Data ! Click ok and hit CTRL+SHIFT+X or CMD+SHIFT+X to clear data.');
+
+			}
+
+			return projects;
+		}
+
+		//Return projects list and files list
+		return {
+			get: get,
+			put: put
+		};
+	}
 ]);

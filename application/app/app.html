@@ -1,150 +1,163 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Prepros App</title>
 
-    <script>
+	<meta charset="utf-8">
+	<title>Prepros App</title>
 
-        //Devtools for developers
-        window.addEventListener('keydown', function (e) {
-            if (e.keyIdentifier === 'F12') {
-                require('nw.gui').Window.get().showDevTools();
-            }
-        });
+	<script>
 
-        (function() {
+		var Prepros = window.Prepros = global.Prepros = {
 
-            var fs = require('fs');
-            var path = require('path');
+			gui: require('nw.gui'),
+			Window: require('nw.gui').Window.get(),
+			openWindow: require('nw.gui').Window.open,
 
-            var cssPath = path.join(process.cwd(), 'app/assets/css/style.css');
+			VERSION : '4.0.0',
+			IS_PRO: false,
+			PLATFORM_WINDOWS: process.platform === 'win32',
+			PLATFORM_MAC: process.platform === 'darwin',
+			PLATFORM_LINUX: process.platform === 'linux',
+			DEBUG: true,
+			RELEASE_DATE: 'December 16, 2013',
+			MAIN_SERVER_PORT : 5656,
+			
+			urls : {
+				website: 'https://alphapixels.com/go/prepros-site',
+				docs: 'https://alphapixels.com/go/prepros-docs',
+				help: 'https://alphapixels.com/go/prepros-help',
+				love: 'https://alphapixels.com/go/prepros-love',
+				updateFile: 'https://alphapixels.com/go/update-json',
+				proUpdateFile: 'https://alphapixels.com/go/update-pro-json',
+				github: 'https://alphapixels.com/go/prepros-github',
+				twitter: 'https://alphapixels.com/go/prepros-twitter',
+				emali: 'subash@subash.me'
+			}
+		};
 
-            fs.watchFile(cssPath, {interval: 500}, function() {
+		//Devtools for developers
+		//Allow anyone to open dev tools for error reporting
+		window.addEventListener('keydown', function (e) {
+			if (e.keyIdentifier === 'F12') {
+				Prepros.Window.showDevTools();
+			}
+		});
 
-                document.querySelector('#preprosStylesheet').href="assets/css/style.css?" + Math.random();
-            })
+		//Watch stylesheet for changes only in debug mode
+		(function() {
 
-        })()
+			if(Prepros.DEBUG) {
 
-    </script>
+				var fs = require('fs');
+				var path = require('path');
 
-    <style>
-        [ng-cloak] {
-            display: none;
-            opacity: 0;
-        }
-    </style>
+				var cssPath = path.join(process.cwd(), 'app/assets/css/style.css');
 
-    <!--Load App styles -->
-    <link href="assets/css/style.css" rel="stylesheet" id="preprosStylesheet">
+				fs.watchFile(cssPath, {interval: 500}, function() {
 
-    <!-- Scripts loader -->
-    <script src="vendor/LAB.min.js"></script>
+					document.querySelector('#preprosStylesheet').href="assets/css/style.css?" + Math.random()*1000;
+				})
+			}
 
-    <!--Load custom script -->
-    <script src="scripts/frame.js"></script>
-    <script src="scripts/load.js"></script>
+		})()
+
+	</script>
+
+	<style type="text/css">
+
+		[ng-cloak] {
+			display: none;
+		}
+
+	</style>
+
+
+	<!--Load App styles -->
+	<link href="assets/css/style.css" rel="stylesheet" id="preprosStylesheet">
+
+	<!-- Load JQuery and Other Third Party Scripts -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/underscore/underscore.min.js"></script>
+	<script src="vendor/bootstrap/bootstrap.min.js"></script>
+	<script src="vendor/angular/angular.js"></script>
+	<script src="vendor/backbone/backbone.min.js"></script>
+	<script src="vendor/backbone-notifier/backbone-notifier.min.js"></script>
+	<script src="vendor/qrcode/qrcode.min.js"></script>
+	<script src="scripts/qrCode.js"></script>
+	<script src="vendor/mousetrap/mousetrap.min.js"></script>
+	<script src="vendor/lab.js/lab.min.js"></script>
+
+
+	<script src="scripts/init.js"></script>
+	
 
 </head>
+<body ng-controller="MainCtrl" drag-drop-project copy-selected-text ng-cloak>
 
-<body class="clearfix" ng-controller="MainCtrl" drop-project keyboard-shortcuts copy-selected-text>
+	<div ng-include src="'partials/titlebar.html'" ng-controller="TitlebarCtrl" class="title-bar"></div>
 
-<div class="wrapper" ng-cloak>
+	<div class="wrapper" ng-controller="ProjectCtrl">
 
-    <!-- Sidebar -->
-    <div ng-include src="'templates/sidebar.html'"></div>
+		<div ng-include src="'partials/sidebar.html'" class="sidebar"></div>
 
-    <div class="main">
+		<!-- Bind keyboard shortcuts after all controllers are defined -->
+		<div ng-controller="FilesCtrl" keyboard-shortcuts class="main" ng-class="{'footer-bar-shown' : routePath == 'FILES' || routePath == 'IMAGE_OPTIMIZATION' || routePath == 'PROJECT_OPTIONS' || routePath == 'LOG'}">
 
-        <!-- App title bar -->
-        <div ng-include src="'templates/title-bar.html'"></div>
+			<div class="main-canvas" ng-class="{'files-lists-shown' : routePath == 'FILES' || routePath == 'IMAGE_OPTIMIZATION'}">
 
-        <!--File list and project view -->
-        <div class="content-wrap clearfix" ng-controller="FilesCtrl"  ng-class="{'show-options' : selectedFile.id}">
+                <div class="home-screen" ng-if="routePath == 'HOME'">
 
-            <div class="content clearfix show-options">
-
-                <div ng-if="currentRoutePath == 'home'" class="home">
-
-                    <h1 class="icomoon-arrow-down-2"></h1>
-
-                    <p>Please drag and drop a folder to start a new project.</p>
+                    <i class="home-screen__icon icon-arrow-down-2"></i>
+                    <h1 class="home-screen__message">Please drag and drop a folder to start a new project.</h1>
 
                 </div>
 
-                <div ng-controller="OptimImageCtrl">
+				<div  class="app-log" ng-if="routePath == 'LOG'" ng-include src="'partials/log.html'"></div>
 
-                    <div ng-if="currentRoutePath == 'optim'">
+				<div ng-if="routePath == 'IMAGE_OPTIMIZATION'"  ng-include src="'partials/images.html'" class="files images" ng-class="{'file-options-shown' : selectedImage.id }"></div>
 
-                            <div ng-include src="'templates/optim-image.html'" ng-if="projectImages.length != 0"></div>
+				<div class="files" ng-class="{'file-options-shown' : selectedFile.id }" ng-if="routePath == 'FILES' ">
 
-                            <!-- There are no files -->
-                            <div class="no-files" ng-if="projectImages.length == 0">
+                    <div class="files__no-files" ng-if="selectedProjectFiles.length == 0">
 
-                                <h1 class="icomoon-images"></h1>
-
-                                <p>No images found.</p>
-
-                            </div>
+                        <i class="files__no-files__icon icon-sad"></i>
+                        <h1 class="files__no-files__message">There is nothing that Prepros can compile. Hit F5 to refresh.</h1>
 
                     </div>
+					
+                    <div ng-include src="'partials/files.html'" class="files-list" ng-if="selectedProjectFiles.length != 0"></div>
 
-                </div>
-
-                <div ng-if="currentRoutePath == 'files'">
-
-                    <!-- Files list -->
-                    <div ng-include src="'templates/files-list.html'" ng-if="selectedProject.files.length != 0"></div>
-
-                    <!-- There are no files -->
-                    <div class="no-files" ng-if="selectedProject.files.length == 0">
-
-                        <h1 class="icomoon-sad"></h1>
-
-                        <p>There is nothing that Prepros can compile. Hit F5 after adding new files.</p>
-
-                    </div>
-
-                    <!-- Options -->
-                    <div class="options" ng-if="selectedFile.id" ng-animate="'slide'">
-
-                        <span class="file-type">{{selectedFile.type}}</span>
-
-                        <span class="file-name">{{selectedFile.name}}</span>
-
+					<div class="file-options">
+                        <h3 class="file-options__type">{{selectedFile.type}}</h3>
+                        <div class="file-options__name">{{selectedFile.name}}</div>
                         <label>
                             <input type="checkbox" ng-model="selectedFile.config.autoCompile">
                             <span class="label-desc">Auto Compile</span>
                         </label>
+                        <div ng-include src="'partials/file-types/' + selectedFile.type +'.html'" ng-if="selectedFile.id"></div>
 
-                        <!-- Load options template -->
-                        <div ng-include src="'templates/fileTypes/' + selectedFile.type + '.html'"></div>
+                        <button class="btn btn-primary file-options__compile-button" ng-click="compile(selectedFile.pid, selectedFile.id)">Compile</button>
+					</div>
 
-                        <button class="compile prepros-button" ng-click="compile()">Compile</button>
-
-                    </div>
-                </div>
-
-                <div ng-controller="LogCtrl">
-
-                    <div ng-include src="'templates/log.html'" ng-if="currentRoutePath == 'log'" ></div>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
+				</div>
 
 
-<!-- Include Modal Windows -->
-<div ng-include src="'templates/project-options.html'"></div>
-<div ng-include src="'templates/about.html'"></div>
-<div ng-include src="'templates/multi-device.html'"></div>
-<div ng-include src="'templates/optim-image.html'"></div>
+				<div class="app-options" ng-if="routePath == 'PROJECT_OPTIONS' " ng-include src="'partials/project-options.html'"></div>
+				<div class="app-options" ng-controller="AppOptionsCtrl" ng-if="routePath == 'APP_OPTIONS' " ng-include src="'partials/app-options.html'"></div>
 
+
+			</div>
+
+			<div class="footer-bar"
+                 ng-if="routePath == 'FILES' || routePath == 'IMAGE_OPTIMIZATION' || routePath == 'PROJECT_OPTIONS' || routePath == 'LOG'"
+                 ng-include src="'partials/footer.html'" >
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade multi-device-testing" id="MultiDeviceModal" ng-controller="MultiDeviceCtrl" ng-include src="'partials/multi-device.html'"></div>
+	<div class="modal fade" id="AboutModal" ng-controller="AboutCtrl" ng-include src="'partials/about.html'"></div>
 
 </body>
 </html>

@@ -6,108 +6,40 @@
  */
 
 
-/*jshint browser: true, node: true*/
+/*jshint browser: true, node: true, curly: false*/
 /*global prepros*/
 
 prepros.factory('sass', [
 
     'config',
-    'utils',
+    '$filter',
 
-    function (
-        config,
-        utils
-    ) {
+    function ( config, $filter) {
 
         'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path'),
-            cp = require('child_process'),
-            autoprefixer = require('autoprefixer'),
-            cssmin = require('ycssmin').cssmin;
+        var fs = require('fs-extra');
+        var path = require('path');
+        var cp = require('child_process');
+        var autoprefixer = require('autoprefixer');
+        var CleanCss = require('clean-css');
 
+        var compile = function(file, project, callback) {
 
-        var format = function (pid, fid, filePath, projectPath) {
+            var input = path.resolve(project.path, file.input);
 
-            //File name
-            var name = path.basename(filePath);
-
-            // Output path
-            var output = filePath.replace(/\.sass|\.scss/gi, '.css');
-
-            var pathRegx = /\\sass\\|\\scss\\|\/sass\/|\/scss\//gi;
-
-            //Find output path; save to user defined css folder if file is in sass or scss folder
-            if (filePath.match(pathRegx)) {
-
-                var customOutput = path.normalize(output.replace(pathRegx, path.sep + '{{cssPath}}' + path.sep));
-
-                if(utils.isFileInsideFolder(projectPath, customOutput)) {
-                    output = customOutput;
-                }
-
-            }
-
-            var file = {
-                id: fid,
-                pid: pid,
-                name: name,
-                input: path.relative(projectPath, filePath),
-                output: path.relative(projectPath, output),
-                config: config.getUserOptions().sass
-            };
-
-            var ext = path.extname(filePath);
-
-            if (ext === '.scss') {
-
-                file.type = 'Scss';
-
-            } else if (ext === '.sass') {
-
-                file.type = 'Sass';
-            }
-
-            return file;
-
-        };
-
-
-        //Compile
-
-        var compile = function (file, successCall, errorCall) {
+            var output = (file.customOutput)? path.resolve(project.path, file.customOutput): $filter('interpolatePath')(file.input, project);
 
             var args = [];
 
-            if (file.config.fullCompass && file.config.compass) {
+            if (file.config.compass && file.config.fullCompass) {
 
                 args = config.ruby.getGem('compass');
 
-                args.push('compile', path.relative(file.projectPath, file.input).replace(/\\/gi, '/'));
+                //Compass requires relative file path
+                args.push('compile', path.relative(project.path, input).replace(/\\/gi, '/'));
 
-                if(!file.config.compassConfigRb) {
-
-                    args.push("--environment", 'development');
-
-                    //Output Style
-                    args.push('--output-style', file.config.outputStyle);
-
-                    //Line numbers
-                    if (!file.config.lineNumbers) {
-                        args.push('--no-line-comments');
-                    }
-
-                    //Debug info
-                    if (file.config.debug) {
-
-                        args.push('--debug-info');
-                    }
-                }
-
-
-
-                //Debug info
+                //No colors
                 args.push('--boring');
 
             } else {
@@ -119,11 +51,19 @@ prepros.factory('sass', [
                     args.push('--unix-newlines');
                 }
 
-                //Input and output
-                args.push(file.input, file.output);
+                //Output and input must be in same drive for sourcemaps to work
+                if(project.path.substr(0, 1) === output.substr(0, 1)) {
+
+                    //Input and output
+                    args.push(path.basename(input), path.relative(path.dirname(input), output));
+
+                } else {
+
+                    args.push(input, output);
+                }
 
                 //Load path for @imports
-                args.push('--load-path', path.dirname(file.input));
+                args.push('--load-path', path.dirname(input));
 
                 //Convert backslashes to double backslashes which weirdly escapes single quotes from sass cache path fix #52
                 var cacheLocation = config.cachePath.replace(/\\\\/gi, '\\\\');
@@ -134,16 +74,20 @@ prepros.factory('sass', [
                 //Output Style
                 args.push('--style', file.config.outputStyle);
 
-                //Debug info
-                if (file.config.debug) {
-
-                    args.push('--debug');
-                }
-
                 //Compass
                 if (file.config.compass) {
 
                     args.push('--compass');
+                }
+
+                if(file.config.sourcemaps && Prepros.PLATFORM_WINDOWS) {
+
+                    args.push('--sourcemap');
+                }
+
+                if(file.config.debug) {
+
+                    args.push('--debug-info');
                 }
 
                 //Sass bourbon
@@ -152,98 +96,126 @@ prepros.factory('sass', [
                 //Bourbon neat framework
                 args.push('--load-path', config.ruby.neat);
 
-                //Line numbers
+                //Bourbon bitters framework
+                args.push('--load-path', config.ruby.bitters);
+
                 if (file.config.lineNumbers) {
                     args.push('--line-numbers');
                 }
 
                 //Make output dir if it doesn't exist
-                fs.mkdirsSync(path.dirname(file.output));
-
+                fs.mkdirsSync(path.dirname(output));
             }
 
-            //file.project path is exclusively provided to sass by compile provider
-            var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: file.projectPath});
+            var cwd = (file.config.compass && file.config.fullCompass)? project.path: path.dirname(input);
 
-            rubyProcess.once('error', function (e) {
-                errorCall('Unable to execute ruby —error ' + e.message);
-            });
+            var rubyProcess = cp.spawn(config.ruby.getExec('sass'), args, {cwd: cwd});
 
             var compileErr = false;
 
+            rubyProcess.once('error', function (e) {
+
+                compileErr = true;
+                callback(new Error('Unable to execute ruby -error: ' + e.message));
+
+            });
+
             //If there is a compilation error
-            rubyProcess.stderr.once('data', function (data) {
+            rubyProcess.stderr.on('data', function (data) {
+
+                var string = data.toString().toLowerCase();
 
                 //Dirty workaround to check if the message is real error or not
-                if(data.toString().length > 20) {
+                if(string.length > 20 && string.indexOf('deprecation warning') < 0) {
 
                     compileErr = true;
 
-                    errorCall(data.toString());
+                    callback(new Error(data.toString()));
                 }
 
             });
 
-            rubyProcess.stdout.once('data', function (data) {
+            rubyProcess.stdout.on('data', function (data) {
 
-                if(data.toString().toLowerCase().indexOf('error') >= 0) {
+                var string = data.toString().toLowerCase();
+
+                if(string.indexOf('error') >= 0 && string.indexOf('deprecation warning') < 0) {
 
                     compileErr = true;
 
-                    errorCall(data.toString());
+                    callback(new Error(data.toString()));
                 }
             });
 
             //Success if there is no error
             rubyProcess.once('exit', function () {
 
-                if (!compileErr) {
+                rubyProcess.removeAllListeners();
 
-                    if(file.config.autoprefixer && fs.existsSync(file.output)) {
+                if(file.config.fullCompass && file.config.compass && !compileErr) return callback(null, input);
 
-                        try {
+                if(!compileErr) {
 
-                            var css = fs.readFileSync(file.output).toString();
+                    if(file.config.autoprefixer && !file.config.sourcemaps) {
 
-                            if(file.config.autoprefixerBrowsers) {
+                        fs.readFile(output, 'utf8', function(err, css){
 
-                                var autoprefixerOptions = file.config.autoprefixerBrowsers.split(',').map(function(i) {
-                                    return i.trim();
+                            if(err) return callback(new Error('Autoprefixer: Failed to read file to autoprefix. ' + err.message));
+
+                            try {
+
+                                if(project.config.autoprefixerBrowsers) {
+
+                                    var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                                        return i.trim();
+                                    });
+
+                                    css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
+
+                                } else {
+
+                                    css =  autoprefixer().compile(css);
+                                }
+
+                                if(file.config.outputStyle === "compressed") {
+
+                                    css = new CleanCss({processImport: false}).minify(css);
+                                }
+
+                                fs.outputFile(output, css, function(err) {
+
+                                    if(err) {
+
+                                        callback('Autoprefixer: Failed to write file ' + output + '\n' + err.message);
+
+                                    } else {
+
+                                        callback(null, input);
+                                    }
                                 });
 
-                                css =  autoprefixer.apply(null, autoprefixerOptions).compile(css);
 
-                            } else {
+                            } catch (e) {
 
-                                css =  autoprefixer().compile(css);
+                                callback('Failed autoprefix css\n' + e.message);
+
                             }
 
-                            if(file.config.outputStyle === "compressed") {
+                        });
 
-                                css = cssmin(css);
-                            }
+                    } else {
 
-                            fs.outputFile(file.output, css);
-
-                        } catch (e) {
-
-                            errorCall('Failed to compile file due to autoprefixer error '+ e.message);
-                            compileErr = true;
-                        }
+                        callback(null, input);
                     }
-
-                    successCall(file.input);
 
                 }
 
+
                 rubyProcess = null;
             });
-
-
         };
 
         return {
-            format: format,
             compile: compile
         };
     }

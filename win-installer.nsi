@@ -1,7 +1,7 @@
 !define PRODUCT_NAME "Prepros"
-!define PRODUCT_VERSION "3.1.0"
+!define PRODUCT_VERSION "4.0.0"
 !define PRODUCT_PUBLISHER "Subash Pathak"
-!define PRODUCT_WEB_SITE "http://alphapixels.com/prepros"
+!define PRODUCT_WEB_SITE "https://alphapixels.com/go/prepros-site"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
@@ -50,12 +50,9 @@ Section "MainSection" SEC01
   File /r "bin"
   File /r "gems"
   File /r "node_modules"
-  File /r "ruby"
-  
-  File "ffmpegsumo.dll"
+
   File "icudt.dll"
   File "libEGL.dll"
-  File "libGLESv2.dll"
   File "nw.pak"
   File "package.json"
   File "Prepros.exe"

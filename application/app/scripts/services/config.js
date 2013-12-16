@@ -8,7 +8,7 @@
 /*jshint browser: true, node: true*/
 /*global prepros, angular, _, $*/
 
-prepros.factory('config',[
+prepros.factory('config', [
 
     function () {
 
@@ -18,17 +18,18 @@ prepros.factory('config',[
             path = require('path'),
             os = require('os');
 
+
+        //Package.json path
+        var packagePath = process.cwd();
+
         //Base path
-        var basePath = path.join(process.cwd(), 'app');
+        var basePath = path.join(packagePath, 'app');
 
         //Package.json file url
-        var packageFileUrl = path.join(basePath, '../package.json');
+        var packageFileUrl = path.join(packagePath, 'package.json');
 
         //Read package.json file and get data of app in prepros object
         var packageData = angular.fromJson(fs.readFileSync(packageFileUrl).toString());
-
-        //We need package path because everything is relative to this file
-        var packagePath = path.join(basePath, '..');
 
         //CachePath
         var cachePath = path.join(os.tmpdir(), 'PreprosCache');
@@ -41,24 +42,6 @@ prepros.factory('config',[
 
         //App version
         var version = packageData.version;
-
-        //App urls
-        var online = {
-            url: 'http://alphapixels.com/prepros',
-            helpUrl: 'http://alphapixels.com/prepros/docs/',
-            loveUrl: 'http://alphapixels.com/prepros#love',
-            updateFileUrl: 'http://prepros.alphapixels.com/update.json',
-            githubUrl: 'http://github.com/sbspk/prepros',
-            authorTwitter: 'http://twitter.com/sbspk',
-            authorUrl: 'http://alphapixels.com'
-        };
-
-        //Older projects and files are not compatible with this version
-        if('PreprosProjects' in localStorage) {
-            localStorage.removeItem('PreprosProjects');
-            localStorage.removeItem('PreprosFiles');
-            localStorage.removeItem('PreprosImports');
-        }
 
         //Read user config
         var userConfig = {};
@@ -74,10 +57,21 @@ prepros.factory('config',[
         }
 
         var defaultConfig = {
-            cssPath: 'css',
-            jsPath: 'js',
-            htmlPath: 'html',
-            jsMinPath: 'min',
+            cssPath: 'css/',
+            jsPath: 'js/',
+            htmlPath: 'html/',
+            minJsPath: 'min/',
+            cssPathType: 'REPLACE_TYPE', //REPLACE_TYPE, RELATIVE_FILESDIR, RELATIVE_FILEDIR
+            htmlPathType: 'REPLACE_TYPE',
+            jsPathType: 'REPLACE_TYPE',
+            minJsPathType: 'RELATIVE_FILEDIR',
+            htmlTypes: 'jade, haml, slim, markdown, md',
+            cssTypes: 'less, sass, stylus, scss, styl',
+            jsTypes: 'coffee, coffeescript, coffeescripts, ls, livescript, livescripts',
+            cssPreprocessorPath: '',
+            htmlPreprocessorPath: '',
+            jsPreprocessorPath: '',
+            minJsPreprocessorPath: '',
             htmlExtension: '.html',
             enableSuccessNotifications: true,
             enableErrorNotifications: true,
@@ -86,8 +80,9 @@ prepros.factory('config',[
             liveRefreshDelay: 0,
             notificationTime: 3000,
             notificationDetails: false,
-            experimental : {
-                fileWatcher: false
+            experimental: {
+                fileWatcher: false,
+                autoAddRemoveFile: true
             },
 
             customRuby: {
@@ -102,7 +97,8 @@ prepros.factory('config',[
             less: {
                 autoCompile: true,
                 compress: false,
-                lineNumbers: false,
+                sourcemaps: false,
+                cleancss: false,
                 strictMath: false,
                 strictUnits: false,
                 autoprefixer: false
@@ -113,10 +109,10 @@ prepros.factory('config',[
                 autoCompile: true,
                 lineNumbers: false,
                 unixNewlines: false,
+                sourcemaps: false,
                 debug: false,
                 compass: false,
                 fullCompass: false,
-                compassConfigRb: false,
                 outputStyle: 'expanded', //compressed, nested, expanded, compact
                 autoprefixer: false
             },
@@ -143,7 +139,9 @@ prepros.factory('config',[
                 autoCompile: true,
                 bare: false,
                 uglify: false,
-                mangle: true
+                mangle: true,
+                iced: false,
+                sourcemaps: false
             },
 
             //Default Livescript Options
@@ -158,7 +156,8 @@ prepros.factory('config',[
             javascript: {
                 autoCompile: true,
                 uglify: true,
-                mangle: true
+                mangle: true,
+                sourcemaps: false
             },
 
             //Default Jade  Options
@@ -188,6 +187,12 @@ prepros.factory('config',[
         //Fill in the undefined values from default configurations
         userConfig = _.defaults(userConfig, defaultConfig);
 
+        if (userConfig.jsMinPath) {
+
+            userConfig.minJsPath = userConfig.jsMinPath;
+            delete userConfig.jsMinPath;
+        }
+
         for (var configKey in userConfig) {
 
             if (userConfig.hasOwnProperty(configKey) && typeof userConfig[configKey] === 'object') {
@@ -196,19 +201,14 @@ prepros.factory('config',[
             }
         }
 
-        //Wrap user options in a function to prevent angular data sharing between services
-        //If user config data is shared between files changing configuration of one file will affect another file
+        //Do not pass by refrence
         function getUserOptions() {
-
-            return $.parseJSON(angular.toJson(userConfig, false));
-
+            return JSON.parse(angular.toJson(userConfig, false));
         }
 
         function saveUserOptions(options) {
-
             localStorage.setItem('PreprosConfig', angular.toJson(options));
-
-            userConfig = $.parseJSON(angular.toJson(options));
+            userConfig = JSON.parse(angular.toJson(options));
         }
 
         //Ruby Executable
@@ -216,6 +216,7 @@ prepros.factory('config',[
             version: packageData.ruby.version,
             bourbon: path.join(packagePath, packageData.ruby.bourbon),
             neat: path.join(packagePath, packageData.ruby.neat),
+            bitters: path.join(packagePath, packageData.ruby.bitters),
             getExec: function (fileType) {
 
                 if (userConfig.customRuby.use && userConfig.customRuby.path !== '' && userConfig.customRuby[fileType]) {
@@ -252,8 +253,6 @@ prepros.factory('config',[
             ruby: ruby,
             node_modules: node_modules,
             ruby_gems: ruby_gems,
-            online: online,
-            version: version,
             getUserOptions: getUserOptions,
             saveUserOptions: saveUserOptions
         };

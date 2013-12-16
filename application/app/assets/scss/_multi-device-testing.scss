@@ -1,0 +1,35 @@
+.multi-device-testing {
+
+	.multi-device-testing__network {
+		list-style: none;
+		display: flex;
+		margin-bottom: 20px;
+		button {
+			margin: auto;
+			width: 60px;
+		}
+
+		.multi-device-testing__network__details {
+			margin: auto;
+			margin-left: 10px;
+			flex: 1;
+		}
+		
+		a {
+			display: block;
+			margin-bottom: 5px;
+			margin-top: 5px;
+			user-select: text;
+			padding: 5px;
+		}
+	}
+
+	.multi-device-testing__qrcode-button {
+
+		i {
+			font-size: 280%;
+		}
+
+	}
+
+}
