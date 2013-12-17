@@ -1,5 +1,5 @@
 !define PRODUCT_NAME "Prepros"
-!define PRODUCT_VERSION "4.0.0"
+!define PRODUCT_VERSION "4.0.1"
 !define PRODUCT_PUBLISHER "Subash Pathak"
 !define PRODUCT_WEB_SITE "https://alphapixels.com/go/prepros-site"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
