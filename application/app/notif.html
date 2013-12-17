@@ -44,12 +44,20 @@
                     nwin.height = height;
 
                     if (process.platform === 'win32') {
+
                         nwin.y = (window.screen.availHeight - 5) - height;
+
+                    } else {
+
+                        nwin.y = 10;
                     }
 
                     if (typeof nwin.showInactive === 'function') {
+
                         nwin.showInactive();
+
                     } else {
+
                         nwin.show();
                         nwin.blur();
                     }

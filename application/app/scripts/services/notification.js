@@ -38,7 +38,7 @@ prepros.factory('notification', [
                 show_in_taskbar: false
             };
 
-            if (Prepros.PLATFORM_WINDOWS) {
+            if (Prepros.PLATFORM_MAC || Prepros.PLATFORM_LINUX) {
                 options.y = 10;
             }
 
