@@ -1,8 +1,8 @@
 <div class="project-filters" ng-if="routePath != 'LOG'">
-    <a ng-href="#/files/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : !routeSubPath && routePath != 'IMAGE_OPTIMIZATION' && routePath != 'PROJECT_OPTIONS'}">ALL CODE</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/html/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routeSubPath == 'HTML'}">HTML</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/css/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routeSubPath == 'CSS'}">CSS</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/js/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routeSubPath == 'JS'}">JS</a>
+    <a ng-href="#/files/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath != 'IMAGE_OPTIMIZATION' && routePath != 'PROJECT_OPTIONS'}">ALL CODE</a>
+    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/html/{{selectedProject.id}}" class="project-filter__item">HTML</a>
+    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/css/{{selectedProject.id}}" class="project-filter__item">CSS</a>
+    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/js/{{selectedProject.id}}" class="project-filter__item">JS</a>
     <a ng-href="#/images/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath == 'IMAGE_OPTIMIZATION'}">IMAGES</a>
 </div>
 
