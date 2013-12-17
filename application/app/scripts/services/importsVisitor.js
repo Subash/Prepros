@@ -59,9 +59,8 @@ prepros.factory('importsVisitor', [
 
                         imps = imps.map(function (imp) {
 
-                            imp = imp.trim().replace();
+                            return path.resolve(basedir, imp.trim());
 
-                            return path.resolve(basedir, imp);
                         });
 
                         list = list.concat(imps);

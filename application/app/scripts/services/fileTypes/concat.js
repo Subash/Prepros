@@ -30,8 +30,8 @@ prepros.factory('concat', [
 
                 if (err) return callback(err);
 
-                //Add file itself to the list so the file comes in the middle of appends and prepends
-                var list = [filePath];
+                var appendList = [];
+                var prependList = [];
 
                 var result;
 
@@ -43,17 +43,9 @@ prepros.factory('concat', [
 
                     if (result) {
 
-                        var appends = result[1].replace(/"|'|\n|;/gi, '').split(',');
+                        var app = result[1].replace(/"|'|\n|;/gi, '').trim();
 
-                        appends = appends.map(function (imp) {
-
-                            imp = imp.trim().replace();
-
-                            return path.resolve(basedir, imp);
-                        });
-
-                        //Concat at the end
-                        list = list.concat(appends);
+                        appendList.push(path.resolve(basedir, app))
                     }
 
                 } while (result);
@@ -64,20 +56,17 @@ prepros.factory('concat', [
 
                     if (result) {
 
-                        var prepends = result[1].replace(/"|'|\n|;/gi, '').split(',');
+                        var prep = result[1].replace(/"|'|\n|;/gi, '').trim();
 
-                        prepends = prepends.map(function (imp) {
+                        prependList.push(path.resolve(basedir, prep))
 
-                            imp = imp.trim().replace();
-
-                            return path.resolve(basedir, imp);
-                        });
-
-                        //Concat at the begining
-                        list = prepends.concat(list);
                     }
 
                 } while (result);
+
+
+                //Add file itself to the list so the file comes in the middle of appends and prepends
+                var list = prependList.concat([filePath], appendList);
 
                 var i = 0;
 
