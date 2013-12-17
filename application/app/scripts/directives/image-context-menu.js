@@ -37,7 +37,7 @@ prepros.directive('imageContextMenu', [
 
                         } else {
 
-                            if (!Prepros.IS_PRO) return pro.showMessage();
+                            pro.showMessage();
 
                         }
                     }
@@ -56,15 +56,7 @@ prepros.directive('imageContextMenu', [
 
                         } else {
 
-                            if (!Prepros.IS_PRO) return pro.showMessage();
-
-                            _.each(scope.multiSelect.images, function (i) {
-
-                                scope.$apply(function () {
-                                    scope.optimizeImage(i.pid, i.id);
-                                });
-
-                            })
+                            pro.showMessage();
 
                         }
                     }
@@ -82,12 +74,7 @@ prepros.directive('imageContextMenu', [
 
                         } else {
 
-                            if (!Prepros.IS_PRO) return pro.showMessage();
-
-                            _.each(scope.multiSelect.images, function (i) {
-
-                                scope.showImageInFolder(i.pid, i.id);
-                            })
+                            pro.showMessage();
 
                         }
                     }

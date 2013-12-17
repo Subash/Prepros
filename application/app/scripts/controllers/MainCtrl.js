@@ -81,7 +81,7 @@ prepros.controller('MainCtrl', [
 
         $scope.$on('$routeChangeSuccess', function () {
 
-            if ($scope.multiSelect.pid !== $routeParams.pid || $scope.routeSubPath !== $route.current.subPath || $scope.routePath !== $route.current.path) {
+            if ($scope.multiSelect.pid !== $routeParams.pid || $scope.routePath !== $route.current.path) {
 
                 $scope.multiSelect.id = "";
                 $scope.multiSelect.files = {};
@@ -239,10 +239,7 @@ prepros.controller('MainCtrl', [
 
         $scope.addMultiSelectFile = function (pid, fid) {
 
-
-            var subPath = $scope.routeSubPath ? $scope.routeSubPath.toLowerCase() : 'files';
-
-            $location.path('/' + subPath + '/' + pid); //Redirect to files list view
+            $location.path('/files/' + pid); //Redirect to files list view
 
             $scope.multiSelect.pid = pid;
 

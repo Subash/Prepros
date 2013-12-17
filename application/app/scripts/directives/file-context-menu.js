@@ -101,7 +101,7 @@ prepros.directive('fileContextMenu', [
 
                         } else {
 
-                            if (!Prepros.IS_PRO) return pro.showMessage();
+                            pro.showMessage();
 
                         }
                     }
@@ -119,7 +119,7 @@ prepros.directive('fileContextMenu', [
 
                         } else {
 
-                            if (!Prepros.IS_PRO) return pro.showMessage();
+                            pro.showMessage();
                         }
                     }
                 }));
@@ -146,7 +146,7 @@ prepros.directive('fileContextMenu', [
 
                             } else {
 
-                                if (!Prepros.IS_PRO) return pro.showMessage();
+                                pro.showMessage();
                             }
                         }
                     });

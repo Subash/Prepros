@@ -80,7 +80,7 @@ prepros.controller('ProjectCtrl', [
 
         $scope.openRemoteInspect = function () {
 
-            liveServer.openRemoteInspect();
+            pro.showMessage();
         };
 
         $scope.optimizeAllImages = function (pid) {

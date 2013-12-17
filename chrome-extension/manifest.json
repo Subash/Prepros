@@ -1,6 +1,6 @@
 {
     "name": "Prepros",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "manifest_version": 2,
     "description": "Live refresh extension for Prepros App",
     "permissions": ["tabs", "<all_urls>"],
