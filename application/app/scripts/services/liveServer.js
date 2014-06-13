@@ -110,8 +110,19 @@ prepros.factory('liveServer', [
 
                     } else {
 
-                        next();
+                        var html = ['.html', '.htm'];
 
+                        if (!_.contains(html, path.extname(realPath))) {
+
+                            return next();
+                        }
+
+                        fs.readFile(realPath, function(err, data) {
+
+                            if(err) return next();
+
+                            sendHtml(data.toString(), req, res);
+                        });
                     }
                 });
             };
