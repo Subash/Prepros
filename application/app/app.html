@@ -39,7 +39,7 @@
 		require('coffee-script').register();
 
         //This function is fucked up in OS X
-        Prepros.gui.Shell.openItem = function(item) {
+        Prepros.gui.Shell.openItem = Prepros.gui.Shell.openExternal = function(item) {
 
             require('child_process').spawn('open', [item], { detached: true });
 
