@@ -18,23 +18,17 @@ prepros.factory('liveServer', [
         'use strict';
 
         var express = require('express');
-        var fs = require('fs');
         var WebSocketServer = require('websocket').server;
         var urls = [];
         var portfinder = require('portfinder');
         var url = require('url');
         var request = require('request');
         var path = require('path');
-        var coffeescript = require('coffee-script');
         var weinre = require('weinre');
         var wsServer = {}; //Global main websocket server object
-        var wenWin = null; //Global weinre window
         var fs = require('fs');
 
         var MAIN_SERVER_PORT = Prepros.MAIN_SERVER_PORT;
-        var WEINRE_SERVER_PORT = Prepros.WEINRE_SERVER_PORT;
-
-        var enableWeinre = false; //Disable weinre and enable it only after the inspection window is opened
 
         var projectsBeingServed = {};
 
@@ -140,101 +134,6 @@ prepros.factory('liveServer', [
                     res.setHeader('Content-type', 'text/html');
                     res.end('<h4 style="margin: auto">Testing and refreshing custom server from network device and refreshing other browsers except Google Chrome is a Prepros Pro feature. If you are seeing this page on non network device please open your custom server url directly in Google Chrome. </h3>');
 
-                } else if (Prepros.IS_PRO && project.config.useCustomServer) {
-
-                    var headers = {};
-
-                    _.each(req.headers, function (val, key) {
-
-                        if (key === 'host' || key === 'accept-encoding') return;
-
-                        headers[key] = val;
-
-                    });
-
-
-                    var parsedUrl = url.parse(project.config.customServerUrl);
-
-                    var uri = parsedUrl.protocol + '//' + parsedUrl.host + url.parse(req.url).path;
-
-                    var options = {
-                        headers: headers,
-                        host: parsedUrl.host,
-                        port: parsedUrl.port,
-                        uri: uri,
-                        method: req.method,
-                        followRedirect: false,
-                        form: req.body
-                    };
-
-                    var urlRegx = new RegExp("(http|https)://" + parsedUrl.host + "(:" + parsedUrl.port + "|)", "gi");
-
-                    var rqs = request(options, function (err, response, body) {
-                        if (err) {
-                            return res.end('Prepros was unable to reach ' + uri + ' . Please check your internet connection and firewall settings.');
-                        }
-
-                        return true;
-                    });
-
-                    var hasbody = false;
-
-                    var snippet = '<script src="/prepros.js"></script>';
-
-                    rqs.on('response', function (r) {
-
-                        res.statusCode = r.statusCode;
-
-                        _.each(r.headers, function (header, key) {
-
-                            if (
-                                key !== 'location' &&
-                                    key !== 'cache-control' &&
-                                    key !== 'content-length' &&
-                                    key !== 'pragma' &&
-                                    key !== 'expires'
-                                ) {
-
-                                res.setHeader(key, r.headers[key]);
-
-                            }
-                        });
-
-                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                        res.setHeader('Pragma', 'no-cache');
-                        res.setHeader('Expires', '0');
-
-                        if (r.headers.location) {
-
-                            res.setHeader('location', r.headers.location.replace(urlRegx, ''));
-                        }
-
-                        rqs.on('data', function (d) {
-
-                            if (/html/gi.test(r.headers['content-type']) && !req.xhr) {
-
-                                var html = (d.toString('utf-8').replace(urlRegx, ''));
-
-                                if (/<\/(:?\s|)body(:?\s|)>/i.test(html)) {
-                                    html = html.replace(/<\/(:?\s|)body(:?\s|)>/i, (snippet + '\n</body>'));
-                                    hasbody = true;
-                                }
-
-                                res.write(html);
-
-                            } else {
-
-                                res.write(d, 'binary');
-                            }
-                        });
-
-                        rqs.on('end', function () {
-                            if (!hasbody && /html/gi.test(r.headers['content-type']) && !req.xhr) {
-                                res.write(snippet);
-                            }
-                            res.end();
-                        });
-                    });
                 } else {
 
                     next();
@@ -251,7 +150,6 @@ prepros.factory('liveServer', [
 
 
                 var src = 'script.src="/livereload.js?snipver=1&host=" + window.location.hostname + "&port=" + window.location.port + "";';
-                var weinreHost = '" + window.location.hostname + "';
 
                 var snippet = '' +
                     '(function(){' +
@@ -262,20 +160,6 @@ prepros.factory('liveServer', [
                     '} catch(e) {}' +
                     '})();';
 
-
-                if (enableWeinre) {
-
-                    snippet += '' +
-                        '(function(){' +
-                        '   try {' +
-                        '    var script = document.createElement("script");' +
-                        '    script.src="http://{{weinreHost}}:' + WEINRE_SERVER_PORT + '/target/target-script-min.js#prepros";' +
-                        '    document.querySelectorAll("body")[0].appendChild(script);' +
-                        '} catch(e) {}' +
-                        '})();';
-                }
-
-
                 if (!project && 'pid' in req.query) {
 
                     if (req.query.pid in projectsBeingServed) {
@@ -283,8 +167,6 @@ prepros.factory('liveServer', [
                         var port = projectsBeingServed[req.query.pid].port;
 
                         src = 'script.src="http://localhost:' + MAIN_SERVER_PORT + '/livereload.js?snipver=1&host=localhost&port=' + port + '";';
-
-                        weinreHost = 'localhost';
 
                     } else {
 						
@@ -294,7 +176,7 @@ prepros.factory('liveServer', [
 
 
                 res.setHeader('Content-type', 'application/x-javascript');
-                res.end(snippet.replace('{{src}}', src).replace('{{weinreHost}}', weinreHost));
+                res.end(snippet.replace('{{src}}', src));
 
             };
 
@@ -320,16 +202,6 @@ prepros.factory('liveServer', [
         (function startMainServer() {
 
             var app = express();
-
-            //Run Weinre Server
-            weinre.run({
-                httpPort: WEINRE_SERVER_PORT,
-                boundHost: '-all-',
-                verbose: false,
-                debug: false,
-                deathTimeout: 15,
-                readTimeout: 5
-            });
 
             //Start listening
             var httpServer = app.listen(MAIN_SERVER_PORT);
@@ -496,66 +368,11 @@ prepros.factory('liveServer', [
             }
         }
 
-        /*
-         Open Remote Inspector
-         */
-        function openRemoteInspect() {
-
-            enableWeinre = true;
-
-            //Refresh all projects to  load weinre script
-            _.each(projectsBeingServed, function (project, pid) {
-
-                refresh(pid, 'index.html', 0);
-
-            });
-
-            var winreUrl = 'http://localhost:' + WEINRE_SERVER_PORT + '/client/#prepros';
-
-            if (!wenWin) {
-
-                wenWin = Prepros.gui.Window.open(winreUrl, {
-                    title: 'Prepros Remote Inspect',
-                    width: 850,
-                    height: 550,
-                    frame: true,
-                    toolbar: false,
-                    resizable: true,
-                    show: true,
-                    min_width: 400,
-                    min_height: 400,
-                    show_in_taskbar: true,
-                    icon: 'app/assets/img/icons/128.png' //Relative to package.json file
-                });
-
-                wenWin.once('closed', function () {
-
-                    enableWeinre = false;
-
-                    //Refresh all projects to remove weinre script
-                    _.each(projectsBeingServed, function (project, pid) {
-
-                        refresh(pid, 'index.html', 0);
-
-                    });
-
-                    wenWin.removeAllListeners();
-                    wenWin = null;
-                });
-
-            } else {
-                wenWin.show();
-                wenWin.focus();
-            }
-
-        }
-
         //Return
         return {
             startServing: startServing,
             getLiveUrl: getLiveUrl,
-            refresh: refresh,
-            openRemoteInspect: openRemoteInspect
+            refresh: refresh
         };
     }
 ]);

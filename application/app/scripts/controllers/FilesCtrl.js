@@ -206,30 +206,7 @@ prepros.controller('FilesCtrl', [
 
         $scope.resetMultiSelectFileSettings = function () {
 
-            if (!Prepros.IS_PRO) return pro.showMessage();
-
-            var confirmMsg = utils.notifier.notify({
-                message: "Are you sure you want to reset the settings of these files?",
-                type: "warning",
-                buttons: [
-                    {'data-role': 'ok', text: 'Yes'},
-                    {'data-role': 'cancel', text: 'Cancel'}
-                ],
-                destroy: true
-            });
-
-            confirmMsg.on('click:ok', function () {
-
-                this.destroy();
-
-                _.each($scope.multiSelect.files, function (f) {
-
-                    $scope.resetFileSettings(f.pid, f.id, true);
-
-                })
-            });
-
-            confirmMsg.on('click:cancel', 'destroy');
+            return pro.showMessage();
 
         }
     }
