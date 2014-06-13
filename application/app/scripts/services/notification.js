@@ -58,6 +58,8 @@ prepros.factory('notification', [
                 notificationWindow.removeAllListeners();
                 notificationWindow = null;
             });
+
+            Prepros.gui.Window.get().setShowInTaskbar(true);
         };
 
         //Create initial window
@@ -115,9 +117,54 @@ prepros.factory('notification', [
             }
         };
 
+        //Instantiate Backbone Notifier
+        var notifier = new Backbone.Notifier({
+            theme: 'clean',
+            type: 'info',
+            types: ['warning', 'error', 'info', 'success'],
+            modal: true,
+            ms: false,
+            offsetY: 100,
+            position: 'top',
+            zIndex: 10000,
+            screenOpacity: 0.5,
+            fadeInMs: 0,
+            fadeOutMs: 0,
+            destroy: true
+        });
+
+        var showInlineNotification = function(details) {
+
+            if(details.destroy === undefined) {
+
+                details.destroy = true;
+
+            }
+
+            return notifier.notify(details);
+
+        };
+
+        //Shows loading overlay
+        function showLoading(message) {
+
+            return notifier.info({
+                message: (message)? message: "Loading..... :) ",
+                loader: true
+            });
+        }
+
+        //Hide loading animation
+        function hideLoading() {
+            notifier.destroyAll();
+        }
+
         return {
             error: error,
-            success: success
+            success: success,
+            showInlineNotification: showInlineNotification,
+            showLoading: showLoading,
+            hideLoading: hideLoading
         };
     }
 ]);

@@ -1,0 +1,70 @@
+From 52d5a80edd624cc11e982f87fb230569c09d1256 Mon Sep 17 00:00:00 2001
+From: Subash Pathak <subash@subash.me>
+Date: Fri, 30 Aug 2013 14:43:35 +0545
+Subject: [PATCH] fixed weinre oversmartness
+
+---
+ utils.coffee | 50 --------------------------------------------------
+ 1 file changed, 50 deletions(-)
+
+diff --git a/utils.coffee b/utils.coffee
+index ee5a72b..3947e47 100644
+--- a/utils.coffee
++++ b/utils.coffee
+@@ -144,53 +144,3 @@ utils.fileExistsSync = (name) ->
+         return fs.existsSync name
+         
+     return path.existsSync(name)
+-
+-#-------------------------------------------------------------------------------
+-Error.prepareStackTrace = (error, structuredStackTrace) ->
+-    result = []
+-    result.push "---------------------------------------------------------"
+-    result.push "error: #{error}"
+-    result.push "---------------------------------------------------------"
+-    result.push "stack: "
+-
+-    longestFile = 0
+-    longestLine = 0
+-    
+-    for callSite in structuredStackTrace
+-        file = callSite.getFileName()
+-        line = callSite.getLineNumber()
+-
+-        file = path.basename(file)
+-        line = "#{line}"
+-        
+-        if file.length > longestFile
+-            longestFile = file.length
+-    
+-        if line.length > longestLine
+-            longestLine = line.length
+-    
+-    for callSite in structuredStackTrace
+-        func = callSite.getFunction()
+-        file = callSite.getFileName()
+-        line = callSite.getLineNumber()
+-
+-        file = path.basename(file)
+-        line = "#{line}"
+-        
+-        file = utils.alignRight(file, longestFile)
+-        line = utils.alignLeft( line, longestLine)
+-        
+-        funcName = func.displayName ||
+-                   func.name || 
+-                   callSite.getFunctionName()
+-                   callSite.getMethodName()
+-                   '???'
+-        
+-        if funcName == "Module._compile"
+-            result.pop()
+-            result.pop()
+-            break
+-            
+-        result.push "   #{file}:#{line} - #{funcName}()"
+-        
+-    result.join "\n"
+-- 
+1.8.3.msysgit.0
+

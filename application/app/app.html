@@ -13,14 +13,15 @@
 			Window: require('nw.gui').Window.get(),
 			openWindow: require('nw.gui').Window.open,
 
-			VERSION : '4.0.1',
+			VERSION : '4.1.0',
 			IS_PRO: false,
 			PLATFORM_WINDOWS: process.platform === 'win32',
 			PLATFORM_MAC: process.platform === 'darwin',
 			PLATFORM_LINUX: process.platform === 'linux',
 			DEBUG: true,
-			RELEASE_DATE: 'December 17, 2013',
+			RELEASE_DATE: 'June 14, 2013',
 			MAIN_SERVER_PORT : 5656,
+			WEINRE_SERVER_PORT : 5657,
 			
 			urls : {
 				website: 'https://alphapixels.com/go/prepros-site',
@@ -31,9 +32,18 @@
 				proUpdateFile: 'https://alphapixels.com/go/update-pro-json',
 				github: 'https://alphapixels.com/go/prepros-github',
 				twitter: 'https://alphapixels.com/go/prepros-twitter',
-				emali: 'subash@subash.me'
+				emali: 'help@alphapixels.com'
 			}
 		};
+		
+		require('coffee-script').register();
+
+        //This function is fucked up in OS X
+        Prepros.gui.Shell.openItem = function(item) {
+
+            require('child_process').spawn('open', [item], { detached: true });
+
+        };
 
 		//Devtools for developers
 		//Allow anyone to open dev tools for error reporting
@@ -77,6 +87,7 @@
 
 	<!-- Load JQuery and Other Third Party Scripts -->
 	<script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/promise/promise-0.1.1.min.js"></script>
 	<script src="vendor/underscore/underscore.min.js"></script>
 	<script src="vendor/bootstrap/bootstrap.min.js"></script>
 	<script src="vendor/angular/angular.js"></script>

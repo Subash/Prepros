@@ -23,10 +23,13 @@ prepros.directive('ctrlClick', [
 
                 element.on('click', function (e) {
 
-                    if (e.ctrlKey) {
+                    if (e.ctrlKey || e.metaKey) {
+
                         scope.$apply(function () {
                             scope.$eval(attrs.ctrlClick);
-                        })
+                        });
+
+                        e.preventDefault();
                     }
                 });
             }

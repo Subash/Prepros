@@ -45,7 +45,7 @@ prepros.factory('concat', [
 
                         var app = result[1].replace(/"|'|\n|;/gi, '').trim();
 
-                        appendList.push(path.resolve(basedir, app))
+                        appendList.push(path.resolve(basedir, app));
                     }
 
                 } while (result);
@@ -58,7 +58,7 @@ prepros.factory('concat', [
 
                         var prep = result[1].replace(/"|'|\n|;/gi, '').trim();
 
-                        prependList.push(path.resolve(basedir, prep))
+                        prependList.push(path.resolve(basedir, prep));
 
                     }
 

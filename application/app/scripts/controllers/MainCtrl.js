@@ -229,7 +229,7 @@ prepros.controller('MainCtrl', [
         //Remove Selection if no control key is pressed on click
         $(window).click(function (e) {
 
-            if (!e.ctrlKey) {
+            if (!(e.ctrlKey || e.metaKey)) {
 
                 $scope.clearMultiSelect();
 

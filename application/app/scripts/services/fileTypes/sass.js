@@ -80,7 +80,7 @@ prepros.factory('sass', [
                     args.push('--compass');
                 }
 
-                if (file.config.sourcemaps && Prepros.PLATFORM_WINDOWS) {
+                if (file.config.sourcemaps) {
 
                     args.push('--sourcemap');
                 }
@@ -170,11 +170,11 @@ prepros.factory('sass', [
                                         return i.trim();
                                     });
 
-                                    css = autoprefixer.apply(null, autoprefixerOptions).compile(css);
+                                    css = autoprefixer(autoprefixerOptions).process(css);
 
                                 } else {
 
-                                    css = autoprefixer().compile(css);
+                                    css = autoprefixer().process(css);
                                 }
 
                                 if (file.config.outputStyle === "compressed") {

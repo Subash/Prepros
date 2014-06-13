@@ -30,8 +30,8 @@ prepros.factory("watcher", [
 
         var projectsBeingWatched = {};
 
-        var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls)$/gi;
-        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|json|map|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|tpl)$/gi;
+        var supported = /\.(:?less|sass|scss|styl|md|markdown|coffee|js|jade|haml|slim|ls|html|htm|css|rb|php|asp|aspx|cfm|chm|cms|do|erb|jsp|mhtml|mspx|pl|py|shtml|cshtml|cs|vb|vbs|tpl)$/gi;
+        var notSupported = /\.(:?png|jpg|jpeg|gif|bmp|woff|ttf|svg|ico|eot|psd|ai|tmp|json|map)$/gi;
 
 
         function _watch(project) {
@@ -114,7 +114,7 @@ prepros.factory("watcher", [
                         }
                     });
 
-                }, 200);
+                }, 2*1000);
             };
 
             watcher.on('add', timeOutAdd);
@@ -133,7 +133,7 @@ prepros.factory("watcher", [
                         }
                     });
 
-                }, 200);
+                }, 2*1000);
             };
 
             watcher.on('unlink', timeOutUnlink);
@@ -141,6 +141,16 @@ prepros.factory("watcher", [
             var changeHandler = function (fpath) {
 
                 if (!fs.existsSync(fpath)) return;
+
+                //Do not refresh on preprocessable files except javascript, markdown
+                var isJs = /\.js$/i.test(fpath);
+
+                var isMarkdown = /\.(md|markdown)/i.test(fpath);
+
+                if (project.config.liveRefresh && (!fileTypes.isExtSupported(fpath) || isJs || isMarkdown)) {
+
+                    liveServer.refresh(project.id, fpath, project.config.liveRefreshDelay);
+                }
 
                 //Try to add to files list. if file is not supported project manager will ignore it.
                 if (config.getUserOptions().experimental.autoAddRemoveFile) {

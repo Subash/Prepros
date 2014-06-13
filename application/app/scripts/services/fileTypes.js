@@ -78,7 +78,7 @@ prepros.factory('fileTypes', [
             };
 
             //Some type Exceptions
-            if (extname === 'markdown') file.type = 'MD';
+            if (extname === 'markdown') file.type = 'Md';
             if (extname === 'styl') file.type = 'Stylus';
 
             //Use full compass if config.rb file is present

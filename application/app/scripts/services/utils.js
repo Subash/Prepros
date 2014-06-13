@@ -10,8 +10,9 @@
 prepros.factory('utils', [
 
     'config',
+    'notification',
 
-    function (config) {
+    function (config, notification) {
 
         'use strict';
 
@@ -25,30 +26,26 @@ prepros.factory('utils', [
         }
 
         //Instantiate Backbone Notifier
-        var notifier = new Backbone.Notifier({
-            theme: 'clean',
-            types: ['warning', 'error', 'info', 'success'],
-            modal: true,
-            ms: false,
-            offsetY: 100,
-            position: 'top',
-            zIndex: 10000,
-            screenOpacity: 0.5
-        });
+        var notifier = {
+            notify : notification.showInlineNotification
+        };
+
+        var loader;
 
         //Shows loading overlay
         function showLoading() {
 
-            notifier.info({
+             loader = notification.showInlineNotification({
                 message: "Loading..... :) ",
-                destroy: true,
                 loader: true
             });
         }
 
         //Hide loading animation
         function hideLoading() {
-            notifier.destroyAll();
+
+            if(loader) loader.destroy();
+
         }
 
 
@@ -107,7 +104,6 @@ prepros.factory('utils', [
 
         }
 
-
         //Convert a project
         function convertProject(project) {
 
@@ -151,7 +147,8 @@ prepros.factory('utils', [
                     ftpPassword: project.config.ftpPassword,
                     ftpIgnorePreprocessorFiles: project.config.ftpIgnorePreprocessorFiles,
                     ftpType: 'FTP', //FTP, SFTP
-                    ftpExcludePatterns: project.config.ftpExcludePatterns
+                    ftpExcludePatterns: project.config.ftpExcludePatterns,
+                    ftpSecure: false
                 }
             };
 

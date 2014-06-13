@@ -62,11 +62,11 @@ prepros.factory('stylus', [
                                     return i.trim();
                                 });
 
-                                css = autoprefixer.apply(null, autoprefixerOptions).compile(css);
+                                css = autoprefixer(autoprefixerOptions).process(css);
 
                             } else {
 
-                                css = autoprefixer().compile(css);
+                                css = autoprefixer().process(css);
                             }
 
                             if (file.config.compress) {
