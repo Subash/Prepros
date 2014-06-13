@@ -20,6 +20,8 @@ prepros.factory('notification', [
 
         var path = require('path');
 
+        var tnotify = require('terminal-notifier-plus');
+
         var notificationWindow;
 
         var _createWindow = function () {
@@ -62,23 +64,43 @@ prepros.factory('notification', [
             Prepros.gui.Window.get().setShowInTaskbar(true);
         };
 
-        //Create initial window
-        _createWindow();
+        if(Prepros.PLATFORM_WINDOWS) {
+
+            //Create initial window
+            _createWindow();
+
+        }
+
 
         function _showNotification(data) {
 
-            if (notificationWindow) {
+            if(Prepros.PLATFORM_WINDOWS) {
 
-                notificationWindow.emit('updateNotification', data);
+                if (notificationWindow) {
+
+                    notificationWindow.emit('updateNotification', data);
+
+                } else {
+
+                    _createWindow();
+
+                    notificationWindow.on('loaded', function () {
+                        notificationWindow.emit('updateNotification', data);
+                    });
+                }
 
             } else {
 
-                _createWindow();
-
-                notificationWindow.on('loaded', function () {
-                    notificationWindow.emit('updateNotification', data);
+                tnotify.notify({
+                    title: data.name,
+                    message: data.message,
+                    activate: 'com.alphapixels.prepros',
+                    sender: 'com.alphapixels.prepros'
                 });
+
             }
+
+
         }
 
         //Function to show error notification

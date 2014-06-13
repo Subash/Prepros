@@ -1,5 +1,5 @@
 {
-  "name": "Prepros App",
+  "name": "Prepros-App",
   "main": "app/app.html",
   "single-instance": false,
   "dom_storage_quota": 40,
@@ -37,6 +37,7 @@
     "request": "2.27.0",
     "ssh2": "0.2.25",
     "stylus": "0.46.3",
+    "terminal-notifier-plus": "1.0.0",
     "uglify-js": "2.4.3",
     "websocket": "1.0.8",
     "weinre": "2.0.0-pre-HH0SN197"
