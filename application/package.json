@@ -62,7 +62,7 @@
         "neat": "1.6.0",
         "susy": "2.1.2",
         "bitters": "0.10.0",
-		"autoprefixer-rails": "1.2.0.20140609"
+        "autoprefixer-rails": "1.2.0.20140609"
     }
   }
 }
