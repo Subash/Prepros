@@ -588,7 +588,7 @@ prepros.factory('projectsManager', [
 
                                         refreshFile(pid, file_id, function (complete, fp) {
 
-                                            if (fp === file) --total;
+                                            --total;
 
                                             hideIfFinished();
                                         });
@@ -597,7 +597,7 @@ prepros.factory('projectsManager', [
 
                                         addFile(pid, file, function (complete, fp) {
 
-                                            if (fp === file) --total;
+                                            --total;
 
                                             hideIfFinished();
                                         });

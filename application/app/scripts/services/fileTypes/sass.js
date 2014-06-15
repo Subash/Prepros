@@ -177,11 +177,6 @@ prepros.factory('sass', [
                                     css = autoprefixer().process(css);
                                 }
 
-                                if (file.config.outputStyle === "compressed") {
-
-                                    css = new CleanCss({processImport: false}).minify(css);
-                                }
-
                                 fs.outputFile(output, css, function (err) {
 
                                     if (err) {

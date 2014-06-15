@@ -69,11 +69,6 @@ prepros.factory('stylus', [
                                 css = autoprefixer().process(css);
                             }
 
-                            if (file.config.compress) {
-
-                                css = new CleanCss({processImport: false}).minify(css);
-                            }
-
                         } catch (err) {
 
                             callback(new Error('Failed to autoprefix css' + err.message));

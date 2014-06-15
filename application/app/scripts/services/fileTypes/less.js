@@ -106,11 +106,6 @@ prepros.factory('less', [
                                 css = autoprefixer().process(css);
                             }
 
-                            if (file.config.compress || file.config.cleancss) {
-
-                                css = new CleanCss({processImport: false}).minify(css);
-                            }
-
                         } catch (err) {
 
                             return callback(new Error('Failed to autoprefix css' + err.message));
