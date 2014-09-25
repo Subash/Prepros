@@ -25,7 +25,7 @@ prepros.factory('$exceptionHandler', [
 
         var handle = function (err) {
 
-            var errorLogPath = require('path').join(process.env.USERPROFILE || process.env.HOMEPATH || process.env.HOME, 'Prepros-Error-Log.html');
+            var errorLogPath = require('path').join( process.env.USERPROFILE || process.env.HOMEPATH || process.env.HOME, 'Prepros-Error-Log.html');
 
             fs.appendFile(errorLogPath, ' <div class="error"> \n <b> [ ' + new Date().toDateString() + ' : ' + new Date().toTimeString() + ' ]</b> \n <pre>\n ' + err.stack.toString() + '\n </pre> \n <hr> \n </div> \n');
 
