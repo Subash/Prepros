@@ -55,7 +55,7 @@ prepros.factory('livescript', [
 
                 } catch (e) {
 
-                    if (err) return callback(new Error(err.message + '\n' + input));
+                    if (e) return callback(new Error(e.message + '\n' + input));
                 }
             });
 
