@@ -1,50 +1,52 @@
 <div class="project-filters" ng-if="routePath != 'LOG'">
-    <a ng-href="#/files/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath != 'IMAGE_OPTIMIZATION' && routePath != 'PROJECT_OPTIONS'}">ALL CODE</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/html/{{selectedProject.id}}" class="project-filter__item">HTML</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/css/{{selectedProject.id}}" class="project-filter__item">CSS</a>
-    <a ng-click="PREPROS.IS_PRO || showProMessage($event); "  ng-href="#/js/{{selectedProject.id}}" class="project-filter__item">JS</a>
-    <a ng-href="#/images/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath == 'IMAGE_OPTIMIZATION'}">IMAGES</a>
+  <a ng-href="#/files/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath != 'IMAGE_OPTIMIZATION' && routePath != 'PROJECT_OPTIONS'}">ALL CODE</a>
+  <a ng-click="PREPROS.IS_PRO || showProMessage($event); " ng-href="#/html/{{selectedProject.id}}" class="project-filter__item">HTML</a>
+  <a ng-click="PREPROS.IS_PRO || showProMessage($event); " ng-href="#/css/{{selectedProject.id}}" class="project-filter__item">CSS</a>
+  <a ng-click="PREPROS.IS_PRO || showProMessage($event); " ng-href="#/js/{{selectedProject.id}}" class="project-filter__item">JS</a>
+  <a ng-href="#/images/{{selectedProject.id}}" class="project-filter__item" ng-class="{'project-filter__item--active' : routePath == 'IMAGE_OPTIMIZATION'}">IMAGES</a>
 </div>
 
 <div class="project-toolbar" ng-if="routePath != 'LOG'">
 
-    <div class="project-toolbar__item" ng-click="refreshProject(selectedProject.id)">
-        <i class="icon-spinner-6 project-toolbar__item__icon" tooltip="Refresh Project"></i>
-    </div>
+  <div class="project-toolbar__item" ng-click="refreshProject(selectedProject.id)">
+    <i class="icon-spinner-6 project-toolbar__item__icon" tooltip="Refresh Project"></i>
+  </div>
 
-    <div class="project-toolbar__item">
-        <a ng-href="#/project-options/{{selectedProject.id}}/general"><i class="icon-cog project-toolbar__item__icon" tooltip="Project Settings"></i></a>
-    </div>
+  <div class="project-toolbar__item">
+    <a ng-href="#/project-options/{{selectedProject.id}}/general"><i class="icon-cog project-toolbar__item__icon" tooltip="Project Settings"></i></a>
+  </div>
 
-    <div class="project-toolbar__item" ng-click="openProjectPreview(selectedProject.id)">
-        <i class="icon-globe project-toolbar__item__icon" tooltip="Open Live Preview"></i>
-    </div>
+  <div class="project-toolbar__item" ng-click="openProjectPreview(selectedProject.id)">
+    <i class="icon-globe project-toolbar__item__icon" tooltip="Open Live Preview"></i>
+  </div>
 
-    <div class="project-toolbar__item" ng-click="pushProjectToRemote(selectedProject.id)">
-        <i class="icon-arrow-up project-toolbar__item__icon" tooltip="Push To Remote Via FTP"></i>
-    </div>
+  <div class="project-toolbar__item" ng-click="pushProjectToRemote(selectedProject.id)">
+    <i class="icon-arrow-up project-toolbar__item__icon" tooltip="Push To Remote Via FTP"></i>
+  </div>
 
-    <div class="project-toolbar__item" ng-click="removeProject(selectedProject.id)">
-        <i class="icon-remove-2 project-toolbar__item__icon" tooltip="Remove Project"></i>
-    </div>
+  <div class="project-toolbar__item" ng-click="removeProject(selectedProject.id)">
+    <i class="icon-remove-2 project-toolbar__item__icon" tooltip="Remove Project"></i>
+  </div>
 
-    <div class="project-toolbar__item project-toolbar__item--dropdown dropup">
-        <i class="icon-menu-2 project-toolbar__item__icon" data-toggle="dropdown" tooltip="More Options" data-placement="left"></i>
-        <ul class="dropdown-menu pull-right">
-            <li><a ng-click="openProjectFolder(selectedProject.id)"><i class="icon-folder"></i> Open Project Folder</a></li>
-            <li><a ng-click="toggleFileWatcher(selectedProject.id)">
-                <i class="icon-eye-blocked" ng-if="selectedProject.config.watch !== false"></i>
-                <i class="icon-eye" ng-if="selectedProject.config.watch === false"></i>
-                <span ng-if="selectedProject.config.watch !== false">Disable File Watcher</span>
-                <span ng-if="selectedProject.config.watch === false">Enable File Watcher</span>
-            </a></li>
-            <li ng-click="compileAllFiles(selectedProject.id)"><a><i class="icon-file-2"></i> Compile All Files</a></li>
-            <li><a ng-click="optimizeAllImages(selectedProject.id)"><i class="icon-image-2"></i> Optimize All Images</a></li>
-            <li><a ng-click="copyProjectPreviewUrl(selectedProject.id)"><i class="icon-copy"></i> Copy Live Preview Url</a></li>
-            <li><a ng-click="createProjectConfigFile(selectedProject.id)" ><i class="icon-wrench"></i> Create Prepros.json File</a></li>
-            <li><a ng-click="openRemoteInspect()"><i class="icon-mobile-2"></i>Open Remote Inspector</a></li>
-        </ul>
-    </div>
+  <div class="project-toolbar__item project-toolbar__item--dropdown dropup">
+    <i class="icon-menu-2 project-toolbar__item__icon" data-toggle="dropdown" tooltip="More Options" data-placement="left"></i>
+    <ul class="dropdown-menu pull-right">
+      <li><a ng-click="openProjectFolder(selectedProject.id)"><i class="icon-folder"></i> Open Project Folder</a></li>
+      <li>
+        <a ng-click="toggleFileWatcher(selectedProject.id)">
+          <i class="icon-eye-blocked" ng-if="selectedProject.config.watch !== false"></i>
+          <i class="icon-eye" ng-if="selectedProject.config.watch === false"></i>
+          <span ng-if="selectedProject.config.watch !== false">Disable File Watcher</span>
+          <span ng-if="selectedProject.config.watch === false">Enable File Watcher</span>
+        </a>
+      </li>
+      <li ng-click="compileAllFiles(selectedProject.id)"><a><i class="icon-file-2"></i> Compile All Files</a></li>
+      <li><a ng-click="optimizeAllImages(selectedProject.id)"><i class="icon-image-2"></i> Optimize All Images</a></li>
+      <li><a ng-click="copyProjectPreviewUrl(selectedProject.id)"><i class="icon-copy"></i> Copy Live Preview Url</a></li>
+      <li><a ng-click="createProjectConfigFile(selectedProject.id)"><i class="icon-wrench"></i> Create Prepros.json File</a></li>
+      <li><a ng-click="openRemoteInspect()"><i class="icon-mobile-2"></i>Open Remote Inspector</a></li>
+    </ul>
+  </div>
 </div>
 
 <button class="clear-log-button btn btn-primary" ng-if="log.length && routePath == 'LOG' " ng-click="clearLog()">Clear Log</button>

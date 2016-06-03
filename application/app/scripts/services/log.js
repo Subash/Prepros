@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,29 +10,29 @@
 
 prepros.factory("log", [
 
-    function () {
+  function() {
 
-        'use strict';
+    'use strict';
 
-        var log = [];
+    var log = [];
 
-        var add = function (details) {
+    var add = function(details) {
 
-            log.unshift(details);
+      log.unshift(details);
 
-            if (log.length > 30) {
-                log.length = 30;
-            }
-        };
+      if (log.length > 30) {
+        log.length = 30;
+      }
+    };
 
-        var clear = function () {
-            log.length = 0;
-        };
+    var clear = function() {
+      log.length = 0;
+    };
 
-        return {
-            add: add,
-            clear: clear,
-            log: log
-        };
-    }
+    return {
+      add: add,
+      clear: clear,
+      log: log
+    };
+  }
 ]);

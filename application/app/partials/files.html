@@ -1,20 +1,14 @@
-<a ng-repeat="file in selectedProjectFiles"
-   ng-href="#/files/{{file.pid}}/{{file.id}}"
-   class="files-list__item files-list__item--{{file.type.toLowerCase()}}"
-   ng-class="{'files-list__item--active' : file.id == selectedFile.id || multiSelect.files[file.id]}"
-   ng-dblclick="openFile(file.pid, file.id)"
-   file-context-menu="file"
-   ctrl-click="addMultiSelectFile(file.pid, file.id)"
-   draggable="false" >
+<a ng-repeat="file in selectedProjectFiles" ng-href="#/files/{{file.pid}}/{{file.id}}" class="files-list__item files-list__item--{{file.type.toLowerCase()}}" ng-class="{'files-list__item--active' : file.id == selectedFile.id || multiSelect.files[file.id]}"
+  ng-dblclick="openFile(file.pid, file.id)" file-context-menu="file" ctrl-click="addMultiSelectFile(file.pid, file.id)" draggable="false">
 
-    <div class="files-list__item__thumb" ng-class="{'files-list__item__thumb--compile-disabled' : !file.config.autoCompile}">{{file.type}}</div>
-    <div class="files-list__item__details">
-        <div class="files-list__item__details__name">{{file.name}}</div>
-        <div class="files-list__item__details__input">{{file.input | prettyPath}}</div>
-		<div ng-if=" !(file.config.compass && file.config.fullCompass) " >
-			<div class="files-list__item__details__output" ng-click="changeFileOutput(file.pid, file.id, $event)" ng-if="file.customOutput">&rarr; {{file.customOutput | shortPath : selectedProject.path | prettyPath }}</div>
-			<div class="files-list__item__details__output" ng-click="changeFileOutput(file.pid, file.id, $event)" ng-if="!file.customOutput">&rarr; {{file.input | interpolatePath : selectedProject | shortPath : selectedProject.path | prettyPath }}</div>
-		</div>
-        <div class="files-list__item__details__output files-list__item__details__output--not-available" ng-if="file.config.compass && file.config.fullCompass" tooltip="Changing output path from UI is not supported in full compass support mode. Use compass config.rb file to manage output paths.">&rarr; Not Available <i class="icon-info"></i></div>
+  <div class="files-list__item__thumb" ng-class="{'files-list__item__thumb--compile-disabled' : !file.config.autoCompile}">{{file.type}}</div>
+  <div class="files-list__item__details">
+    <div class="files-list__item__details__name">{{file.name}}</div>
+    <div class="files-list__item__details__input">{{file.input | prettyPath}}</div>
+    <div ng-if=" !(file.config.compass && file.config.fullCompass) ">
+      <div class="files-list__item__details__output" ng-click="changeFileOutput(file.pid, file.id, $event)" ng-if="file.customOutput">&rarr; {{file.customOutput | shortPath : selectedProject.path | prettyPath }}</div>
+      <div class="files-list__item__details__output" ng-click="changeFileOutput(file.pid, file.id, $event)" ng-if="!file.customOutput">&rarr; {{file.input | interpolatePath : selectedProject | shortPath : selectedProject.path | prettyPath }}</div>
     </div>
+    <div class="files-list__item__details__output files-list__item__details__output--not-available" ng-if="file.config.compass && file.config.fullCompass" tooltip="Changing output path from UI is not supported in full compass support mode. Use compass config.rb file to manage output paths.">&rarr; Not Available <i class="icon-info"></i></div>
+  </div>
 </a>

@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,23 +11,23 @@
 //About Window Controller
 prepros.controller('AppOptionsCtrl', [
 
-    '$scope',
-    'config',
+  '$scope',
+  'config',
 
-    function ($scope, config) {
+  function($scope, config) {
 
-        'use strict';
+    'use strict';
 
-        $scope.config = config.getUserOptions();
+    $scope.config = config.getUserOptions();
 
-        $scope.$watch('config', function () {
+    $scope.$watch('config', function() {
 
-            if (!_.isEmpty($scope.config)) {
+      if (!_.isEmpty($scope.config)) {
 
-                config.saveUserOptions($scope.config);
+        config.saveUserOptions($scope.config);
 
-            }
+      }
 
-        }, true);
-    }
+    }, true);
+  }
 ]);

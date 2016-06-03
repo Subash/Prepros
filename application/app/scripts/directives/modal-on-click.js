@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,27 +11,27 @@
 //Popover directive
 prepros.directive('modalOnClick', [
 
-    '$timeout',
+  '$timeout',
 
-    function ($timeout) {
+  function($timeout) {
 
-        'use strict';
+    'use strict';
 
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
 
-                $timeout(function () {
+        $timeout(function() {
 
-                    element.on('click', function (e) {
+          element.on('click', function(e) {
 
-                        e.preventDefault();
-                        $(attrs.modalOnClick).modal();
+            e.preventDefault();
+            $(attrs.modalOnClick).modal();
 
-                    });
-                });
+          });
+        });
 
-            }
-        };
-    }
+      }
+    };
+  }
 ]);

@@ -1,139 +1,120 @@
 .dropdown-menu {
-	
-	border-radius: 0;
-	box-shadow: none;
-	z-index: 9999;
-
-	> li {
-
-		>a {
-
-			color: $base-color;
-			padding: 5px 10px;
-
-			&:hover {
-				background: #4ea6ea;
-			}
-
-			i {
-				margin-right: 8px !important;
-				display: inline-block;
-			}
-		}
-	}
+  border-radius: 0;
+  box-shadow: none;
+  z-index: 9999;
+  > li {
+    > a {
+      color: $base-color;
+      padding: 5px 10px;
+      &:hover {
+        background: #4ea6ea;
+      }
+      i {
+        margin-right: 8px !important;
+        display: inline-block;
+      }
+    }
+  }
 }
-
-input:focus, select:focus, select:active {
-	box-shadow: none !important;
+input:focus,
+select:active,
+select:focus {
+  box-shadow: none !important;
 }
-
-input[type='text'], input[type='password'], textarea, select {
-	border: 1px solid #cfcfcf;
-	border-radius: 0;
-	padding: 4px 8px;
-	color: inherit;
-	font: inherit;
-	&:focus {
-		border: 1px solid #bbb;
-	}
+input[type='password'],
+input[type='text'],
+select,
+textarea {
+  border: 1px solid #cfcfcf;
+  border-radius: 0;
+  padding: 4px 8px;
+  color: inherit;
+  font: inherit;
+  &:focus {
+    border: 1px solid #bbb;
+  }
 }
-
 input[type=checkbox] {
-	-webkit-appearance: none;
-	width: 17px;
-	height: 17px;
-	line-height: 1.7em;
-	border: 1px solid #BBB;
-	padding: 0;
-	margin: 0 5px;
-	position: relative;
-	vertical-align: middle;
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  line-height: 1.7em;
+  border: 1px solid #BBB;
+  padding: 0;
+  margin: 0 5px;
+  position: relative;
+  vertical-align: middle;
 }
-
 input[type=checkbox]:checked:after {
-	font-family: Icomoon;
-	content: '\e0fe';
-	line-height: 1em;
-	font-size: 11px;
-	color: #BBB;
-	position: absolute;
-	top: 2px;
-	left: 2px;
+  font-family: Icomoon;
+  content: '\e0fe';
+  line-height: 1em;
+  font-size: 11px;
+  color: #BBB;
+  position: absolute;
+  top: 2px;
+  left: 2px;
 }
-
 input[type=checkbox]:disabled {
-	opacity: .8;
-	background: #ebebe4;
+  opacity: 0.8;
+  background: #ebebe4;
 }
-
 label {
-	cursor: pointer;
+  cursor: pointer;
 }
-
 .tooltip-inner {
-	padding: 8px 10px;
-	display: inline-block;
+  padding: 8px 10px;
+  display: inline-block;
 }
-
 .btn {
-	border-radius: 0;
+  border-radius: 0;
 }
-
 .btn-primary {
-	background: $color-primary;
-	border: none;
-	padding: 8px 12px;
-	&:hover {
-		background: lighten($color-primary, 10%);
-	}
-	&:active {
-		background: $color-primary;
-	}
+  background: $color-primary;
+  border: none;
+  padding: 8px 12px;
+  &:hover {
+    background: lighten($color-primary, 10%);
+  }
+  &:active {
+    background: $color-primary;
+  }
 }
-
 .modal-backdrop.fade {
-	opacity: 0.4;
+  opacity: 0.4;
 }
-
 .modal-content {
-	box-shadow: none;
-	border-radius: 0;
-	margin-top: 30px;
+  box-shadow: none;
+  border-radius: 0;
+  margin-top: 30px;
 }
-
 .modal-header {
-	background: $color-primary;
-	color: #fff;
-	border-bottom: none;
-	padding: 10px 15px;
-
-	.close {
-		color: #fff;
-		opacity: .8;
-		margin-top: 5px;
-	}
+  background: $color-primary;
+  color: #fff;
+  border-bottom: none;
+  padding: 10px 15px;
+  .close {
+    color: #fff;
+    opacity: 0.8;
+    margin-top: 5px;
+  }
 }
-
 .modal-footer {
-	padding: 10px 15px;
+  padding: 10px 15px;
 }
-
 .modal-body {
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
-
 .tab-pane {
-	margin-top: 15px;
+  margin-top: 15px;
 }
-
 a.link {
-	color: $color-primary;
-	&:hover {
-		text-decoration: underline;
-	}
+  color: $color-primary;
+  &:hover {
+    text-decoration: underline;
+  }
 }
-
 .modal .tab-pane {
-	max-height: 270px;
-	overflow: scroll;
+  max-height: 270px;
+  overflow: scroll;
 }

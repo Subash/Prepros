@@ -1,26 +1,26 @@
 <label>
-    <input type="checkbox" ng-model="selectedFile.config.uglify">
-    <span class="label-desc">Uglify</span>
+  <input type="checkbox" ng-model="selectedFile.config.uglify">
+  <span class="label-desc">Uglify</span>
 </label>
 
 
 <label>
 
-	<input type="checkbox" ng-model="selectedFile.config.mangle" ng-show="selectedFile.config.uglify">
-	<span ng-show="selectedFile.config.uglify">Mangle Variable Names</span>
+  <input type="checkbox" ng-model="selectedFile.config.mangle" ng-show="selectedFile.config.uglify">
+  <span ng-show="selectedFile.config.uglify">Mangle Variable Names</span>
 
-	<input type="checkbox" disabled ng-hide="selectedFile.config.uglify">
-	<span tooltip="This is an uglifyjs option"  ng-hide="selectedFile.config.uglify">Mangle Variable Names</span>
+  <input type="checkbox" disabled ng-hide="selectedFile.config.uglify">
+  <span tooltip="This is an uglifyjs option" ng-hide="selectedFile.config.uglify">Mangle Variable Names</span>
 
 </label>
 
 
 <label>
 
-	<input type="checkbox" ng-model="selectedFile.config.sourcemaps" ng-show="selectedFile.config.uglify">
-	<span ng-show="selectedFile.config.uglify">SourceMaps</span>
+  <input type="checkbox" ng-model="selectedFile.config.sourcemaps" ng-show="selectedFile.config.uglify">
+  <span ng-show="selectedFile.config.uglify">SourceMaps</span>
 
-	<input type="checkbox" disabled ng-hide="selectedFile.config.uglify">
-	<span tooltip="UglifyJS must be enabled to generate sourcemaps."  ng-hide="selectedFile.config.uglify">SourceMaps</span>
+  <input type="checkbox" disabled ng-hide="selectedFile.config.uglify">
+  <span tooltip="UglifyJS must be enabled to generate sourcemaps." ng-hide="selectedFile.config.uglify">SourceMaps</span>
 
 </label>

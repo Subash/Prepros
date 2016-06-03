@@ -1,20 +1,20 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
 /*jshint browser: true, node: true*/
 /*global prepros*/
 
-prepros.filter('prettyPath', [ function () {
+prepros.filter('prettyPath', [function() {
 
-    'use strict';
+  'use strict';
 
-    return function (string) {
+  return function(string) {
 
-        return string.replace(/\\/g, '/');
+    return string.replace(/\\/g, '/');
 
-    };
+  };
 }]);

@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,34 +11,34 @@
 //About Window Controller
 prepros.controller('AboutCtrl', [
 
-    '$scope',
-    'config',
+  '$scope',
+  'config',
 
-    function ($scope, config) {
+  function($scope, config) {
 
-        'use strict';
+    'use strict';
 
-        $scope.gems = [];
-        $scope.node_modules = [];
+    $scope.gems = [];
+    $scope.node_modules = [];
 
-        for (var nm in config.node_modules) {
+    for (var nm in config.node_modules) {
 
-            if (config.node_modules.hasOwnProperty(nm)) {
+      if (config.node_modules.hasOwnProperty(nm)) {
 
-                $scope.node_modules.push(nm + " -> " + config.node_modules[nm]);
+        $scope.node_modules.push(nm + " -> " + config.node_modules[nm]);
 
-            }
+      }
 
-        }
-
-        for (var gem in config.ruby_gems) {
-
-            if (config.ruby_gems.hasOwnProperty(gem)) {
-
-                $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
-
-            }
-
-        }
     }
+
+    for (var gem in config.ruby_gems) {
+
+      if (config.ruby_gems.hasOwnProperty(gem)) {
+
+        $scope.gems.push(gem + " -> " + config.ruby_gems[gem]);
+
+      }
+
+    }
+  }
 ]);

@@ -1,254 +1,254 @@
 $types: scss #c02ec9,
-		sass #F19F35,
-		less #E97F02,
-		stylus #F8CA00,
-		jade #8A9B0F,
-		coffee #AB7DC2,
-		js #ECD078,
-		haml #57BC8A,
-		md #D86043,
-		slim #00A0B0,
-		ls #509bd1;
+  sass #F19F35,
+  less #E97F02,
+  stylus #F8CA00,
+  jade #8A9B0F,
+  coffee #AB7DC2,
+  js #ECD078,
+  haml #57BC8A,
+  md #D86043,
+  slim #00A0B0,
+  ls #509bd1;
 
 .files {
-	height: 100%;
-	overflow: hidden;
-	display: flex;
-	margin-right: 10px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  margin-right: 10px;
 
-	&.file-options-shown {
+  &.file-options-shown {
 
-		margin-right: 0;
+  margin-right: 0;
 
-        .files-list  {
-            width: calc( 100% - 230px);
-            transition: width .4s;
-        }
+    .files-list  {
+      width: calc( 100% - 230px);
+      transition: width .4s;
+    }
 
-		.file-options {
-			display: block;
-            overflow: hidden;
-		}
+  .file-options {
+    display: block;
+      overflow: hidden;
+  }
 
-		@media(max-width: 850px) {
+  @media(max-width: 850px) {
 
-			.files-list__item {
+    .files-list__item {
 
-				padding-left: 20px;
-				position: relative;
+    padding-left: 20px;
+    position: relative;
 
-				&::before {
-					display: block;
-					content: '';
-					position: absolute;
-					top: 2px;
-					bottom: 2px;
-					left: 2px;
-					width: 10px;
-				}
+    &::before {
+      display: block;
+      content: '';
+      position: absolute;
+      top: 2px;
+      bottom: 2px;
+      left: 2px;
+      width: 10px;
+    }
 
-				@each $type in $types {
-					&.files-list__item--#{nth($type, 1)}::before{
-						background: nth($type, 2);
-					}
-				}
-			}
+    @each $type in $types {
+      &.files-list__item--#{nth($type, 1)}::before{
+      background: nth($type, 2);
+      }
+    }
+    }
 
-			.files-list__item__thumb {
-				display: none;
-			}
+    .files-list__item__thumb {
+    display: none;
+    }
 
-			.files-list__item__details__name {
-				display: none;
-			}
+    .files-list__item__details__name {
+    display: none;
+    }
 
-			.files-list__item__details__input {
-				font-size: 90%;
-				font-weight: 400;
-			}
+    .files-list__item__details__input {
+    font-size: 90%;
+    font-weight: 400;
+    }
 
-			.files-list__item__details__output {
-				display: none;
-			}
-		}
-	}
+    .files-list__item__details__output {
+    display: none;
+    }
+  }
+  }
 }
 
 .files__no-files {
 
-    width: 100%;
-    .files__no-files__icon {
+  width: 100%;
+  .files__no-files__icon {
 
-        font-size: 12vw;
-        display: block;
-        margin: auto;
-        text-align: center;
-        margin-top: 20vh;
-        margin-bottom: 20px;
-        transition: all .5s;
+    font-size: 12vw;
+    display: block;
+    margin: auto;
+    text-align: center;
+    margin-top: 20vh;
+    margin-bottom: 20px;
+    transition: all .5s;
 
-    }
-    .files__no-files__message {
-         font-size: 2.2vw;
-         font-weight: 200;
-         text-align: center;
-         transition: all .5s;
-    }
+  }
+  .files__no-files__message {
+     font-size: 2.2vw;
+     font-weight: 200;
+     text-align: center;
+     transition: all .5s;
+  }
 }
 
 .files-list {
-	overflow: auto;
-	height: 100%;
-    width: 100%;
-    transition: width .4s;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  transition: width .4s;
 
-	.files-list__item {
+  .files-list__item {
 
-		padding: 10px;
-		display: flex;
-		margin-bottom: 10px;
-		border: 1px solid rgba(#dfdfdf, .9);
-		color: #888;
-		cursor: default;
+  padding: 10px;
+  display: flex;
+  margin-bottom: 10px;
+  border: 1px solid rgba(#dfdfdf, .9);
+  color: #888;
+  cursor: default;
 
-		&:hover {
-			border: 1px solid rgba($color-primary, .3);
-		}
+  &:hover {
+    border: 1px solid rgba($color-primary, .3);
+  }
 
-		&.files-list__item--active {
-			border: 1px solid rgba($color-primary, .2);
-			background: rgba($color-primary, .09);
-		}
+  &.files-list__item--active {
+    border: 1px solid rgba($color-primary, .2);
+    background: rgba($color-primary, .09);
+  }
 
-		&:last-child {
-			margin-bottom: 0;
-		}
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-		.files-list__item__thumb {
-			margin-top: auto;
-			margin-bottom: auto;
-			width: 60px;
-			height: 60px;
-			background: $sidebar-background;
-			margin-right: 10px;
-			color: #fff;
-			line-height: 60px;
-			text-align: center;
-			position: relative;
-			border-right: 5px solid #F77825;
+  .files-list__item__thumb {
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 60px;
+    height: 60px;
+    background: $sidebar-background;
+    margin-right: 10px;
+    color: #fff;
+    line-height: 60px;
+    text-align: center;
+    position: relative;
+    border-right: 5px solid #F77825;
 
-			&.files-list__item__thumb--compile-disabled {
-				opacity: 0.5;
-			}
+    &.files-list__item__thumb--compile-disabled {
+    opacity: 0.5;
+    }
 
-			&::after {
-				position: absolute;
-				top: 25px;
-				right: 0;
-				width: 0;
-				height: 0;
-				border-top: 5px solid transparent;
-				border-bottom: 5px solid transparent;
-				border-right: 5px solid #F77825;
-				content: '';
-			}
-		}
+    &::after {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #F77825;
+    content: '';
+    }
+  }
 
-		@each $type in $types {
-			&.files-list__item--#{nth($type, 1)} {
-				.files-list__item__thumb {
-					border-right: 5px solid nth($type, 2);
-					&::after {
-						border-right: 5px solid nth($type, 2);
-					}
-				}
-			}
-		}
+  @each $type in $types {
+    &.files-list__item--#{nth($type, 1)} {
+    .files-list__item__thumb {
+      border-right: 5px solid nth($type, 2);
+      &::after {
+      border-right: 5px solid nth($type, 2);
+      }
+    }
+    }
+  }
 
-		.files-list__item__details__name {
-			font-weight: 400;
-			flex: 1;
-		}
+  .files-list__item__details__name {
+    font-weight: 400;
+    flex: 1;
+  }
 
-		.files-list__item__details__input, .files-list__item__details__output {
-			color: #AAA;
-			word-break: break-all;
-			margin-top: 2px;
+  .files-list__item__details__input, .files-list__item__details__output {
+    color: #AAA;
+    word-break: break-all;
+    margin-top: 2px;
 
-			i {
-				opacity: .5;
-				display: inline-block;
-				margin-left: 5px;
-				&:hover {
-					opacity: 1;
-				}
-			}
-		}
+    i {
+    opacity: .5;
+    display: inline-block;
+    margin-left: 5px;
+    &:hover {
+      opacity: 1;
+    }
+    }
+  }
 
-		.files-list__item__details__output {
+  .files-list__item__details__output {
 
-			cursor: pointer;
-			&:hover {
-				text-decoration: underline;
-			}
+    cursor: pointer;
+    &:hover {
+    text-decoration: underline;
+    }
 
-			&.files-list__item__details__output--not-available:hover {
-				text-decoration: none;
-			}
-		}
-	}
+    &.files-list__item__details__output--not-available:hover {
+    text-decoration: none;
+    }
+  }
+  }
 }
 
 .file-options {
-	border: 1px solid rgba(#dfdfdf, .9);
-	width: 220px;
-	margin-left: 10px;
-	overflow: auto;
-	display: none;
-	padding: 10px;
-	position: relative;
+  border: 1px solid rgba(#dfdfdf, .9);
+  width: 220px;
+  margin-left: 10px;
+  overflow: auto;
+  display: none;
+  padding: 10px;
+  position: relative;
 
-	> * {
-		max-width: 200px;
-	}
+  > * {
+  max-width: 200px;
+  }
 
-	.file-options__type {
-		text-align: center;
-		font-weight: 200;
-	}
+  .file-options__type {
+  text-align: center;
+  font-weight: 200;
+  }
 
-	.file-options__name {
-		text-align: center;
-		margin-bottom: 15px;
-		border-bottom: 1px solid #efefef;
-		color: #666;
-		padding-bottom: 8px;
+  .file-options__name {
+  text-align: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #efefef;
+  color: #666;
+  padding-bottom: 8px;
 
-	}
+  }
 
-	label {
-		margin-top: 10px;
-		margin-bottom: 10px;
-		font-weight: inherit;
-		display: block;
-		i {
-			display: inline-block;
-			margin-left: 4px;
-			vertical-align: baseline;
-		}
-	}
+  label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: inherit;
+  display: block;
+  i {
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: baseline;
+  }
+  }
 
-	select {
-		display: block;
-		width: 200px;
-		margin-top: 5px; //Margin from label
-		padding: 5px 8px;
-		font-weight: inherit;
-	}
+  select {
+  display: block;
+  width: 200px;
+  margin-top: 5px; //Margin from label
+  padding: 5px 8px;
+  font-weight: inherit;
+  }
 
-	.file-options__compile-button {
-		position: absolute;
-		bottom: 10px;
-		left: 30%; //Magic number :P
-	}
+  .file-options__compile-button {
+  position: absolute;
+  bottom: 10px;
+  left: 30%; //Magic number :P
+  }
 }

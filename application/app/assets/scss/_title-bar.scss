@@ -1,96 +1,77 @@
 .title-bar {
-
-	//Dragable Region
-	-webkit-app-region: drag;
-
-	display: flex;
-	position: relative;
-
-	.title-bar-sidebar-overlay {
-		width: $sidebar-width;
-		background: $sidebar-background;
-		color: #fff;
-		padding-left: 10px;
-	}
-
-	.title-bar-controls {
-		
-		flex: 1; //Can be any value 
-		display: flex;
-		justify-content: flex-end;
-		box-shadow: 0px 1px 2px #d9d9d9;
-
-		.title-bar__control {
-
-			//Non dragable Controls
-			-webkit-app-region: no-drag;
-
-
-			margin: 5px;
-			margin-left: 0;
-			position: relative;
-			width: 30px;
-			height: 30px;
-			line-height: 35px;
-			color: #888;
-			cursor: pointer;
-			&:hover {
-				color: $color-primary;
-				background: lighten($color-primary, 45%);
-			}
-			&:active {
-				color: #fff;
-				background: $color-primary;
-			}
-
-			.title-bar__control__icon {
-				display: inline-block;
-				width: 100%;
-				height: 100%;
-				text-align: center;
-			}
-
-			&.title-bar__control--highlighted {
-				color: $color-primary;
-			}
-
-			&.title-bar__control--highlighted:active {
-				color: #fff;
-			}
-
-			&.title-bar__control--dropdown {
-				> i {
-					font-size: 120%; //Shame CSS
-				}
-
-				.dropdown-menu {
-
-					background: #222;
-					border: none;
-					width: 250px;
-
-					a {
-						color: #fff;
-						padding: 7px 12px;
-                        font-weight: inherit;
-
-						&:hover {
-							background: $color-primary;
-						}
-					}
-
-					&::after {
-						position: absolute;
-						top: -6px;
-						right: 10px;
-						display: inline-block;
-						border-right: 6px solid transparent;
-						border-bottom: 6px solid #222;
-						border-left: 6px solid transparent;
-						content: '';
-					}
-				}
-			} 
-		}
-	}
+  //Dragable Region
+  -webkit-app-region: drag;
+  display: flex;
+  position: relative;
+  .title-bar-sidebar-overlay {
+    width: $sidebar-width;
+    background: $sidebar-background;
+    color: #fff;
+    padding-left: 10px;
+  }
+  .title-bar-controls {
+    flex: 1; //Can be any value
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 1px 2px #d9d9d9;
+    .title-bar__control {
+      //Non dragable Controls
+      -webkit-app-region: no-drag;
+      margin: 5px 5px 5px 0;
+      position: relative;
+      width: 30px;
+      height: 30px;
+      line-height: 35px;
+      color: #888;
+      cursor: pointer;
+      &:hover {
+        color: $color-primary;
+        background: lighten($color-primary, 45%);
+      }
+      &:active {
+        color: #fff;
+        background: $color-primary;
+      }
+      .title-bar__control__icon {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+      }
+      &.title-bar__control--highlighted {
+        color: $color-primary;
+      }
+      &.title-bar__control--highlighted:active {
+        color: #fff;
+      }
+      &.title-bar__control--dropdown {
+        > i {
+          font-size: 120%; //Shame CSS
+        }
+        .dropdown-menu {
+          background: #222;
+          border: none;
+          width: 250px;
+          a {
+            color: #fff;
+            padding: 7px 12px;
+            font-weight: inherit;
+            &:hover {
+              background: $color-primary;
+            }
+          }
+          &::after {
+            position: absolute;
+            top: -6px;
+            right: 10px;
+            display: inline-block;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #222;
+            border-left: 6px solid transparent;
+            content: '';
+          }
+        }
+      }
+    }
+  }
 }

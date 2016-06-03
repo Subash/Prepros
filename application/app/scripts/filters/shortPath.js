@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,19 +10,20 @@
 
 prepros.filter('shortPath', [
 
-    'utils',
+  'utils',
 
-    function (utils) {
+  function(utils) {
 
-        'use strict';
+    'use strict';
 
-        var path = require('path');
+    var path = require('path');
 
-        return function (string, basePath) {
+    return function(string, basePath) {
 
-            if (utils.isFileInsideFolder(basePath, string)) return path.relative(basePath, string);
+      if (utils.isFileInsideFolder(basePath, string)) return path.relative(basePath, string);
 
-            return string;
+      return string;
 
-        };
-    }]);
+    };
+  }
+]);

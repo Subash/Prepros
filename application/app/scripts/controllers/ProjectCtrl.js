@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,148 +11,151 @@
 //Files List controls
 prepros.controller('ProjectCtrl', [
 
-    '$scope',
-    '$rootScope',
-    'projectsManager',
-    'liveServer',
-    'pro',
-    'utils',
-    'compiler',
+  '$scope',
+  '$rootScope',
+  'projectsManager',
+  'liveServer',
+  'pro',
+  'utils',
+  'compiler',
 
-    function ($scope, $rootScope, projectsManager, liveServer, pro, utils, compiler) {
+  function($scope, $rootScope, projectsManager, liveServer, pro, utils, compiler) {
 
-        'use strict';
+    'use strict';
 
-        var fs = require('fs-extra');
-        var path = require('path');
-        var url = require('url');
+    var fs = require('fs-extra');
+    var path = require('path');
+    var url = require('url');
 
-        $scope.toggleFileWatcher = function (id) {
-            $scope.projects[id].config.watch = !$scope.projects[id].config.watch;
-        };
+    $scope.toggleFileWatcher = function(id) {
+      $scope.projects[id].config.watch = !$scope.projects[id].config.watch;
+    };
 
-        $scope.openProjectFolder = function (id) {
-            Prepros.gui.Shell.openItem($scope.projects[id].path);
-        };
+    $scope.openProjectFolder = function(id) {
+      Prepros.gui.Shell.openItem($scope.projects[id].path);
+    };
 
-        $scope.openProjectPreview = function (pid) {
+    $scope.openProjectPreview = function(pid) {
 
-            if (!Prepros.IS_PRO && $scope.projects[pid].config.useCustomServer) {
+      if (!Prepros.IS_PRO && $scope.projects[pid].config.useCustomServer) {
 
-                Prepros.gui.Shell.openItem($scope.projects[pid].config.customServerUrl);
+        Prepros.gui.Shell.openItem($scope.projects[pid].config.customServerUrl);
 
-            } else {
+      } else {
 
-                var lurl = liveServer.getLiveUrl(pid);
+        var lurl = liveServer.getLiveUrl(pid);
 
-                if (url.parse($scope.projects[pid].config.customServerUrl).path) {
+        if (url.parse($scope.projects[pid].config.customServerUrl).path) {
 
-                    lurl += url.parse($scope.projects[pid].config.customServerUrl).path;
-                }
+          lurl += url.parse($scope.projects[pid].config.customServerUrl).path;
+        }
 
-                Prepros.gui.Shell.openItem(lurl);
-            }
-        };
+        Prepros.gui.Shell.openItem(lurl);
+      }
+    };
 
-        $scope.copyProjectPreviewUrl = function (pid) {
+    $scope.copyProjectPreviewUrl = function(pid) {
 
-            if (!Prepros.IS_PRO && $scope.projects[pid].config.useCustomServer) {
+      if (!Prepros.IS_PRO && $scope.projects[pid].config.useCustomServer) {
 
-                Prepros.gui.Clipboard.get().set($scope.projects[pid].config.customServerUrl, 'text');
+        Prepros.gui.Clipboard.get().set($scope.projects[pid].config.customServerUrl, 'text');
 
-            } else {
+      } else {
 
-                var lurl = liveServer.getLiveUrl(pid);
+        var lurl = liveServer.getLiveUrl(pid);
 
-                if (url.parse($scope.projects[pid].config.customServerUrl).path) {
+        if (url.parse($scope.projects[pid].config.customServerUrl).path) {
 
-                    lurl += url.parse($scope.projects[pid].config.customServerUrl).path;
-                }
+          lurl += url.parse($scope.projects[pid].config.customServerUrl).path;
+        }
 
-                Prepros.gui.Clipboard.get().set(lurl, 'text');
-            }
-        };
+        Prepros.gui.Clipboard.get().set(lurl, 'text');
+      }
+    };
 
-        $scope.createProjectConfigFile = function (id) {
+    $scope.createProjectConfigFile = function(id) {
 
-            pro.showMessage();
-        };
+      pro.showMessage();
+    };
 
-        $scope.openRemoteInspect = function () {
+    $scope.openRemoteInspect = function() {
 
-            pro.showMessage();
-        };
+      pro.showMessage();
+    };
 
-        $scope.optimizeAllImages = function (pid) {
-            pro.showMessage();
-        };
+    $scope.optimizeAllImages = function(pid) {
+      pro.showMessage();
+    };
 
-        $scope.refreshProject = function (id) {
-            projectsManager.refreshProjectFiles(id);
-        };
+    $scope.refreshProject = function(id) {
+      projectsManager.refreshProjectFiles(id);
+    };
 
-        $scope.pushProjectToRemote = function (id) {
-            pro.showMessage();
-        };
+    $scope.pushProjectToRemote = function(id) {
+      pro.showMessage();
+    };
 
-        $scope.removeProject = function (pid) {
+    $scope.removeProject = function(pid) {
 
 
-            var confirmMsg = utils.notifier.notify({
-                type: 'warning',
-                message: 'Are You sure you want to remove this project ?',
-                buttons: [
-                    {'data-role': 'ok', text: 'Yes'},
-                    {'data-role': 'cancel', text: 'Cancel'}
-                ],
-                destroy: true
-            });
+      var confirmMsg = utils.notifier.notify({
+        type: 'warning',
+        message: 'Are You sure you want to remove this project ?',
+        buttons: [{
+          'data-role': 'ok',
+          text: 'Yes'
+        }, {
+          'data-role': 'cancel',
+          text: 'Cancel'
+        }],
+        destroy: true
+      });
 
-            confirmMsg.on('click:ok', function () {
-                $rootScope.$apply(function () {
-                    projectsManager.removeProject(pid);
-                    confirmMsg.destroy();
-                });
-            });
+      confirmMsg.on('click:ok', function() {
+        $rootScope.$apply(function() {
+          projectsManager.removeProject(pid);
+          confirmMsg.destroy();
+        });
+      });
 
-            confirmMsg.on('click:cancel', function () {
-                confirmMsg.destroy();
-            });
-        };
+      confirmMsg.on('click:cancel', function() {
+        confirmMsg.destroy();
+      });
+    };
 
-        $scope.compileAllFiles = function (pid) {
+    $scope.compileAllFiles = function(pid) {
 
-            _.each($scope.projects[pid].files, function (file) {
+      _.each($scope.projects[pid].files, function(file) {
 
-                compiler.compile(file.pid, file.id);
+        compiler.compile(file.pid, file.id);
 
-            });
+      });
 
-        };
+    };
 
-        $scope.compileMultiSelectFiles = function () {
+    $scope.compileMultiSelectFiles = function() {
 
-            pro.showMessage();
+      pro.showMessage();
 
-        };
+    };
 
-        $scope.addProject = function () {
+    $scope.addProject = function() {
 
-            //Function to add new project
-            var elm = $('<input type="file" nwdirectory>');
+      //Function to add new project
+      var elm = $('<input type="file" nwdirectory>');
 
-            elm.trigger('click');
+      elm.trigger('click');
 
-            $(elm).on('change', function (e) {
+      $(elm).on('change', function(e) {
 
-                var file = e.currentTarget.files[0].path;
+        var file = e.currentTarget.files[0].path;
 
-                //Must notify scope after async operation
-                $scope.$apply(function () {
-                    projectsManager.addProject(file);
-                });
+        //Must notify scope after async operation
+        $scope.$apply(function() {
+          projectsManager.addProject(file);
+        });
 
-            });
-        };
-    }
+      });
+    };
+  }
 ]);

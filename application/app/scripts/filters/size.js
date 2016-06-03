@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,30 +10,30 @@
 
 prepros.filter('size', [
 
-    function () {
+  function() {
 
-        'use strict';
+    'use strict';
 
-        return function (size) {
+    return function(size) {
 
-            var type = 'Bytes';
+      var type = 'Bytes';
 
-            if (isNaN(parseFloat(size))) return size + type;
+      if (isNaN(parseFloat(size))) return size + type;
 
-            size = parseFloat(size);
+      size = parseFloat(size);
 
-            if (size > 1024) {
-                size = size / 1024;
-                type = 'KB';
-            }
+      if (size > 1024) {
+        size = size / 1024;
+        type = 'KB';
+      }
 
-            if (size > 1024) {
-                size = size / 1024;
-                type = 'MB';
-            }
+      if (size > 1024) {
+        size = size / 1024;
+        type = 'MB';
+      }
 
-            return size.toFixed(2) + ' ' + type;
+      return size.toFixed(2) + ' ' + type;
 
-        };
-    }
+    };
+  }
 ]);

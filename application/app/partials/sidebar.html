@@ -1,30 +1,30 @@
 <ul class="sidebar-project-list">
 
-	<li ng-repeat="project in projects" class="sidebar-project-list__item" ng-animate="'animate'" >
+  <li ng-repeat="project in projects" class="sidebar-project-list__item" ng-animate="'animate'" >
 
-		<a
-			ng-href="#/files/{{project.id}}"
-			draggable="false"
-			ng-dblclick="openProjectFolder(project.id)"
-			class="sidebar-project-list__item__link"
-			project-context-menu="project.id"
-			ng-class="{'sidebar-project-list__item__link--active' : selectedProject.id == project.id}">
-			{{project.name}}
-		</a>
+  <a
+    ng-href="#/files/{{project.id}}"
+    draggable="false"
+    ng-dblclick="openProjectFolder(project.id)"
+    class="sidebar-project-list__item__link"
+    project-context-menu="project.id"
+    ng-class="{'sidebar-project-list__item__link--active' : selectedProject.id == project.id}">
+    {{project.name}}
+  </a>
 
-		<span
-			class="sidebar-project-list__item__file-watcher-indicator"
-			tooltip="Enable/Disable File Watcher"
-			data-placement="right"
-			ng-click="toggleFileWatcher(project.id)"
-			ng-class="{'sidebar-project-list__item__file-watcher-indicator--active' : project.config.watch}">
-		</span>
+  <span
+    class="sidebar-project-list__item__file-watcher-indicator"
+    tooltip="Enable/Disable File Watcher"
+    data-placement="right"
+    ng-click="toggleFileWatcher(project.id)"
+    ng-class="{'sidebar-project-list__item__file-watcher-indicator--active' : project.config.watch}">
+  </span>
 
-	</li>
+  </li>
 </ul>
 
 <div class="sidebar-add-project" ng-click="addProject()">
 
-	<i class="icon-plus"></i> Add New Project
+  <i class="icon-plus"></i> Add New Project
 
 </div>

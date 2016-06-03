@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,72 +11,72 @@
 //Storage
 prepros.factory('storage', [
 
-    'utils',
+  'utils',
 
-    function (utils) {
+  function(utils) {
 
-        'use strict';
+    'use strict';
 
-        var fs = require('fs-extra'),
-            path = require('path');
+    var fs = require('fs-extra'),
+      path = require('path');
 
-        var _put = function (projects) {
+    var _put = function(projects) {
 
-            var prs = {};
+      var prs = {};
 
-            angular.copy(projects, prs);
+      angular.copy(projects, prs);
 
-            _.each(prs, function (pr) {
+      _.each(prs, function(pr) {
 
-                _.each(pr.images, function (img) {
-                    if (img.status === 'OPTIMIZING') {
-                        img.status = 'NOT_OPTIMIZED';
-                    }
-                });
-            });
+        _.each(pr.images, function(img) {
+          if (img.status === 'OPTIMIZING') {
+            img.status = 'NOT_OPTIMIZED';
+          }
+        });
+      });
 
-            localStorage.PreprosData = angular.toJson(prs, false);
+      localStorage.PreprosData = angular.toJson(prs, false);
 
-        };
+    };
 
-        //Function to save project list to json
-        function put(projects) {
+    //Function to save project list to json
+    function put(projects) {
 
-            _put(projects);
+      _put(projects);
 
-        }
-
-        //Get projects list from localStorage
-        function get() {
-
-            var projects = {};
-
-            try {
-
-                projects = angular.fromJson(localStorage.PreprosData || '{}');
-
-                if (_.isArray(projects)) projects = utils.convertProjects(projects);
-
-                _.each(projects, function (project) {
-
-                    if (!project.cfgVersion) project = utils.convertProject(project);
-
-                    projects[project.id] = project;
-                });
-
-            } catch (e) {
-
-                window.alert('Error Reading Data ! Click ok and hit CTRL+SHIFT+X or CMD+SHIFT+X to clear data.');
-
-            }
-
-            return projects;
-        }
-
-        //Return projects list and files list
-        return {
-            get: get,
-            put: put
-        };
     }
+
+    //Get projects list from localStorage
+    function get() {
+
+      var projects = {};
+
+      try {
+
+        projects = angular.fromJson(localStorage.PreprosData || '{}');
+
+        if (_.isArray(projects)) projects = utils.convertProjects(projects);
+
+        _.each(projects, function(project) {
+
+          if (!project.cfgVersion) project = utils.convertProject(project);
+
+          projects[project.id] = project;
+        });
+
+      } catch (e) {
+
+        window.alert('Error Reading Data ! Click ok and hit CTRL+SHIFT+X or CMD+SHIFT+X to clear data.');
+
+      }
+
+      return projects;
+    }
+
+    //Return projects list and files list
+    return {
+      get: get,
+      put: put
+    };
+  }
 ]);

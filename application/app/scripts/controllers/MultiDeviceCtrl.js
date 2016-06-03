@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,51 +11,51 @@
 //Controller for multiple device
 prepros.controller('MultiDeviceCtrl', [
 
-    '$scope',
-    'liveServer',
-    'pro',
+  '$scope',
+  'liveServer',
+  'pro',
 
-    function ($scope, liveServer, pro) {
+  function($scope, liveServer, pro) {
 
-        'use strict';
+    'use strict';
 
-        var os = require('os');
+    var os = require('os');
 
-        $scope.addresses = [];
+    $scope.addresses = [];
 
-        $scope.refreshIpList = function () {
+    $scope.refreshIpList = function() {
 
-            $scope.addresses = [];
+      $scope.addresses = [];
 
-            var ifaces = os.networkInterfaces();
+      var ifaces = os.networkInterfaces();
 
-            var ifacesKeys = Object.keys(ifaces);
+      var ifacesKeys = Object.keys(ifaces);
 
-            _.each(ifacesKeys, function (face) {
+      _.each(ifacesKeys, function(face) {
 
-                var add = _.filter(ifaces[face], function (f) {
-                    return f.family === "IPv4" && !f.internal;
-                });
+        var add = _.filter(ifaces[face], function(f) {
+          return f.family === "IPv4" && !f.internal;
+        });
 
-                if (!_.isEmpty(add)) {
+        if (!_.isEmpty(add)) {
 
-                    _.each(add, function (a) {
+          _.each(add, function(a) {
 
-                        $scope.addresses.push({
-                            name: face,
-                            ip: a.address,
-                            qr: window.getQR('http://' + a.address + ':' + Prepros.MAIN_SERVER_PORT)
-                        });
-                    });
-                }
+            $scope.addresses.push({
+              name: face,
+              ip: a.address,
+              qr: window.getQR('http://' + a.address + ':' + Prepros.MAIN_SERVER_PORT)
             });
-        };
+          });
+        }
+      });
+    };
 
-        $scope.refreshIpList();
+    $scope.refreshIpList();
 
-        $scope.openRemoteInspect = function () {
+    $scope.openRemoteInspect = function() {
 
-            pro.showMessage();
-        };
-    }
+      pro.showMessage();
+    };
+  }
 ]);

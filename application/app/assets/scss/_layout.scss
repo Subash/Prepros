@@ -1,52 +1,42 @@
 .title-bar {
-	height: $title-bar-height;
+  height: $title-bar-height;
 }
-
 .wrapper {
-	display: flex;
-	position: relative;
-	height: calc(100% - #{$title-bar-height});
-
-	.sidebar {
-		width: $sidebar-width;
-		height: 100%;
-		overflow: hidden;
-	}
-
-	.main {
-		flex: 1;
-		height: 100%;
-		overflow: hidden;
-
-		.main-canvas {
-			display: block;
-			overflow: auto;
-			margin: 10px;
-			overflow: auto;
-			height: calc(100% - 20px);
-			position: relative;
-            &.files-lists-shown {
-                margin: 10px 0 10px 10px;
-				overflow: hidden;
-            }
-		}
-
-
-
-		&.footer-bar-shown {
-
-			.main-canvas {
-				height: calc(100% - (#{$footer-bar-height} + 20px) ); //also subtract margins
-			}
-
-			.footer-bar {
-				display: flex;
-				height: $footer-bar-height;
-			}
-		}
-
-		.footer-bar {
-			display: none;
-		}
-	}
+  display: flex;
+  position: relative;
+  height: calc(100% - #{$title-bar-height});
+  .sidebar {
+    width: $sidebar-width;
+    height: 100%;
+    overflow: hidden;
+  }
+  .main {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    .main-canvas {
+      display: block;
+      overflow: auto;
+      margin: 10px;
+      overflow: auto;
+      height: calc(100% - 20px);
+      position: relative;
+      &.files-lists-shown {
+        margin: 10px 0 10px 10px;
+        overflow: hidden;
+      }
+    }
+    &.footer-bar-shown {
+      .main-canvas {
+        height: calc(100% - (#{$footer-bar-height} + 20px) ); //also subtract margins
+      }
+      .footer-bar {
+        display: flex;
+        height: $footer-bar-height;
+      }
+    }
+    .footer-bar {
+      display: none;
+    }
+  }
 }

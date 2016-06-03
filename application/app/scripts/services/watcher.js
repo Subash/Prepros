@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -266,4 +266,3 @@ prepros.factory("watcher", [
 
     }
 ]);
-

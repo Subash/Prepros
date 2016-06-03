@@ -1,71 +1,57 @@
 .app-log {
-
-	position: relative;
-	
-	.app-log__clear-button {
-		position: fixed;
-		right: 35px;
-		top: 60px;
-
-	}
-
-	.app-log__no-logs {
-		.app-log__no-logs__icon {
-
-			font-size: 12vw;
-			display: block;
-			margin: auto;
-			text-align: center;
-			margin-top: 25vh;
-			margin-bottom: 20px;
-			transition: all .5s;
-
-		}
-
-		.app-log__no-logs__message{
-			font-size: 2.2vw;
-			font-weight: 200;
-			text-align: center;
-			transition: all .5s;
-
-		}
-	}
-
-	.app-log__entry {
-		margin-bottom: 10px;
-		padding: 10px;
-
-		.app-log__entry__title {
-			margin-bottom: 10px;
-		}
-
-		.app-log__entry__message {
-			margin-bottom: 10px;
-		}
-
-		.app-log__entry__details {
-			pre {
-				border-radius: 0;
-				border: none;
-				user-select: all;
-				background: #FFF;
-				color: #888;
-			}
-			margin-bottom: 10px;
-		}
-
-		&.app-log__entry--error {
-			background: rgba(red, .15);
-			.name {
-				color: rgba(red, .4);
-			}
-		}
-		&.app-log__entry--success {
-			background: rgba(green, .15);
-			.name {
-				color: rgba(green, .4);
-			}
-		}
-	}
-
+  position: relative;
+  .app-log__clear-button {
+    position: fixed;
+    right: 35px;
+    top: 60px;
+  }
+  .app-log__no-logs {
+    .app-log__no-logs__icon {
+      font-size: 12vw;
+      display: block;
+      margin: auto;
+      text-align: center;
+      margin-top: 25vh;
+      margin-bottom: 20px;
+      transition: all 0.5s;
+    }
+    .app-log__no-logs__message {
+      font-size: 2.2vw;
+      font-weight: 200;
+      text-align: center;
+      transition: all 0.5s;
+    }
+  }
+  .app-log__entry {
+    margin-bottom: 10px;
+    padding: 10px;
+    .app-log__entry__title {
+      margin-bottom: 10px;
+    }
+    .app-log__entry__message {
+      margin-bottom: 10px;
+    }
+    .app-log__entry__details {
+      pre {
+        border-radius: 0;
+        border: none;
+        user-select: all;
+        background: #FFF;
+        color: #888;
+      }
+      margin-bottom: 10px;
+    }
+    &.app-log__entry--error {
+      background: rgba(red, .15);
+      .name {
+        color: rgba(red, .4);
+      }
+    }
+    &.app-log__entry--success {
+      background: rgba(green, .15);
+      .name {
+        color: rgba(green, .4);
+      }
+    }
+  }
 }

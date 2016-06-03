@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,60 +10,60 @@
 
 prepros.factory('jade', [
 
-    '$filter',
+  '$filter',
 
-    function ($filter) {
+  function($filter) {
 
-        'use strict';
+    'use strict';
 
-        var fs = require('fs-extra');
-        var path = require('path');
-        var jade = require('jade');
+    var fs = require('fs-extra');
+    var path = require('path');
+    var jade = require('jade');
 
-        var compile = function (file, project, callback) {
+    var compile = function(file, project, callback) {
 
-            var input = path.resolve(project.path, file.input);
+      var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
+      var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-            var options = {
-                filename: input,
-                pretty: file.config.pretty
-            };
+      var options = {
+        filename: input,
+        pretty: file.config.pretty
+      };
 
-            fs.readFile(input, 'utf8', function (err, data) {
+      fs.readFile(input, 'utf8', function(err, data) {
 
-                if (err) return callback(new Error('Unable to read source file\n' + err.message));
+        if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                try {
+        try {
 
-                    var html = jade.compile(data, options)({
-                        prepros: {
-                            input: input,
-                            output: output,
-                            project: project.path
-                        }
-                    });
+          var html = jade.compile(data, options)({
+            prepros: {
+              input: input,
+              output: output,
+              project: project.path
+            }
+          });
 
-                    fs.outputFile(output, html, function (err) {
+          fs.outputFile(output, html, function(err) {
 
-                        if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
+            if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
 
-                        callback(null, input);
+            callback(null, input);
 
-                    });
+          });
 
-                } catch (err) {
+        } catch (err) {
 
-                    callback(new Error(err.message + '\n' + input));
-                }
-            });
-        };
+          callback(new Error(err.message + '\n' + input));
+        }
+      });
+    };
 
 
-        return {
-            compile: compile
-        };
+    return {
+      compile: compile
+    };
 
-    }
+  }
 ]);

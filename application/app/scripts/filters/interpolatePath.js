@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,217 +10,217 @@
 
 prepros.filter('interpolatePath', [
 
-    'utils',
+  'utils',
 
-    function (utils) {
+  function(utils) {
 
-        'use strict';
+    'use strict';
 
-        var path = require('path');
+    var path = require('path');
 
-        var CSS = 'CSS';
-        var HTML = 'HTML';
-        var JS = 'JS';
-        var MINJS = 'MINJS';
+    var CSS = 'CSS';
+    var HTML = 'HTML';
+    var JS = 'JS';
+    var MINJS = 'MINJS';
 
-        var typeMap = {};
+    var typeMap = {};
 
-        //Css
-        typeMap.less = typeMap.sass = typeMap.scss = typeMap.styl = CSS;
+    //Css
+    typeMap.less = typeMap.sass = typeMap.scss = typeMap.styl = CSS;
 
-        //Html
-        typeMap.md = typeMap.markdown = typeMap.jade = typeMap.haml = typeMap.slim = HTML;
+    //Html
+    typeMap.md = typeMap.markdown = typeMap.jade = typeMap.haml = typeMap.slim = HTML;
 
-        //Javascript
-        typeMap.ls = typeMap.coffee = JS;
+    //Javascript
+    typeMap.ls = typeMap.coffee = JS;
 
-        //minified javascript
-        typeMap.js = MINJS;
+    //minified javascript
+    typeMap.js = MINJS;
 
-        return function (filePath, project) {
+    return function(filePath, project) {
 
-            var ext = path.extname(filePath).slice(1).toLowerCase();
+      var ext = path.extname(filePath).slice(1).toLowerCase();
 
-            filePath = path.join(project.path, filePath);
+      filePath = path.join(project.path, filePath);
 
-            //Change Output Extension
-            switch (typeMap[ext]) {
+      //Change Output Extension
+      switch (typeMap[ext]) {
 
-                case CSS:
+        case CSS:
 
-                    filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.css'));
-                    break;
+          filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.css'));
+          break;
 
-                case HTML:
+        case HTML:
 
-                    filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), project.config.htmlExtension));
-                    break;
+          filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), project.config.htmlExtension));
+          break;
 
-                case JS:
+        case JS:
 
-                    filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.js'));
-                    break;
+          filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.js'));
+          break;
 
-                case MINJS:
+        case MINJS:
 
-                    filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.min.js'));
-                    break;
-            }
+          filePath = path.join(path.dirname(filePath), path.basename(filePath).replace(new RegExp('.' + ext + '$'), '.min.js'));
+          break;
+      }
 
-            var fileName = path.basename(filePath);
-            var fileDir = path.dirname(filePath);
+      var fileName = path.basename(filePath);
+      var fileDir = path.dirname(filePath);
 
-            switch (typeMap[ext]) {
+      switch (typeMap[ext]) {
 
-                case CSS:
+        case CSS:
 
-                    switch (project.config.cssPathType) {
+          switch (project.config.cssPathType) {
 
-                        case "REPLACE_TYPE":
+            case "REPLACE_TYPE":
 
-                            //Conver comma sepereted string to pipe seperated regx like string and escape special regx characters
-                            var cssTypes = project.config.cssTypes.split(',').map(function (type) {
+              //Conver comma sepereted string to pipe seperated regx like string and escape special regx characters
+              var cssTypes = project.config.cssTypes.split(',').map(function(type) {
 
-                                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
+                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
 
-                            }).join('|');
+              }).join('|');
 
-                            var cssRegX = new RegExp('(:?\\\\|/)(:?' + cssTypes + ')(:?\\\\|/)', 'gi');
+              var cssRegX = new RegExp('(:?\\\\|/)(:?' + cssTypes + ')(:?\\\\|/)', 'gi');
 
-                            filePath = filePath.replace(cssRegX, path.sep + project.config.cssPath + path.sep);
+              filePath = filePath.replace(cssRegX, path.sep + project.config.cssPath + path.sep);
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILESDIR":
+            case "RELATIVE_FILESDIR":
 
 
-                            project.config.cssPreprocessorPath.split(',').forEach(function (cPath) {
+              project.config.cssPreprocessorPath.split(',').forEach(function(cPath) {
 
-                                var cssPreprocessorDir = path.resolve(project.path, cPath);
+                var cssPreprocessorDir = path.resolve(project.path, cPath);
 
-                                if (utils.isFileInsideFolder(cssPreprocessorDir, filePath)) {
-                                    filePath = path.resolve(project.path, project.config.cssPath, path.relative(cssPreprocessorDir, filePath));
-                                }
-                            });
+                if (utils.isFileInsideFolder(cssPreprocessorDir, filePath)) {
+                  filePath = path.resolve(project.path, project.config.cssPath, path.relative(cssPreprocessorDir, filePath));
+                }
+              });
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILEDIR":
+            case "RELATIVE_FILEDIR":
 
-                            filePath = path.resolve(fileDir, project.config.cssPath, fileName);
+              filePath = path.resolve(fileDir, project.config.cssPath, fileName);
 
-                            break;
-                    }
+              break;
+          }
 
-                    break;
+          break;
 
-                case HTML:
+        case HTML:
 
-                    switch (project.config.htmlPathType) {
+          switch (project.config.htmlPathType) {
 
-                        case "REPLACE_TYPE":
+            case "REPLACE_TYPE":
 
-                            var htmlTypes = project.config.htmlTypes.split(',').map(function (type) {
+              var htmlTypes = project.config.htmlTypes.split(',').map(function(type) {
 
-                                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
+                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
 
-                            }).join('|');
+              }).join('|');
 
-                            var htmlRegX = new RegExp('(:?\\\\|\/)(:?' + htmlTypes + ')(:?\\\\|\/)', 'gi');
+              var htmlRegX = new RegExp('(:?\\\\|\/)(:?' + htmlTypes + ')(:?\\\\|\/)', 'gi');
 
-                            filePath = filePath.replace(htmlRegX, path.sep + project.config.htmlPath + path.sep);
+              filePath = filePath.replace(htmlRegX, path.sep + project.config.htmlPath + path.sep);
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILESDIR":
+            case "RELATIVE_FILESDIR":
 
-                            project.config.htmlPreprocessorPath.split(',').forEach(function (hPath) {
+              project.config.htmlPreprocessorPath.split(',').forEach(function(hPath) {
 
-                                var htmlPreprocessorDir = path.resolve(project.path, hPath);
+                var htmlPreprocessorDir = path.resolve(project.path, hPath);
 
-                                if (utils.isFileInsideFolder(htmlPreprocessorDir, filePath)) {
-                                    filePath = path.resolve(project.path, project.config.htmlPath, path.relative(htmlPreprocessorDir, filePath));
-                                }
-                            });
+                if (utils.isFileInsideFolder(htmlPreprocessorDir, filePath)) {
+                  filePath = path.resolve(project.path, project.config.htmlPath, path.relative(htmlPreprocessorDir, filePath));
+                }
+              });
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILEDIR":
+            case "RELATIVE_FILEDIR":
 
-                            filePath = path.resolve(fileDir, project.config.htmlPath, fileName);
-                            break;
-                    }
+              filePath = path.resolve(fileDir, project.config.htmlPath, fileName);
+              break;
+          }
 
-                    break;
+          break;
 
-                case JS:
+        case JS:
 
-                    switch (project.config.jsPathType) {
+          switch (project.config.jsPathType) {
 
-                        case "REPLACE_TYPE":
+            case "REPLACE_TYPE":
 
-                            var jsTypes = project.config.jsTypes.split(',').map(function (type) {
+              var jsTypes = project.config.jsTypes.split(',').map(function(type) {
 
-                                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
+                return type.trim().replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&');
 
-                            }).join('|');
+              }).join('|');
 
-                            var jsRegX = new RegExp('(:?\\\\|\/)(:?' + jsTypes + ')(:?\\\\|\/)', 'gi');
+              var jsRegX = new RegExp('(:?\\\\|\/)(:?' + jsTypes + ')(:?\\\\|\/)', 'gi');
 
-                            filePath = filePath.replace(jsRegX, path.sep + project.config.jsPath + path.sep);
+              filePath = filePath.replace(jsRegX, path.sep + project.config.jsPath + path.sep);
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILESDIR":
+            case "RELATIVE_FILESDIR":
 
-                            project.config.jsPreprocessorPath.split(',').forEach(function (jPath) {
+              project.config.jsPreprocessorPath.split(',').forEach(function(jPath) {
 
-                                var jsPreprocessorDir = path.resolve(project.path, jPath);
+                var jsPreprocessorDir = path.resolve(project.path, jPath);
 
-                                if (utils.isFileInsideFolder(jsPreprocessorDir, filePath)) {
-                                    filePath = path.resolve(project.path, project.config.jsPath, path.relative(jsPreprocessorDir, filePath));
-                                }
-                            });
+                if (utils.isFileInsideFolder(jsPreprocessorDir, filePath)) {
+                  filePath = path.resolve(project.path, project.config.jsPath, path.relative(jsPreprocessorDir, filePath));
+                }
+              });
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILEDIR":
+            case "RELATIVE_FILEDIR":
 
-                            filePath = path.resolve(fileDir, project.config.jsPath, fileName);
+              filePath = path.resolve(fileDir, project.config.jsPath, fileName);
 
-                            break;
-                    }
+              break;
+          }
 
-                    break;
+          break;
 
-                case MINJS:
+        case MINJS:
 
-                    switch (project.config.minJsPathType) {
+          switch (project.config.minJsPathType) {
 
-                        case "RELATIVE_FILESDIR":
+            case "RELATIVE_FILESDIR":
 
-                            project.config.minJsPreprocessorPath.split(',').forEach(function (jPath) {
+              project.config.minJsPreprocessorPath.split(',').forEach(function(jPath) {
 
-                                var minJsPreprocessorDir = path.resolve(project.path, jPath);
+                var minJsPreprocessorDir = path.resolve(project.path, jPath);
 
-                                if (utils.isFileInsideFolder(minJsPreprocessorDir, filePath)) {
-                                    filePath = path.resolve(project.path, project.config.minJsPath, path.relative(minJsPreprocessorDir, filePath));
-                                }
-                            });
+                if (utils.isFileInsideFolder(minJsPreprocessorDir, filePath)) {
+                  filePath = path.resolve(project.path, project.config.minJsPath, path.relative(minJsPreprocessorDir, filePath));
+                }
+              });
 
-                            break;
+              break;
 
-                        case "RELATIVE_FILEDIR":
+            case "RELATIVE_FILEDIR":
 
-                            filePath = path.join(fileDir, project.config.minJsPath, fileName);
+              filePath = path.join(fileDir, project.config.minJsPath, fileName);
 
-                            break;
-                    }
+              break;
+          }
 
-                    break;
-            }
+          break;
+      }
 
-            return path.normalize(filePath);
-        };
-    }
+      return path.normalize(filePath);
+    };
+  }
 ]);

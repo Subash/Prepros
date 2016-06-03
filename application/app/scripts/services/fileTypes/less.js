@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -11,123 +11,122 @@
 
 prepros.factory('less', [
 
-    '$filter',
+  '$filter',
 
-    function ($filter) {
+  function($filter) {
 
-        'use strict';
+    'use strict';
 
-        var less = require('less');
-        var path = require('path');
-        var autoprefixer = require('autoprefixer');
-        var fs = require('fs-extra');
-        var CleanCss = require('clean-css');
+    var less = require('less');
+    var path = require('path');
+    var autoprefixer = require('autoprefixer');
+    var fs = require('fs-extra');
+    var CleanCss = require('clean-css');
 
-        var compile = function (file, project, callback) {
+    var compile = function(file, project, callback) {
 
-            var input = path.resolve(project.path, file.input);
+      var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
+      var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-            var options = {
-                compress: file.config.compress,
-                cleancss: file.config.cleancss && !file.config.sourcemaps, //Do not run if sourcemaps are enabled
-                sourceMap: file.config.sourcemaps,
-                sourceMapFilename: path.basename(output) + '.map',
-                sourceMapRootpath: '',
-                writeSourceMap: function (map) {
+      var options = {
+        compress: file.config.compress,
+        cleancss: file.config.cleancss && !file.config.sourcemaps, //Do not run if sourcemaps are enabled
+        sourceMap: file.config.sourcemaps,
+        sourceMapFilename: path.basename(output) + '.map',
+        sourceMapRootpath: '',
+        writeSourceMap: function(map) {
 
-                    try {
+          try {
 
-                        //Small fix to make sourcemaps relative
-                        var data = JSON.parse(map);
+            //Small fix to make sourcemaps relative
+            var data = JSON.parse(map);
 
-                        for (var i = 0; i < data.sources.length; i++) {
+            for (var i = 0; i < data.sources.length; i++) {
 
-                            if (input.substr(0, 1) === data.sources[i].substr(0, 1)) {
+              if (input.substr(0, 1) === data.sources[i].substr(0, 1)) {
 
-                                data.sources[i] = path.relative(path.dirname(output), data.sources[i]).replace(/\\/g, '/');
+                data.sources[i] = path.relative(path.dirname(output), data.sources[i]).replace(/\\/g, '/');
 
-                            }
-                        }
+              }
+            }
 
-                        fs.outputFile(output + '.map', JSON.stringify(data), function (err) {
+            fs.outputFile(output + '.map', JSON.stringify(data), function(err) {
 
-                            if (err) callback(err);
+              if (err) callback(err);
 
-                        });
-
-                    } catch (e) {
-                    }
-                }
-
-            };
-
-            var parser = new (less.Parser)({
-                paths: [path.dirname(input)],
-                filename: input
             });
 
+          } catch (e) {}
+        }
 
-            fs.readFile(input, 'utf8', function (err, data) {
+      };
 
-                if (err) return callback(new Error('Unable to read source file\n' + err.message));
-
-                parser.parse(data, function (err, tree) {
-
-                    if (err) return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
-
-                    var css;
-
-                    try {
-
-                        css = tree.toCSS(options); //Fuck you, can't you just gimme callback from parser
-
-                    } catch (err) {
-
-                        return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
-                    }
+      var parser = new(less.Parser)({
+        paths: [path.dirname(input)],
+        filename: input
+      });
 
 
-                    if (!file.config.sourcemaps && file.config.autoprefixer) {
+      fs.readFile(input, 'utf8', function(err, data) {
 
-                        try {
+        if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                            if (project.config.autoprefixerBrowsers) {
+        parser.parse(data, function(err, tree) {
 
-                                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function (i) {
-                                    return i.trim();
-                                });
+          if (err) return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
 
-                                css = autoprefixer(autoprefixerOptions).process(css);
+          var css;
 
-                            } else {
+          try {
 
-                                css = autoprefixer().process(css);
-                            }
+            css = tree.toCSS(options); //Fuck you, can't you just gimme callback from parser
 
-                        } catch (err) {
+          } catch (err) {
 
-                            return callback(new Error('Failed to autoprefix css' + err.message));
+            return callback(new Error(err.message + "\n" + err.filename + ' line ' + err.line));
+          }
 
-                        }
-                    }
 
-                    fs.outputFile(output, css, function (err) {
+          if (!file.config.sourcemaps && file.config.autoprefixer) {
 
-                        if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
+            try {
 
-                        callback(null, input);
+              if (project.config.autoprefixerBrowsers) {
 
-                    });
-
+                var autoprefixerOptions = project.config.autoprefixerBrowsers.split(',').map(function(i) {
+                  return i.trim();
                 });
-            });
-        };
 
-        return {
-            compile: compile
-        };
+                css = autoprefixer(autoprefixerOptions).process(css);
 
-    }
+              } else {
+
+                css = autoprefixer().process(css);
+              }
+
+            } catch (err) {
+
+              return callback(new Error('Failed to autoprefix css' + err.message));
+
+            }
+          }
+
+          fs.outputFile(output, css, function(err) {
+
+            if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
+
+            callback(null, input);
+
+          });
+
+        });
+      });
+    };
+
+    return {
+      compile: compile
+    };
+
+  }
 ]);

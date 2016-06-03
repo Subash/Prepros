@@ -1,130 +1,132 @@
 <!DOCTYPE html>
 <html ng-app>
+
 <head>
-    <title>Notification</title>
-    <script src="vendor/angular/angular.js"></script>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
+  <title>Notification</title>
+  <script src="vendor/angular/angular.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <link href="assets/css/style.css" rel="stylesheet">
 
-    <script>
-        function NotificationCtrl($scope) {
+  <script>
+    function NotificationCtrl($scope) {
 
-            var nwin = require('nw.gui').Window.get();
+      var nwin = require('nw.gui').Window.get();
 
-            $scope.notification = {};
+      $scope.notification = {};
 
-            var timer = setTimeout(function () {
-            }, 0);
+      var timer = setTimeout(function() {}, 0);
 
-            var defTime = 3000;
+      var defTime = 3000;
 
-            nwin.on('updateNotification', function (data) {
+      nwin.on('updateNotification', function(data) {
 
-                nwin.hide();
+        nwin.hide();
 
-                $scope.$apply(function () {
+        $scope.$apply(function() {
 
-                    $scope.notification = data;
+          $scope.notification = data;
 
-                    window.clearTimeout(timer);
+          window.clearTimeout(timer);
 
-                    defTime = parseInt(data.time, 10);
+          defTime = parseInt(data.time, 10);
 
-                    timer = setTimeout(function () {
-                        nwin.hide();
-                    }, defTime);
-                });
+          timer = setTimeout(function() {
+            nwin.hide();
+          }, defTime);
+        });
 
-                setTimeout(function () {
+        setTimeout(function() {
 
-                    var elem = $('.notif-container');
+          var elem = $('.notif-container');
 
-                    var height = elem.height() + 10;
+          var height = elem.height() + 10;
 
-                    nwin.height = height;
+          nwin.height = height;
 
-                    if (process.platform === 'win32') {
+          if (process.platform === 'win32') {
 
-                        nwin.y = (window.screen.availHeight - 5) - height;
+            nwin.y = (window.screen.availHeight - 5) - height;
 
-                    } else {
+          } else {
 
-                        nwin.y = 10;
-                    }
+            nwin.y = 10;
+          }
 
-                    if (typeof nwin.showInactive === 'function') {
+          if (typeof nwin.showInactive === 'function') {
 
-                        nwin.showInactive();
+            nwin.showInactive();
 
-                    } else {
+          } else {
 
-                        nwin.show();
-                        nwin.blur();
-                    }
+            nwin.show();
+            nwin.blur();
+          }
 
-                }, 75);
-            });
+        }, 75);
+      });
 
-            $(document).ready(function () {
+      $(document).ready(function() {
 
-                nwin.setAlwaysOnTop(true);
+        nwin.setAlwaysOnTop(true);
 
-                var $win = $(window);
+        var $win = $(window);
 
-                //Hide window on right click
-                $win.on('contextmenu', function () {
-                    nwin.hide();
-                });
+        //Hide window on right click
+        $win.on('contextmenu', function() {
+          nwin.hide();
+        });
 
-                $win.on('mouseover', function () {
-                    window.clearTimeout(timer);
-                });
+        $win.on('mouseover', function() {
+          window.clearTimeout(timer);
+        });
 
-                $win.on('mouseout', function () {
-                    timer = setTimeout(function () {
-                        nwin.hide();
-                    }, defTime);
-                })
+        $win.on('mouseout', function() {
+          timer = setTimeout(function() {
+            nwin.hide();
+          }, defTime);
+        })
 
-            });
+      });
 
-            $scope.openLog = function () {
-                nwin.emit('showLog');
-                nwin.hide();
-            };
+      $scope.openLog = function() {
+        nwin.emit('showLog');
+        nwin.hide();
+      };
 
-            $scope.close = function (e) {
-                e.stopPropagation();
-                nwin.hide();
-            };
-        }
-    </script>
+      $scope.close = function(e) {
+        e.stopPropagation();
+        nwin.hide();
+      };
+    }
+  </script>
 </head>
+
 <body class="notif-window">
 
-    <div ng-controller="NotificationCtrl" ng-click="openLog()">
+  <div ng-controller="NotificationCtrl" ng-click="openLog()">
 
-        <div class="notif-container {{notification.type}}">
+    <div class="notif-container {{notification.type}}">
 
-            <span class="icon-close notif-close" ng-click="close($event)"></span>
+      <span class="icon-close notif-close" ng-click="close($event)"></span>
 
-            <div class="notif-header">
+      <div class="notif-header">
 
-                <div class="notif-icon">
-                    <i ng-class="{'icon-smiley' : notification.type == 'success', 'icon-sad' : notification.type == 'error'}"></i>
-                </div>
-
-                <div class="notif-info">
-                    <h3>{{notification.name}}</h3>
-
-                    <p>{{notification.message}}</p>
-                </div>
-
-            </div>
-
-            <pre ng-if="notification.type == 'error' && notification.details ">{{notification.details}}</pre>
-
+        <div class="notif-icon">
+          <i ng-class="{'icon-smiley' : notification.type == 'success', 'icon-sad' : notification.type == 'error'}"></i>
         </div>
+
+        <div class="notif-info">
+          <h3>{{notification.name}}</h3>
+
+          <p>{{notification.message}}</p>
+        </div>
+
+      </div>
+
+      <pre ng-if="notification.type == 'error' && notification.details ">{{notification.details}}</pre>
+
     </div>
+  </div>
 </body>
+
 </html>

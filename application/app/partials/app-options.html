@@ -1,590 +1,591 @@
-<div class="app-options___title"><h2>Prepros Options</h2></div>
+<div class="app-options___title">
+  <h2>Prepros Options</h2></div>
 
 <div class="app-options__inner">
 
-<div class="app-options__nav">
+  <div class="app-options__nav">
 
-	<div class="app-options__nav__inner">
+    <div class="app-options__nav__inner">
 
-		<a ng-href="#/app-options/general" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'general'}">General</a>
-		<a ng-href="#/app-options/notifications" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'notifications'}">Notifications</a>
-		<a ng-href="#/app-options/cssoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'cssoutput'}">CSS Options</a>
-		<a ng-href="#/app-options/htmloutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'htmloutput'}">HTML Options</a>
-		<a ng-href="#/app-options/jsoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'jsoutput'}">JS Options</a>
-		<a ng-href="#/app-options/sass" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'sass'}">Sass Options</a>
-		<a ng-href="#/app-options/less" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'less'}">LESS Options</a>
-		<a ng-href="#/app-options/stylus" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'stylus'}">Stylus Options</a>
-		<a ng-href="#/app-options/jade" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'jade'}">Jade Options</a>
-		<a ng-href="#/app-options/haml" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'haml'}">Haml Options</a>
-		<a ng-href="#/app-options/slim" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'slim'}">Slim Options</a>
-		<a ng-href="#/app-options/coffeescript" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'coffeescript'}">Coffeescript Options</a>
-		<a ng-href="#/app-options/livescript" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'livescript'}">Livescript Options</a>
-		<a ng-href="#/app-options/markdown" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'markdown'}">Markdown Options</a>
-		<a ng-href="#/app-options/advanced" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'advanced'}">Advanced Options</a>
+      <a ng-href="#/app-options/general" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'general'}">General</a>
+      <a ng-href="#/app-options/notifications" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'notifications'}">Notifications</a>
+      <a ng-href="#/app-options/cssoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'cssoutput'}">CSS Options</a>
+      <a ng-href="#/app-options/htmloutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'htmloutput'}">HTML Options</a>
+      <a ng-href="#/app-options/jsoutput" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'jsoutput'}">JS Options</a>
+      <a ng-href="#/app-options/sass" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'sass'}">Sass Options</a>
+      <a ng-href="#/app-options/less" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'less'}">LESS Options</a>
+      <a ng-href="#/app-options/stylus" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'stylus'}">Stylus Options</a>
+      <a ng-href="#/app-options/jade" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'jade'}">Jade Options</a>
+      <a ng-href="#/app-options/haml" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'haml'}">Haml Options</a>
+      <a ng-href="#/app-options/slim" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'slim'}">Slim Options</a>
+      <a ng-href="#/app-options/coffeescript" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'coffeescript'}">Coffeescript Options</a>
+      <a ng-href="#/app-options/livescript" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'livescript'}">Livescript Options</a>
+      <a ng-href="#/app-options/markdown" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'markdown'}">Markdown Options</a>
+      <a ng-href="#/app-options/advanced" class="app-options__nav__link" ng-class="{'app-options__nav__link--active' : appOptionSubPath == 'advanced'}">Advanced Options</a>
 
-	</div>
+    </div>
 
-</div>
+  </div>
 
-<div class="app-option__pannel">
+  <div class="app-option__pannel">
 
-	<div ng-if="appOptionSubPath == 'general' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'general' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">General Options</h3>
+      <h3 class="app-option__pannel__title">General Options</h3>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Live Refresh Delay in milliseconds</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.liveRefreshDelay">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Live Refresh Delay in milliseconds</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.liveRefreshDelay">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Filters To Exclude</span>
-			<textarea class="app-option__pannel__input" ng-model="config.filterPatterns" rows="5"></textarea>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Filters To Exclude</span>
+        <textarea class="app-option__pannel__input" ng-model="config.filterPatterns" rows="5"></textarea>
+      </label>
 
-	</div>
-
-	<div ng-if="appOptionSubPath == 'notifications' " class="app-options__pannel__pane">
+    </div>
+
+    <div ng-if="appOptionSubPath == 'notifications' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Notification Options</h3>
+      <h3 class="app-option__pannel__title">Notification Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input class="app-option__pannel__input" type="checkbox" ng-model="config.enableErrorNotifications">
-			<span class="app-option__pannel__label__text">Enable Error Notifications</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input class="app-option__pannel__input" type="checkbox" ng-model="config.enableErrorNotifications">
+        <span class="app-option__pannel__label__text">Enable Error Notifications</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input class="app-option__pannel__input" type="checkbox" ng-model="config.enableSuccessNotifications">
-			<span class="app-option__pannel__label__text">Enable Success Notifications</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input class="app-option__pannel__input" type="checkbox" ng-model="config.enableSuccessNotifications">
+        <span class="app-option__pannel__label__text">Enable Success Notifications</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input class="app-option__pannel__input" type="checkbox" ng-model="config.notificationDetails">
-			<span class="app-option__pannel__label__text">Show Details in Notification Popup</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input class="app-option__pannel__input" type="checkbox" ng-model="config.notificationDetails">
+        <span class="app-option__pannel__label__text">Show Details in Notification Popup</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Show Notification for ( in milliseconds )</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.notificationTime">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Show Notification for ( in milliseconds )</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.notificationTime">
+      </label>
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'cssoutput' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'cssoutput' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title app-option__pannel__title">CSS Options</h3>
+      <h3 class="app-option__pannel__title app-option__pannel__title">CSS Options</h3>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
-			<select ng-model="config.cssPathType" class="app-option__pannel__input">
-				<option value="REPLACE_TYPE">Replace File Type In Path With CSS Path</option>
-				<option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
-				<option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
-				<option value="SIDE_BY_FILE">Same Folder As Source File</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+        <select ng-model="config.cssPathType" class="app-option__pannel__input">
+          <option value="REPLACE_TYPE">Replace File Type In Path With CSS Path</option>
+          <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+          <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+          <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.cssPathType == 'RELATIVE_FILESDIR' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to less/sass/stylus files directory<br>(seperate multiple paths with comma)</span>
-			<textarea class="app-option__pannel__input" ng-model="config.cssPreprocessorPath"></textarea>
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.cssPathType == 'RELATIVE_FILESDIR' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to less/sass/stylus files directory<br>(seperate multiple paths with comma)</span>
+        <textarea class="app-option__pannel__input" ng-model="config.cssPreprocessorPath"></textarea>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.cssPathType == 'REPLACE_TYPE' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For CSS File Types</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.cssTypes">
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.cssPathType == 'REPLACE_TYPE' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For CSS File Types</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.cssTypes">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">CSS Path</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.cssPath">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">CSS Path</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.cssPath">
+      </label>
 
 
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Autoprefixer Browser List</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.autoprefixerBrowsers">
-		</label>
-
-		<p class="alert alert-info" style="max-width: 300px">Css options do not work with compass projects with full compass support. Use config.rb file to manage compass options.</p>
-
-	</div>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Comma Seperated Autoprefixer Browser List</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.autoprefixerBrowsers">
+      </label>
+
+      <p class="alert alert-info" style="max-width: 300px">Css options do not work with compass projects with full compass support. Use config.rb file to manage compass options.</p>
+
+    </div>
 
-	<div ng-if="appOptionSubPath == 'htmloutput' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'htmloutput' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title app-option__pannel__title">HTML Options</h3>
+      <h3 class="app-option__pannel__title app-option__pannel__title">HTML Options</h3>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
-			<select ng-model="config.htmlPathType" class="app-option__pannel__input">
-				<option value="REPLACE_TYPE">Replace File Type In Path With HTML Path</option>
-				<option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
-				<option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
-				<option value="SIDE_BY_FILE">Same Folder As Source File</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+        <select ng-model="config.htmlPathType" class="app-option__pannel__input">
+          <option value="REPLACE_TYPE">Replace File Type In Path With HTML Path</option>
+          <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+          <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+          <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.htmlPathType == 'RELATIVE_FILESDIR' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to jade/haml/slim/markdown files directory<br>(seperate multiple paths with comma)</span>
-			<textarea class="app-option__pannel__input" ng-model="config.htmlPreprocessorPath"></textarea>
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.htmlPathType == 'RELATIVE_FILESDIR' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to jade/haml/slim/markdown files directory<br>(seperate multiple paths with comma)</span>
+        <textarea class="app-option__pannel__input" ng-model="config.htmlPreprocessorPath"></textarea>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.htmlPathType == 'REPLACE_TYPE' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For HTML File Types</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.htmlTypes">
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.htmlPathType == 'REPLACE_TYPE' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For HTML File Types</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.htmlTypes">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html Path</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.htmlPath">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html Path</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.htmlPath">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html File Extension</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.htmlExtension">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Html File Extension</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.htmlExtension">
+      </label>
 
 
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'jsoutput' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'jsoutput' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title app-option__pannel__title">Javascript Options</h3>
+      <h3 class="app-option__pannel__title app-option__pannel__title">Javascript Options</h3>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
-			<select ng-model="config.jsPathType" class="app-option__pannel__input">
-				<option value="REPLACE_TYPE">Replace File Type In Path With JS Path</option>
-				<option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
-				<option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
-				<option value="SIDE_BY_FILE">Same Folder As Source File</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Path Type</span>
+        <select ng-model="config.jsPathType" class="app-option__pannel__input">
+          <option value="REPLACE_TYPE">Replace File Type In Path With JS Path</option>
+          <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+          <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+          <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.jsPathType == 'RELATIVE_FILESDIR' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to coffeescript/livescript files directory<br>(seperate multiple paths with comma)</span>
-			<textarea class="app-option__pannel__input" ng-model="config.jsPreprocessorPath"></textarea>
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.jsPathType == 'RELATIVE_FILESDIR' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to coffeescript/livescript files directory<br>(seperate multiple paths with comma)</span>
+        <textarea class="app-option__pannel__input" ng-model="config.jsPreprocessorPath"></textarea>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.jsPathType == 'REPLACE_TYPE' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For Javascript File Types</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.jsTypes">
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.jsPathType == 'REPLACE_TYPE' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path Fragment To Replace For Javascript File Types</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.jsTypes">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">JS Path</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.jsPath">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">JS Path</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.jsPath">
+      </label>
 
 
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Concatenated &amp; Minified Javascript Output Path Type</span>
-			<select ng-model="config.minJsPathType" class="app-option__pannel__input">
-				<option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
-				<option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
-				<option value="SIDE_BY_FILE">Same Folder As Source File</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Concatenated &amp; Minified Javascript Output Path Type</span>
+        <select ng-model="config.minJsPathType" class="app-option__pannel__input">
+          <option value="RELATIVE_FILESDIR">Relative To Preprocessable Files Directory</option>
+          <option value="RELATIVE_FILEDIR">Relative To Source File Directory</option>
+          <option value="SIDE_BY_FILE">Same Folder As Source File</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label" ng-show="config.minJsPathType == 'RELATIVE_FILESDIR' ">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to javascript files directory<br>(seperate multiple paths with comma)</span>
-			<textarea class="app-option__pannel__input" ng-model="config.minJsPreprocessorPath"></textarea>
-		</label>
+      <label class="app-option__pannel__label" ng-show="config.minJsPathType == 'RELATIVE_FILESDIR' ">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Enter paths to javascript files directory<br>(seperate multiple paths with comma)</span>
+        <textarea class="app-option__pannel__input" ng-model="config.minJsPreprocessorPath"></textarea>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block"> Concatenated &amp; JMinified S Path</span>
-			<input class="app-option__pannel__input" type="text" ng-model="config.minJsPath">
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block"> Concatenated &amp; JMinified S Path</span>
+        <input class="app-option__pannel__input" type="text" ng-model="config.minJsPath">
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.javascript.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.javascript.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label" >
-			<input type="checkbox" ng-model="config.javascript.uglify">
-			<span>Uglify</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.javascript.uglify">
+        <span>Uglify</span>
+      </label>
 
 
-		<label class="app-option__pannel__label" >
+      <label class="app-option__pannel__label">
 
-			<input type="checkbox" ng-model="config.javascript.mangle" ng-show="config.javascript.uglify">
-			<span ng-show="config.javascript.uglify">Mangle Variable Names</span>
+        <input type="checkbox" ng-model="config.javascript.mangle" ng-show="config.javascript.uglify">
+        <span ng-show="config.javascript.uglify">Mangle Variable Names</span>
 
-			<input type="checkbox" disabled ng-hide="config.javascript.uglify">
-			<span tooltip="This is an uglifyjs option"  ng-hide="config.javascript.uglify">Mangle Variable Names</span>
+        <input type="checkbox" disabled ng-hide="config.javascript.uglify">
+        <span tooltip="This is an uglifyjs option" ng-hide="config.javascript.uglify">Mangle Variable Names</span>
 
-		</label>
+      </label>
 
 
-		<label class="app-option__pannel__label" >
+      <label class="app-option__pannel__label">
 
-			<input type="checkbox" ng-model="config.javascript.sourcemaps" ng-show="config.javascript.uglify">
-			<span ng-show="config.javascript.uglify">SourceMaps</span>
+        <input type="checkbox" ng-model="config.javascript.sourcemaps" ng-show="config.javascript.uglify">
+        <span ng-show="config.javascript.uglify">SourceMaps</span>
 
-			<input type="checkbox" disabled ng-hide="config.javascript.uglify">
-			<span tooltip="UglifyJS must be enabled to generate sourcemaps."  ng-hide="config.javascript.uglify">SourceMaps</span>
+        <input type="checkbox" disabled ng-hide="config.javascript.uglify">
+        <span tooltip="UglifyJS must be enabled to generate sourcemaps." ng-hide="config.javascript.uglify">SourceMaps</span>
 
-		</label>
+      </label>
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'sass' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'sass' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Sass Options</h3>
+      <h3 class="app-option__pannel__title">Sass Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.compass">
-			<span>Use Compass</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.compass">
+        <span>Use Compass</span>
+      </label>
 
-		<label ng-show="config.sass.compass" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.fullCompass">
-			<span>Full Compass Support</span>
-		</label>
+      <label ng-show="config.sass.compass" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.fullCompass">
+        <span>Full Compass Support</span>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.lineNumbers">
-			<span>Line numbers</span>
-		</label>
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.lineNumbers">
+        <span>Line numbers</span>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.unixNewlines">
-			<span>Unix Newlines</span>
-		</label>
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.unixNewlines">
+        <span>Unix Newlines</span>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.debug">
-			<span>Debug Info</span>
-		</label>
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.debug">
+        <span>Debug Info</span>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.sass.sourcemaps">
-			<span>SourceMaps</span>
-		</label>
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.sass.sourcemaps">
+        <span>SourceMaps</span>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
 
-			<input type="checkbox" ng-model="config.sass.autoprefixer" ng-hide="config.sass.sourcemaps">
-			<span ng-hide="config.sass.sourcemaps">Auto Prefix CSS</span>
+        <input type="checkbox" ng-model="config.sass.autoprefixer" ng-hide="config.sass.sourcemaps">
+        <span ng-hide="config.sass.sourcemaps">Auto Prefix CSS</span>
 
-			<input type="checkbox" disabled ng-show="config.sass.sourcemaps">
-			<span tooltip="Autoprefixer is not compatible with sourcemaps."  ng-show="config.sass.sourcemaps">Auto Prefix CSS</span>
+        <input type="checkbox" disabled ng-show="config.sass.sourcemaps">
+        <span tooltip="Autoprefixer is not compatible with sourcemaps." ng-show="config.sass.sourcemaps">Auto Prefix CSS</span>
 
-		</label>
+      </label>
 
-		<label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Style</span>
-			<select ng-model="config.sass.outputStyle" class="app-option__pannel__input">
-				<option value="compressed">Compressed</option>
-				<option value="compact">Compact</option>
-				<option value="nested">Nested</option>
-				<option value="expanded">Expanded</option>
-			</select>
-		</label>
-	</div>
+      <label ng-hide="config.sass.compass && config.sass.fullCompass" class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Style</span>
+        <select ng-model="config.sass.outputStyle" class="app-option__pannel__input">
+          <option value="compressed">Compressed</option>
+          <option value="compact">Compact</option>
+          <option value="nested">Nested</option>
+          <option value="expanded">Expanded</option>
+        </select>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'less'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'less'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">LESS Options</h3>
+      <h3 class="app-option__pannel__title">LESS Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.less.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.less.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.less.sourcemaps">
-			<span>SourceMaps</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.less.sourcemaps">
+        <span>SourceMaps</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.less.strictMath">
-			<span>Strict Maths</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.less.strictMath">
+        <span>Strict Maths</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.less.strictUnits">
-			<span>Strict Units</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.less.strictUnits">
+        <span>Strict Units</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.less.compress">
-			<span>Compress CSS</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.less.compress">
+        <span>Compress CSS</span>
+      </label>
 
-		<label class="app-option__pannel__label">
+      <label class="app-option__pannel__label">
 
-			<input type="checkbox" ng-model="config.less.cleancss" ng-hide="config.less.sourcemaps">
-			<span ng-hide="config.less.sourcemaps">Run Clean-CSS</span>
+        <input type="checkbox" ng-model="config.less.cleancss" ng-hide="config.less.sourcemaps">
+        <span ng-hide="config.less.sourcemaps">Run Clean-CSS</span>
 
-			<input type="checkbox" disabled ng-show="config.less.sourcemaps">
-			<span tooltip="Clean-CSS is not compatible with sourcemaps."  ng-show="config.less.sourcemaps">Run Clean-CSS</span>
-		</label>
+        <input type="checkbox" disabled ng-show="config.less.sourcemaps">
+        <span tooltip="Clean-CSS is not compatible with sourcemaps." ng-show="config.less.sourcemaps">Run Clean-CSS</span>
+      </label>
 
-		<label class="app-option__pannel__label">
+      <label class="app-option__pannel__label">
 
-			<input type="checkbox" ng-model="config.less.autoprefixer" ng-hide="config.less.sourcemaps">
-			<span ng-hide="config.less.sourcemaps">Auto Prefix CSS</span>
+        <input type="checkbox" ng-model="config.less.autoprefixer" ng-hide="config.less.sourcemaps">
+        <span ng-hide="config.less.sourcemaps">Auto Prefix CSS</span>
 
-			<input type="checkbox" disabled ng-show="config.less.sourcemaps">
-			<span tooltip="Autoprefixer is not compatible with sourcemaps."  ng-show="config.less.sourcemaps">Auto Prefix CSS</span>
+        <input type="checkbox" disabled ng-show="config.less.sourcemaps">
+        <span tooltip="Autoprefixer is not compatible with sourcemaps." ng-show="config.less.sourcemaps">Auto Prefix CSS</span>
 
-		</label>
-	</div>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'stylus'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'stylus'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Stylus Options</h3>
+      <h3 class="app-option__pannel__title">Stylus Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.stylus.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.stylus.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.stylus.lineNumbers">
-			<span>Line numbers</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.stylus.lineNumbers">
+        <span>Line numbers</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.stylus.compress">
-			<span>Compress CSS</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.stylus.compress">
+        <span>Compress CSS</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.stylus.config.nib">
-			<span>Use Nib</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.stylus.config.nib">
+        <span>Use Nib</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.stylus.autoprefixer">
-			<span>Auto Prefix CSS</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.stylus.autoprefixer">
+        <span>Auto Prefix CSS</span>
+      </label>
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'jade'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'jade'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Jade Options</h3>
+      <h3 class="app-option__pannel__title">Jade Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.jade.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.jade.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.jade.pretty">
-			<span>Pretty Output</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.jade.pretty">
+        <span>Pretty Output</span>
+      </label>
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'haml'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'haml'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Haml Options</h3>
+      <h3 class="app-option__pannel__title">Haml Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.haml.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.haml.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.haml.doubleQuotes">
-			<span>Double quotes</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.haml.doubleQuotes">
+        <span>Double quotes</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Format</span>
-			<select ng-model="config.haml.format" class="app-option__pannel__input">
-				<option value="xhtml">XHTML</option>
-				<option value="html5">HTML5</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Format</span>
+        <select ng-model="config.haml.format" class="app-option__pannel__input">
+          <option value="xhtml">XHTML</option>
+          <option value="html5">HTML5</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Style</span>
-			<select ng-model="config.haml.outputStyle" class="app-option__pannel__input">
-				<option value="indented">Indented</option>
-				<option value="ugly">Ugly</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Style</span>
+        <select ng-model="config.haml.outputStyle" class="app-option__pannel__input">
+          <option value="indented">Indented</option>
+          <option value="ugly">Ugly</option>
+        </select>
+      </label>
 
-	</div>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'slim'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'slim'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Slim Options</h3>
+      <h3 class="app-option__pannel__title">Slim Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.slim.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.slim.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.slim.pretty">
-			<span>Pretty Output</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.slim.pretty">
+        <span>Pretty Output</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Indent</span>
-			<select ng-model="config.slim.indent" class="app-option__pannel__input">>
-				<option value="default">Default ( 2 spaces )</option>
-				<option value="four">Four Spaces</option>
-				<option value="tab">Tab</option>
-			</select>
-		</label>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Indent</span>
+        <select ng-model="config.slim.indent" class="app-option__pannel__input">>
+          <option value="default">Default ( 2 spaces )</option>
+          <option value="four">Four Spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Format</span>
-			<select ng-model="config.slim.format" class="app-option__pannel__input">
-				<option value=":xhtml">XHTML</option>
-				<option value=":html5">HTML5</option>
-				<option value=":html">HTML</option>
-				<option value=":html4">HTML4</option>
-			</select>
-		</label>
-	</div>
+      <label class="app-option__pannel__label">
+        <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Output Format</span>
+        <select ng-model="config.slim.format" class="app-option__pannel__input">
+          <option value=":xhtml">XHTML</option>
+          <option value=":html5">HTML5</option>
+          <option value=":html">HTML</option>
+          <option value=":html4">HTML4</option>
+        </select>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'coffeescript'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'coffeescript'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">CoffeeScript Options</h3>
+      <h3 class="app-option__pannel__title">CoffeeScript Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.bare">
-			<span>Bare</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.bare">
+        <span>Bare</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.sourcemaps">
-			<span>SourceMaps</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.sourcemaps">
+        <span>SourceMaps</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.iced">
-			<span>Iced CoffeeScript</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.iced">
+        <span>Iced CoffeeScript</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.uglify">
-			<span>Uglify</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.uglify">
+        <span>Uglify</span>
+      </label>
 
-		<label ng-if="config.coffee.uglify" class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.coffee.mangle">
-			<span>Mangle Variable Names</span>
-		</label>
-	</div>
+      <label ng-if="config.coffee.uglify" class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.coffee.mangle">
+        <span>Mangle Variable Names</span>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'livescript'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'livescript'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">LiveScript Options</h3>
+      <h3 class="app-option__pannel__title">LiveScript Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.livescript.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.livescript.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.livescript.bare">
-			<span>Bare</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.livescript.bare">
+        <span>Bare</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.livescript.uglify">
-			<span>Uglify</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.livescript.uglify">
+        <span>Uglify</span>
+      </label>
 
-		<label class="app-option__pannel__label" ng-if="config.livescript.uglify">
-			<input type="checkbox" ng-model="config.livescript.mangle">
-			<span>Mangle Variable Names</span>
-		</label>
-	</div>
+      <label class="app-option__pannel__label" ng-if="config.livescript.uglify">
+        <input type="checkbox" ng-model="config.livescript.mangle">
+        <span>Mangle Variable Names</span>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'markdown'" class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'markdown'" class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Markdown Options</h3>
+      <h3 class="app-option__pannel__title">Markdown Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.markdown.autoCompile">
-			<span>Auto Compile</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.markdown.autoCompile">
+        <span>Auto Compile</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.markdown.gfm">
-			<span>GitHub Flavoured</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.markdown.gfm">
+        <span>GitHub Flavoured</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.markdown.sanitize">
-			<span>Sanitize Output</span>
-		</label>
-	</div>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.markdown.sanitize">
+        <span>Sanitize Output</span>
+      </label>
+    </div>
 
-	<div ng-if="appOptionSubPath == 'advanced' " class="app-options__pannel__pane">
+    <div ng-if="appOptionSubPath == 'advanced' " class="app-options__pannel__pane">
 
-		<h3 class="app-option__pannel__title">Advanced Options</h3>
+      <h3 class="app-option__pannel__title">Advanced Options</h3>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.customRuby.use">
-			<span>Use Custom Ruby</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.customRuby.use">
+        <span>Use Custom Ruby</span>
+      </label>
 
-		<div ng-if="config.customRuby.use">
+      <div ng-if="config.customRuby.use">
 
-			<label class="app-option__pannel__label">
-				<span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path to custom ruby executable file</span>
-				<span class="app-option__pannel__label__text app-option__pannel__label__text--block muted">You can enter <code>ruby</code> if it's installed on your path.</span>
-				<input class="app-option__pannel__input" type="text" ng-model="config.customRuby.path">
-			</label>
+        <label class="app-option__pannel__label">
+          <span class="app-option__pannel__label__text app-option__pannel__label__text--block">Path to custom ruby executable file</span>
+          <span class="app-option__pannel__label__text app-option__pannel__label__text--block muted">You can enter <code>ruby</code> if it's installed on your path.</span>
+          <input class="app-option__pannel__input" type="text" ng-model="config.customRuby.path">
+        </label>
 
-			<div ng-if="config.customRuby.path">
+        <div ng-if="config.customRuby.path">
 
-				<label class="app-option__pannel__label">
-					<input type="checkbox" ng-model="config.customRuby.sass">
-					<span>For Sass</span>
-				</label>
+          <label class="app-option__pannel__label">
+            <input type="checkbox" ng-model="config.customRuby.sass">
+            <span>For Sass</span>
+          </label>
 
-				<label class="app-option__pannel__label">
-					<input type="checkbox" ng-model="config.customRuby.slim">
-					<span>For Slim</span>
-				</label>
+          <label class="app-option__pannel__label">
+            <input type="checkbox" ng-model="config.customRuby.slim">
+            <span>For Slim</span>
+          </label>
 
-				<label class="app-option__pannel__label">
-					<input type="checkbox" ng-model="config.customRuby.haml">
-					<span>For HAML</span>
-				</label>
-			</div>
-		</div>
+          <label class="app-option__pannel__label">
+            <input type="checkbox" ng-model="config.customRuby.haml">
+            <span>For HAML</span>
+          </label>
+        </div>
+      </div>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.experimental.autoAddRemoveFile">
-			<span>Automatically Add/Remove File Without Refreshing</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.experimental.autoAddRemoveFile">
+        <span>Automatically Add/Remove File Without Refreshing</span>
+      </label>
 
-		<label class="app-option__pannel__label">
-			<input type="checkbox" ng-model="config.experimental.fileWatcher">
-			<span> Enable Faster Event Based File Watcher</span>
-		</label>
+      <label class="app-option__pannel__label">
+        <input type="checkbox" ng-model="config.experimental.fileWatcher">
+        <span> Enable Faster Event Based File Watcher</span>
+      </label>
 
-		<div class="alert alert-info" style="max-width: 300px">Event based file watcher greatly improves performance but may not work with some file systems. Please disable it if you are having issues with file change detection.</div>
+      <div class="alert alert-info" style="max-width: 300px">Event based file watcher greatly improves performance but may not work with some file systems. Please disable it if you are having issues with file change detection.</div>
 
-	</div>
+    </div>
 
-</div>
+  </div>
 
 </div>

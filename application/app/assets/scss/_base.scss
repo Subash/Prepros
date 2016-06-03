@@ -1,39 +1,37 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
-
-html, body {
-	height: 100%;
+body,
+html {
+  height: 100%;
 }
-
 *:focus {
-	outline: none !important;
+  outline: none !important;
 }
-
 body {
-	border: 1px solid #343843;
-	user-select: none;
-	background: #fff;
-	color: $base-color;
-	cursor: default;
-	font-family: SourceSansPro;
-	vertical-align: middle;
-    font-weight: 400;
-	-webkit-user-select: none;
-	width: 100%;
-    overflow: hidden;
+  border: 1px solid #343843;
+  user-select: none;
+  background: #fff;
+  color: $base-color;
+  cursor: default;
+  font-family: SourceSansPro;
+  vertical-align: middle;
+  font-weight: 400;
+  -webkit-user-select: none;
+  width: 100%;
+  overflow: hidden;
 }
-
 i {
-	color: inherit;
+  color: inherit;
 }
-
-h1, h2, h3, h4 {
-	font-family: inherit;
-    font-weight: 400;
+h1,
+h2,
+h3,
+h4 {
+  font-family: inherit;
+  font-weight: 400;
 }
-
 a:not(.link-style) {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }

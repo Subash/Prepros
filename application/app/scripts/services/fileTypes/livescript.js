@@ -1,7 +1,7 @@
 /**
  * Prepros
  * (c) Subash Pathak
- * sbshpthk@gmail.com
+ * subash@subash.me
  * License: MIT
  */
 
@@ -10,61 +10,64 @@
 
 prepros.factory('livescript', [
 
-    '$filter',
+  '$filter',
 
-    function ($filter) {
+  function($filter) {
 
-        'use strict';
+    'use strict';
 
-        var fs = require('fs-extra');
-        var path = require('path');
-        var livescript = require('LiveScript');
-        var ugly = require('uglify-js');
+    var fs = require('fs-extra');
+    var path = require('path');
+    var livescript = require('LiveScript');
+    var ugly = require('uglify-js');
 
-        var compile = function (file, project, callback) {
+    var compile = function(file, project, callback) {
 
-            var input = path.resolve(project.path, file.input);
+      var input = path.resolve(project.path, file.input);
 
-            var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
+      var output = (file.customOutput) ? path.resolve(project.path, file.customOutput) : $filter('interpolatePath')(file.input, project);
 
-            var options = {
-                bare: file.config.bare
-            };
+      var options = {
+        bare: file.config.bare
+      };
 
-            fs.readFile(input, 'utf8', function (err, data) {
+      fs.readFile(input, 'utf8', function(err, data) {
 
-                if (err) return callback(new Error('Unable to read source file\n' + err.message));
+        if (err) return callback(new Error('Unable to read source file\n' + err.message));
 
-                try {
+        try {
 
-                    var javascript = livescript.compile(data, options);
+          var javascript = livescript.compile(data, options);
 
-                    if (file.config.uglify) {
+          if (file.config.uglify) {
 
-                        javascript = ugly.minify(javascript, {fromString: true, mangle: file.config.mangle}).code;
-                    }
+            javascript = ugly.minify(javascript, {
+              fromString: true,
+              mangle: file.config.mangle
+            }).code;
+          }
 
-                    fs.outputFile(output, javascript, function (err) {
+          fs.outputFile(output, javascript, function(err) {
 
-                        if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
+            if (err) return callback(new Error('Unable to write compiled data. ' + err.message));
 
-                        callback(null, input);
+            callback(null, input);
 
-                    });
-
-
-                } catch (e) {
-
-                    if (e) return callback(new Error(e.message + '\n' + input));
-                }
-            });
+          });
 
 
-        };
+        } catch (e) {
+
+          if (e) return callback(new Error(e.message + '\n' + input));
+        }
+      });
 
 
-        return {
-            compile: compile
-        };
-    }
+    };
+
+
+    return {
+      compile: compile
+    };
+  }
 ]);

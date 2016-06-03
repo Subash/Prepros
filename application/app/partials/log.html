@@ -1,15 +1,15 @@
 <div class="app-log__no-logs" ng-if="log.length == 0">
 
-	<i class="app-log__no-logs__icon icon-file-2"></i>
-	<h1 class="app-log__no-logs__message">No logs found. You will see log entries after compiling files.</h1>
+  <i class="app-log__no-logs__icon icon-file-2"></i>
+  <h1 class="app-log__no-logs__message">No logs found. You will see log entries after compiling files.</h1>
 
 </div>
 
 <div ng-repeat="entry in log" class="app-log__entry app-log__entry--{{entry.type}}">
 
-	<div class="app-log__entry__title">{{entry.title}}</div>
-	<div class="app-log__entry__message">{{entry.message}}</div>
-	<div class="app-log__entry__details" ng-if="entry.details"><pre>{{entry.details}}</pre></div>
-	<div class="app-log__entry__time">{{entry.time | date: 'HH:mm:ss'}}</div>
+  <div class="app-log__entry__title">{{entry.title}}</div>
+  <div class="app-log__entry__message">{{entry.message}}</div>
+  <div class="app-log__entry__details" ng-if="entry.details"><pre>{{entry.details}}</pre></div>
+  <div class="app-log__entry__time">{{entry.time | date: 'HH:mm:ss'}}</div>
 
 </div>

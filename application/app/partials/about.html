@@ -1,66 +1,66 @@
 <div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h4 class="modal-title">About Prepros <span ng-show="PREPROS.IS_PRO">Pro</span> &mdash;{{PREPROS.VERSION}}</h4>
-		</div>
-		<div class="modal-body">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">About Prepros <span ng-show="PREPROS.IS_PRO">Pro</span> &mdash;{{PREPROS.VERSION}}</h4>
+    </div>
+    <div class="modal-body">
 
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="#about" data-toggle="tab">Home</a></li>
-				<li><a href="#modules" data-toggle="tab">Node Modules</a></li>
-				<li><a href="#gems" data-toggle="tab">Ruby Gems</a></li>
-			</ul>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#about" data-toggle="tab">Home</a></li>
+        <li><a href="#modules" data-toggle="tab">Node Modules</a></li>
+        <li><a href="#gems" data-toggle="tab">Ruby Gems</a></li>
+      </ul>
 
-			<!-- Tab panes -->
-			<div class="tab-content">
+      <!-- Tab panes -->
+      <div class="tab-content">
 
-				<div class="tab-pane active" id="about">
+        <div class="tab-pane active" id="about">
 
-					<p>Prepros <span ng-show="PREPROS.IS_PRO">Pro</span> is a multi purpose code preprocessing, testing and deployment tool. It's designed, developed and maintained by
-						<a href="{{PREPROS.urls.twitter}}" link-external class="link">Subash Pathak</a></p>
+          <p>Prepros <span ng-show="PREPROS.IS_PRO">Pro</span> is a multi purpose code preprocessing, testing and deployment tool. It's designed, developed and maintained by
+            <a href="{{PREPROS.urls.twitter}}" link-external class="link">Subash Pathak</a></p>
 
-					<p>&copy; Subash Pathak</p>
+          <p>&copy; Subash Pathak</p>
 
 
-					<div ng-if="UPDATE_AVAILABLE" class="alert alert-info">
-						New version {{UPDATE_DATA.version}} released on {{UPDATE_DATA.date}} is available, visit
-						<a href="{{UPDATE_DATA.updateUrl}}" link-external class="link">Prepros Website</a> to download.
-					</div>
+          <div ng-if="UPDATE_AVAILABLE" class="alert alert-info">
+            New version {{UPDATE_DATA.version}} released on {{UPDATE_DATA.date}} is available, visit
+            <a href="{{UPDATE_DATA.updateUrl}}" link-external class="link">Prepros Website</a> to download.
+          </div>
 
-					<div ng-if="UPDATE_FAILED" class="alert alert-danger">
-						An error occurred while checking for updates.
-					</div>
+          <div ng-if="UPDATE_FAILED" class="alert alert-danger">
+            An error occurred while checking for updates.
+          </div>
 
-					<div ng-if="UPDATE_CHECKING" class="alert alert-info">
-						Checking for updates &hellip;
-					</div>
+          <div ng-if="UPDATE_CHECKING" class="alert alert-info">
+            Checking for updates &hellip;
+          </div>
 
-					<div ng-if="!UPDATE_AVAILABLE && !UPDATE_CHECKING && !UPDATE_FAILED" class="alert alert-success">
-						You are using the latest and greatest version of Prepros.
-					</div>
+          <div ng-if="!UPDATE_AVAILABLE && !UPDATE_CHECKING && !UPDATE_FAILED" class="alert alert-success">
+            You are using the latest and greatest version of Prepros.
+          </div>
 
-				</div>
+        </div>
 
-				<div class="tab-pane" id="modules">
+        <div class="tab-pane" id="modules">
 
-					<ul>
-						<li ng-repeat="module in node_modules">{{module}}</li>
-					</ul>
+          <ul>
+            <li ng-repeat="module in node_modules">{{module}}</li>
+          </ul>
 
-				</div>
+        </div>
 
-				<div class="tab-pane" id="gems">
+        <div class="tab-pane" id="gems">
 
-					<ul>
-						<li ng-repeat="gem in gems">{{gem}}</li>
-					</ul>
+          <ul>
+            <li ng-repeat="gem in gems">{{gem}}</li>
+          </ul>
 
-				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		</div>
-	</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
 </div>

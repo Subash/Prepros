@@ -1,48 +1,48 @@
 <div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h4 class="modal-title">Multi-Device Testing</h4>
-		</div>
-		<div class="modal-body">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">Multi-Device Testing</h4>
+    </div>
+    <div class="modal-body">
 
-			<p>Please enter one of the following addresses from your network devices to open Prepros http server. Connected devices can be inspected using remote web inspector.</p>
+      <p>Please enter one of the following addresses from your network devices to open Prepros http server. Connected devices can be inspected using remote web inspector.</p>
 
-			<h4>Network address(es) to access Prepros server <i class="icon-spinner-6 btn btn-primary" ng-click="refreshIpList()" style="cursor: pointer; font-size: 50%"></i></h4>
+      <h4>Network address(es) to access Prepros server <i class="icon-spinner-6 btn btn-primary" ng-click="refreshIpList()" style="cursor: pointer; font-size: 50%"></i></h4>
 
-			<ul ng-if="addresses.length > 0" class="list-unstyled">
-				<li ng-repeat="address in addresses" class="multi-device-testing__network">
+      <ul ng-if="addresses.length > 0" class="list-unstyled">
+        <li ng-repeat="address in addresses" class="multi-device-testing__network">
 
-					<button class="multi-device-testing__qrcode-button btn btn-primary" popover="<img src='{{address.qr}}'>" data-placement="right"><i class="icon-qrcode"></i></button>
+          <button class="multi-device-testing__qrcode-button btn btn-primary" popover="<img src='{{address.qr}}'>" data-placement="right"><i class="icon-qrcode"></i></button>
 
-					<div class="multi-device-testing__network__details">
-						<a href="http://{{address.ip}}:5656" link-external draggable="false" class="alert alert-success">http://{{address.ip}}:5656</a>
-						<div>For devices in <code>{{address.name}}</code> network.</div>
-					</div>
-
-
-				</li>
-			</ul>
-
-			<div class="alert alert-danger" ng-if="addresses.length == 0">No networks detected</div>
-
-			<div>
-
-				<hr>
-
-				<button class="btn btn-primary btn-large" ng-click="openRemoteInspect()">Open Remote Inspector</button>
-
-				<hr ng-if="addresses.length > 0">
-
-			</div>
+          <div class="multi-device-testing__network__details">
+            <a href="http://{{address.ip}}:5656" link-external draggable="false" class="alert alert-success">http://{{address.ip}}:5656</a>
+            <div>For devices in <code>{{address.name}}</code> network.</div>
+          </div>
 
 
+        </li>
+      </ul>
 
-			<p ng-if="addresses.length > 0">Please check your firewall permissions if addresses are not working.</p>
-		</div>
+      <div class="alert alert-danger" ng-if="addresses.length == 0">No networks detected</div>
 
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		</div>
-	</div>
+      <div>
+
+        <hr>
+
+        <button class="btn btn-primary btn-large" ng-click="openRemoteInspect()">Open Remote Inspector</button>
+
+        <hr ng-if="addresses.length > 0">
+
+      </div>
+
+
+
+      <p ng-if="addresses.length > 0">Please check your firewall permissions if addresses are not working.</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
 </div>
