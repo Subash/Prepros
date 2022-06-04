@@ -1,1 +1,1 @@
-Compile less, sass, scss, compass, coffeescript, stylus, jade, slim, markdown, haml and livescript files with live browser refresh. https://prepros.io
+This repository contains very old Prepros code for archival purposes. Please visit https://prepros.io for latest updates.
